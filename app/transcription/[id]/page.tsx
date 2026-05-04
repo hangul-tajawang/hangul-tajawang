@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "한글타자왕"
     ],
     alternates: {
-      canonical: `https://hangul-tajawang.com/transcription/${resolvedParams.id}`,
+      canonical: `https://www.hangul-tajawang.com/transcription/${resolvedParams.id}`,
     },
     openGraph: {
       title: `${text.title} 한글 타자 연습 | 필사 연습 | 한글타자왕`,
       description: `지금 바로 '${text.title}' 한글 타자 연습을 시작하세요. 타수와 정확도를 측정해 드립니다!`,
-      url: `https://hangul-tajawang.com/transcription/${resolvedParams.id}`,
+      url: `https://www.hangul-tajawang.com/transcription/${resolvedParams.id}`,
       type: "article",
     }
   };

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "연습 모드 선택 - 한글타자왕",
     description: "한글 타자 마스터를 위한 첫 걸음, 모드를 선택하세요.",
+    url: "https://www.hangul-tajawang.com/practice",
   }
 };
 

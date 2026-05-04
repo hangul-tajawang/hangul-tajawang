@@ -6,9 +6,13 @@ export const metadata: Metadata = {
   title: "기억력 타자 - 카드 뒤집기 한글 타자 게임",
   description: "타자로 카드를 뒤집어 짝을 맞추는 혁신적인 한글 타자 게임! 기억력과 타자 실력을 동시에 키워보세요. 무료 온라인 타자 게임.",
   keywords: ["카드 뒤집기", "타자 게임", "기억력 게임", "한글 타자 연습", "온라인 타자 게임", "한글타자왕"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/game/card-flip',
+  },
   openGraph: {
     title: "기억력 타자: 카드 뒤집기 - 한글타자왕",
     description: "마우스가 아닌 오직 타자로만 즐기는 기억력 카드 게임! 당신의 기억력 한계에 도전하세요.",
+    url: "https://www.hangul-tajawang.com/game/card-flip",
   }
 };
 

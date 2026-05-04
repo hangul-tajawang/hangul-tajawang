@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "한글 게임 모음 - 한글타자왕",
     description: "게임처럼 즐기는 타자 연습! 다양한 한글 게임에 도전해 보세요.",
+    url: "https://www.hangul-tajawang.com/game",
   }
 };
 

@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "기능 안내 - 한글 타자 연습 및 속도 측정 사이트 활용법",
   description: "한글타자왕의 다양한 타자 연습 모드를 소개합니다. 자리 연습부터 낱말, 짧은 글, 긴 글 연습, 그리고 재미있는 아케이드 게임까지 모두 무료로 이용하세요.",
   keywords: ["한글타자연습 사용법", "타자 속도 측정 방법", "온라인 타자 연습 가이드", "무료 타자 게임 안내"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/guide',
+  }
 };
 
 export default function GuidePage() {

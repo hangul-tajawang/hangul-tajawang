@@ -27,12 +27,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "어문 규범"
     ],
     alternates: {
-      canonical: `https://hangul-tajawang.com/quiz/${data.id}`,
+      canonical: `https://www.hangul-tajawang.com/quiz/${data.id}`,
     },
     openGraph: {
       title: data.aeoQuestion,
       description: data.aeoAnswer,
-      url: `https://hangul-tajawang.com/quiz/${data.id}`,
+      url: `https://www.hangul-tajawang.com/quiz/${data.id}`,
       type: "article",
     }
   };

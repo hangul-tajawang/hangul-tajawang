@@ -1,9 +1,17 @@
-"use client";
-
 import React from "react";
 import { Keyboard, ShieldCheck, VolumeX, Sparkles, ShoppingCart, Zap, ArrowRight, Info, CheckCircle2, Play, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ABKO MK108 멤브레인 키보드 리뷰 - 입문용 추천 | 한글타자왕",
+  description: "오트밀 감성의 세련된 디자인과 쫀득한 멤브레인 타건감을 자랑하는 ABKO MK108 키보드 리뷰입니다. 타자 연습 입문자에게 최적인 이유를 확인해보세요.",
+  keywords: ["ABKO MK108", "멤브레인 키보드 추천", "입문용 키보드", "타자연습 키보드", "앱코 키보드", "가성비 키보드"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/recommend/abko-mk108',
+  }
+};
 
 export default function AbkoMk108Page() {
   const coupangLink = "https://link.coupang.com/a/d95o22";

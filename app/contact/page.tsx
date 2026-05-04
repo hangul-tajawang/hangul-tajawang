@@ -1,6 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronLeft, Mail, MessageCircle, Clock, AlertCircle } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "문의하기 | 한글타자왕",
+  description: "서비스 이용 중 궁금한 점이나 제안하고 싶은 기능이 있다면 언제든 문의해 주세요.",
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/contact',
+  }
+};
 
 export default function ContactPage() {
   return (

@@ -3,9 +3,19 @@ import Link from "next/link";
 import { blogPosts } from "@/lib/blog-data";
 import { Newspaper, Calendar, Hash, ArrowRight } from "lucide-react";
 
-export const metadata = {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "블로그 | 한글타자왕",
   description: "타자와 개발, 그리고 사람 중심의 이야기를 담은 한글타자왕의 블로그입니다.",
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/blog',
+  },
+  openGraph: {
+    title: "한글타자왕 블로그 - 타자와 성장의 이야기",
+    description: "단순한 연습을 넘어 인사이트를 나누는 블로그입니다.",
+    url: "https://www.hangul-tajawang.com/blog",
+  }
 };
 
 export default function BlogIndexPage() {

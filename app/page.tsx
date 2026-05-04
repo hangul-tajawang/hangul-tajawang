@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.hangul-tajawang.com',
   },
+  openGraph: {
+    title: '한글타자왕 - 무료 한글타자연습사이트',
+    description: '낱말 연습, 짧은 글 연습, 원고지 필사, 산성비 게임을 무료로 즐겨보세요.',
+    url: 'https://www.hangul-tajawang.com',
+  }
 };
 
 // ── SSR 인기 챌린지 fetch ─────────────────────────────────────────────────

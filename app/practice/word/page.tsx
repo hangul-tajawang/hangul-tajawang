@@ -7,9 +7,13 @@ export const metadata: Metadata = {
   title: "한글 낱말 연습 목록 - 단계별 자판 단어 연습",
   description: "중간 줄, 상단 줄, 하단 줄 등 키보드 자판 위치별로 구성된 한글 낱말 타자 연습을 통해 타이핑 실력을 체계적으로 높여보세요. 독수리 타법 교정에 필수적인 코스입니다.",
   keywords: ["낱말 타자 연습", "한글 자판 연습", "단어 타자", "독수리 타법 교정", "타수 늘리기", "단계별 타자"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/practice/word',
+  },
   openGraph: {
     title: "한글 낱말 타자 연습 단계별 목록 | 한글타자왕",
     description: "키보드 위치별로 맞춤형 낱말 연습을 진행해보세요.",
+    url: "https://www.hangul-tajawang.com/practice/word",
   }
 };
 

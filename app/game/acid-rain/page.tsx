@@ -22,10 +22,14 @@ export const metadata: Metadata = {
     '무료 타자 게임',
     '한글타자왕 게임',
   ],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/game/acid-rain',
+  },
   openGraph: {
     title: '한글 산성비 게임 - 한글타자왕',
     description:
       '한순간도 방심할 수 없는 긴장감! 산성비 게임으로 당신의 타자 실력을 증명하세요.',
+    url: 'https://www.hangul-tajawang.com/game/acid-rain',
   },
 };
 

@@ -7,9 +7,13 @@ export const metadata: Metadata = {
   title: "자주 틀리는 한글 맞춤법 사전 및 퀴즈",
   description: "한국인이 가장 자주 헷갈리는 맞춤법(바람/바램, 낫다/낳다 등)을 퀴즈로 풀고 상세한 해설을 확인하세요.",
   keywords: ["맞춤법 퀴즈", "한글 타자 연습", "바람 바램", "낫다 낳다", "되 돼 구분", "띄어쓰기 앱"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/quiz',
+  },
   openGraph: {
     title: "자주 틀리는 한글 맞춤법 사전 | 한글타자왕",
     description: "헷갈리는 맞춤법, 더 이상 틀리지 마세요. 퀴즈와 해설로 완벽 마스터!",
+    url: "https://www.hangul-tajawang.com/quiz",
   }
 };
 

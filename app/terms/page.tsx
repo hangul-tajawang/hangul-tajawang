@@ -1,6 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronLeft, Scale, Mail } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "이용약관 | 한글타자왕",
+  description: "한글타자왕의 서비스 이용약관입니다. 서비스 이용에 필요한 권리와 의무를 확인하세요.",
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/terms',
+  }
+};
 
 export default function TermsOfService() {
   return (

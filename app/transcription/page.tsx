@@ -7,9 +7,13 @@ export const metadata: Metadata = {
   title: "긴 글 연습 및 감성 필사 목록",
   description: "다양한 문학 작품, 시, 소설, 수필 등을 원고지 타자로 연습할 수 있는 감성 한글 타자 연습 리스트입니다. 나만의 타자 속도와 정확도를 측정해보세요.",
   keywords: ["긴 글 타자 연습", "한글 타자 연습 목록", "감성 필사 목록", "타자 속도 측정", "무료 한글 타자 사이트"],
+  alternates: {
+    canonical: 'https://www.hangul-tajawang.com/transcription',
+  },
   openGraph: {
     title: "긴 글 타자 연습 및 감성 필사 - 한글타자왕",
     description: "원고지에 써내려가는 명문. 아날로그 감성으로 타자 속도와 정확도를 측정해보세요.",
+    url: "https://www.hangul-tajawang.com/transcription",
   }
 };
 
