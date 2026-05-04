@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
@@ -121,6 +121,7 @@ export const Header: React.FC = () => {
                 <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/recommend" icon={<Keyboard size={20} />} label="키보드 추천" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/blog" icon={<Newspaper size={20} />} label="블로그" onClick={() => setIsMobileMenuOpen(false)} />
             </div>
 
             <div className="p-6 bg-surface-low">
@@ -171,6 +172,7 @@ export const Header: React.FC = () => {
                 <NavButton icon={<BookOpenCheck size={18} />} label="맞춤법 퀴즈" href="/quiz" />
                 <NavButton icon={<Users size={18} />} label="필사 챌린지" href="/challenge" />
                 <NavButton icon={<Keyboard size={18} />} label="키보드 추천" href="/recommend" />
+                <NavButton icon={<Newspaper size={18} />} label="블로그" href="/blog" />
             </nav>
 
             <div className="flex items-center gap-2">
