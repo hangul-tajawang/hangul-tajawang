@@ -37,6 +37,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       publishedTime: post.date,
       authors: ['한글타자왕'],
+      url: `https://www.hangul-tajawang.com/blog/${post.id}`,
+    },
+    alternates: {
+      canonical: `https://www.hangul-tajawang.com/blog/${post.id}`,
     },
   };
 }
@@ -65,12 +69,12 @@ export default async function BlogPostPage({ params }: Props) {
       name: '한글타자왕',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://hangul-tajawang.com/favicon.ico' // 임시 로고 URL
+        url: 'https://www.hangul-tajawang.com/favicon.ico'
       }
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://hangul-tajawang.com/blog/${post.id}`
+      '@id': `https://www.hangul-tajawang.com/blog/${post.id}`
     }
   };
 

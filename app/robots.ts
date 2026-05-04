@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://hangul-tajawang.com'; // 실제 도메인으로 변경 권장
+  const baseUrl = 'https://www.hangul-tajawang.com';
 
   return {
     rules: {

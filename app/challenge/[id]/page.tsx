@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
         "타자 챌린지"
       ],
       alternates: {
-        canonical: `https://hangul-tajawang.com/challenge/${id}`,
+        canonical: `https://www.hangul-tajawang.com/challenge/${id}`,
       },
       openGraph: {
         title: `${content.title} | 유저 창작 타자 챌린지 | 한글타자왕`,
         description: `"${content.title}" - 감성적인 문장을 원고지에 직접 써내려가 보세요. 유저들이 직접 창작하고 공유한 글입니다.`,
-        url: `https://hangul-tajawang.com/challenge/${id}`,
+        url: `https://www.hangul-tajawang.com/challenge/${id}`,
         type: "article",
         images: content.profiles?.avatar_url ? [content.profiles.avatar_url] : [],
       },

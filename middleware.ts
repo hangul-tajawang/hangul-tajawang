@@ -2,6 +2,20 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  const { hostname, pathname, search } = request.nextUrl;
+
+  // ── WWW 통일: non-www → www 301 영구 리디렉션 ──────────────────────────
+  // 프로덕션 환경(hangul-tajawang.com)에서만 적용하여 로컬 개발 환경 안전 보장
+  if (hostname === 'hangul-tajawang.com') {
+    const wwwUrl = new URL(request.url);
+    wwwUrl.hostname = 'www.hangul-tajawang.com';
+    return NextResponse.redirect(wwwUrl, {
+      status: 301,
+      headers: { 'Cache-Control': 'public, max-age=31536000' },
+    });
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,

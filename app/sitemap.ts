@@ -4,6 +4,7 @@ import { LONG_TEXT_DB } from '@/lib/long-text-data';
 import { BASIC_PRACTICE_STEPS } from '@/lib/word-data';
 import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import { QUIZ_DATA } from '@/lib/quiz-data';
+import { blogPosts } from '@/lib/blog-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 실제 운영 중인 www 도메인으로 베이스 URL 설정
@@ -13,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. 정적 페이지 목록
   const staticPages = [
     '',
+    '/blog',
     '/practice',
     '/practice/position',
     '/practice/word',
@@ -26,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/recommend',
     '/recommend/abko-mk108',
     '/guide',
+    '/contact',
     '/privacy',
     '/terms',
   ].map((route) => ({
@@ -35,7 +38,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1.0 : 0.8,
   }));
 
-  // 2. 로컬 하드코딩 된 SEO 페이지 파싱 (낱말, 짧은글, 긴글, 퀴즈)
+  // 2. 블로그 포스트 페이지
+  const blogPages = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.id}`,
+    lastModified: post.date,
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }));
+
+  // 3. 로컬 하드코딩 된 SEO 페이지 파싱 (낱말, 짧은글, 긴글, 퀴즈)
   const longTextPages = LONG_TEXT_DB.map(text => ({
     url: `${baseUrl}/transcription/${text.id}`,
     lastModified: lastModifiedTime,
@@ -64,7 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  // 3. 동적 챌린지 페이지 목록 (Supabase에서 실시간으로 가져옴)
+  // 4. 동적 챌린지 페이지 목록 (Supabase에서 실시간으로 가져옴)
   let challengePages: any[] = [];
   try {
     const { data: contents } = await supabase
@@ -84,5 +95,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap generation error:', error);
   }
 
-  return [...staticPages, ...longTextPages, ...shortPages, ...wordPages, ...quizPages, ...challengePages];
+  return [...staticPages, ...blogPages, ...longTextPages, ...shortPages, ...wordPages, ...quizPages, ...challengePages];
 }

@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "한글타자왕 - 아날로그 감성 한글 타자 연습",
     description: "아날로그 학용품 컨셉의 따뜻한 디자인과 함께하는 최고의 한글 타자 연습 서비스",
-    url: "https://hangul-tajawang.com",
+    url: "https://www.hangul-tajawang.com",
     siteName: "한글타자왕",
     images: [
       {
