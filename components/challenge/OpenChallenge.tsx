@@ -138,7 +138,7 @@ const ChallengeList = () => {
                     <p className="text-xs text-zinc-500 font-medium">작가가 직접 창작하고 공유한 소중한 글들입니다.</p>
                 </div>
             </div>
-            <Link href="/challenge" className="px-4 py-2 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-xl text-xs font-black shadow-sm hover:bg-zinc-50 transition-all">전체 목록 보기</Link>
+            <Link href="/challenge" prefetch={false} className="px-4 py-2 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-xl text-xs font-black shadow-sm hover:bg-zinc-50 transition-all">전체 목록 보기</Link>
         </div>
       )}
 
@@ -166,7 +166,7 @@ const ChallengeList = () => {
             const isLiked = myLikes.includes(item.id);
             return (
               <div key={item.id} className="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl transition-all cursor-pointer group flex flex-col justify-between border-b-4 hover:border-b-blue-500">
-                <Link href={`/challenge/${item.id}`} className="block">
+                <Link href={`/challenge/${item.id}`} prefetch={false} className="block">
                   <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-wrap gap-2">
                         <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-[10px] font-black rounded-lg uppercase">{item.category}</span>
@@ -192,7 +192,7 @@ const ChallengeList = () => {
                           <span className="text-xs font-black">{item.comment_count || 0}</span>
                       </button>
                   </div>
-                  <Link href={`/challenge/${item.id}`} className="flex items-center gap-2 px-5 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl text-xs font-black hover:scale-105 transition-all shadow-lg">
+                  <Link href={`/challenge/${item.id}`} prefetch={false} className="flex items-center gap-2 px-5 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl text-xs font-black hover:scale-105 transition-all shadow-lg">
                       <Play size={14} fill="currentColor" /> 도전하기
                   </Link>
                 </div>
@@ -223,10 +223,10 @@ const ChallengeList = () => {
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 <div className="flex items-center justify-between mb-4">
                     <h4 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-2">작가의 다른 글</h4>
-                    <Link href={`/challenge?authorId=${selectedAuthorProfile.id}`} onClick={() => setSelectedAuthorProfile(null)} className="text-[10px] font-black text-blue-600 hover:underline">전체보기</Link>
+                    <Link href={`/challenge?authorId=${selectedAuthorProfile.id}`} prefetch={false} onClick={() => setSelectedAuthorProfile(null)} className="text-[10px] font-black text-blue-600 hover:underline">전체보기</Link>
                 </div>
                 {authorContents.map((post) => (
-                    <Link key={post.id} href={`/challenge/${post.id}`} onClick={() => setSelectedAuthorProfile(null)} className="block bg-zinc-50 dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-blue-500 transition-all group">
+                    <Link key={post.id} href={`/challenge/${post.id}`} prefetch={false} onClick={() => setSelectedAuthorProfile(null)} className="block bg-zinc-50 dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-blue-500 transition-all group">
                         <h5 className="font-black text-lg mb-2 group-hover:text-blue-600 text-zinc-900 dark:text-zinc-100">{post.title}</h5>
                         <div className="flex items-center justify-between mt-6">
                             <div className="flex gap-3 text-zinc-400 text-[10px] font-black"><span><Zap size={12} fill="currentColor" className="inline mr-1" /> {post.complete_count || 0}명</span><span><Heart size={12} className="inline mr-1" /> {post.like_count || 0}</span></div>

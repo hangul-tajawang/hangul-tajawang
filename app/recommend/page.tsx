@@ -26,7 +26,7 @@ export default function RecommendIndexPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
           
           {/* ABKO MK108 Card */}
-          <Link href="/recommend/abko-mk108" className="group block">
+          <Link href="/recommend/abko-mk108" prefetch={false} className="group block">
             <div className="bg-surface-lowest rounded-[3rem] p-8 md:p-10 shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform">
                 <Keyboard size={120} />

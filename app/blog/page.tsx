@@ -36,7 +36,7 @@ export default function BlogIndexPage() {
 
         <div className="grid gap-6 sm:gap-8">
           {blogPosts.map((post, index) => (
-            <Link href={`/blog/${post.id}`} key={post.id} className="group flex flex-col md:flex-row gap-6 p-6 sm:p-8 bg-surface-lowest hover:bg-surface-lowest/80 border border-outline-variant hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/5 rounded-3xl transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 overflow-hidden" style={{ animationDelay: `${index * 150}ms` }}>
+            <Link href={`/blog/${post.id}`} key={post.id} prefetch={false} className="group flex flex-col md:flex-row gap-6 p-6 sm:p-8 bg-surface-lowest hover:bg-surface-lowest/80 border border-outline-variant hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/5 rounded-3xl transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 overflow-hidden" style={{ animationDelay: `${index * 150}ms` }}>
               <div className="flex-1 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-4 text-xs font-bold uppercase tracking-wider text-primary">
                   <span className="flex items-center gap-1.5 bg-primary/10 py-1.5 px-3 rounded-full">

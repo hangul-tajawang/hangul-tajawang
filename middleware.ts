@@ -16,6 +16,15 @@ export async function middleware(request: NextRequest) {
   }
   // ────────────────────────────────────────────────────────────────────────
 
+  // 보호된 라우트(예: /mypage)가 아니면 Supabase API 호출을 생략하여 트래픽 최적화
+  if (!pathname.startsWith('/mypage')) {
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    })
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,

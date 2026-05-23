@@ -33,6 +33,7 @@ export default function QuizListPage() {
           <Link 
             key={item.id} 
             href={`/quiz/${item.id}`}
+            prefetch={false}
             className="group flex flex-col bg-surface-low p-8 rounded-[2.5rem] border border-surface-high hover:border-blue-500/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] relative overflow-hidden"
             style={{ animationDelay: `${i * 50}ms` }}
           >
