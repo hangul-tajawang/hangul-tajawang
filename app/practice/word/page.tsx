@@ -30,7 +30,7 @@ export default function WordPracticeListPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {BASIC_PRACTICE_STEPS.map((step, i) => (
-          <Link 
+          <Link prefetch={false} 
             key={step.id} 
             href={`/practice/word/${step.id}`}
             className="group flex flex-col bg-surface-low p-8 rounded-[2rem] border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"

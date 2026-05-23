@@ -300,7 +300,7 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
                                 <div className="flex items-center gap-2 text-zinc-400"><Heart size={18} className="fill-red-500 text-red-500" /><span className="text-sm font-black">{item.like_count || 0}</span></div>
                                 <div className="flex items-center gap-2 text-zinc-400"><MessageSquare size={18} /><span className="text-sm font-black">{item.comment_count || 0}</span></div>
                             </div>
-                            <Link href={`/challenge/${item.id}`} className="p-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-2xl hover:scale-110 transition-transform shadow-xl">
+                            <Link prefetch={false} href={`/challenge/${item.id}`} className="p-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-2xl hover:scale-110 transition-transform shadow-xl">
                                 <ChevronRight size={20} />
                             </Link>
                         </div>
@@ -323,7 +323,7 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
                         <h3 className="text-2xl font-black mb-4 text-zinc-900 dark:text-zinc-100">{item.title}</h3>
                         <p className="text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-10 font-serif italic">"{item.content}"</p>
                         <div className="flex justify-end">
-                            <Link href={`/challenge/${item.id}`} className="flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-[1.5rem] text-sm font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 dark:shadow-none">
+                            <Link prefetch={false} href={`/challenge/${item.id}`} className="flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-[1.5rem] text-sm font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 dark:shadow-none">
                                 <Play size={16} fill="currentColor" /> 다시 도전하기
                             </Link>
                         </div>

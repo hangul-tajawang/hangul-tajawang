@@ -52,7 +52,7 @@ export function MarkdownRenderer({ content }: Props) {
           const isInternal = href?.startsWith('/');
           if (isInternal) {
             return (
-              <Link
+              <Link prefetch={false}
                 href={href!}
                 className="inline-flex items-center gap-1 px-4 py-2 bg-blue-600 text-white font-bold rounded-full text-base hover:bg-blue-700 transition-all shadow-md hover:scale-105 no-underline"
               >

@@ -17,7 +17,7 @@ export default function TermsOfService() {
       <div className="container mx-auto max-w-3xl bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
         {/* Header */}
         <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 flex flex-col items-center text-center">
-          <Link href="/" className="mb-6 self-start flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
+          <Link prefetch={false} href="/" className="mb-6 self-start flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
             <ChevronLeft size={16} /> 홈으로 돌아가기
           </Link>
           <Scale size={48} className="text-blue-600 mb-4" />
@@ -106,7 +106,7 @@ export default function TermsOfService() {
 
         {/* Footer */}
         <div className="p-8 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 text-center flex justify-center gap-6 text-sm font-bold text-zinc-400">
-          <Link href="/privacy" className="hover:text-zinc-600 transition-colors">개인정보처리방침</Link>
+          <Link prefetch={false} href="/privacy" className="hover:text-zinc-600 transition-colors">개인정보처리방침</Link>
           <span>·</span>
           <span>© 2026 한글타자왕</span>
         </div>

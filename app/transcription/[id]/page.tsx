@@ -82,7 +82,7 @@ export default async function TranscriptionDetailPage({ params }: Props) {
                 {/* 이전 글 / 다음 글 네비게이션 */}
                 <nav className="mt-12 flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-surface-high pt-8">
                     {prevText ? (
-                        <Link href={`/transcription/${prevText.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
+                        <Link prefetch={false} href={`/transcription/${prevText.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">이전 작품</span>
                             <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevText.title}</span>
                             <span className="text-sm font-medium text-zinc-500">{prevText.author}</span>
@@ -90,7 +90,7 @@ export default async function TranscriptionDetailPage({ params }: Props) {
                     ) : <div className="w-full sm:w-1/2" />}
 
                     {nextText ? (
-                        <Link href={`/transcription/${nextText.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
+                        <Link prefetch={false} href={`/transcription/${nextText.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">다음 작품</span>
                             <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextText.title}</span>
                             <span className="text-sm font-medium text-zinc-500">{nextText.author}</span>

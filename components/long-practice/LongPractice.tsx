@@ -271,7 +271,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                         </div>
                     </div>
                 </div>
-                <Link href={`/challenge?authorId=${externalContent.author_id}`} className="px-12 py-6 bg-on-surface text-white font-black rounded-3xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center gap-3">작가의 글 더보기 <ChevronRight size={20}/></Link>
+                <Link prefetch={false} href={`/challenge?authorId=${externalContent.author_id}`} className="px-12 py-6 bg-on-surface text-white font-black rounded-3xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center gap-3">작가의 글 더보기 <ChevronRight size={20}/></Link>
             </section>
 
             <section className="bg-surface-lowest p-16 rounded-[4rem] shadow-xl">
@@ -338,7 +338,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                 <h2 className="display-lg !text-5xl mb-6">유저들이 만든 글은 어때요?</h2>
                 <p className="text-zinc-400 font-medium text-xl leading-relaxed max-w-xl">매일 새로운 감성 명문이 올라오는 필사 챌린지에서 다른 유저들과 소통하며 연습해 보세요.</p>
             </div>
-            <Link 
+            <Link prefetch={false} 
                 href="/challenge" 
                 className="px-12 py-7 bg-white text-on-surface font-black rounded-[2rem] hover:scale-[1.05] transition-all flex items-center gap-4 whitespace-nowrap shadow-2xl group relative z-10"
             >

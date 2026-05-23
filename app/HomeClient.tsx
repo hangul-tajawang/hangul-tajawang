@@ -108,7 +108,7 @@ export default function HomeClient({ initialPopular }: Props) {
                 아름다운 문장들을 직접 타이핑하며 감성을 채워보세요.
               </p>
             </div>
-            <Link
+            <Link prefetch={false}
               href="/challenge"
               prefetch={false}
               className="group flex items-center gap-3 text-on-surface font-black text-sm uppercase tracking-widest hover:text-primary transition-colors bg-surface-lowest px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all"
@@ -133,7 +133,7 @@ export default function HomeClient({ initialPopular }: Props) {
                 ))
             ) : popularContents.length > 0 ? (
               popularContents.slice(0, 3).map((content) => (
-                <Link
+                <Link prefetch={false}
                   key={content.id}
                   href={`/challenge/${content.id}`}
                   prefetch={false}
@@ -293,14 +293,14 @@ function HeroSection() {
 
         <div className="flex flex-col items-center gap-8 w-full">
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full sm:w-auto px-4">
-            <Link
+            <Link prefetch={false}
               href="/practice"
               prefetch={false}
               className="px-10 md:px-12 py-5 md:py-6 primary-gradient text-white text-lg md:text-xl font-black rounded-full shadow-2xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center gap-3"
             >
               지금 시작하기 <ChevronRight size={24} />
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/game"
               prefetch={false}
               className="px-10 md:px-12 py-5 md:py-6 bg-surface-lowest text-on-surface text-lg md:text-xl font-black rounded-full shadow-sm transition-all hover:bg-surface-low flex items-center justify-center gap-3"
@@ -333,7 +333,7 @@ function FeatureCard({
   href: string;
 }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       prefetch={false}
       className="bg-surface-lowest p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] text-left transition-all duration-500 hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] hover:-translate-y-2 relative group overflow-hidden"

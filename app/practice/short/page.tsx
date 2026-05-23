@@ -30,7 +30,7 @@ export default function ShortPracticeListPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {SHORT_TEXT_DB.map((item, i) => (
-          <Link 
+          <Link prefetch={false} 
             key={item.id} 
             href={`/practice/short/${item.id}`}
             className="group flex flex-col bg-surface-low p-10 rounded-[2.5rem] border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"

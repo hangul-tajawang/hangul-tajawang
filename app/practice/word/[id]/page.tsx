@@ -93,14 +93,14 @@ export default async function WordCategoryPage({ params }: Props) {
                 {/* 이전 글 / 다음 글 네비게이션 */}
                 <nav className="mt-12 flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-surface-high pt-8">
                     {prevData ? (
-                        <Link href={`/practice/word/${prevData.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
+                        <Link prefetch={false} href={`/practice/word/${prevData.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">이전 단계</span>
                             <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevData.title}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
 
                     {nextData ? (
-                        <Link href={`/practice/word/${nextData.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
+                        <Link prefetch={false} href={`/practice/word/${nextData.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">다음 단계</span>
                             <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextData.title}</span>
                         </Link>

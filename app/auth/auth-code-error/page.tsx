@@ -11,7 +11,7 @@ export default function AuthErrorPage() {
           인증 과정에서 문제가 발생했습니다. <br />
           잠시 후 다시 시도해주세요.
         </p>
-        <Link 
+        <Link prefetch={false} 
           href="/"
           className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-md"
         >

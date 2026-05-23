@@ -63,7 +63,7 @@ export default function GameHubPage() {
             <h2 className="text-3xl font-black mb-3">내 게임 실력은 몇 등일까?</h2>
             <p className="text-blue-100 font-medium">산성비 게임 최고 점수에 도전하고 <br className="hidden sm:block" />다른 유저들과 랭킹을 겨뤄보세요.</p>
         </div>
-        <Link 
+        <Link prefetch={false} 
             href="/game/acid-rain" 
             className="px-8 py-4 bg-white text-blue-600 font-black rounded-2xl hover:scale-105 transition-all flex items-center gap-2 shadow-xl"
         >
@@ -81,7 +81,7 @@ function GameCard({ href, icon, title, description, difficulty, color }: any) {
   };
 
   return (
-    <Link 
+    <Link prefetch={false} 
       href={href}
       className="group bg-white dark:bg-zinc-900 p-10 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 hover:border-blue-500 hover:shadow-2xl transition-all flex flex-col items-center text-center"
     >

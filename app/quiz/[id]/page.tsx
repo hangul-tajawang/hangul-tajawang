@@ -113,7 +113,7 @@ export default async function QuizDetailPage({ params }: Props) {
                 {/* Internal Linking to Practice Mode */}
                 <div className="mt-12 text-center flex flex-col items-center">
                     <p className="text-zinc-600 dark:text-zinc-400 mb-6 font-medium">머리로만 외우지 말고 손가락으로 직접 쳐서 기억하세요.</p>
-                    <Link 
+                    <Link prefetch={false} 
                         href="/practice/short/healing" 
                         className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold rounded-2xl hover:scale-105 transition-transform"
                     >

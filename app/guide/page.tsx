@@ -72,7 +72,7 @@ export default function GuidePage() {
           <h2 className="text-3xl font-black mb-2">지금 바로 시작해보세요!</h2>
           <p className="opacity-90 font-medium text-lg">한글타자왕은 별도의 설치 없이 웹에서 바로 이용 가능합니다.</p>
         </div>
-        <Link href="/practice" className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-xl flex items-center gap-2 hover:scale-105 transition-all">
+        <Link prefetch={false} href="/practice" className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-xl flex items-center gap-2 hover:scale-105 transition-all">
           연습장 가기 <ChevronRight />
         </Link>
       </div>
@@ -86,7 +86,7 @@ function GuideSection({ icon, title, desc, href }: { icon: any, title: string, d
       <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">{icon}</div>
       <h3 className="text-2xl font-black mb-4">{title}</h3>
       <p className="text-zinc-500 leading-relaxed mb-8">{desc}</p>
-      <Link href={href} className="text-blue-600 font-bold flex items-center gap-1 hover:underline">
+      <Link prefetch={false} href={href} className="text-blue-600 font-bold flex items-center gap-1 hover:underline">
         직접 체험하기 <ChevronRight size={16} />
       </Link>
     </div>

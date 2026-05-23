@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 /**
  * [SEO 핵심] 서버 컴포넌트에서 챌린지 목록을 SSR로 가져와
- * 정적 <Link> 태그로 렌더링합니다.
+ * 정적 <Link prefetch={false}> 태그로 렌더링합니다.
  * 
  * 이를 통해 구글봇이 JS 실행 없이도 120개+ 챌린지 페이지의
  * 내부 링크를 발견하고 크롤링할 수 있게 됩니다.
@@ -73,7 +73,7 @@ export default async function ChallengePage() {
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {challenges.map((item) => (
                   <li key={item.id}>
-                    <Link
+                    <Link prefetch={false}
                       href={`/challenge/${item.id}`}
                       className="flex items-center gap-2 p-3 rounded-xl hover:bg-surface-high transition-colors group/link"
                     >

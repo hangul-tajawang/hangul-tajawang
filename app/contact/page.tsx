@@ -15,7 +15,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans py-12 px-4">
       <div className="container mx-auto max-w-3xl">
-        <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
+        <Link prefetch={false} href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
           <ChevronLeft size={16} /> 홈으로 돌아가기
         </Link>
 

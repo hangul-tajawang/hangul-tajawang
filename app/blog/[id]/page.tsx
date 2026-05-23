@@ -89,7 +89,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="min-h-screen bg-surface py-12 px-4 sm:px-8">
         <div className="max-w-3xl mx-auto">
           {/* 뒤로 가기 링크 */}
-          <Link href="/blog" className="inline-flex items-center gap-2 text-zinc-500 hover:text-primary font-bold mb-8 transition-colors">
+          <Link prefetch={false} href="/blog" className="inline-flex items-center gap-2 text-zinc-500 hover:text-primary font-bold mb-8 transition-colors">
             <ArrowLeft size={18} /> 목록으로 돌아가기
           </Link>
 

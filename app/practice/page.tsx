@@ -58,7 +58,7 @@ export default function PracticePage() {
             </h2>
             <p className="text-zinc-400 font-medium">원고지에 써내려가는 감성 필사, 긴 글 연습 페이지로 이동합니다.</p>
         </div>
-        <Link 
+        <Link prefetch={false} 
             href="/transcription" 
             prefetch={false}
             className="px-8 py-4 bg-white text-zinc-900 font-black rounded-2xl hover:scale-105 transition-all flex items-center gap-2 whitespace-nowrap"
@@ -78,7 +78,7 @@ function PracticeModeCard({ href, icon, title, description, color }: any) {
   };
 
   return (
-    <Link 
+    <Link prefetch={false} 
       href={href}
       prefetch={false}
       className="group bg-white dark:bg-zinc-900 p-10 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-2xl hover:-translate-y-2 transition-all flex flex-col items-center text-center shadow-sm"

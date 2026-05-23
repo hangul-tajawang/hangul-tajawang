@@ -30,7 +30,7 @@ export default function QuizListPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {QUIZ_DATA.map((item, i) => (
-          <Link 
+          <Link prefetch={false} 
             key={item.id} 
             href={`/quiz/${item.id}`}
             prefetch={false}

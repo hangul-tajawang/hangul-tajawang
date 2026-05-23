@@ -26,7 +26,7 @@ export const KeyboardRecommendationBanner: React.FC<KeyboardRecommendationBanner
   };
 
   return (
-    <Link href="/recommend" className={`${baseStyles} ${variants[variant]} ${className}`}>
+    <Link prefetch={false} href="/recommend" className={`${baseStyles} ${variants[variant]} ${className}`}>
       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-700">
         <Keyboard size={100} />
       </div>

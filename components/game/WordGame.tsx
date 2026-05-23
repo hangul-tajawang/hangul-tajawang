@@ -244,7 +244,7 @@ export const WordGame: React.FC = () => {
             <div className="flex flex-col gap-4">
                 <KeyboardRecommendationBanner variant="light" className="!mt-0 mb-4 !rounded-3xl" />
                 <button onClick={startGame} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
-                <Link href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16}/></Link>
+                <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16}/></Link>
             </div>
         </div>
     </div>

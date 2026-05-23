@@ -34,14 +34,14 @@ export default function NotFound() {
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg">
-        <Link 
+        <Link prefetch={false} 
           href="/" 
           className="w-full sm:w-auto px-10 py-5 bg-on-surface text-white font-black rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center justify-center gap-3"
         >
           <MoveLeft size={20} /> 홈으로 돌아가기
         </Link>
         
-        <Link 
+        <Link prefetch={false} 
           href="/practice" 
           className="w-full sm:w-auto px-10 py-5 bg-white border-2 border-zinc-100 text-on-surface font-black rounded-2xl hover:bg-zinc-50 transition-all flex items-center justify-center gap-3"
         >

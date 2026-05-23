@@ -20,7 +20,7 @@ export default function AbkoMk108Page() {
     <div className="bg-surface overflow-x-hidden min-h-screen pb-24">
       {/* Header / Navigation Back */}
       <nav className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-8">
-        <Link href="/recommend" className="inline-flex items-center gap-2 text-zinc-400 hover:text-primary transition-colors font-black text-xs uppercase tracking-widest group">
+        <Link prefetch={false} href="/recommend" className="inline-flex items-center gap-2 text-zinc-400 hover:text-primary transition-colors font-black text-xs uppercase tracking-widest group">
           <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Collection
         </Link>
       </nav>
