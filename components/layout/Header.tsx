@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
             <div className="p-6 bg-surface-low">
                 {user ? (
                     <div className="flex flex-col gap-4">
-                        <Link href="/mypage" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 p-2">
+                        <Link href="/mypage" prefetch={false} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 p-2">
                             {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={40} height={40} className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold">U</div>}
                             <div>
                                 <p className="editorial-heading text-sm">{profile?.nickname || '필사 작가'}</p>
@@ -160,7 +160,7 @@ export const Header: React.FC = () => {
 
       <div className="w-full bg-surface/80 backdrop-blur-md">
         <div className="container mx-auto max-w-7xl h-16 flex items-center justify-between px-4 lg:px-8">
-            <Link href="/" className="flex items-center gap-2 cursor-pointer group">
+            <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group">
                 <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:scale-110 transition-transform">한</div>
                 <span className="editorial-heading text-xl">한글타자왕</span>
             </Link>
@@ -185,7 +185,7 @@ export const Header: React.FC = () => {
                         {user && <NotificationDrawer />}
                         <div className="hidden md:flex items-center gap-2">
                             {user ? (
-                                <Link href="/mypage" className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
+                                <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
                                     {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={32} height={32} className="w-8 h-8 rounded-full object-cover" /> : <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold text-xs">U</div>}
                                     <span className="text-sm font-bold text-zinc-700">마이페이지</span>
                                 </Link>
@@ -210,7 +210,7 @@ export const Header: React.FC = () => {
 
 function NavButton({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
   return (
-    <Link href={href} className="flex items-center gap-2 px-4 py-2 text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all">
+    <Link href={href} prefetch={false} className="flex items-center gap-2 px-4 py-2 text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all">
       {icon}
       <span>{label}</span>
     </Link>
@@ -219,7 +219,7 @@ function NavButton({ icon, label, href }: { icon: React.ReactNode; label: string
 
 function MobileNavItem({ href, icon, label, onClick }: { href: string; icon: React.ReactNode; label: string; onClick: () => void }) {
     return (
-        <Link href={href} onClick={onClick} className="flex items-center justify-between p-4 bg-surface-lowest hover:bg-surface-low rounded-2xl transition-all">
+        <Link href={href} prefetch={false} onClick={onClick} className="flex items-center justify-between p-4 bg-surface-lowest hover:bg-surface-low rounded-2xl transition-all">
             <div className="flex items-center gap-4 text-zinc-600">
                 {icon}
                 <span className="editorial-heading text-lg">{label}</span>

@@ -54,16 +54,16 @@ export default async function Home() {
           독수리 타법을 교정할 수 있는 한글타자연습사이트입니다.
         </p>
         <nav aria-label="주요 메뉴">
-          <Link href="/practice">타자 연습 - 자리/낱말/짧은글</Link>
-          <Link href="/practice/word">낱말 연습 단계별 목록</Link>
-          <Link href="/practice/short">짧은 글 연습 카테고리</Link>
-          <Link href="/transcription">긴 글 원고지 필사 연습</Link>
-          <Link href="/challenge">유저 창작 필사 챌린지</Link>
-          <Link href="/game">한글 타자 게임</Link>
-          <Link href="/game/acid-rain">산성비 타자 게임</Link>
-          <Link href="/quiz">한글 맞춤법 퀴즈</Link>
-          <Link href="/recommend">키보드 추천</Link>
-          <Link href="/blog">타자 연습 블로그</Link>
+          <Link href="/practice" prefetch={false}>타자 연습 - 자리/낱말/짧은글</Link>
+          <Link href="/practice/word" prefetch={false}>낱말 연습 단계별 목록</Link>
+          <Link href="/practice/short" prefetch={false}>짧은 글 연습 카테고리</Link>
+          <Link href="/transcription" prefetch={false}>긴 글 원고지 필사 연습</Link>
+          <Link href="/challenge" prefetch={false}>유저 창작 필사 챌린지</Link>
+          <Link href="/game" prefetch={false}>한글 타자 게임</Link>
+          <Link href="/game/acid-rain" prefetch={false}>산성비 타자 게임</Link>
+          <Link href="/quiz" prefetch={false}>한글 맞춤법 퀴즈</Link>
+          <Link href="/recommend" prefetch={false}>키보드 추천</Link>
+          <Link href="/blog" prefetch={false}>타자 연습 블로그</Link>
         </nav>
 
         {/* 인기 챌린지 내부 링크 - 크롤러가 챌린지 페이지로 진입할 수 있는 경로 */}
@@ -73,7 +73,7 @@ export default async function Home() {
             <ul>
               {popularContents.map((c: any) => (
                 <li key={c.id}>
-                  <Link href={`/challenge/${c.id}`}>
+                  <Link href={`/challenge/${c.id}`} prefetch={false}>
                     {c.title} - {c.profiles?.nickname || '익명'} 작가의 한글 타자 연습
                   </Link>
                 </li>
