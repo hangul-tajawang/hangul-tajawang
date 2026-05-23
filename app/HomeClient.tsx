@@ -110,7 +110,7 @@ export default function HomeClient({ initialPopular }: Props) {
             </div>
             <Link prefetch={false}
               href="/challenge"
-              prefetch={false}
+              
               className="group flex items-center gap-3 text-on-surface font-black text-sm uppercase tracking-widest hover:text-primary transition-colors bg-surface-lowest px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all"
             >
               전체 보기{' '}
@@ -136,7 +136,7 @@ export default function HomeClient({ initialPopular }: Props) {
                 <Link prefetch={false}
                   key={content.id}
                   href={`/challenge/${content.id}`}
-                  prefetch={false}
+                  
                   className="group relative overflow-hidden bg-surface-lowest rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2"
                 >
                   <div className="p-8 md:p-10 h-full flex flex-col justify-between">
@@ -295,14 +295,14 @@ function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full sm:w-auto px-4">
             <Link prefetch={false}
               href="/practice"
-              prefetch={false}
+              
               className="px-10 md:px-12 py-5 md:py-6 primary-gradient text-white text-lg md:text-xl font-black rounded-full shadow-2xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center gap-3"
             >
               지금 시작하기 <ChevronRight size={24} />
             </Link>
             <Link prefetch={false}
               href="/game"
-              prefetch={false}
+              
               className="px-10 md:px-12 py-5 md:py-6 bg-surface-lowest text-on-surface text-lg md:text-xl font-black rounded-full shadow-sm transition-all hover:bg-surface-low flex items-center justify-center gap-3"
             >
               <Gamepad2 size={24} className="text-secondary" /> 게임 즐기기
@@ -335,7 +335,7 @@ function FeatureCard({
   return (
     <Link prefetch={false}
       href={href}
-      prefetch={false}
+      
       className="bg-surface-lowest p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] text-left transition-all duration-500 hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] hover:-translate-y-2 relative group overflow-hidden"
     >
       <div className="absolute -top-4 -right-4 text-6xl md:text-8xl font-black text-on-surface opacity-[0.02] group-hover:opacity-[0.05] transition-opacity select-none">
