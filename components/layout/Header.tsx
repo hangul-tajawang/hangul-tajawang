@@ -182,7 +182,7 @@ export const Header: React.FC = () => {
                     </div>
                 ) : (
                     <>
-                        {user && <NotificationDrawer />}
+                        {user && <NotificationDrawer userId={user.id} />}
                         <div className="hidden md:flex items-center gap-2">
                             {user ? (
                                 <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">

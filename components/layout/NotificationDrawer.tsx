@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Bell, X, Heart, MessageSquare, Clock, ChevronRight, Loader2, Sparkles, User } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 
-export const NotificationDrawer = () => {
+export const NotificationDrawer = ({ userId }: { userId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activities, setActivities] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -18,18 +18,19 @@ export const NotificationDrawer = () => {
     fetchUnreadCount();
     
     const channel = supabase
-      .channel('realtime-activities')
+      .channel(`realtime-activities-${userId}`)
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'typing_activities' 
+        table: 'typing_activities',
+        filter: `receiver_id=eq.${userId}`
       }, () => {
         fetchUnreadCount();
       })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, []);
+  }, [userId]);
 
   const fetchUnreadCount = async () => {
     const count = await SupabaseService.getUnreadActivityCount();
