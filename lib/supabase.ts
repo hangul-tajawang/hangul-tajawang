@@ -37,8 +37,8 @@ export class SupabaseService {
   }
 
   static async getCurrentUser() {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user;
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user || null;
   }
 
   // --- Profiles ---
