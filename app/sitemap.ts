@@ -6,12 +6,18 @@ import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import { QUIZ_DATA } from '@/lib/quiz-data';
 import { blogPosts } from '@/lib/blog-data';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 실제 운영 중인 www 도메인으로 베이스 URL 설정
-  const baseUrl = 'https://www.hangul-tajawang.com';
-  const lastModifiedTime = new Date().toISOString();
+// 사이트맵을 1시간마다 재생성 (매 요청마다 DB 쿼리 방지)
+export const revalidate = 3600;
 
-  // 1. 정적 페이지 목록
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://www.hangul-tajawang.com';
+
+  // ✅ 고정 날짜 사용
+  // new Date()를 쓰면 매번 "오늘 수정됨"으로 인식되어
+  // 크롤러가 매일 모든 페이지를 강제 재크롤링합니다.
+  const CONTENT_LAST_UPDATED = '2025-12-01';
+
+  // 1. 정적 페이지
   const staticPages = [
     '',
     '/blog',
@@ -33,12 +39,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/terms',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: lastModifiedTime,
-    changeFrequency: 'daily' as const,
+    lastModified: CONTENT_LAST_UPDATED,
+    changeFrequency: 'monthly' as const, // daily → monthly (정적 페이지는 자주 안 바뀜)
     priority: route === '' ? 1.0 : 0.8,
   }));
 
-  // 2. 블로그 포스트 페이지
+  // 2. 블로그 포스트 (실제 작성 날짜 사용)
   const blogPages = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.id}`,
     lastModified: post.date,
@@ -46,48 +52,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  // 3. 로컬 하드코딩 된 SEO 페이지 파싱 (낱말, 짧은글, 긴글, 퀴즈)
+  // 3. 하드코딩된 콘텐츠 페이지 (고정 날짜 사용)
   const longTextPages = LONG_TEXT_DB.map(text => ({
     url: `${baseUrl}/transcription/${text.id}`,
-    lastModified: lastModifiedTime,
-    changeFrequency: 'weekly' as const,
+    lastModified: CONTENT_LAST_UPDATED,
+    changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
   const shortPages = SHORT_TEXT_DB.map(data => ({
     url: `${baseUrl}/practice/short/${data.id}`,
-    lastModified: lastModifiedTime,
-    changeFrequency: 'weekly' as const,
+    lastModified: CONTENT_LAST_UPDATED,
+    changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
   const wordPages = BASIC_PRACTICE_STEPS.map(step => ({
     url: `${baseUrl}/practice/word/${step.id}`,
-    lastModified: lastModifiedTime,
+    lastModified: CONTENT_LAST_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
 
   const quizPages = QUIZ_DATA.map(quiz => ({
     url: `${baseUrl}/quiz/${quiz.id}`,
-    lastModified: lastModifiedTime,
+    lastModified: CONTENT_LAST_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
-  // 4. 동적 챌린지 페이지 목록 (Supabase에서 실시간으로 가져옴)
+  // 4. 동적 챌린지 페이지 (revalidate로 1시간 캐싱)
   let challengePages: any[] = [];
   try {
     const { data: contents } = await supabase
       .from('typing_contents')
       .select('id, updated_at, created_at')
-      .lt('report_count', 10); // 신고 누적된 글은 제외
+      .lt('report_count', 10);
 
     if (contents) {
       challengePages = contents.map((content) => ({
         url: `${baseUrl}/challenge/${content.id}`,
         lastModified: new Date(content.updated_at || content.created_at).toISOString(),
-        changeFrequency: 'weekly' as const,
+        changeFrequency: 'monthly' as const,
         priority: 0.7,
       }));
     }
@@ -95,5 +101,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap generation error:', error);
   }
 
-  return [...staticPages, ...blogPages, ...longTextPages, ...shortPages, ...wordPages, ...quizPages, ...challengePages];
+  return [
+    ...staticPages,
+    ...blogPages,
+    ...longTextPages,
+    ...shortPages,
+    ...wordPages,
+    ...quizPages,
+    ...challengePages,
+  ];
 }
