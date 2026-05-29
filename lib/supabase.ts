@@ -140,22 +140,37 @@ export class SupabaseService {
   }
 
   static async getContents(category?: string, sortBy: SortType = '최신순', authorId?: string) {
-    let query = supabase.from('typing_contents').select('*, profiles!typing_contents_author_id_fkey(nickname, avatar_url), typing_results(user_id), typing_comments(id)').lt('report_count', 10);
+    let query = supabase.from('typing_contents').select('*, profiles!typing_contents_author_id_fkey(nickname, avatar_url), typing_comments(count)').lt('report_count', 10);
     if (category && category !== '전체') query = query.eq('category', category);
     if (authorId) query = query.eq('author_id', authorId);
+
+    // 데이터베이스 레벨에서 정렬하여 성능 최적화
+    if (sortBy === '최신순') query = query.order('created_at', { ascending: false });
+    if (sortBy === '인기순') query = query.order('like_count', { ascending: false });
+    if (sortBy === '도전순') query = query.order('complete_count', { ascending: false });
+
+    // 전체 조회를 방지하기 위한 리미트 설정
+    query = query.limit(100); // 100개로 더 엄격하게 제한하여 DOM 렌더링 부하 최소화
+
     const { data, error } = await query;
     if (error) throw error;
-    const processed = data.map((item: any) => ({ ...item, comment_count: item.typing_comments?.length || 0, unique_participant_count: new Set(item.typing_results?.map((r: any) => r.user_id)).size }));
-    if (sortBy === '인기순') return processed.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
-    if (sortBy === '도전순') return processed.sort((a, b) => (b.complete_count || 0) - (a.complete_count || 0));
+    
+    const processed = data.map((item: any) => ({ 
+      ...item, 
+      content: item.content?.length > 150 ? item.content.substring(0, 150) + '...' : item.content, // 너무 긴 본문은 브라우저 렌더링을 멈추게 하므로 자름
+      comment_count: item.typing_comments?.[0]?.count ?? item.typing_comments?.length ?? 0 
+    }));
+    
+    // 댓글순은 클라이언트에서 정렬
     if (sortBy === '댓글순') return processed.sort((a, b) => (b.comment_count || 0) - (a.comment_count || 0));
-    return processed.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    
+    return processed;
   }
 
   static async getContentById(contentId: string) {
-    const { data, error } = await supabase.from('typing_contents').select('*, profiles!typing_contents_author_id_fkey(nickname, avatar_url, best_speed), typing_results(user_id, speed, accuracy, created_at), typing_comments(*, profiles(nickname, avatar_url))').eq('id', contentId).single();
+    const { data, error } = await supabase.from('typing_contents').select('*, profiles!typing_contents_author_id_fkey(nickname, avatar_url, best_speed), typing_comments(*, profiles(nickname, avatar_url))').eq('id', contentId).single();
     if (error) throw error;
-    return { ...data, comment_count: data.typing_comments?.length || 0, unique_participant_count: new Set(data.typing_results?.map((r: any) => r.user_id)).size };
+    return { ...data, comment_count: data.typing_comments?.length || 0 };
   }
 
   static async incrementViewCount(contentId: string) {
@@ -165,14 +180,22 @@ export class SupabaseService {
   static async getMyContents() {
     const user = await this.getCurrentUser();
     if (!user) return [];
-    const { data, error } = await supabase.from('typing_contents').select('*, typing_results(user_id), typing_comments(id)').eq('author_id', user.id).order('created_at', { ascending: false });
-    return (data || []).map((item: any) => ({ ...item, comment_count: item.typing_comments?.length || 0 }));
+    const { data, error } = await supabase.from('typing_contents').select('*, typing_comments(count)').eq('author_id', user.id).order('created_at', { ascending: false }).limit(100);
+    return (data || []).map((item: any) => ({ 
+      ...item, 
+      content: item.content?.length > 150 ? item.content.substring(0, 150) + '...' : item.content,
+      comment_count: item.typing_comments?.[0]?.count ?? item.typing_comments?.length ?? 0 
+    }));
   }
 
   static async getAuthorContents(authorId: string, limit: number = 30) {
-    const { data, error } = await supabase.from('typing_contents').select('*, typing_results(user_id), typing_comments(id)').eq('author_id', authorId).order('created_at', { ascending: false }).limit(limit);
+    const { data, error } = await supabase.from('typing_contents').select('*, typing_comments(count)').eq('author_id', authorId).order('created_at', { ascending: false }).limit(limit);
     if (error) throw error;
-    return data.map((item: any) => ({ ...item, comment_count: item.typing_comments?.length || 0 }));
+    return data.map((item: any) => ({ 
+      ...item, 
+      content: item.content?.length > 150 ? item.content.substring(0, 150) + '...' : item.content,
+      comment_count: item.typing_comments?.[0]?.count ?? item.typing_comments?.length ?? 0 
+    }));
   }
 
   static async getRelatedContents(authorId: string, currentContentId: string) {

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { BASIC_PRACTICE_STEPS } from '@/lib/word-data';
 import Link from 'next/link';
 import { Keyboard, ArrowRight } from 'lucide-react';
+import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
 
 export const metadata: Metadata = {
   title: "한글 낱말 연습 목록 - 단계별 자판 단어 연습",
@@ -19,8 +20,9 @@ export const metadata: Metadata = {
 
 export default function WordPracticeListPage() {
   return (
-    <div className="w-full max-w-6xl mx-auto py-16 px-6">
-      <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
+    <div className="w-full max-w-7xl mx-auto py-16 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+      <div className="flex-1 min-w-0">
+        <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
         <h1 className="text-5xl font-black mb-6">단계별 낱말 타자 연습</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
           키보드의 각 위치(중간 줄, 윗 줄, 아랫 줄) 영역별로 구성된 낱말을 연습합니다. <br className="hidden md:block" />
@@ -54,6 +56,13 @@ export default function WordPracticeListPage() {
           </Link>
         ))}
       </div>
+      </div>
+      
+      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
+        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
+          <KeyboardAdSidebar />
+        </div>
+      </aside>
     </div>
   );
 }

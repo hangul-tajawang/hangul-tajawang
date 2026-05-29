@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { ArrowRight, Sparkles } from "lucide-react";
 
-interface KeyboardItem {
+export interface KeyboardItem {
   id: string;
   name: string;
   category: string;
@@ -16,7 +16,7 @@ interface KeyboardItem {
   bgColor: string;
 }
 
-const RECOMMEND_KEYBOARDS: KeyboardItem[] = [
+export const RECOMMEND_KEYBOARDS: KeyboardItem[] = [
   {
     id: "abko",
     name: "ABKO MK108",
@@ -42,6 +42,26 @@ const RECOMMEND_KEYBOARDS: KeyboardItem[] = [
 ];
 
 export const KeyboardAdBanner: React.FC = () => {
+  const handleAffiliateClick = (keyboard: any) => {
+    if (typeof window !== "undefined" && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: "purchase",
+        ecommerce: {
+          transaction_id: `click_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+          value: 1,
+          currency: "KRW",
+          items: [{
+            item_id: keyboard.id || keyboard.name,
+            item_name: keyboard.name,
+            item_category: "Affiliate Keyboard",
+            price: 1,
+            quantity: 1
+          }]
+        }
+      });
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-8">
       <div className="text-center mb-10">
@@ -63,6 +83,7 @@ export const KeyboardAdBanner: React.FC = () => {
             href={keyboard.affiliateUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => handleAffiliateClick(keyboard)}
             className="group block bg-surface-lowest border border-outline-variant rounded-[2.5rem] p-8 shadow-xs hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden"
           >
             <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -90,7 +111,7 @@ export const KeyboardAdBanner: React.FC = () => {
                   {keyboard.description}
                 </p>
                 <div className="pt-1 flex items-center justify-center sm:justify-start gap-1.5 text-primary font-black text-[10px] uppercase tracking-wider">
-                  최저가 확인하기 <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+                  상세 스펙 보러가기 <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             </div>
@@ -99,7 +120,8 @@ export const KeyboardAdBanner: React.FC = () => {
       </div>
 
       <p className="text-center text-[9px] text-zinc-400 font-medium tracking-widest mt-8 leading-relaxed">
-        💡 이 포스팅은 제휴 마케팅 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
+        💡 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. <br className="sm:hidden" />
+        <span className="text-zinc-500 font-bold ml-1">운영자가 서버비용을 감당하는데 큰 도움이 됩니다 🙇‍♂️</span>
       </p>
     </div>
   );

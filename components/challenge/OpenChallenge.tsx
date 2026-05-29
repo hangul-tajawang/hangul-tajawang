@@ -14,6 +14,7 @@ const ChallengeList = () => {
 
   const [challenges, setChallenges] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
   const [user, setUser] = useState<any>(null);
   const [myLikes, setMyLikes] = useState<string[]>([]);
   
@@ -46,6 +47,7 @@ const ChallengeList = () => {
         SupabaseService.getCurrentUser()
       ]);
       setChallenges(data);
+      setVisibleCount(10);
       setUser(currentUser);
 
       if (currentUser) {
@@ -127,7 +129,7 @@ const ChallengeList = () => {
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto py-8 px-4 relative min-h-[80vh]">
+    <div className="w-full relative min-h-[80vh]">
       {/* 상단 타이틀 (필터 시 노출) */}
       {filterAuthorId && challenges.length > 0 && (
         <div className="mb-10 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] border border-blue-100 dark:border-blue-900/30 flex items-center justify-between">
@@ -161,8 +163,9 @@ const ChallengeList = () => {
       {loading && challenges.length === 0 ? (
         <div className="flex justify-center py-32"><Loader2 className="w-12 h-12 animate-spin text-blue-600" /></div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {challenges.map((item) => {
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {challenges.slice(0, visibleCount).map((item) => {
             const isLiked = myLikes.includes(item.id);
             return (
               <div key={item.id} className="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl transition-all cursor-pointer group flex flex-col justify-between border-b-4 hover:border-b-blue-500">
@@ -199,7 +202,18 @@ const ChallengeList = () => {
               </div>
             );
           })}
-        </div>
+          </div>
+          {challenges.length > visibleCount && (
+            <div className="mt-12 flex justify-center animate-in fade-in duration-500">
+              <button 
+                onClick={() => setVisibleCount(prev => prev + 10)}
+                className="px-8 py-3 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 rounded-2xl text-sm font-black shadow-sm border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all"
+              >
+                콘텐츠 더 불러오기
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* 작가 프로필 사이드바 */}

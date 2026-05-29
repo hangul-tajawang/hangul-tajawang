@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import Link from 'next/link';
 import { Quote, Sparkles } from 'lucide-react';
+import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
 
 export const metadata: Metadata = {
   title: "한글 짧은 글 연습 목록 - 테마별 감성 문장 타자",
@@ -19,8 +20,9 @@ export const metadata: Metadata = {
 
 export default function ShortPracticeListPage() {
   return (
-    <div className="w-full max-w-6xl mx-auto py-16 px-6">
-      <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
+    <div className="w-full max-w-7xl mx-auto py-16 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+      <div className="flex-1 min-w-0">
+        <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
         <h1 className="text-5xl font-black mb-6">테마별 짧은 글 타자 연습</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
           오늘 나의 기분과 감성에 맞는 주제를 선택해 문장 타자 연습을 시작해보세요. <br className="hidden md:block" />
@@ -53,6 +55,13 @@ export default function ShortPracticeListPage() {
           </Link>
         ))}
       </div>
+      </div>
+      
+      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
+        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
+          <KeyboardAdSidebar />
+        </div>
+      </aside>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { CardFlipGame } from "@/components/game/CardFlipGame";
 import { Brain, Zap, Trophy, MousePointer2, HelpCircle } from "lucide-react";
+import { KeyboardAdSidebar } from "@/components/layout/KeyboardAdSidebar";
 
 export const metadata: Metadata = {
   title: "기억력 타자 - 카드 뒤집기 한글 타자 게임",
@@ -18,7 +19,8 @@ export const metadata: Metadata = {
 
 export default function CardFlipPage() {
   return (
-    <div className="w-full max-w-6xl mx-auto py-8 px-4">
+    <div className="w-full max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+      <div className="flex-1 min-w-0">
       <h1 className="sr-only">기억력 타자 한글 카드 뒤집기 게임</h1>
       <CardFlipGame />
 
@@ -49,6 +51,13 @@ export default function CardFlipPage() {
             </ul>
         </section>
       </div>
+      </div>
+
+      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
+        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
+          <KeyboardAdSidebar />
+        </div>
+      </aside>
     </div>
   );
 }

@@ -50,6 +50,7 @@ export const WordGame: React.FC = () => {
   const requestRef = useRef<number | null>(null);
   const lastSpawnTime = useRef<number>(0);
   const speedMultiplierRef = useRef<number>(1);
+  const processedMissedWordsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     setMounted(true);
@@ -157,7 +158,10 @@ export const WordGame: React.FC = () => {
         return { ...w, y: w.y + (w.speed * speedMultiplierRef.current), x: newX, movingDir: newDir, isVisible: newVis };
       }).filter((w) => {
         if (w.y > height) {
-          if (w.itemType === "normal") missedCount++;
+          if (w.itemType === "normal" && !processedMissedWordsRef.current.has(w.id)) {
+            processedMissedWordsRef.current.add(w.id);
+            missedCount++;
+          }
           return false;
         }
         return true;
@@ -221,14 +225,14 @@ export const WordGame: React.FC = () => {
 
   const startGame = () => {
     setFallingWords([]); setScore(0); setLives(5); setLevel(1); setCombo(0); setMaxCombo(0);
-    speedMultiplierRef.current = 1; setGameState("playing"); lastSpawnTime.current = performance.now();
+    speedMultiplierRef.current = 1; processedMissedWordsRef.current.clear(); setGameState("playing"); lastSpawnTime.current = performance.now();
   };
 
   // 게임 종료 팝업 (Portal)
   const gameOverModal = gameState === "gameover" && (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
         <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
-        <div className="relative max-w-lg w-full bg-white dark:bg-zinc-900 rounded-[3.5rem] p-12 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
+        <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
             <div className="inline-flex p-6 bg-red-50 dark:bg-red-900/20 rounded-full mb-8"><Trophy className="w-20 h-20 text-yellow-500" /></div>
             <h2 className="text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tighter">GAME OVER</h2>
             <p className="text-zinc-500 dark:text-zinc-400 font-bold mb-10">최고의 집중력을 보여주셨네요!</p>

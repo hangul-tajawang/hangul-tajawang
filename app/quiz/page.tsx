@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { QUIZ_DATA } from '@/lib/quiz-data';
 import Link from 'next/link';
 import { BookOpen, AlertTriangle } from 'lucide-react';
+import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
 
 export const metadata: Metadata = {
   title: "자주 틀리는 한글 맞춤법 사전 및 퀴즈",
@@ -19,12 +20,13 @@ export const metadata: Metadata = {
 
 export default function QuizListPage() {
   return (
-    <div className="w-full max-w-6xl mx-auto py-16 px-6">
+    <div className="w-full max-w-7xl mx-auto py-16 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+      <div className="flex-1 min-w-0">
       <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
         <h1 className="text-5xl font-black mb-6">📝 한글 맞춤법 집중 공략</h1>
         <p className="text-zinc-600 dark:text-zinc-400 font-medium text-xl leading-relaxed">
           어른들도 자주 헷갈리는 필수 맞춤법과 띄어쓰기 논란을 모았습니다. <br className="hidden md:block" />
-          가장 취약한 문제를 골라 퀴즈를 풀고 검색 엔진이 추천하는 완벽한 해설을 확인해보세요.
+          가장 취약한 문제를 골라 퀴즈를 풀고 완벽한 해설을 확인해보세요.
         </p>
       </div>
 
@@ -55,6 +57,13 @@ export default function QuizListPage() {
           </Link>
         ))}
       </div>
+      </div>
+      
+      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
+        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
+          <KeyboardAdSidebar />
+        </div>
+      </aside>
     </div>
   );
 }
