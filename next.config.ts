@@ -5,11 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'k.kakaocdn.net',
+        hostname: '*.kakaocdn.net',
       },
       {
         protocol: 'https',
-        hostname: 'k.kakaocdn.net',
+        hostname: '*.kakaocdn.net',
       },
       {
         protocol: 'https',
