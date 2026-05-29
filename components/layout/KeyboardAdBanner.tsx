@@ -23,7 +23,7 @@ const RECOMMEND_KEYBOARDS: KeyboardItem[] = [
     category: "멤브레인 / 가성비 입문용",
     tag: "Entry King",
     price: "2만원대",
-    description: "쫀득한 키감과 세련된 오트밀 디자인. 타자 입문자에게 최적의 선택.",
+    description: "운영자가 사무실에서 주로 사용하고 있는 키보드입니다. 오트밀 디자인이 세련되고 이쁘며, 무엇보다 소음이 없고 부드러운 멤브레인 타건감을 제공합니다.",
     imageUrl: "/keyboard/abko.png",
     affiliateUrl: "https://link.coupang.com/a/d95o22",
     bgColor: "bg-surface-low",
@@ -49,7 +49,7 @@ export const KeyboardAdBanner: React.FC = () => {
           <Sparkles size={12} className="text-primary" /> Special Gear <Sparkles size={12} className="text-primary" />
         </span>
         <h3 className="headline-md !text-2xl text-on-surface">
-          타자 연습의 품격을 높여줄 추천 키보드
+          운영자가 좋아하고 직접 사용하고 추천하는 키보드
         </h3>
         <p className="text-zinc-400 text-sm font-medium mt-2">
           손끝이 즐거워지는 타건감으로 오타율을 낮추고 타자 속도를 올리세요.
