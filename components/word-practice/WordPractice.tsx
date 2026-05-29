@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
+import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import { Trophy, RotateCcw, Target, Zap, Clock, ChevronRight, Layout, Keyboard, Star, Sparkles, Flame, X } from "lucide-react";
 import { BASIC_PRACTICE_STEPS, PracticeStep } from "@/lib/word-data";
 
@@ -158,6 +159,10 @@ export const WordPractice: React.FC = () => {
 
       <div className="w-full max-w-md relative group">
         <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown} className={`w-full h-24 px-10 text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[2.5rem] shadow-2xl outline-hidden text-center font-bold transition-all ${isError ? 'border-red-100 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800 focus:border-blue-500'}`} placeholder="입력하세요" autoFocus autoComplete="off" />
+      </div>
+
+      <div className="mt-24 pt-16 border-t border-outline-variant/60 w-full">
+        <KeyboardAdBanner />
       </div>
     </div>
   );

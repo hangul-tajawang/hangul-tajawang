@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { SHORT_TEXT_DB, SHORT_TEXT_CATEGORIES } from "@/lib/short-text-data";
 import { Clock, Target, Zap, Keyboard as KbdIcon, Sparkles } from "lucide-react";
+import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 
 export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialCategory }) => {
   const [activeCategory, setActiveCategory] = useState(initialCategory || "전체");
@@ -162,6 +163,10 @@ export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialC
                 <KbdIcon size={14} /> 끝까지 입력하면 자동으로 다음 문장으로 넘어갑니다.
             </div>
         </div>
+      </div>
+
+      <div className="mt-32 pt-16 border-t border-outline-variant/60 w-full">
+        <KeyboardAdBanner />
       </div>
     </div>
   );

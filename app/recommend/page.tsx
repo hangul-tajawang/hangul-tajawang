@@ -4,6 +4,7 @@ import React from "react";
 import { Keyboard, ArrowRight, Sparkles, Zap, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { KeyboardAdBanner } from "@/components/layout/KeyboardAdBanner";
 
 export default function RecommendIndexPage() {
   return (
@@ -68,6 +69,10 @@ export default function RecommendIndexPage() {
 
         </div>
       </section>
+
+      <div className="mt-16 pt-16 border-t border-outline-variant/60">
+        <KeyboardAdBanner />
+      </div>
     </div>
   );
 }

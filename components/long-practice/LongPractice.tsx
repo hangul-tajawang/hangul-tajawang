@@ -6,6 +6,7 @@ import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
+import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -243,6 +244,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
               </div>
           </div>
         </div>
+      </div>
+
+      {/* 키보드 추천 배너 - 긴글 연습 패드 직후에 삽입 */}
+      <div className="mt-16 pt-16 border-t border-outline-variant/60 w-full">
+        <KeyboardAdBanner />
       </div>
 
       {externalContent && (

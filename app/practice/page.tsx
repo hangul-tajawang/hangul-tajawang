@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Keyboard, Layout, PenTool, MousePointer2, ChevronRight, Star, Sparkles } from "lucide-react";
+import { KeyboardAdBanner } from "@/components/layout/KeyboardAdBanner";
 
 export const metadata: Metadata = {
   title: "타자 연습 모드 선택 - 자리/낱말/짧은글",
@@ -65,6 +66,10 @@ export default function PracticePage() {
         >
             긴 글 연습 바로가기 <ChevronRight size={20} />
         </Link>
+      </div>
+
+      <div className="mt-16 pt-16 border-t border-outline-variant/60">
+        <KeyboardAdBanner />
       </div>
     </div>
   );

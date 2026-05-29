@@ -4,6 +4,7 @@ import { blogPosts, BlogPost } from '@/lib/blog-data';
 import { MarkdownRenderer } from '@/components/blog/MarkdownRenderer';
 import { Calendar, Hash, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { KeyboardAdBanner } from '@/components/layout/KeyboardAdBanner';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -119,6 +120,10 @@ export default async function BlogPostPage({ params }: Props) {
           <main className="animate-in fade-in slide-in-from-bottom-8 duration-700 bg-surface-lowest p-6 sm:p-10 rounded-3xl shadow-sm border border-outline-variant">
             <MarkdownRenderer content={post.content} />
           </main>
+
+          <div className="mt-16 pt-16 border-t border-outline-variant/60">
+            <KeyboardAdBanner />
+          </div>
         </div>
       </div>
     </>

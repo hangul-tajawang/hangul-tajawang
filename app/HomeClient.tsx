@@ -21,6 +21,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { SupabaseService } from '@/lib/supabase';
+import { KeyboardAdBanner } from '@/components/layout/KeyboardAdBanner';
 
 interface Props {
   initialPopular: any[];
@@ -266,6 +267,10 @@ export default function HomeClient({ initialPopular }: Props) {
           </div>
         </div>
       </section>
+
+      <div className="mt-16 pt-16 border-t border-outline-variant/60 w-full">
+        <KeyboardAdBanner />
+      </div>
 
       <BetaFeedback />
     </div>
