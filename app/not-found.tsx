@@ -24,7 +24,7 @@ export default function NotFound() {
         404 ERROR / 길을 잃은 문장
       </span>
       
-      <h1 className="display-lg !text-5xl md:!text-7xl mb-6 font-myeongjo">
+      <h1 className="display-lg !text-5xl md:!text-7xl mb-6 font-serif">
         찾으시는 문장이<br />지워졌거나, 존재하지 않습니다.
       </h1>
       
@@ -53,7 +53,7 @@ export default function NotFound() {
         <div className="absolute -top-6 left-10 p-4 bg-white rounded-2xl shadow-lg text-primary">
           <PenTool size={24} />
         </div>
-        <p className="text-sm font-myeongjo text-zinc-600 leading-loose italic">
+        <p className="text-sm font-serif text-zinc-600 leading-loose italic">
           "길을 잃는다는 것은, 곧 새로운 길을 발견하게 된다는 의미이기도 합니다. 당신의 연습도 지금 이 순간부터 다시 시작될 수 있습니다."
         </p>
       </div>

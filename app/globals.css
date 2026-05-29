@@ -44,6 +44,21 @@
 
   --font-plus-jakarta: var(--font-plus-jakarta);
   --font-inter: var(--font-inter);
+  
+  --font-noto: var(--font-noto-sans);
+  --font-myeongjo: var(--font-nanum-myeongjo);
+  --font-batang: var(--font-gowun-batang);
+  --font-dodum: var(--font-gowun-dodum);
+  --font-pen: var(--font-nanum-pen);
+  --font-brush: var(--font-nanum-brush);
+  --font-gaegu: var(--font-gaegu);
+  --font-poor: var(--font-poor-story);
+  --font-dokdo: var(--font-dokdo);
+  --font-gamja: var(--font-gamja-flower);
+  --font-single: var(--font-single-day);
+  --font-yeon: var(--font-yeon-sung);
+  --font-stylish: var(--font-stylish);
+  --font-jua: var(--font-jua);
 }
 
 @layer base {
