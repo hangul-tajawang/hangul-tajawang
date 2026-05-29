@@ -29,14 +29,14 @@ const RECOMMEND_KEYBOARDS: KeyboardItem[] = [
     bgColor: "bg-surface-low",
   },
   {
-    id: "hansung",
-    name: "한성 GK893B Sports",
-    category: "무접점 / 오피스 프리미엄",
-    tag: "Office Choice",
-    price: "14만원대",
-    description: "보글보글 매력적인 무접점 타건감. 극강의 저소음으로 조용한 연습.",
-    imageUrl: "/keyboard/abko.png", // GK893B
-    affiliateUrl: "https://link.coupang.com/a/d95o22", // 제휴 링크
+    id: "aula",
+    name: "AULA F87 Pro",
+    category: "기계식 / 회목축 타격감 끝판왕",
+    tag: "Developer Pick",
+    price: "4만원대",
+    description: "운영자가 3개월간 매일 8시간씩 실사용한 최강 갓성비 기계식. '도각도각' 회목축 특유의 중독성 넘치는 타건음과 일주일을 거뜬히 버티는 미친 배터리 효율을 직접 경험해 보세요.",
+    imageUrl: "/keyboard/aura.jpg",
+    affiliateUrl: "https://link.coupang.com/a/d95o22", // 추후 AULA 전용 쿠팡 단축링크로 대체 가능
     bgColor: "bg-indigo-50/50 dark:bg-indigo-950/20",
   },
 ];
