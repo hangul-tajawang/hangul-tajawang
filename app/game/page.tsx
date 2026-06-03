@@ -2,7 +2,6 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Gamepad2, ChevronRight, Sparkles, CloudRain, ShieldAlert, Trophy, Brain } from "lucide-react";
-import { KeyboardAdSidebar } from "@/components/layout/KeyboardAdSidebar";
 
 export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
@@ -20,8 +19,7 @@ export const metadata: Metadata = {
 
 export default function GameHubPage() {
   return (
-    <div className="w-full max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-      <div className="flex-1 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-12 px-4">
       <div className="text-center mb-16">
         <h1 className="text-4xl font-black mb-4">한글 게임 센터</h1>
         <p className="text-zinc-500 font-medium text-lg">타자 연습을 게임처럼 신나게 즐겨보세요!</p>
@@ -72,14 +70,6 @@ export default function GameHubPage() {
             게임 시작하기 <ChevronRight size={20} />
         </Link>
       </div>
-      </div>
-      
-      {/* 우측 사이드바: 키보드 추천 광고 (Sticky) */}
-      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
-        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
-          <KeyboardAdSidebar />
-        </div>
-      </aside>
     </div>
   );
 }

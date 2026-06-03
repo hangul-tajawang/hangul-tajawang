@@ -10,6 +10,8 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PrivacyConsentModal } from "@/components/layout/PrivacyConsentModal";
+import { TopAdBanner } from "@/components/layout/TopAdBanner";
+import { KakaoAdFit } from "@/components/layout/KakaoAdFit";
 
 const plusJakartaSans = Plus_Jakarta_Sans({ variable: "--font-plus-jakarta", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -99,9 +101,27 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCVLQG83" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} /></noscript>
         <PrivacyConsentModal />
         <Header />
-        <main className="flex-1">
-          {children}
-        </main>
+        <TopAdBanner />
+        <div className="flex w-full">
+          {/* 좌측 160x600 광고 - 충분한 여백이 있을 때만 노출 */}
+          <aside className="hidden xl:flex shrink-0 w-[180px] items-start justify-center pt-8 px-2">
+            <div className="sticky top-28">
+              <KakaoAdFit unit="DAN-07GIKaryVfOS8YDz" width={160} height={600} />
+            </div>
+          </aside>
+
+          {/* 메인 콘텐츠 */}
+          <main className="flex-1 min-w-0">
+            {children}
+          </main>
+
+          {/* 우측 160x600 광고 */}
+          <aside className="hidden xl:flex shrink-0 w-[180px] items-start justify-center pt-8 px-2">
+            <div className="sticky top-28">
+              <KakaoAdFit unit="DAN-1HADJiJOZbdlAc0V" width={160} height={600} />
+            </div>
+          </aside>
+        </div>
         <Footer />
       </body>
     </html>

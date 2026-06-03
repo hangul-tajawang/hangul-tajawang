@@ -36,8 +36,7 @@ export const metadata: Metadata = {
 
 export default function AcidRainPage() {
   return (
-    <div className="w-full max-w-7xl mx-auto py-8 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-      <div className="flex-1 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-8 px-4">
       <h1 className="sr-only">한글 산성비 타자 게임 - 온라인 랭킹 시스템</h1>
 
       {/* 게임 본체 */}
@@ -211,14 +210,7 @@ export default function AcidRainPage() {
             </div>
           </div>
         </section>
-      </div>
-      </div>
-
-      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
-        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
-          <KeyboardAdSidebar />
-        </div>
-      </aside>
+    </div>
     </div>
   );
 }

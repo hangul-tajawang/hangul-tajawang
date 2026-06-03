@@ -42,8 +42,7 @@ export default async function ChallengePage() {
   const challenges = await fetchChallengesForSEO();
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-8 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-      <div className="flex-1 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-8 px-4">
       <h1 className="sr-only">필사 챌린지 - 유저 참여형 타자 연습</h1>
       
       {/* 
@@ -96,14 +95,6 @@ export default async function ChallengePage() {
 
       {/* 기존 클라이언트 사이드 챌린지 인터랙티브 UI */}
       <ClientChallengeWrapper />
-      </div>
-
-      {/* 우측 사이드바: 키보드 추천 광고 (Sticky) */}
-      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
-        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
-          <KeyboardAdSidebar />
-        </div>
-      </aside>
     </div>
   );
 }

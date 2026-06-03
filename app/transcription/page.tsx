@@ -20,8 +20,7 @@ export const metadata: Metadata = {
 
 export default function TranscriptionPage() {
   return (
-    <div className="w-full max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-      <div className="flex-1 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-12 px-4">
         <div className="text-center mb-12 animate-in slide-in-from-bottom duration-700">
         <h1 className="text-5xl font-black mb-6">긴 글 연습 및 감성 필사</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
@@ -56,13 +55,6 @@ export default function TranscriptionPage() {
           </Link>
         ))}
       </div>
-      </div>
-
-      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
-        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
-          <KeyboardAdSidebar />
-        </div>
-      </aside>
     </div>
   );
 }

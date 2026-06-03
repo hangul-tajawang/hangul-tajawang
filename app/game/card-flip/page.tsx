@@ -19,8 +19,7 @@ export const metadata: Metadata = {
 
 export default function CardFlipPage() {
   return (
-    <div className="w-full max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-      <div className="flex-1 min-w-0">
+    <div className="w-full max-w-4xl mx-auto py-12 px-4">
       <h1 className="sr-only">기억력 타자 한글 카드 뒤집기 게임</h1>
       <CardFlipGame />
 
@@ -50,14 +49,7 @@ export default function CardFlipPage() {
                 <li className="flex items-start gap-2"><span>✅</span> <strong>기록 저장:</strong> 제한 시간 내에 모든 짝을 맞추면 전 세계 랭킹에 기록됩니다.</li>
             </ul>
         </section>
-      </div>
-      </div>
-
-      <aside className="shrink-0 mt-8 lg:mt-0 hidden md:block transition-all duration-500">
-        <div className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar pb-8">
-          <KeyboardAdSidebar />
-        </div>
-      </aside>
+    </div>
     </div>
   );
 }
