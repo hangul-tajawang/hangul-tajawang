@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Gamepad2, ChevronRight, Sparkles, CloudRain, ShieldAlert, Trophy, Brain } from "lucide-react";
+import { Castle, ChevronRight, CloudRain, Trophy, Brain } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
@@ -43,15 +43,15 @@ export default function GameHubPage() {
           difficulty="Hard"
           color="purple"
         />
-        
-        {/* 향후 추가될 게임들을 위한 Placeholder */}
-        <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-10 rounded-[3rem] border border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-zinc-300 mb-6">
-                <Gamepad2 size={32} />
-            </div>
-            <h3 className="text-xl font-black text-zinc-300 mb-2">Comming Soon</h3>
-            <p className="text-zinc-400 text-sm">더 재미있는 게임이 <br/>준비 중입니다.</p>
-        </div>
+
+        <GameCard 
+          href="/game/castle-defense"
+          icon={<Castle size={40} className="text-emerald-500" />}
+          title="성문방어 타자 게임"
+          description="발사, 방패, 번개, 수리 명령으로 <br/>60초 동안 성문을 지키세요!"
+          difficulty="Hard"
+          color="emerald"
+        />
       </div>
 
       {/* 실시간 랭킹 유도 섹션 */}
@@ -61,7 +61,7 @@ export default function GameHubPage() {
         </div>
         <div className="relative z-10 text-center md:text-left">
             <h2 className="text-3xl font-black mb-3">내 게임 실력은 몇 등일까?</h2>
-            <p className="text-blue-100 font-medium">산성비 게임 최고 점수에 도전하고 <br className="hidden sm:block" />다른 유저들과 랭킹을 겨뤄보세요.</p>
+            <p className="text-blue-100 font-medium">산성비와 성문방어 최고 점수에 도전하고 <br className="hidden sm:block" />다른 유저들과 랭킹을 겨뤄보세요.</p>
         </div>
         <Link prefetch={false} 
             href="/game/acid-rain" 
@@ -74,10 +74,20 @@ export default function GameHubPage() {
   );
 }
 
-function GameCard({ href, icon, title, description, difficulty, color }: any) {
-  const colorMap: any = {
+interface GameCardProps {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  difficulty: string;
+  color: "blue" | "purple" | "emerald";
+}
+
+function GameCard({ href, icon, title, description, difficulty, color }: GameCardProps) {
+  const colorMap: Record<GameCardProps["color"], string> = {
     blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-600",
     purple: "bg-purple-50 dark:bg-purple-900/20 text-purple-600",
+    emerald: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600",
   };
 
   return (
