@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Castle, ChevronRight, CloudRain, Trophy, Brain } from "lucide-react";
+import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
@@ -44,13 +44,22 @@ export default function GameHubPage() {
           color="purple"
         />
 
-        <GameCard 
+        <GameCard
           href="/game/castle-defense"
           icon={<Castle size={40} className="text-emerald-500" />}
           title="성문방어 타자 게임"
           description="발사, 방패, 번개, 수리 명령으로 <br/>60초 동안 성문을 지키세요!"
           difficulty="Hard"
           color="emerald"
+        />
+
+        <GameCard
+          href="/game/block-pop"
+          icon={<Boxes size={40} className="text-rose-500" />}
+          title="블록 팝핑"
+          description="아래에서 차오르는 단어 블록을 <br/>천장에 닿기 전에 터뜨리세요!"
+          difficulty="Medium"
+          color="rose"
         />
       </div>
 
@@ -61,7 +70,7 @@ export default function GameHubPage() {
         </div>
         <div className="relative z-10 text-center md:text-left">
             <h2 className="text-3xl font-black mb-3">내 게임 실력은 몇 등일까?</h2>
-            <p className="text-blue-100 font-medium">산성비와 성문방어 최고 점수에 도전하고 <br className="hidden sm:block" />다른 유저들과 랭킹을 겨뤄보세요.</p>
+            <p className="text-blue-100 font-medium">산성비, 성문방어, 블록 팝핑 최고 점수에 도전하고 <br className="hidden sm:block" />다른 유저들과 랭킹을 겨뤄보세요.</p>
         </div>
         <Link prefetch={false} 
             href="/game/acid-rain" 
@@ -80,7 +89,7 @@ interface GameCardProps {
   title: string;
   description: string;
   difficulty: string;
-  color: "blue" | "purple" | "emerald";
+  color: "blue" | "purple" | "emerald" | "rose";
 }
 
 function GameCard({ href, icon, title, description, difficulty, color }: GameCardProps) {
@@ -88,6 +97,7 @@ function GameCard({ href, icon, title, description, difficulty, color }: GameCar
     blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-600",
     purple: "bg-purple-50 dark:bg-purple-900/20 text-purple-600",
     emerald: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600",
+    rose: "bg-rose-50 dark:bg-rose-900/20 text-rose-600",
   };
 
   return (
