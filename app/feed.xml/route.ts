@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { blogPosts } from '@/lib/blog-data';
 
 export const revalidate = 3600; // 1시간마다 캐시 갱신
 
@@ -21,6 +22,20 @@ export async function GET() {
       // DB 에러가 발생해도 크롤러가 뻗지 않도록 최소한의 빈 XML을 반환합니다.
     }
 
+    // 블로그 글 (최신순)
+    const blogXml = [...blogPosts]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map((post) => `
+      <item>
+        <title><![CDATA[${post.title}]]></title>
+        <link>${baseUrl}/blog/${post.id}</link>
+        <guid isPermaLink="true">${baseUrl}/blog/${post.id}</guid>
+        <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+        <description><![CDATA[${post.description}]]></description>
+        <author>한글타자왕</author>
+      </item>
+    `).join('');
+
     const itemsXml = (contents || []).map((item: any) => `
       <item>
         <title><![CDATA[${item.title} - 유저 창작 필사]]></title>
@@ -35,11 +50,12 @@ export async function GET() {
     const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
         <channel>
-          <title>한글타자왕 - 필사 챌린지 최신글</title>
-          <link>${baseUrl}/challenge</link>
-          <description>유저들이 직접 등록하고 공유하는 아름다운 타자 연습 문장들입니다.</description>
+          <title>한글타자왕 - 타자 연습 가이드 및 필사 챌린지</title>
+          <link>${baseUrl}</link>
+          <description>타자 연습 가이드, 맞춤법 콘텐츠, 유저들이 등록한 필사 챌린지 소식을 전합니다.</description>
           <language>ko-KR</language>
           <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+          ${blogXml}
           ${itemsXml}
         </channel>
       </rss>`;

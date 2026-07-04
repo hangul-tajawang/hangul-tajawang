@@ -70,21 +70,21 @@ export const SHORT_TEXT_DB: ShortTextData[] = [
     ]
   },
   {
-    id: 'kpop',
-    category: 'K-POP',
+    id: 'proverb',
+    category: '속담/격언',
     sentences: [
-      "Dynamite 시원한 밤이야 this life is so nice",
-      "작은 것들을 위한 시 네가 나의 밤을 밝혀주는 별",
-      "Spring Day 보고 싶다 이렇게 말하니까 더 보고 싶다",
-      "DNA 운명을 찾아낸 둘이니까",
-      "Fake Love 사랑이었다고 말해줘",
-      "IDOL 답답한 걸 원해? No thanks",
-      "Life Goes On 같은 곳을 바라보고 서있을게",
-      "Butter 매끄럽게 녹아들어가 like butter",
-      "What Is Love 사랑이란 게 뭔지 알겠어",
-      "Feel Special 넌 나를 특별하게 만들어줘"
+      "가는 말이 고와야 오는 말이 곱다",
+      "낮말은 새가 듣고 밤말은 쥐가 듣는다",
+      "천 리 길도 한 걸음부터 시작된다",
+      "구슬이 서 말이라도 꿰어야 보배다",
+      "하늘이 무너져도 솟아날 구멍이 있다",
+      "백 번 듣는 것이 한 번 보는 것만 못하다",
+      "될성부른 나무는 떡잎부터 알아본다",
+      "고생 끝에 낙이 온다",
+      "우물을 파도 한 우물을 파라",
+      "티끌 모아 태산이 된다"
     ]
   }
 ];
 
-export const SHORT_TEXT_CATEGORIES = ['전체', '위로/힐링', '동기부여', '사랑', '문학/명대사', 'K-POP'];
+export const SHORT_TEXT_CATEGORIES = ['전체', '위로/힐링', '동기부여', '사랑', '문학/명대사', '속담/격언'];

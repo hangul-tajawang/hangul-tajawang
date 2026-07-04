@@ -6,7 +6,7 @@ import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
 
 export const metadata: Metadata = {
   title: "한글 짧은 글 연습 목록 - 테마별 감성 문장 타자",
-  description: "명언, 힐링, 동기부여, K-POP 가사 등 다양한 카테고리의 짧은 글을 선택하여 한글 타자 연습을 매일 새롭게 즐겨보세요.",
+  description: "명언, 힐링, 동기부여, 속담 등 다양한 카테고리의 짧은 글을 선택하여 한글 타자 연습을 매일 새롭게 즐겨보세요.",
   keywords: ["짧은 글 타자 연습", "한글 문장 연습", "타자 속도 측정", "주제별 타자 연습", "감성 문장 타자"],
   alternates: {
     canonical: 'https://www.hangul-tajawang.com/practice/short',

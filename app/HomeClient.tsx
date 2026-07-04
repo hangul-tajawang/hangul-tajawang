@@ -286,10 +286,10 @@ function HeroSection() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center w-full">
-        <h2 className="display-lg text-on-surface mb-8 md:mb-10 leading-tight">
-          타자 연습, <br />
+        <h1 className="display-lg text-on-surface mb-8 md:mb-10 leading-tight">
+          한글 타자 연습, <br />
           <span className="text-primary italic">감성</span>을 더하다.
-        </h2>
+        </h1>
 
         <p className="text-lg md:text-xl text-zinc-500 max-w-2xl mb-12 md:mb-16 font-medium leading-relaxed px-4">
           노력하는 당신을 존경합니다. <br className="hidden sm:block" />
