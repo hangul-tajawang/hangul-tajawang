@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { 
   Geist, Geist_Mono, Noto_Sans_KR, Nanum_Myeongjo, Nanum_Pen_Script, 
   Jua, Gowun_Batang, Gowun_Dodum, Gamja_Flower, Single_Day, Stylish, 
@@ -35,6 +35,14 @@ const nanumBrush = Nanum_Brush_Script({ variable: "--font-nanum-brush", weight: 
 const gaegu = Gaegu({ variable: "--font-gaegu", weight: "400" });
 const poorStory = Poor_Story({ variable: "--font-poor-story", weight: "400" });
 const dokdo = East_Sea_Dokdo({ variable: "--font-dokdo", weight: "400" });
+
+// 모바일 가상 키보드가 올라올 때 뷰포트가 함께 줄어들도록 설정
+// (안드로이드 크롬: interactive-widget, iOS는 useVirtualKeyboard 훅으로 보완)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
+};
 
 export const metadata: Metadata = {
   title: {

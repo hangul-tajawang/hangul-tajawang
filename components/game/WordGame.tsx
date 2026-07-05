@@ -98,12 +98,15 @@ export const WordGame: React.FC = () => {
 
     const obstacleType = itemType === "normal" ? getObstacleTypeForLevel(level) : "normal";
 
+    // 화면 높이에 비례해 낙하 속도 보정 (모바일의 낮은 게임 영역에서 난이도 급상승 방지)
+    const heightScale = Math.max(0.45, (gameAreaRef.current.clientHeight || 600) / 600);
+
     const newWord: FallingWord = {
       id: Date.now() + Math.random(),
       text,
-      x: Math.random() * (width - 140) + 20,
+      x: Math.random() * Math.max(40, width - 140) + 20,
       y: -50,
-      speed: (0.8 + Math.random() * 0.5 + (level * 0.15)),
+      speed: (0.8 + Math.random() * 0.5 + (level * 0.15)) * heightScale,
       itemType,
       obstacleType,
       movingDir: Math.random() > 0.5 ? 1 : -1,
@@ -244,15 +247,15 @@ export const WordGame: React.FC = () => {
   );
 
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col gap-4 py-2 animate-in fade-in duration-700 h-[calc(100vh-100px)] max-h-[800px] min-h-[650px]">
+    <div className="w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 h-[calc(100dvh-140px)] md:h-[calc(100vh-100px)] max-h-[800px] min-h-[420px] md:min-h-[650px]">
       {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
 
       {/* Game Dashboard */}
-      <div className="w-full flex justify-between items-center px-8 py-4 bg-zinc-900 text-white rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
-        <div className="flex gap-8 items-center">
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Score</span><span className="text-2xl font-black text-yellow-400">{score.toLocaleString()}</span></div>
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Level</span><span className="text-2xl font-black text-blue-400">{level}</span></div>
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Health</span><div className="flex gap-0.5">{Array(5).fill(0).map((_, i) => (<span key={i} className={`text-lg transition-all ${i < lives ? "grayscale-0 scale-110" : "grayscale opacity-20 scale-90"}`}>❤️</span>))}</div></div>
+      <div className="w-full flex justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
+        <div className="flex gap-4 md:gap-8 items-center">
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Score</span><span className="text-lg md:text-2xl font-black text-yellow-400">{score.toLocaleString()}</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Level</span><span className="text-lg md:text-2xl font-black text-blue-400">{level}</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Health</span><div className="flex gap-0.5">{Array(5).fill(0).map((_, i) => (<span key={i} className={`text-sm md:text-lg transition-all ${i < lives ? "grayscale-0 scale-110" : "grayscale opacity-20 scale-90"}`}>❤️</span>))}</div></div>
         </div>
         <div className="hidden sm:flex items-center gap-4">
             {isSlowed && <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg animate-pulse border border-blue-500/30"><CloudSnow size={14} /><span className="text-[10px] font-black uppercase tracking-widest">Slow</span></div>}
@@ -271,7 +274,7 @@ export const WordGame: React.FC = () => {
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
                     <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
                         <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-[1.5rem] flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
-                        <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">산성비 게임</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">노트북 화면에 최적화된 모드입니다.</p></div>
+                        <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">산성비 게임</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">떨어지는 단어를 바닥에 닿기 전에 입력하세요!</p></div>
                         <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">게임 시작</button>
                     </div>
                 </div>
@@ -285,12 +288,12 @@ export const WordGame: React.FC = () => {
 
             {/* Input Area: Perfectly matched width with Game Area */}
             <div className="w-full shrink-0">
-                <input type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-20 px-8 text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === 'playing' ? 'border-zinc-900 dark:border-zinc-100 focus:border-blue-500' : 'border-zinc-100 dark:border-zinc-800 opacity-50'}`} placeholder={gameState === "playing" ? "단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" />
+                <input type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === 'playing' ? 'border-zinc-900 dark:border-zinc-100 focus:border-blue-500' : 'border-zinc-100 dark:border-zinc-800 opacity-50'}`} placeholder={gameState === "playing" ? "단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
             </div>
         </div>
 
-        {/* Rankings Sidebar */}
-        <div className="w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex flex-col shrink-0">
+        {/* Rankings Sidebar (모바일에서는 게임 영역 확보를 위해 숨김) */}
+        <div className="hidden lg:flex w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex-col shrink-0">
             <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-black">실시간 랭킹</h3></div>
             <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
                 {rankingLoading ? (<div className="flex flex-col items-center justify-center py-10 gap-2"><Loader2 className="animate-spin text-zinc-300" size={20} /></div>) : 

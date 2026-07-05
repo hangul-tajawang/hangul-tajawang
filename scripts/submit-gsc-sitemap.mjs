@@ -22,7 +22,7 @@
 import { createSign } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
-const SITE_URL = 'https://www.hangul-tajawang.com/'; // GSC에 등록된 속성 URL
+const SITE_URL = 'sc-domain:hangul-tajawang.com'; // GSC에 도메인 속성으로 등록됨
 const SITEMAP = 'https://www.hangul-tajawang.com/sitemap.xml';
 
 const keyFile = process.env.GSC_KEY_FILE;

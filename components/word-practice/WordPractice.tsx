@@ -6,6 +6,7 @@ import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBa
 import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import { Trophy, RotateCcw, Target, Zap, Clock, ChevronRight, Layout, Keyboard, Star, Sparkles, Flame, X } from "lucide-react";
 import { BASIC_PRACTICE_STEPS, PracticeStep } from "@/lib/word-data";
+import { scrollIntoViewOnFocus } from "@/hooks/useVirtualKeyboard";
 
 export const WordPractice: React.FC = () => {
   const [selectedStep, setSelectedStep] = useState<PracticeStep | null>(null);
@@ -143,8 +144,8 @@ export const WordPractice: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 max-w-4xl mx-auto px-4 w-full animate-in fade-in">
-      <div className="w-full flex justify-between items-center mb-12 bg-white dark:bg-zinc-900 p-4 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+    <div className="flex flex-col items-center justify-center py-4 md:py-12 max-w-4xl mx-auto px-4 w-full animate-in fade-in">
+      <div className="w-full flex justify-between items-center mb-4 md:mb-12 bg-white dark:bg-zinc-900 p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
         <div className="flex gap-4">
             <div className="flex items-center gap-2 px-4 py-2 bg-zinc-50 dark:bg-zinc-800 rounded-xl"><Target size={16} className="text-blue-600" /><span className="text-sm font-black">{currentIndex + 1} / {currentWords.length}</span></div>
             {combo > 1 && <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 dark:bg-orange-900/20 rounded-xl animate-bounce"><Flame size={16} className="text-orange-500" /><span className="text-sm font-black text-orange-600">{combo} COMBO</span></div>}
@@ -152,16 +153,16 @@ export const WordPractice: React.FC = () => {
         <button onClick={reset} className="p-2 hover:bg-zinc-100 rounded-xl transition-colors text-zinc-400"><RotateCcw size={20} /></button>
       </div>
 
-      <div className={`w-full bg-white dark:bg-zinc-900 rounded-[3.5rem] shadow-2xl p-16 mb-16 text-center border-4 transition-all duration-300 relative overflow-hidden ${isError ? 'border-red-500 animate-shake' : 'border-zinc-100 dark:border-zinc-800'}`}>
+      <div className={`w-full bg-white dark:bg-zinc-900 rounded-[2rem] md:rounded-[3.5rem] shadow-2xl p-8 md:p-16 mb-6 md:mb-16 text-center border-4 transition-all duration-300 relative overflow-hidden ${isError ? 'border-red-500 animate-shake' : 'border-zinc-100 dark:border-zinc-800'}`}>
         <div className="absolute top-0 left-0 w-full h-2 bg-zinc-50 dark:bg-zinc-800"><div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${(currentIndex / currentWords.length) * 100}%` }} /></div>
-        <h2 className="text-7xl md:text-8xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tight select-none">{currentWords[currentIndex]}</h2>
+        <h2 className="text-5xl sm:text-7xl md:text-8xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tight select-none break-keep">{currentWords[currentIndex]}</h2>
       </div>
 
       <div className="w-full max-w-md relative group">
-        <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown} className={`w-full h-24 px-10 text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[2.5rem] shadow-2xl outline-hidden text-center font-bold transition-all ${isError ? 'border-red-100 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800 focus:border-blue-500'}`} placeholder="입력하세요" autoFocus autoComplete="off" />
+        <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown} onFocus={() => scrollIntoViewOnFocus(inputRef.current)} className={`w-full h-16 md:h-24 px-6 md:px-10 text-2xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl outline-hidden text-center font-bold transition-all ${isError ? 'border-red-100 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800 focus:border-blue-500'}`} placeholder="입력 후 스페이스" autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
       </div>
 
-      <div className="mt-24 pt-16 border-t border-outline-variant/60 w-full">
+      <div className="mt-12 md:mt-24 pt-16 border-t border-outline-variant/60 w-full">
         <KeyboardAdBanner />
       </div>
     </div>

@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "seo:indexnow": "node scripts/submit-indexnow.mjs",
-    "seo:gsc": "node scripts/submit-gsc-sitemap.mjs"
+    "seo:gsc": "node scripts/submit-gsc-sitemap.mjs",
+    "test:mobile": "node tests/mobile-e2e.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -29,6 +30,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "playwright": "^1.61.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

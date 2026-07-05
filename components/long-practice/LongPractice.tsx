@@ -70,6 +70,19 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
     return () => clearInterval(timer);
   }, [startTime, report]);
 
+  // 타이핑 진행에 따라 원문 패널을 현재 위치로 자동 스크롤
+  // (모바일에서 화면이 좁아도 항상 현재 문장이 보이도록)
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const currentEl = container.querySelector<HTMLElement>('[data-current="true"]');
+    if (!currentEl) return;
+    const target = currentEl.offsetTop - container.clientHeight / 2;
+    if (Math.abs(container.scrollTop - target) > 40) {
+      container.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+    }
+  }, [inputValue.length]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     if (!startTime && val.length > 0) setStartTime(Date.now());
@@ -131,16 +144,17 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
     return chars.map((char: string, i: number) => {
       const normChar = TypingUtils.normalize(char);
       let color = "text-zinc-400"; let bg = ""; let deco = "";
-      if (i === inputValue.length) { 
-          color = "text-primary font-black"; 
-          bg = "bg-primary/10 ring-4 ring-primary/5 rounded-sm"; 
+      const isCurrent = i === inputValue.length;
+      if (isCurrent) {
+          color = "text-primary font-black";
+          bg = "bg-primary/10 ring-4 ring-primary/5 rounded-sm";
       }
       else if (i < inputValue.length) {
         const tChar = typedNorm.charAt(i);
         if (tChar === normChar) color = "text-on-surface font-bold";
         else { color = "text-red-500 line-through opacity-80"; }
       }
-      return <span key={i} className={`${color} ${bg} ${deco} transition-all`}>{char === "\n" ? <br /> : char}</span>;
+      return <span key={i} data-current={isCurrent || undefined} className={`${color} ${bg} ${deco} transition-all`}>{char === "\n" ? <br /> : char}</span>;
     });
   };
 
@@ -153,8 +167,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-12 px-6 flex flex-col gap-10 relative animate-in fade-in duration-1000">
-      <div className="flex justify-center gap-8 mb-4">
+    <div className="w-full max-w-7xl mx-auto py-4 md:py-12 px-3 md:px-6 flex flex-col gap-4 md:gap-10 relative animate-in fade-in duration-1000">
+      <div className="flex justify-center gap-2 md:gap-8 mb-0 md:mb-4 flex-wrap">
         <MetricItem icon={<Zap size={18}/>} label="현재 타수" value={liveKPM} unit="타" color="text-primary" />
         <MetricItem icon={<Target size={18}/>} label="정확도" value={liveAccuracy} unit="%" color="text-green-600" />
         <MetricItem icon={<Clock size={18}/>} label="진행 시간" value={Math.floor(elapsedSeconds)} unit="초" color="text-secondary" />
@@ -163,13 +177,13 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       {report && (
         <div className="fixed inset-0 bg-on-surface/80 backdrop-blur-xl z-[100] flex items-center justify-center p-6 overflow-y-auto">
           <div className="relative max-w-2xl w-full my-auto animate-in zoom-in duration-500">
-            <div className={`relative overflow-hidden rounded-[3.5rem] shadow-2xl ${paperAssets[paperType].bg} p-16 text-center`}>
+            <div className={`relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] shadow-2xl ${paperAssets[paperType].bg} p-8 md:p-16 text-center`}>
                 <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
                 <div className="relative z-10 text-on-surface">
                     <div className="flex justify-center mb-8"><div className="primary-gradient text-white p-6 rounded-full shadow-2xl"><Award size={60} /></div></div>
-                    <h2 className={`display-lg !text-5xl mb-4 ${fontFamily}`}>{currentText.title}</h2>
-                    <p className="text-zinc-500 text-xs font-black mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
-                    <div className="grid grid-cols-3 gap-8 mb-16">
+                    <h2 className={`display-lg !text-3xl md:!text-5xl mb-4 ${fontFamily}`}>{currentText.title}</h2>
+                    <p className="text-zinc-500 text-xs font-black mb-8 md:mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
+                    <div className="grid grid-cols-3 gap-3 md:gap-8 mb-8 md:mb-16">
                         <ResultItem label="Keystrokes" value={report.kpm} unit="타" />
                         <ResultItem label="Accuracy" value={report.accuracy} unit="%" />
                         <ResultItem label="Time" value={report.elapsedSeconds} unit="s" />
@@ -197,13 +211,13 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
             <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-2 block">{externalContent ? "Challenge Transcription" : "Editorial Practice"}</span>
-            <h1 className="display-lg !text-5xl text-on-surface flex items-center gap-4">
+            <h1 className="display-lg !text-2xl md:!text-5xl text-on-surface flex items-center gap-4">
                 {currentText.title} {!externalContent && <span className="text-2xl text-zinc-500 hidden md:inline-block ml-2 opacity-60"> 한글 타자 연습</span>}
             </h1>
-            <p className="text-sm text-zinc-400 font-black flex items-center gap-2 mt-4"><BookOpen size={14} className="text-primary" /> {currentText.author} · {currentText.source}</p>
+            <p className="text-sm text-zinc-400 font-black flex items-center gap-2 mt-2 md:mt-4"><BookOpen size={14} className="text-primary" /> {currentText.author} · {currentText.source}</p>
         </div>
-        <div className="flex items-center gap-4 bg-surface-lowest p-3 rounded-[2rem] shadow-sm">
-          <div className="flex items-center gap-4 px-4 border-r border-surface-high">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 bg-surface-lowest p-3 rounded-[1.5rem] md:rounded-[2rem] shadow-sm w-full md:w-auto">
+          <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 md:border-r border-surface-high">
             <Type size={18} className="text-primary" />
             <select value={fontFamily} onChange={(e) => setFontFamily(e.target.value as FontType)} className="bg-transparent text-sm font-black outline-hidden cursor-pointer appearance-none hover:text-primary transition-colors">
                 <option value="font-noto">본고딕</option><option value="font-myeongjo">나눔명조</option><option value="font-batang">고운바탕</option><option value="font-dodum">고운돋움</option><option value="font-pen">나눔펜</option><option value="font-brush">나눔브러쉬</option><option value="font-gaegu">개구체</option><option value="font-poor">푸어스토리</option><option value="font-dokdo">독도체</option><option value="font-gamja">감자꽃</option><option value="font-single">싱글데이</option><option value="font-yeon">연성체</option><option value="font-stylish">스타일리시</option><option value="font-jua">배민 주아</option>
@@ -218,24 +232,25 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
         </div>
       </div>
 
-      <div className={`w-full h-[75vh] shadow-[0_40px_80px_rgba(21,28,39,0.1)] rounded-[4rem] overflow-hidden flex flex-col md:flex-row transition-all duration-700 relative`}>
+      <div className={`w-full h-[78dvh] md:h-[75vh] min-h-[420px] shadow-[0_40px_80px_rgba(21,28,39,0.1)] rounded-[2rem] md:rounded-[4rem] overflow-hidden flex flex-col md:flex-row transition-all duration-700 relative`}>
         <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
-        
-        <div ref={scrollRef} className={`flex-1 p-12 md:p-20 overflow-y-auto relative scroll-smooth border-r border-on-surface/5 z-10 ${fontFamily}`} style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }}>
+
+        {/* 원문: 모바일에선 상단 42% 고정 + 현재 위치 자동 스크롤, 데스크톱에선 좌측 절반 */}
+        <div ref={scrollRef} className={`h-[42%] md:h-auto shrink-0 md:shrink md:flex-1 p-5 sm:p-8 md:p-20 overflow-y-auto relative border-b md:border-b-0 md:border-r border-on-surface/5 z-10 ${fontFamily}`} style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }}>
             <div className="max-w-none text-left tracking-tight whitespace-pre-wrap select-none text-on-surface">{renderHighlightedText()}</div>
         </div>
 
-        <div className={`flex-1 p-12 md:p-20 relative flex flex-col bg-on-surface/5 backdrop-blur-sm z-10 ${fontFamily}`}>
-          <div className="flex justify-between items-center mb-10">
-            <span className="px-4 py-1.5 primary-gradient text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">Active Transcription</span>
-            <div className="flex gap-8 text-sm font-black text-zinc-400">
+        <div className={`flex-1 min-h-0 p-5 sm:p-8 md:p-20 relative flex flex-col bg-on-surface/5 backdrop-blur-sm z-10 ${fontFamily}`}>
+          <div className="flex justify-between items-center mb-3 md:mb-10">
+            <span className="px-4 py-1.5 primary-gradient text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20 hidden sm:inline-flex">Active Transcription</span>
+            <div className="flex gap-4 md:gap-8 text-sm font-black text-zinc-400">
                 <span className="flex items-center gap-2"><Keyboard size={16}/> {TypingUtils.getStrokeCount(inputValue)}</span>
                 <span className="flex items-center gap-2"><Clock size={16}/> {Math.floor(elapsedSeconds/60)}:{String(Math.floor(elapsedSeconds)%60).padStart(2,'0')}</span>
             </div>
           </div>
-          <textarea ref={textareaRef} value={inputValue} onChange={handleInputChange} className="flex-1 w-full bg-transparent resize-none outline-hidden leading-relaxed z-10 py-0 text-on-surface placeholder:text-zinc-400/30" style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }} placeholder="이곳에 필사를 시작하세요..." />
-          
-          <div className="mt-12 relative h-16 w-full flex items-end">
+          <textarea ref={textareaRef} value={inputValue} onChange={handleInputChange} autoCorrect="off" autoCapitalize="off" spellCheck={false} className="flex-1 min-h-0 w-full bg-transparent resize-none outline-hidden leading-relaxed z-10 py-0 text-on-surface placeholder:text-zinc-400/30" style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }} placeholder="이곳에 필사를 시작하세요..." />
+
+          <div className="mt-4 md:mt-12 relative h-12 md:h-16 w-full flex items-end">
               <div className="absolute w-full h-2 bg-surface-high rounded-full mb-2 shadow-inner" />
               <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${progressValue}%` }} />
               <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${progressValue}%`, transform: 'translateX(-50%)', bottom: '8px' }}>
@@ -252,8 +267,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       </div>
 
       {externalContent && (
-        <div className="mt-32 space-y-32 z-10">
-            <section className="bg-surface-lowest p-16 rounded-[4rem] shadow-[0_20px_60px_rgba(21,28,39,0.06)] flex flex-col md:flex-row items-center gap-16">
+        <div className="mt-16 md:mt-32 space-y-16 md:space-y-32 z-10">
+            <section className="bg-surface-lowest p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-[0_20px_60px_rgba(21,28,39,0.06)] flex flex-col md:flex-row items-center gap-8 md:gap-16">
                 {externalContent.profiles?.avatar_url ? (
                     <Image src={externalContent.profiles.avatar_url} alt="작가" width={180} height={180} className="w-40 h-40 md:w-56 md:h-56 rounded-[4rem] object-cover shadow-2xl" />
                 ) : (
@@ -261,8 +276,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                 )}
                 <div className="flex-1 text-center md:text-left">
                     <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-4 block underline decoration-4 decoration-primary/20 underline-offset-8">Original Author</span>
-                    <h3 className="display-lg !text-5xl mb-8">{externalContent.profiles?.nickname || '익명 작가'}</h3>
-                    <div className="flex flex-wrap justify-center md:justify-start gap-16">
+                    <h3 className="display-lg !text-3xl md:!text-5xl mb-4 md:mb-8">{externalContent.profiles?.nickname || '익명 작가'}</h3>
+                    <div className="flex flex-wrap justify-center md:justify-start gap-8 md:gap-16">
                         <div className="flex flex-col">
                             <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2">Likes</span>
                             <span className={`text-4xl font-black flex items-center gap-4 transition-all ${isLiked ? 'text-red-500 scale-110' : 'text-on-surface'}`}>
@@ -280,8 +295,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                 <Link prefetch={false} href={`/challenge?authorId=${externalContent.author_id}`} className="px-12 py-6 bg-on-surface text-white font-black rounded-3xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center gap-3">작가의 글 더보기 <ChevronRight size={20}/></Link>
             </section>
 
-            <section className="bg-surface-lowest p-16 rounded-[4rem] shadow-xl">
-                <div className="flex items-center gap-4 mb-16">
+            <section className="bg-surface-lowest p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-xl">
+                <div className="flex items-center gap-4 mb-8 md:mb-16">
                     <MessageSquare className="text-primary" size={32} />
                     <h3 className="headline-md">Comments <span className="text-primary opacity-30">/ {comments.length}</span></h3>
                 </div>
@@ -294,7 +309,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                         onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
                         placeholder={user ? "작가님께 따뜻한 응원의 한마디를 남겨주세요" : "로그인 후 댓글을 남길 수 있습니다"}
                         disabled={!user || commentLoading}
-                        className="w-full p-8 bg-surface-low border-none rounded-[2.5rem] outline-hidden focus:shadow-xl transition-all text-xl font-medium pr-28"
+                        className="w-full p-5 md:p-8 bg-surface-low border-none rounded-[1.5rem] md:rounded-[2.5rem] outline-hidden focus:shadow-xl transition-all text-base md:text-xl font-medium pr-20 md:pr-28"
                     />
                     <button 
                         onClick={handleAddComment}
@@ -335,13 +350,13 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       )}
 
       {!externalContent && (
-        <div className="mt-32 w-full p-16 bg-on-surface rounded-[4rem] text-white flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden shadow-[0_40px_80px_rgba(21,28,39,0.2)]">
+        <div className="mt-16 md:mt-32 w-full p-8 md:p-16 bg-on-surface rounded-[2rem] md:rounded-[4rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 relative overflow-hidden shadow-[0_40px_80px_rgba(21,28,39,0.2)]">
             <div className="absolute top-0 right-0 p-20 opacity-5 pointer-events-none scale-150">
                 <ScrollText size={300} />
             </div>
             <div className="relative z-10 text-center md:text-left flex-1">
                 <div className="inline-flex px-5 py-1.5 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest mb-8 shadow-lg shadow-primary/20">커뮤니티와 함께</div>
-                <h2 className="display-lg !text-5xl mb-6">유저들이 만든 글은 어때요?</h2>
+                <h2 className="display-lg !text-3xl md:!text-5xl mb-6">유저들이 만든 글은 어때요?</h2>
                 <p className="text-zinc-400 font-medium text-xl leading-relaxed max-w-xl">매일 새로운 감성 명문이 올라오는 필사 챌린지에서 다른 유저들과 소통하며 연습해 보세요.</p>
             </div>
             <Link prefetch={false} 
@@ -358,11 +373,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
 function MetricItem({ icon, label, value, unit, color }: { icon: any, label: string, value: number, unit?: string, color: string }) {
     return (
-        <div className="flex items-center gap-3 bg-surface-lowest px-6 py-3 rounded-[1.5rem] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+        <div className="flex items-center gap-2 md:gap-3 bg-surface-lowest px-3 py-2 md:px-6 md:py-3 rounded-[1rem] md:rounded-[1.5rem] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className={color}>{icon}</div>
             <div className="flex flex-col">
                 <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-0.5">{label}</span>
-                <span className={`text-xl font-black ${color}`}>{value}<span className="text-xs ml-0.5 opacity-50">{unit}</span></span>
+                <span className={`text-base md:text-xl font-black ${color}`}>{value}<span className="text-xs ml-0.5 opacity-50">{unit}</span></span>
             </div>
         </div>
     );
@@ -370,9 +385,9 @@ function MetricItem({ icon, label, value, unit, color }: { icon: any, label: str
 
 function ResultItem({ label, value, unit }: { label: string, value: number, unit: string }) {
     return (
-        <div className="bg-on-surface/5 backdrop-blur-sm p-8 rounded-[2.5rem] text-on-surface">
+        <div className="bg-on-surface/5 backdrop-blur-sm p-4 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] text-on-surface">
             <p className="text-zinc-400 text-[10px] font-black uppercase mb-2 tracking-widest">{label}</p>
-            <p className="text-4xl font-black text-primary">{value}<span className="text-xs ml-1 font-bold opacity-50">{unit}</span></p>
+            <p className="text-2xl md:text-4xl font-black text-primary">{value}<span className="text-xs ml-1 font-bold opacity-50">{unit}</span></p>
         </div>
     );
 }

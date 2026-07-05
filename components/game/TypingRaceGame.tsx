@@ -221,11 +221,11 @@ export const TypingRaceGame: React.FC = () => {
       {gameState === "finished" && mounted && createPortal(finishModal, document.body)}
 
       {/* Game Dashboard */}
-      <div className="w-full flex justify-between items-center px-8 py-4 bg-zinc-900 text-white rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
-        <div className="flex gap-8 items-center">
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">현재 타수</span><span className="text-2xl font-black text-blue-400">{liveKpm}</span></div>
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Time</span><span className="text-2xl font-black text-yellow-400 flex items-center gap-1"><Timer size={18} />{elapsed.toFixed(0)}s</span></div>
-          <div className="hidden sm:flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">정확도</span><span className="text-2xl font-black text-emerald-400">{accuracy}%</span></div>
+      <div className="w-full flex justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
+        <div className="flex gap-4 md:gap-8 items-center">
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">현재 타수</span><span className="text-lg md:text-2xl font-black text-blue-400">{liveKpm}</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Time</span><span className="text-lg md:text-2xl font-black text-yellow-400 flex items-center gap-1"><Timer size={18} />{elapsed.toFixed(0)}s</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">정확도</span><span className="text-lg md:text-2xl font-black text-emerald-400">{accuracy}%</span></div>
         </div>
         <div className="flex items-center gap-4">
           {combo > 1 && <div className="animate-bounce"><span className="text-orange-500 font-black text-lg italic flex items-center gap-1"><Flame size={16} fill="currentColor" /> {combo}</span></div>}
@@ -276,8 +276,8 @@ export const TypingRaceGame: React.FC = () => {
 
           {/* Word + Input Area */}
           <div className="w-full shrink-0 flex flex-col gap-3">
-            <div className="flex items-center justify-center gap-4">
-              <div className={`px-10 py-4 rounded-[2rem] border-4 text-4xl sm:text-5xl font-black tracking-wider transition-colors ${isWrongNow ? "bg-rose-50 dark:bg-rose-900/20 border-rose-500 text-rose-600" : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100"}`}>
+            <div className="flex items-center justify-center gap-3 md:gap-4">
+              <div className={`px-6 md:px-10 py-2.5 md:py-4 rounded-[1.5rem] md:rounded-[2rem] border-4 text-2xl md:text-5xl font-black tracking-wider transition-colors ${isWrongNow ? "bg-rose-50 dark:bg-rose-900/20 border-rose-500 text-rose-600" : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100"}`}>
                 {gameState === "playing" ? word : "🏁"}
               </div>
               {gameState === "playing" && nextWord && (
@@ -286,7 +286,7 @@ export const TypingRaceGame: React.FC = () => {
                 </div>
               )}
             </div>
-            <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-20 px-8 text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 dark:border-zinc-100 focus:border-blue-500") : "border-zinc-100 dark:border-zinc-800 opacity-50"}`} placeholder={gameState === "playing" ? "위 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoComplete="off" />
+            <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 dark:border-zinc-100 focus:border-blue-500") : "border-zinc-100 dark:border-zinc-800 opacity-50"}`} placeholder={gameState === "playing" ? "위 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
           </div>
         </div>
 
