@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes } from "lucide-react";
+import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
@@ -60,6 +60,15 @@ export default function GameHubPage() {
           description="아래에서 차오르는 단어 블록을 <br/>천장에 닿기 전에 터뜨리세요!"
           difficulty="Medium"
           color="rose"
+        />
+
+        <GameCard
+          href="/game/typing-race"
+          icon={<Flag size={40} className="text-blue-500" />}
+          title="타자 레이스"
+          description="거북이, 토끼, 치타와 경주! <br/>단어를 입력해 결승선을 통과하세요!"
+          difficulty="Easy"
+          color="blue"
         />
       </div>
 

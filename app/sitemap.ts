@@ -31,6 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/game/acid-rain',
     '/game/card-flip',
     '/game/block-pop',
+    '/game/castle-defense',
+    '/game/typing-race',
     '/quiz',
     '/recommend',
     '/recommend/abko-mk108',

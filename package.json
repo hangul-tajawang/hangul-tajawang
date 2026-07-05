@@ -7,7 +7,9 @@
     "build": "next build",
     "preview": "next build && next start",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo:indexnow": "node scripts/submit-indexnow.mjs",
+    "seo:gsc": "node scripts/submit-gsc-sitemap.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",

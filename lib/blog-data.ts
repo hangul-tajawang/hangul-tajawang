@@ -118,6 +118,32 @@ export const blogPosts: BlogPost[] = [
 
 타자 연습을 시작하면 가장 먼저 궁금해지는 게 있습니다. "그래서 남들은 보통 몇 타나 치는데?" 이 글에서는 분당 타수의 정확한 의미와 집단별 평균 수준, 그리고 목표 타수를 어떻게 잡아야 하는지 정리해 봤습니다.
 
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="320" viewBox="0 0 480 320" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="수준별 분당 타수 비교 막대 차트">
+    <rect width="480" height="320" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">수준별 분당 타수(CPM) 기준</text>
+    <text x="98" y="82" font-family="sans-serif" font-size="13" fill="#64748B" text-anchor="end">입문</text>
+    <rect x="108" y="68" width="50" height="19" rx="9" fill="#CBD5E1"/>
+    <text x="166" y="82" font-family="sans-serif" font-size="12" fill="#94A3B8">150타</text>
+    <text x="98" y="120" font-family="sans-serif" font-size="13" fill="#64748B" text-anchor="end">초급</text>
+    <rect x="108" y="106" width="83" height="19" rx="9" fill="#CBD5E1"/>
+    <text x="199" y="120" font-family="sans-serif" font-size="12" fill="#94A3B8">250타</text>
+    <text x="98" y="158" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="end">평균</text>
+    <rect x="108" y="144" width="117" height="19" rx="9" fill="#3B82F6"/>
+    <text x="233" y="158" font-family="sans-serif" font-weight="bold" font-size="12" fill="#3B82F6">350타 ← 일반 직장인</text>
+    <text x="98" y="196" font-family="sans-serif" font-size="13" fill="#64748B" text-anchor="end">숙련</text>
+    <rect x="108" y="182" width="167" height="19" rx="9" fill="#93C5FD"/>
+    <text x="283" y="196" font-family="sans-serif" font-size="12" fill="#94A3B8">500타</text>
+    <text x="98" y="234" font-family="sans-serif" font-size="13" fill="#64748B" text-anchor="end">상급</text>
+    <rect x="108" y="220" width="233" height="19" rx="9" fill="#93C5FD"/>
+    <text x="349" y="234" font-family="sans-serif" font-size="12" fill="#94A3B8">700타</text>
+    <text x="98" y="272" font-family="sans-serif" font-size="13" fill="#64748B" text-anchor="end">최상위</text>
+    <rect x="108" y="258" width="300" height="19" rx="9" fill="#10B981"/>
+    <text x="416" y="272" font-family="sans-serif" font-weight="bold" font-size="12" fill="#059669">900타+</text>
+    <text x="240" y="304" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">300~400타면 이미 평균입니다. 조급해하지 마세요.</text>
+  </svg>
+</div>
+
 ## 타수(CPM)가 정확히 뭘 뜻하는 걸까?
 
 한국에서 말하는 '타수'는 보통 **분당 타수(CPM, Characters Per Minute)**를 의미합니다. 여기서 중요한 건 '글자 수'가 아니라 '타건 수'라는 점입니다. 예를 들어 '값'이라는 한 글자는 ㄱ + ㅏ + ㅂ + ㅅ, 총 4번의 키 입력이 필요하므로 4타로 계산됩니다.
@@ -175,6 +201,21 @@ export const blogPosts: BlogPost[] = [
 # 한국인이 가장 자주 틀리는 맞춤법 15개 총정리
 
 맞춤법은 몰라서 틀리는 게 아니라 '헷갈려서' 틀립니다. 그리고 헷갈리는 단어는 사람마다 거의 비슷합니다. 업무 메일이나 자기소개서에서 자주 틀리는 맞춤법 15개를 구분 원리와 함께 정리했습니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="235" viewBox="0 0 480 235" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="되와 돼를 하와 해로 구분하는 방법">
+    <rect width="480" height="235" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">되/돼 3초 구분법: '하/해'를 넣어보세요</text>
+    <rect x="55" y="65" width="170" height="95" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="2"/>
+    <text x="140" y="110" font-family="sans-serif" font-weight="bold" font-size="30" fill="#3B82F6" text-anchor="middle">되 = 하</text>
+    <text x="140" y="140" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">되고 싶다 → 하고 싶다 ✓</text>
+    <rect x="255" y="65" width="170" height="95" rx="12" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="2"/>
+    <text x="340" y="110" font-family="sans-serif" font-weight="bold" font-size="30" fill="#059669" text-anchor="middle">돼 = 해</text>
+    <text x="340" y="140" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">그래도 돼? → 그래도 해? ✓</text>
+    <text x="240" y="196" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="middle">문장 끝은 무조건 '돼' — "이제 다 됐다"도 같은 원리</text>
+    <text x="240" y="216" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">'되'는 홀로 문장을 끝맺을 수 없습니다</text>
+  </svg>
+</div>
 
 ## 1. 되 vs 돼 — '하/해'를 넣어보세요
 
@@ -267,6 +308,27 @@ export const blogPosts: BlogPost[] = [
 
 컴퓨터 교실에서 몰래 하던 산성비 게임을 기억하시나요? 하늘에서 떨어지는 단어를 바닥에 닿기 전에 쳐내던 그 게임 말입니다. 재미로 하던 게임이었지만, 사실 산성비는 훈련 이론 관점에서 꽤 정교하게 설계된 연습 도구였습니다.
 
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="300" viewBox="0 0 480 300" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="산성비 게임의 원리를 나타낸 그림">
+    <rect width="480" height="300" rx="16" fill="#0F172A" stroke="#1E293B" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="16" fill="#E2E8F0" text-anchor="middle">산성비 게임의 원리</text>
+    <text x="100" y="90" font-family="sans-serif" font-weight="bold" font-size="15" fill="#7DD3FC" text-anchor="middle">구름</text>
+    <line x1="100" y1="98" x2="100" y2="118" stroke="#7DD3FC" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.5"/>
+    <text x="240" y="70" font-family="sans-serif" font-weight="bold" font-size="15" fill="#7DD3FC" text-anchor="middle">바람</text>
+    <line x1="240" y1="78" x2="240" y2="98" stroke="#7DD3FC" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.5"/>
+    <text x="380" y="110" font-family="sans-serif" font-weight="bold" font-size="15" fill="#FDE047" text-anchor="middle">💣폭탄</text>
+    <line x1="380" y1="118" x2="380" y2="138" stroke="#FDE047" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.5"/>
+    <text x="165" y="170" font-family="sans-serif" font-weight="bold" font-size="15" fill="#F87171" text-anchor="middle">타자</text>
+    <line x1="165" y1="178" x2="165" y2="196" stroke="#F87171" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <text x="165" y="192" font-family="sans-serif" font-size="10" fill="#F87171" text-anchor="middle" dy="16">위험!</text>
+    <line x1="30" y1="225" x2="450" y2="225" stroke="#EF4444" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="440" y="243" font-family="sans-serif" font-size="11" fill="#F87171" text-anchor="end">바닥에 닿으면 게임 오버</text>
+    <rect x="140" y="255" width="200" height="30" rx="8" fill="#1E293B" stroke="#475569" stroke-width="1.5"/>
+    <text x="155" y="275" font-family="monospace" font-weight="bold" font-size="14" fill="#4ADE80">타자_</text>
+    <text x="330" y="275" font-family="sans-serif" font-size="10" fill="#64748B" text-anchor="end">빠르고 정확하게!</text>
+  </svg>
+</div>
+
 ## 산성비 게임이 뭐길래
 
 산성비는 1990~2000년대 국민 타자 프로그램들에 들어있던 미니게임입니다. 화면 위에서 단어들이 비처럼 떨어지고, 바닥(땅)에 닿기 전에 해당 단어를 정확히 입력하면 사라집니다. 단어가 쌓이면 게임 오버. 레벨이 오를수록 낙하 속도가 빨라집니다.
@@ -314,6 +376,34 @@ export const blogPosts: BlogPost[] = [
 
 필사(筆寫)라고 하면 만년필과 노트부터 떠올리게 됩니다. 그래서 "키보드로 치는 건 필사가 아니지 않나?"라는 질문을 종종 받습니다. 결론부터 말하면, 키보드 필사는 손글씨 필사와는 다른 고유한 효과가 있고, 목적에 따라서는 오히려 더 나은 선택입니다.
 
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="250" viewBox="0 0 480 250" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="눈으로 읽기와 필사의 차이를 나타낸 그림">
+    <rect width="480" height="250" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">눈으로 읽기 vs 필사하며 읽기</text>
+    <text x="65" y="90" font-family="sans-serif" font-weight="bold" font-size="13" fill="#64748B">👀 눈으로 읽기</text>
+    <circle cx="80" cy="115" r="7" fill="#3B82F6"/>
+    <circle cx="130" cy="115" r="7" fill="#E2E8F0" stroke="#CBD5E1"/>
+    <circle cx="180" cy="115" r="7" fill="#E2E8F0" stroke="#CBD5E1"/>
+    <circle cx="230" cy="115" r="7" fill="#3B82F6"/>
+    <circle cx="280" cy="115" r="7" fill="#E2E8F0" stroke="#CBD5E1"/>
+    <circle cx="330" cy="115" r="7" fill="#E2E8F0" stroke="#CBD5E1"/>
+    <circle cx="380" cy="115" r="7" fill="#3B82F6"/>
+    <path d="M80 100 Q 155 75 230 100 Q 305 75 380 100" stroke="#94A3B8" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+    <text x="415" y="119" font-family="sans-serif" font-size="11" fill="#94A3B8">건너뜀</text>
+    <text x="65" y="170" font-family="sans-serif" font-weight="bold" font-size="13" fill="#059669">⌨️ 필사하며 읽기</text>
+    <circle cx="80" cy="195" r="7" fill="#10B981"/>
+    <circle cx="130" cy="195" r="7" fill="#10B981"/>
+    <circle cx="180" cy="195" r="7" fill="#10B981"/>
+    <circle cx="230" cy="195" r="7" fill="#10B981"/>
+    <circle cx="280" cy="195" r="7" fill="#10B981"/>
+    <circle cx="330" cy="195" r="7" fill="#10B981"/>
+    <circle cx="380" cy="195" r="7" fill="#10B981"/>
+    <line x1="80" y1="195" x2="380" y2="195" stroke="#10B981" stroke-width="2" opacity="0.4"/>
+    <text x="415" y="199" font-family="sans-serif" font-size="11" fill="#059669">전부 처리</text>
+    <text x="240" y="232" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">필사는 조사 하나, 쉼표 하나까지 강제로 '느리게 읽기'를 만듭니다</text>
+  </svg>
+</div>
+
 ## 필사의 본질은 '느리게 읽기'다
 
 필사의 핵심 효과는 쓰는 행위 자체가 아니라, **문장을 강제로 천천히, 빠짐없이 읽게 되는 것**에 있습니다.
@@ -350,6 +440,653 @@ export const blogPosts: BlogPost[] = [
 한글타자왕의 [필사 연습](/transcription)에서는 윤동주, 김소월, 정지용, 이육사, 한용운 등 한국 문학의 명문을 디지털 원고지 위에서 필사할 수 있습니다. 타수와 정확도가 실시간으로 측정되고, 다른 사용자가 올린 글로 연습하는 [필사 챌린지](/challenge)도 있습니다.
 
 > **[📖 원고지 필사 연습 시작하기](/transcription)**
+`
+  },
+  {
+    id: "keyboard-switch-guide",
+    title: "기계식 키보드 축 완벽 정리: 청축·갈축·적축·무접점, 타자 연습엔 뭐가 좋을까?",
+    description: "청축은 시끄럽고 적축은 밋밋하다? 축별 특성과 소음, 키압을 비교하고 타자 연습·사무실·게임 등 용도별로 어떤 축을 골라야 하는지 정리했습니다.",
+    date: "2026-05-28",
+    category: "장비",
+    keyword: "기계식 키보드 축 차이, 청축 갈축 적축, 무접점 키보드, 타자용 키보드 추천, 키보드 축 추천",
+    content: `
+# 기계식 키보드 축 완벽 정리: 타자 연습엔 뭐가 좋을까?
+
+타자 연습을 하다 보면 어느 순간 장비에 눈이 갑니다. 그리고 기계식 키보드를 검색하는 순간 '청축', '갈축', '적축', '무접점'이라는 낯선 단어의 벽에 부딪히죠. 어렵게 생각할 필요 없습니다. 축(스위치)은 결국 **누를 때의 느낌과 소리**를 결정하는 부품일 뿐입니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="270" viewBox="0 0 480 270" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="키보드 축별 타건감과 소음 비교">
+    <rect width="480" height="270" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">4대 축 한눈에 비교</text>
+    <circle cx="97" cy="95" r="24" fill="#3B82F6"/>
+    <text x="97" y="140" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">청축</text>
+    <text x="97" y="160" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">딸깍!</text>
+    <rect x="62" y="180" width="70" height="10" rx="5" fill="#FCA5A5"/>
+    <text x="97" y="212" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">소음 큼</text>
+    <circle cx="192" cy="95" r="24" fill="#A16207"/>
+    <text x="192" y="140" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">갈축</text>
+    <text x="192" y="160" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">서걱서걱</text>
+    <rect x="172" y="180" width="40" height="10" rx="5" fill="#FCD34D"/>
+    <text x="192" y="212" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">소음 중간</text>
+    <circle cx="287" cy="95" r="24" fill="#EF4444"/>
+    <text x="287" y="140" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">적축</text>
+    <text x="287" y="160" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">부드러움</text>
+    <rect x="274" y="180" width="26" height="10" rx="5" fill="#86EFAC"/>
+    <text x="287" y="212" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">소음 작음</text>
+    <circle cx="382" cy="95" r="24" fill="#6366F1"/>
+    <text x="382" y="140" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">무접점</text>
+    <text x="382" y="160" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">도각도각</text>
+    <rect x="367" y="180" width="30" height="10" rx="5" fill="#86EFAC"/>
+    <text x="382" y="212" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">소음 작음</text>
+    <text x="240" y="248" font-family="sans-serif" font-weight="bold" font-size="12" fill="#1E293B" text-anchor="middle">입문 추천: 갈축 · 사무실: 저소음 적축 · 예산 되면: 무접점</text>
+  </svg>
+</div>
+
+## 축이란 무엇인가
+
+기계식 키보드는 키캡 아래에 하나하나 독립된 스위치가 들어 있습니다. 이 스위치의 내부 구조에 따라 키를 누를 때의 압력, 걸리는 느낌(구분감), 소리가 달라집니다. 축의 이름은 스위치 내부 부품의 색깔에서 왔습니다.
+
+## 4대 축 특성 비교
+
+| 축 | 타건감 | 소음 | 특징 |
+|----|--------|------|------|
+| 청축 | 딸깍! 하는 명확한 클릭 | 매우 큼 | 타건의 쾌감 최고, 사무실 반입 금지급 소음 |
+| 갈축 | 서걱, 약한 걸림(넉클) | 중간 | 구분감과 소음의 균형, 입문 추천 1순위 |
+| 적축 | 걸림 없이 부드럽게 쑥 | 작음 | 빠른 연타에 유리, 게이밍에서 인기 |
+| 무접점 | 도각도각, 쫀득함 | 작음~중간 | 물리 접점 없이 정전용량 감지, 내구성·정숙함 최상, 가격 비쌈 |
+
+### 청축 — 타자 치는 맛의 끝판왕
+누를 때마다 '딸깍' 소리와 함께 확실한 구분감이 옵니다. 타자 연습이 즐거워지는 축이지만, 소음이 커서 같이 사는 가족이나 사무실 동료의 원성을 살 수 있습니다. **혼자 쓰는 공간이 있을 때만** 추천합니다.
+
+### 갈축 — 뭘 살지 모르겠다면 이것
+청축의 구분감을 줄이고 소음도 줄인 중간 지점입니다. 타건감이 있으면서도 시끄럽지 않아 첫 기계식 키보드로 가장 무난합니다.
+
+### 적축 — 부드럽고 빠르게
+걸리는 느낌 없이 일직선으로 눌리는 리니어 방식입니다. 힘이 덜 들어 장시간 타이핑과 빠른 연타에 유리하지만, 처음에는 '이게 눌린 건가?' 싶게 밋밋할 수 있습니다.
+
+### 무접점 — 예산이 허락한다면
+물리적 금속 접점 없이 정전용량 변화로 입력을 감지합니다. '도각도각'이라 표현되는 특유의 쫀득한 타건감 때문에 한 번 쓰면 못 돌아간다는 사람이 많습니다. 대신 가격대가 기계식보다 높습니다.
+
+## 용도별 추천
+
+- **집에서 타자 연습**: 갈축 또는 청축. 타건의 재미가 연습 지속률을 높여줍니다.
+- **사무실**: 저소음 적축(일명 '저적') 또는 무접점. 일반 청축은 절대 금물입니다.
+- **게임 위주**: 적축. 입력 반응이 빠르고 연타가 편합니다.
+- **밤에 조용히**: 저소음 적축 또는 저소음 갈축.
+
+## 키압도 확인하세요
+
+같은 축이라도 키압(누르는 데 필요한 힘)이 다릅니다. 보통 45g 전후가 표준인데, 손힘이 약하거나 장시간 타이핑하면 35~45g의 가벼운 축이, 오타가 잦은 독수리 타법 교정 중이라면 오히려 50g 이상의 무거운 축이 실수를 줄여주기도 합니다.
+
+## 장비보다 중요한 것
+
+솔직히 말하면, 300타를 치는 사람이 30만 원짜리 키보드를 산다고 500타가 되지는 않습니다. 하지만 **좋은 키보드는 연습을 계속하게 만듭니다**. 치는 맛이 있으면 매일 키보드 앞에 앉는 게 즐거워지고, 결국 그 누적 시간이 실력을 만듭니다.
+
+한글타자왕의 [키보드 추천 페이지](/recommend)에서 가성비 기계식 키보드를 정리해 두었으니, 장비를 바꿨다면 [타자 속도 측정](/practice)으로 타건감 차이를 직접 느껴보세요.
+
+> **[⌨️ 타자 연습용 키보드 추천 보러 가기](/recommend)**
+`
+  },
+  {
+    id: "kids-typing-guide",
+    title: "초등학생 타자 연습, 언제 어떻게 시작해야 할까? (학부모 가이드)",
+    description: "아이 타자 교육의 적정 시기, 단계별 학습 순서, 게임을 활용한 동기부여 방법까지. 컴퓨터 수업을 앞둔 초등학생 학부모를 위한 가이드입니다.",
+    date: "2026-06-10",
+    category: "가이드",
+    keyword: "초등학생 타자 연습, 아이 타자 배우기, 어린이 타자 게임, 초등 컴퓨터 수업, 타자 교육",
+    content: `
+# 초등학생 타자 연습, 언제 어떻게 시작해야 할까?
+
+요즘 초등학교는 저학년부터 디지털 기기로 과제를 합니다. 3~4학년이 되면 실과 수업에서 문서 작성을 배우고, 발표 자료도 직접 만들죠. 이때 타자가 느린 아이는 내용을 몰라서가 아니라 **입력이 느려서** 뒤처지는 경험을 하게 됩니다. 타자는 어릴 때 잡아주면 평생 쓰는 기술입니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="200" viewBox="0 0 480 200" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="초등학생 타자 학습 4단계 로드맵">
+    <rect width="480" height="200" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">우리 아이 타자 학습 로드맵</text>
+    <circle cx="90" cy="105" r="30" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2.5"/>
+    <text x="90" y="100" font-family="sans-serif" font-weight="bold" font-size="13" fill="#3B82F6" text-anchor="middle">1단계</text>
+    <text x="90" y="117" font-family="sans-serif" font-size="12" fill="#1E293B" text-anchor="middle">자리</text>
+    <path d="M126 105 L154 105" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M148 99 L156 105 L148 111" stroke="#CBD5E1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="190" cy="105" r="30" fill="#ECFDF5" stroke="#10B981" stroke-width="2.5"/>
+    <text x="190" y="100" font-family="sans-serif" font-weight="bold" font-size="13" fill="#059669" text-anchor="middle">2단계</text>
+    <text x="190" y="117" font-family="sans-serif" font-size="12" fill="#1E293B" text-anchor="middle">낱말</text>
+    <path d="M226 105 L254 105" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M248 99 L256 105 L248 111" stroke="#CBD5E1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="290" cy="105" r="30" fill="#FFFBEB" stroke="#F59E0B" stroke-width="2.5"/>
+    <text x="290" y="100" font-family="sans-serif" font-weight="bold" font-size="13" fill="#D97706" text-anchor="middle">3단계</text>
+    <text x="290" y="117" font-family="sans-serif" font-size="12" fill="#1E293B" text-anchor="middle">게임</text>
+    <path d="M326 105 L354 105" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M348 99 L356 105 L348 111" stroke="#CBD5E1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="390" cy="105" r="30" fill="#F5F3FF" stroke="#8B5CF6" stroke-width="2.5"/>
+    <text x="390" y="100" font-family="sans-serif" font-weight="bold" font-size="13" fill="#7C3AED" text-anchor="middle">4단계</text>
+    <text x="390" y="117" font-family="sans-serif" font-size="12" fill="#1E293B" text-anchor="middle">문장</text>
+    <text x="240" y="172" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">하루 15~20분 · 속도보다 '자판 안 보는 습관'이 먼저</text>
+  </svg>
+</div>
+
+## 시작 시기: 한글을 뗀 후, 초등 1~3학년
+
+타자 연습의 전제 조건은 두 가지입니다.
+
+1. **한글 읽기가 자유로울 것** — 자모 결합 원리(ㄱ+ㅏ=가)를 이해해야 자판 연습이 의미가 있습니다.
+2. **손이 키보드에 어느 정도 닿을 것** — 손이 너무 작으면 올바른 손가락 분담 자체가 물리적으로 어렵습니다.
+
+이 두 조건이 갖춰지는 초등 1~3학년이 일반적인 적기입니다. 너무 이르게 시작하면 잘못된 습관(독수리 타법)만 굳어질 수 있으니 서두를 필요는 없습니다.
+
+## 가장 중요한 것: 처음부터 '바른 손가락'으로
+
+어른의 타자 교정이 어려운 이유는 이미 굳은 독수리 타법을 지우고 다시 배워야 하기 때문입니다. 아이는 백지상태라서 처음부터 올바르게 배우면 교정 과정 자체가 필요 없습니다.
+
+핵심 규칙은 단 두 가지만 지키게 해주세요.
+
+- **기준 자리(ㅁㄴㅇㄹ / ㅓㅏㅣ;)에 손가락을 올려놓고 시작한다**
+- **키보드를 보지 않고 화면을 본다**
+
+처음엔 답답해서 자꾸 키보드를 내려다볼 겁니다. 그래도 "빨리 쳐봐"라고 하지 말고 "손 안 보고 친 것"을 칭찬해주세요. 속도는 나중에 저절로 따라옵니다.
+
+## 단계별 학습 순서
+
+### 1단계: 자리 연습 (1~2주)
+[자리 연습](/practice)으로 각 손가락이 담당하는 키를 익힙니다. 하루 10~15분이면 충분합니다. 아이 집중력은 짧기 때문에 길게 시키면 오히려 역효과입니다.
+
+### 2단계: 낱말 연습 (2~4주)
+[낱말 연습](/practice/word)으로 짧은 단어를 쳐봅니다. 플래시카드가 넘어가는 방식이라 아이들이 카드 넘기는 재미로 계속하게 됩니다.
+
+### 3단계: 게임으로 동기부여
+아이에게 "연습해라"는 말보다 강력한 것이 게임입니다. [산성비 게임](/game/acid-rain)은 원래 어른들도 어릴 때 이 게임 때문에 타자가 늘었을 정도로 검증된 방식입니다. 점수가 눈에 보이니 아이 스스로 어제의 기록을 깨려고 합니다.
+
+### 4단계: 짧은 문장 연습
+게임에 익숙해지면 [짧은 글 연습](/practice/short)으로 띄어쓰기와 문장 부호가 포함된 실전 타이핑을 시작합니다. 속담 카테고리를 고르면 타자 연습을 하면서 속담 공부도 됩니다.
+
+## 학부모가 자주 묻는 질문
+
+**Q. 하루에 얼마나 시켜야 하나요?**
+15~20분이 적당합니다. 몰아서 1시간보다 매일 15분이 근육 기억 형성에 훨씬 효과적이고, 아이도 질리지 않습니다.
+
+**Q. 목표 타수는 어느 정도로 잡아야 하나요?**
+초등 저학년은 100~150타, 고학년은 200~300타면 또래 상위권입니다. 어른 기준(300~400타)을 들이대지 마세요.
+
+**Q. 영타도 같이 시켜야 하나요?**
+한글 타자가 어느 정도 자리 잡은 후에 시작하는 걸 추천합니다. 두 자판을 동시에 배우면 둘 다 어중간해지기 쉽습니다.
+
+## 마치며
+
+타자는 한 번 몸에 익으면 자전거처럼 평생 가는 기술입니다. 그리고 그 기술은 아이가 앞으로 하게 될 모든 디지털 활동의 기초 체력이 됩니다. 회원가입 없이 무료로 바로 시작할 수 있으니, 오늘 아이와 함께 산성비 게임 한 판으로 시작해보세요.
+
+> **[🎮 아이와 함께 산성비 게임 해보기](/game/acid-rain)**
+`
+  },
+  {
+    id: "typing-posture-wrist",
+    title: "타자 칠 때 손목이 아픈 이유: 손목 통증을 만드는 자세 3가지와 교정법",
+    description: "장시간 타이핑 후 손목이 시큰거린다면 자세부터 점검해야 합니다. 손목 통증을 만드는 대표적인 자세 문제와 교정법, 예방 스트레칭을 정리했습니다.",
+    date: "2026-06-25",
+    category: "가이드",
+    keyword: "타자 손목 통증, 키보드 손목 아픔, 올바른 타이핑 자세, 손목터널증후군 예방, 타이핑 자세 교정",
+    content: `
+# 타자 칠 때 손목이 아픈 이유: 통증을 만드는 자세 3가지와 교정법
+
+타자 연습을 열심히 하다 보면 실력보다 먼저 찾아오는 불청객이 있습니다. 바로 손목 통증입니다. 하루 종일 키보드를 쓰는 직장인이라면 더더욱 남 일이 아니죠. 손목 통증의 대부분은 타이핑 '양'이 아니라 '자세'에서 옵니다.
+
+*(참고: 이 글은 일반적인 자세 정보이며, 통증이 지속되거나 저림·감각 이상이 동반되면 반드시 병원 진료를 받으세요.)*
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="240" viewBox="0 0 480 240" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="잘못된 손목 자세와 올바른 손목 자세 비교">
+    <rect width="480" height="240" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">손목, 꺾지 말고 일직선으로</text>
+    <rect x="40" y="60" width="185" height="130" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="2"/>
+    <text x="132" y="85" font-family="sans-serif" font-weight="bold" font-size="14" fill="#DC2626" text-anchor="middle">✗ 꺾인 손목</text>
+    <path d="M60 150 L140 150 L175 118" stroke="#DC2626" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <rect x="130" y="148" width="60" height="14" rx="4" fill="#FCA5A5" opacity="0.6"/>
+    <path d="M152 138 A 18 18 0 0 1 138 148" stroke="#DC2626" stroke-width="1.5" fill="none"/>
+    <text x="132" y="180" font-family="sans-serif" font-size="11" fill="#B91C1C" text-anchor="middle">손목 통로가 눌립니다</text>
+    <rect x="255" y="60" width="185" height="130" rx="12" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="2"/>
+    <text x="347" y="85" font-family="sans-serif" font-weight="bold" font-size="14" fill="#16A34A" text-anchor="middle">✓ 일직선 손목</text>
+    <path d="M275 135 L420 135" stroke="#16A34A" stroke-width="6" stroke-linecap="round"/>
+    <rect x="352" y="148" width="60" height="14" rx="4" fill="#86EFAC" opacity="0.6"/>
+    <text x="347" y="180" font-family="sans-serif" font-size="11" fill="#15803D" text-anchor="middle">손등~팔뚝이 한 선 위에</text>
+    <text x="240" y="218" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">팔꿈치 90~100도 · 손목은 공중에 · 받침대는 쉴 때만</text>
+  </svg>
+</div>
+
+## 통증을 만드는 자세 1: 꺾인 손목
+
+가장 흔한 원인입니다. 손바닥 뒤꿈치를 책상에 딱 붙인 채 손가락만 들어 올려 치면, 손목이 위로 꺾인 상태(신전)로 몇 시간을 보내게 됩니다. 이 자세는 손목 안쪽 통로(수근관)를 압박합니다.
+
+**교정법**: 타이핑하는 동안 손목은 공중에 살짝 떠 있는 것이 이상적입니다. 피아니스트의 손을 떠올려 보세요. 손등부터 팔뚝까지가 일직선이 되어야 합니다. 계속 띄우기 힘들면 팜레스트(손목 받침대)를 쓰되, 타이핑 중이 아니라 **쉴 때 얹는 용도**로 쓰는 것이 원칙입니다.
+
+## 통증을 만드는 자세 2: 너무 높은 키보드
+
+책상이 높거나 의자가 낮으면 팔꿈치보다 키보드가 높아집니다. 그러면 어깨는 올라가고 손목은 꺾이고, 어깨·목·손목이 한 세트로 망가집니다.
+
+**교정법**: 의자 높이를 조절해 **팔꿈치 각도가 90~100도**, 팔뚝이 바닥과 수평이 되게 만드세요. 키보드의 다리(틸트)를 세우는 것도 의외로 손목 꺾임을 심하게 만듭니다. 손목 건강만 보면 키보드는 평평하거나 오히려 앞쪽이 낮은 게 좋습니다.
+
+## 통증을 만드는 자세 3: 손목만 움직이는 타이핑
+
+멀리 있는 키(백스페이스, 엔터, 숫자열)를 칠 때 팔은 고정하고 손목만 휙휙 비틀어 치는 습관입니다. 작은 관절인 손목이 큰 이동을 전담하면서 피로가 누적됩니다.
+
+**교정법**: 먼 키는 손목을 비틀지 말고 **팔 전체를 살짝 이동**해서 치세요. 그리고 근본적으로는 열 손가락 타법을 익혀 각 손가락이 담당 구역만 처리하게 만들면 손목의 이동량 자체가 줄어듭니다. 독수리 타법은 두 손가락이 자판 전체를 커버해야 해서 손목 이동이 몇 배로 많습니다. [자리 연습](/practice)으로 손가락 분담을 익히는 것이 최고의 손목 보호법입니다.
+
+## 50분 타이핑, 10분 휴식
+
+자세가 완벽해도 쉼 없는 연속 타이핑은 부담이 됩니다.
+
+- 50분에 한 번은 키보드에서 손을 떼고 손목을 돌려주세요.
+- **손목 스트레칭**: 팔을 앞으로 뻗고 손끝을 아래로 향한 뒤, 반대 손으로 손등을 몸 쪽으로 지그시 10초 당깁니다. 반대 방향(손끝 위로)도 10초. 좌우 각 3회.
+- 주먹을 꽉 쥐었다 활짝 펴는 동작을 10회 반복하면 혈류가 돌아옵니다.
+
+## 장비가 도움이 되는 경우
+
+- **키압이 높은 키보드**를 오래 쓰면 손가락·손목 피로가 커집니다. 통증이 있다면 45g 이하의 가벼운 축이 유리합니다.
+- 어깨 폭보다 좁은 일반 키보드는 손목을 안쪽으로 모으게 만듭니다. 증상이 있다면 인체공학 키보드도 고려해볼 만합니다. [키보드 추천 페이지](/recommend)에서 부담 적은 키보드들을 정리해 두었습니다.
+
+## 마치며
+
+타자 실력은 하루아침에 늘지 않지만, 손목은 하루아침에 망가질 수 있습니다. 오늘부터 '손목 일직선, 팔꿈치 90도, 50분마다 휴식' 세 가지만 기억하세요. 바른 자세는 통증만 막는 게 아니라 타자 속도도 함께 올려줍니다.
+
+> **[🖐️ 바른 손가락 자세로 자리 연습 시작하기](/practice)**
+`
+  },
+  {
+    id: "best-poems-for-transcription",
+    title: "필사하기 좋은 시 7선: 윤동주부터 이상까지, 타자로 새기는 한국 명시",
+    description: "필사 입문자에게 추천하는 한국 현대시 7편을 골랐습니다. 각 시가 필사에 좋은 이유와 함께, 바로 원고지에서 타자 필사를 시작할 수 있는 링크를 담았습니다.",
+    date: "2026-07-03",
+    category: "필사",
+    keyword: "필사하기 좋은 시, 필사 추천 글, 명시 필사, 윤동주 별 헤는 밤 필사, 시 필사 추천",
+    content: `
+# 필사하기 좋은 시 7선: 타자로 새기는 한국 명시
+
+필사를 시작할 때 가장 어려운 건 '무엇을 필사할까'입니다. 너무 길면 지치고, 너무 어려우면 재미가 없습니다. 그래서 필사 입문에는 시가 가장 좋습니다. 짧고, 리듬이 있고, 한 글자 한 글자에 의미가 눌러 담겨 있으니까요. 저작권이 만료되어 마음껏 필사할 수 있는 한국 현대시 중에서 7편을 골랐습니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="230" viewBox="0 0 480 230" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="원고지 위에 쓴 별 헤는 밤">
+    <rect width="480" height="230" rx="16" fill="#FFFDF7" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">원고지 위에, 한 자 한 자</text>
+    <g stroke="#FDA4AF" stroke-width="1.5" fill="none">
+      <rect x="60" y="65" width="45" height="45"/><rect x="105" y="65" width="45" height="45"/><rect x="150" y="65" width="45" height="45"/><rect x="195" y="65" width="45" height="45"/><rect x="240" y="65" width="45" height="45"/><rect x="285" y="65" width="45" height="45"/><rect x="330" y="65" width="45" height="45"/><rect x="375" y="65" width="45" height="45"/>
+      <rect x="60" y="120" width="45" height="45"/><rect x="105" y="120" width="45" height="45"/><rect x="150" y="120" width="45" height="45"/><rect x="195" y="120" width="45" height="45"/><rect x="240" y="120" width="45" height="45"/><rect x="285" y="120" width="45" height="45"/><rect x="330" y="120" width="45" height="45"/><rect x="375" y="120" width="45" height="45"/>
+    </g>
+    <g font-family="serif" font-weight="bold" font-size="24" fill="#334155" text-anchor="middle">
+      <text x="82" y="97">별</text><text x="127" y="97">하</text><text x="172" y="97">나</text><text x="217" y="97">에</text><text x="307" y="97">추</text><text x="352" y="97">억</text><text x="397" y="97">과</text>
+      <text x="82" y="152">별</text><text x="127" y="152">하</text><text x="172" y="152">나</text><text x="217" y="152">에</text><text x="307" y="152">사</text><text x="352" y="152">랑</text>
+    </g>
+    <rect x="376" y="126" width="3" height="33" fill="#3B82F6">
+      <animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="240" y="205" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">윤동주, 「별 헤는 밤」 中 — 타자로 새기는 필사</text>
+  </svg>
+</div>
+
+## 1. 윤동주, 「별 헤는 밤」
+
+> 별 하나에 추억과 / 별 하나에 사랑과 / 별 하나에 쓸쓸함과…
+
+필사 추천 1순위입니다. "별 하나에"로 시작하는 반복 구절은 타이핑에 리듬감을 만들어주고, 어머니를 부르는 후반부는 필사하다 손이 멈추는 경험을 하게 됩니다. 분량도 적당해서 10~15분이면 완주할 수 있습니다.
+
+[→ 「별 헤는 밤」 타자 필사 시작하기](/transcription/poem_1)
+
+## 2. 김소월, 「진달래꽃」
+
+> 나 보기가 역겨워 가실 때에는 / 말없이 고이 보내 드리우리다
+
+한국인이라면 누구나 아는 시지만, 눈으로 아는 것과 손으로 쳐보는 것은 완전히 다릅니다. 7·5조의 전통 율격이 손끝에서 그대로 재생되는, 운율 필사의 교과서 같은 작품입니다.
+
+[→ 「진달래꽃」 타자 필사 시작하기](/transcription/poem_2)
+
+## 3. 정지용, 「향수」
+
+> 그곳이 차마 꿈엔들 잊힐 리야
+
+"넓은 벌 동쪽 끝으로 옛이야기 지줄대는 실개천이 회돌아 나가고" — 첫 문장부터 우리말의 감각적인 아름다움이 폭발하는 시입니다. 흔히 쓰지 않는 순우리말 어휘가 많아 타자 실력, 특히 낯선 글자 조합 처리 능력을 키우는 데도 좋습니다.
+
+[→ 「향수」 타자 필사 시작하기](/transcription/poem_4)
+
+## 4. 이육사, 「광야」
+
+> 다시 천고의 뒤에 / 백마 타고 오는 초인이 있어
+
+짧지만 한 연 한 연의 무게가 다른 시입니다. 문장이 간결해서 필사 초보도 부담이 없고, 마지막 연을 칠 때의 묵직함은 긴 산문 필사에서는 얻기 힘든 경험입니다.
+
+[→ 「광야」 타자 필사 시작하기](/transcription/poem_8)
+
+## 5. 한용운, 「알 수 없어요」
+
+> 타고 남은 재가 다시 기름이 됩니다
+
+전체가 질문으로 이루어진 독특한 구조의 시입니다. "~은 누구의 ~입니까"라는 문형이 반복되어 리듬을 타기 좋고, 물음표가 있어 문장 부호 타이핑 연습도 자연스럽게 됩니다.
+
+[→ 「알 수 없어요」 타자 필사 시작하기](/transcription/poem_6)
+
+## 6. 이상, 「거울」
+
+> 거울속에는소리가없소 / 저렇게까지조용한세상은참없을것이오
+
+띄어쓰기를 의도적으로 붙여 쓴 실험적인 시입니다. 평소 습관대로 스페이스바를 누르려는 손가락과 싸우게 되는데, 이 낯선 경험 자체가 '내가 얼마나 무의식적으로 타이핑하는지'를 깨닫게 해줍니다. 필사에 익숙해진 분들에게 추천합니다.
+
+[→ 「거울」 타자 필사 시작하기](/transcription/poem_7)
+
+## 7. 윤동주, 「새로운 길」
+
+> 내를 건너서 숲으로 / 고개를 넘어서 마을로
+
+무언가 새로 시작하는 시기에 필사하기 가장 좋은 시입니다. 짧고 쉽고 맑아서 오늘 처음 필사를 시작하는 분의 첫 작품으로도 완벽합니다.
+
+[→ 「새로운 길」 타자 필사 시작하기](/transcription/poem_5)
+
+---
+
+## 시 필사를 더 오래 즐기는 팁
+
+1. **하루 한 편이면 충분합니다.** 여러 편을 몰아치기보다 한 편을 천천히, 가능하면 두 번 치세요. 두 번째 필사에서 처음엔 안 보이던 것들이 보입니다.
+2. **마지막 행을 치고 나면 소리 내어 읽어보세요.** 타자로 새긴 시는 눈으로 읽은 시보다 오래 남습니다.
+3. **기록을 남기세요.** 한글타자왕에서는 필사를 마치면 타수와 정확도가 기록됩니다. 같은 시를 한 달 뒤에 다시 쳐보면 실력 변화가 그대로 보입니다.
+
+시가 익숙해지면 [필사 챌린지](/challenge)에서 다른 사용자들이 올린 글에 도전해보거나, 직접 좋아하는 글을 등록해보세요.
+
+> **[📖 전체 필사 작품 목록 보러 가기](/transcription)**
+`
+  },
+  {
+    id: "dubeolsik-vs-sebeolsik",
+    title: "두벌식 vs 세벌식: 한글 자판 전쟁의 역사와 지금 배운다면 무엇을 택해야 할까",
+    description: "표준이 된 두벌식과 마니아들이 지키는 세벌식. 두 자판의 구조 차이, 도깨비불 현상, 그리고 2026년에 타자를 배우는 사람에게 현실적인 선택지를 정리했습니다.",
+    date: "2026-07-04",
+    category: "지식",
+    keyword: "두벌식 세벌식 차이, 세벌식 자판, 한글 자판 종류, 공병우 세벌식, 두벌식 표준",
+    content: `
+# 두벌식 vs 세벌식: 한글 자판 전쟁의 역사와 현실적인 선택
+
+지금 여러분이 쓰는 한글 자판은 '두벌식'입니다. 그런데 타자에 관심을 갖다 보면 어디선가 "세벌식이 더 우수하다"는 이야기를 듣게 됩니다. 실제로 타자 커뮤니티에는 세벌식으로 전향한 마니아들이 있고, 이들의 만족도는 상당히 높습니다. 도대체 무슨 차이가 있는 걸까요?
+
+## '벌'이 뭘까?
+
+한글 자판에서 '벌'은 글쇠 묶음의 수를 뜻합니다.
+
+- **두벌식**: 자음 한 벌 + 모음 한 벌 = 2벌. 'ㄱ'은 초성이든 받침이든 같은 키를 씁니다.
+- **세벌식**: 초성 한 벌 + 중성 한 벌 + 종성(받침) 한 벌 = 3벌. 초성 'ㄱ'과 받침 'ㄱ'이 서로 다른 키에 있습니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="250" viewBox="0 0 480 250" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="두벌식과 세벌식의 글쇠 구성 비교">
+    <rect width="480" height="250" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">'벌'의 개수가 다릅니다</text>
+    <text x="132" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3B82F6" text-anchor="middle">두벌식 (표준)</text>
+    <rect x="55" y="90" width="72" height="55" rx="10" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+    <text x="91" y="115" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">자음</text>
+    <text x="91" y="133" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">ㄱㄴㄷ…</text>
+    <rect x="137" y="90" width="72" height="55" rx="10" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+    <text x="173" y="115" font-family="sans-serif" font-weight="bold" font-size="14" fill="#1E293B" text-anchor="middle">모음</text>
+    <text x="173" y="133" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">ㅏㅑㅓ…</text>
+    <text x="132" y="172" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">초성·받침이 같은 키</text>
+    <text x="132" y="188" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">→ 도깨비불 현상 있음</text>
+    <line x1="240" y1="70" x2="240" y2="195" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="352" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">세벌식 (공병우)</text>
+    <rect x="270" y="90" width="50" height="55" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+    <text x="295" y="115" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="middle">초성</text>
+    <text x="295" y="133" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">ㄱ</text>
+    <rect x="328" y="90" width="50" height="55" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+    <text x="353" y="115" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="middle">중성</text>
+    <text x="353" y="133" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">ㅏ</text>
+    <rect x="386" y="90" width="50" height="55" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+    <text x="411" y="115" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="middle">종성</text>
+    <text x="411" y="133" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">ㄱ</text>
+    <text x="352" y="172" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">초성·받침이 다른 키</text>
+    <text x="352" y="188" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">→ 도깨비불 현상 없음</text>
+    <text x="240" y="225" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">한글의 구조(초성+중성+종성)에 더 가까운 쪽은 세벌식</text>
+  </svg>
+</div>
+
+한글의 구조 자체가 초성+중성+종성이니, 세벌식이 한글의 원리를 더 충실히 반영한 설계인 셈입니다. 세벌식은 한글 타자기의 아버지라 불리는 안과의사 공병우 박사가 1949년 개발했고, 두벌식은 1982년 정부 표준으로 채택되며 대세가 됐습니다.
+
+## 두벌식의 약점: 도깨비불 현상
+
+두벌식으로 "국이"를 쳐보세요. 'ㄱ+ㅜ+ㄱ'까지 치면 화면에 '국'이 있다가, 'ㅣ'를 치는 순간 받침 ㄱ이 떨어져 나가 '구기'가 됩니다. 글자가 도깨비불처럼 넘나든다고 해서 **도깨비불 현상**이라고 부릅니다.
+
+두벌식은 이 때문에 컴퓨터가 '이 ㄱ이 받침인지 다음 글자의 초성인지'를 계속 추측해야 하고, 타자수 입장에서도 시각적 출렁임이 생깁니다. 세벌식은 초성과 종성 키가 아예 다르므로 이 현상이 원천적으로 없습니다.
+
+## 세벌식의 장점과 단점
+
+**장점**
+- 도깨비불 현상이 없어 입력이 안정적입니다.
+- 왼손(종성·중성)과 오른손(초성)의 리듬이 번갈아 살아나 장시간 타이핑 피로가 적다는 평가가 많습니다.
+- 모아치기(여러 키 동시 입력)가 가능해 이론상 최고 속도가 높습니다.
+
+**단점**
+- 배워야 할 키가 많습니다. 받침이 숫자열까지 올라가 있어 초기 학습 장벽이 확실히 높습니다.
+- 표준이 아닙니다. 내 컴퓨터가 아닌 곳(회사 공용 PC, PC방, 시험장)에서는 설정을 바꿔야 하고, 그마저 불가능한 환경도 있습니다.
+- 두벌식이 이미 몸에 익은 사람은 수개월의 재학습 비용을 치러야 합니다.
+
+## 그래서, 지금 배운다면?
+
+현실적인 답을 드리면 **대부분의 사람에게는 두벌식**입니다.
+
+1. 세상의 모든 키보드와 시험 환경이 두벌식 기준으로 돌아갑니다.
+2. 두벌식으로도 충분히 빠릅니다. 두벌식 600~800타 타이피스트는 흔하고, 그 속도면 생각의 속도를 이미 따라잡습니다.
+3. 속도의 병목은 대부분 자판 방식이 아니라 **연습량과 정확도**입니다. 300타인 사람이 세벌식으로 바꾼다고 빨라지지 않습니다. 같은 시간을 두벌식 연습에 쓰는 게 낫습니다.
+
+다만 이런 분들에게는 세벌식 도전이 의미가 있습니다. 하루 종일 글을 쓰는 직업이라 손목 피로 분산이 절실한 분, 이미 두벌식 500타 이상인데 타자 자체가 취미가 된 분, 한글 입력 방식의 역사에 매력을 느끼는 분.
+
+## 어느 자판이든, 결국은 연습
+
+두벌식이든 세벌식이든 실력을 만드는 건 결국 꾸준한 연습입니다. 한글타자왕의 [자리 연습](/practice)으로 기본기를 다지고, [낱말 연습](/practice/word)과 [긴 글 필사](/transcription)로 속도를 올려보세요. 내 타수가 어느 정도인지 궁금하다면 [평균 타자 속도 가이드](/blog/average-typing-speed)도 함께 읽어보시길 권합니다.
+
+> **[⌨️ 지금 쓰는 자판으로 타자 속도 측정하기](/practice)**
+`
+  },
+  {
+    id: "hangul-typewriter-history",
+    title: "한글 타자기의 역사: 안과의사 공병우는 왜 타자기를 만들었나",
+    description: "세벌식 타자기를 만든 공병우 박사부터 1982년 두벌식 표준화, 컴퓨터 시대의 타자 프로그램까지. 우리가 매일 쓰는 한글 자판에 담긴 역사를 정리했습니다.",
+    date: "2026-06-14",
+    category: "지식",
+    keyword: "한글 타자기 역사, 공병우 타자기, 세벌식 타자기, 한글 기계화, 두벌식 표준",
+    content: `
+# 한글 타자기의 역사: 안과의사 공병우는 왜 타자기를 만들었나
+
+우리는 매일 아무 생각 없이 한글을 타이핑하지만, '기계로 한글을 찍는다'는 것은 한때 국가적 난제였습니다. 알파벳 26자를 일렬로 찍으면 되는 영문과 달리, 한글은 자음과 모음이 네모 칸 안에서 조합되는 문자이기 때문입니다. 이 문제를 풀어낸 사람들의 이야기를 하려고 합니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="210" viewBox="0 0 480 210" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="한글 타자기 역사 연표">
+    <rect width="480" height="210" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">한글 입력의 결정적 장면들</text>
+    <line x1="55" y1="110" x2="425" y2="110" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="110" r="9" fill="#3B82F6"/>
+    <text x="80" y="88" font-family="sans-serif" font-weight="bold" font-size="13" fill="#3B82F6" text-anchor="middle">1949</text>
+    <text x="80" y="136" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">공병우</text>
+    <text x="80" y="151" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">세벌식 타자기</text>
+    <circle cx="193" cy="110" r="9" fill="#10B981"/>
+    <text x="193" y="88" font-family="sans-serif" font-weight="bold" font-size="13" fill="#10B981" text-anchor="middle">1982</text>
+    <text x="193" y="136" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">두벌식</text>
+    <text x="193" y="151" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">표준 자판 확정</text>
+    <circle cx="307" cy="110" r="9" fill="#F59E0B"/>
+    <text x="307" y="88" font-family="sans-serif" font-weight="bold" font-size="13" fill="#F59E0B" text-anchor="middle">1990년대</text>
+    <text x="307" y="136" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">PC 보급과</text>
+    <text x="307" y="151" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">타자 프로그램 전성기</text>
+    <circle cx="420" cy="110" r="9" fill="#8B5CF6"/>
+    <text x="420" y="88" font-family="sans-serif" font-weight="bold" font-size="13" fill="#8B5CF6" text-anchor="middle">현재</text>
+    <text x="420" y="136" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">웹에서 바로</text>
+    <text x="420" y="151" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">타자 연습</text>
+    <text x="240" y="188" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">타자기 → 표준 자판 → 타자 게임 → 웹 브라우저</text>
+  </svg>
+</div>
+
+## 네모 글자를 기계에 넣는다는 것
+
+영문 타자기는 글쇠 하나가 글자 하나입니다. 하지만 한글 '값'을 찍으려면 ㄱ, ㅏ, ㅂ, ㅅ 네 요소를 **같은 자리에 겹쳐** 찍어야 합니다. 게다가 '가'의 ㄱ과 '고'의 ㄱ은 모양과 위치가 다르죠. 이 조합 문제 때문에 한글 기계화는 오랫동안 "불가능하다", "차라리 한글을 풀어쓰자"는 말까지 나왔던 난제였습니다.
+
+## 안과의사, 타자기에 인생을 걸다
+
+이 문제에 뛰어든 대표적인 인물이 안과의사 **공병우**입니다. 병원을 운영하던 그는 한글학자 이극로를 만나 한글 기계화의 필요성에 눈을 뜬 뒤, 진료실 한켠에서 타자기 개발에 매달렸습니다. 그리고 1949년, 초성·중성·종성을 세 벌로 나눈 **세벌식 속도 타자기**를 내놓습니다.
+
+공병우 타자기는 빨랐습니다. 글자 모양은 다소 삐뚤빼뚤했지만(이른바 '빨랫줄 글꼴') 실용적인 속도를 냈고, 한국전쟁기와 그 이후 군과 관공서의 문서 행정에서 실제로 활약했습니다. "기계에 한글을 맞추지 말고, 한글의 구조대로 기계를 만든다"는 그의 철학은 지금의 [세벌식 자판](/blog/dubeolsik-vs-sebeolsik)으로 이어져 여전히 마니아들이 쓰고 있습니다.
+
+## 1982년, 두벌식이 표준이 되다
+
+타자기 시대에는 회사마다 다른 자판을 썼습니다. 네벌식, 다섯벌식까지 난립하던 자판은 컴퓨터 시대가 열리며 정리가 불가피해졌고, 1982년 정부는 **자음 한 벌 + 모음 한 벌의 두벌식**을 표준으로 확정합니다.
+
+두벌식이 채택된 논리는 명확했습니다. 배울 게 적다는 것. 자판 배열이 단순해 교육 비용이 낮고, 기계식 타자기와 달리 컴퓨터는 초성·종성 구분을 소프트웨어가 대신 처리해줄 수 있었습니다. 세벌식 진영은 강하게 반발했지만 표준의 힘은 컸고, 이후 모든 학교와 관공서, PC가 두벌식으로 통일됩니다.
+
+## 1990년대: 타자 연습이 국민 오락이 되다
+
+PC가 가정과 학교에 보급되면서 흥미로운 일이 벌어집니다. 타자 연습이 '교육'을 넘어 '오락'이 된 겁니다. 컴퓨터 학원과 학교 컴퓨터실에서는 타자 연습 프로그램이 필수 코스였고, 그 안에 들어 있던 [산성비 게임](/blog/acid-rain-typing-game)은 수업 시간에 몰래 하는 국민 게임이 됐습니다. 지금 30~40대의 상당수는 이 시절 게임으로 타자를 뗐습니다.
+
+## 그리고 현재: 설치 없이, 브라우저에서
+
+이제 타자 연습은 설치형 프로그램에서 웹으로 넘어왔습니다. 한글타자왕도 그 연장선에 있습니다. 70여 년 전 진료실에서 타자기를 두드리던 안과의사의 문제의식 — '한글을 얼마나 빠르고 편하게 입력할 것인가' — 은 여전히 유효하고, 우리는 그 역사의 수혜자로서 매일 키보드를 두드리고 있는 셈입니다.
+
+오늘 이 글을 읽었다면, 당신의 타자 속도로 그 역사에 답해보는 건 어떨까요.
+
+> **[⌨️ 한글 타자 속도 측정하러 가기](/practice)**
+`
+  },
+  {
+    id: "work-typing-productivity",
+    title: "직장인의 시간을 버는 타이핑: 타자 속도가 만드는 연간 80시간의 차이",
+    description: "메일, 메신저, 보고서까지 직장인은 하루 종일 타이핑합니다. 타자 속도가 업무 시간에 미치는 실제 영향과, 당장 쓸 수 있는 필수 단축키·입력 습관을 정리했습니다.",
+    date: "2026-06-21",
+    category: "생산성",
+    keyword: "직장인 타자 속도, 업무 단축키, 타이핑 생산성, 문서 작성 속도, 일 잘하는 법",
+    content: `
+# 직장인의 시간을 버는 타이핑: 타자 속도가 만드는 연간 80시간의 차이
+
+"타자야 뭐, 대충 치면 되지." 맞는 말이었습니다. 하루에 몇 문장만 치던 시절에는요. 하지만 지금 직장인의 하루를 보세요. 아침 메일 답장, 하루 종일 이어지는 메신저, 회의록, 보고서, 그리고 AI에게 보내는 프롬프트까지. 사무직의 업무는 사실상 **타이핑으로 이루어져 있습니다**.
+
+## 계산해 봅시다: 타자 속도와 업무 시간
+
+메일과 메신저, 문서를 합쳐 하루 15,000타 정도를 입력하는 평범한 사무직을 가정해 보죠. (A4 보고서 한 장이 대략 5,000~6,000타입니다.)
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="250" viewBox="0 0 480 250" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="타자 속도별 하루 타이핑 소요 시간 비교">
+    <rect width="480" height="250" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="42" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">하루 15,000타 입력에 걸리는 시간</text>
+    <text x="130" y="83" font-family="sans-serif" font-weight="bold" font-size="13" fill="#64748B" text-anchor="end">분당 300타</text>
+    <rect x="140" y="68" width="250" height="22" rx="11" fill="#F87171"/>
+    <text x="265" y="83" font-family="sans-serif" font-weight="bold" font-size="12" fill="white" text-anchor="middle">50분</text>
+    <text x="130" y="128" font-family="sans-serif" font-weight="bold" font-size="13" fill="#64748B" text-anchor="end">분당 500타</text>
+    <rect x="140" y="113" width="150" height="22" rx="11" fill="#34D399"/>
+    <text x="215" y="128" font-family="sans-serif" font-weight="bold" font-size="12" fill="white" text-anchor="middle">30분</text>
+    <line x1="290" y1="108" x2="290" y2="140" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="240" y="175" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">차이: 매일 20분 = 연간 약 80시간</text>
+    <text x="240" y="200" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">근무일 240일 기준, 열흘치 근무 시간에 해당</text>
+  </svg>
+</div>
+
+분당 300타와 500타의 차이는 하루 20분입니다. 연간 근무일로 환산하면 **약 80시간, 꼬박 열흘치 근무 시간**이죠. 그리고 이 계산에는 더 중요한 게 빠져 있습니다. 타자가 느리면 문장을 치는 동안 생각이 끊기고, 끊긴 생각을 다시 잇는 데 드는 '전환 비용'은 시간으로 환산조차 어렵습니다.
+
+## 속도만큼 중요한 것: 입력 습관
+
+### 1. 백스페이스 습관부터 고치세요
+느린 타자보다 나쁜 게 '오타 → 지우기 → 다시 치기' 루프입니다. 실측하면 오타 정정에 쓰는 시간이 전체 입력 시간의 20~30%를 차지하는 경우도 흔합니다. 속도를 올리기 전에 [정확도부터 끌어올리는 것](/blog/ultimate-typing-guide)이 순서입니다.
+
+### 2. 문장 단위로 생각하고, 문장 단위로 치세요
+단어 하나 치고 멈춰서 생각하고, 또 한 단어 치는 방식은 손과 머리가 서로를 기다리는 구조입니다. 문장을 머릿속에서 완성한 뒤 한 번에 쏟아내는 습관을 들이면 같은 타수로도 체감 속도가 크게 오릅니다. [짧은 글 연습](/practice)이 정확히 이 훈련입니다.
+
+### 3. 자주 쓰는 문구는 시스템에 맡기세요
+"안녕하세요, ○○팀 △△입니다" 같은 인사말을 하루에 열 번씩 손으로 치고 있다면, 이메일 서명이나 상용구(텍스트 대치) 기능에 등록해두세요. 잘 치는 것만큼 '안 치는 것'도 생산성입니다.
+
+## 오늘부터 쓰는 필수 단축키
+
+손이 키보드와 마우스를 오가는 순간마다 흐름이 끊깁니다. 최소한 이것만은 손에 붙여두세요.
+
+- **Ctrl + C / X / V** — 복사 / 잘라내기 / 붙여넣기. 기본 중의 기본.
+- **Ctrl + Shift + V** — 서식 없이 붙여넣기. 다른 문서에서 가져온 글자의 서식이 깨질 때 쓰는 그 기능입니다.
+- **Win + V** — 클립보드 히스토리. 복사한 항목 여러 개를 거슬러 올라가 붙여넣을 수 있습니다. 모르는 사람이 의외로 많은 최고의 기능.
+- **Ctrl + 방향키 / Ctrl + Backspace** — 단어 단위 이동/삭제. 글자 하나씩 지우는 습관과 이별하세요.
+- **Alt + Tab** — 창 전환. 마우스로 작업 표시줄을 클릭하고 있다면 지금 바꾸세요.
+- **F2** — 파일명 바꾸기, 엑셀 셀 편집. 사무직의 숨은 효자 키입니다.
+
+## 타자 속도는 '측정'에서 시작합니다
+
+내 타수가 몇인지 모르면 개선도 없습니다. 지금 [타자 속도 측정](/practice)으로 현재 타수를 확인하고, [평균 타수 기준](/blog/average-typing-speed)과 비교해 보세요. 300타 이하라면, 하루 15분씩 한 달의 연습이 앞으로 수십 년의 업무 시간을 벌어주는 가장 수익률 높은 투자가 될 겁니다.
+
+> **[⏱️ 내 타자 속도 측정하고 시작하기](/practice)**
+`
+  },
+  {
+    id: "four-week-typing-plan",
+    title: "4주 완성 타자 연습 플랜: 하루 20분으로 100타 올리는 커리큘럼",
+    description: "무작정 치는 연습은 늘지 않습니다. 자리 익히기부터 실전 문장까지, 주차별 목표와 연습 메뉴를 정해둔 4주짜리 타자 연습 커리큘럼을 제안합니다.",
+    date: "2026-06-29",
+    category: "가이드",
+    keyword: "타자 연습 방법, 타자 속도 올리기, 타자 연습 계획, 타수 올리는 법, 4주 타자 연습",
+    content: `
+# 4주 완성 타자 연습 플랜: 하루 20분으로 100타 올리기
+
+"타자 연습 해야지"라고 마음먹고 아무 문장이나 치다가 사흘 만에 그만둔 경험, 있으실 겁니다. 문제는 의지가 아니라 **계획의 부재**입니다. 운동에 루틴이 있듯 타자에도 커리큘럼이 필요합니다. 하루 20분, 4주짜리 플랜을 제안합니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="240" viewBox="0 0 480 240" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="4주 타자 연습 로드맵">
+    <rect width="480" height="240" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="17" fill="#1E293B" text-anchor="middle">4주 로드맵: 정확도에서 속도로</text>
+    <rect x="30" y="65" width="98" height="105" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="2"/>
+    <text x="79" y="92" font-family="sans-serif" font-weight="bold" font-size="14" fill="#3B82F6" text-anchor="middle">1주차</text>
+    <text x="79" y="117" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">자리 연습</text>
+    <text x="79" y="135" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">자판 안 보기</text>
+    <text x="79" y="155" font-family="sans-serif" font-weight="bold" font-size="11" fill="#3B82F6" text-anchor="middle">정확도 95%</text>
+    <rect x="138" y="65" width="98" height="105" rx="12" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="2"/>
+    <text x="187" y="92" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">2주차</text>
+    <text x="187" y="117" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">낱말 연습</text>
+    <text x="187" y="135" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">글자 조합 훈련</text>
+    <text x="187" y="155" font-family="sans-serif" font-weight="bold" font-size="11" fill="#059669" text-anchor="middle">+30타</text>
+    <rect x="246" y="65" width="98" height="105" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="2"/>
+    <text x="295" y="92" font-family="sans-serif" font-weight="bold" font-size="14" fill="#D97706" text-anchor="middle">3주차</text>
+    <text x="295" y="117" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">짧은 글+게임</text>
+    <text x="295" y="135" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">속도 압박 훈련</text>
+    <text x="295" y="155" font-family="sans-serif" font-weight="bold" font-size="11" fill="#D97706" text-anchor="middle">+30타</text>
+    <rect x="354" y="65" width="98" height="105" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="2"/>
+    <text x="403" y="92" font-family="sans-serif" font-weight="bold" font-size="14" fill="#7C3AED" text-anchor="middle">4주차</text>
+    <text x="403" y="117" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">긴 글 필사</text>
+    <text x="403" y="135" font-family="sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">실전 지구력</text>
+    <text x="403" y="155" font-family="sans-serif" font-weight="bold" font-size="11" fill="#7C3AED" text-anchor="middle">+40타</text>
+    <text x="240" y="205" font-family="sans-serif" font-weight="bold" font-size="13" fill="#1E293B" text-anchor="middle">하루 20분 × 4주 = 평균 +100타</text>
+  </svg>
+</div>
+
+## 시작 전: 현재 타수를 기록하세요
+
+플랜의 효과를 확인하려면 출발점이 필요합니다. [긴 글 필사](/transcription)에서 아무 작품이나 골라 3분 이상 쳐보고, 평균 타수와 정확도를 메모해 두세요. 이게 4주 뒤 비교할 기준 기록입니다.
+
+## 1주차: 자리 — 키보드와 눈을 끊는 주
+
+**메뉴: [자리 연습](/practice) 15분 + 낱말 연습 5분**
+
+이번 주의 유일한 목표는 속도가 아니라 '키보드를 보지 않는 습관'입니다. 기준 자리(왼손 ㅁㄴㅇㄹ, 오른손 ㅓㅏㅣ;)에 손을 올리고, 답답해도 시선은 화면에 고정하세요. 이번 주에 타수가 오히려 떨어져도 정상입니다. 정확도 95%를 넘기는 것만 신경 쓰세요.
+
+- 요령: 오타가 나도 백스페이스를 누르지 말고 그냥 진행해 보세요. 지우는 습관보다 '틀리지 않으려는 집중'이 먼저 생겨야 합니다.
+
+## 2주차: 낱말 — 글자 조합을 손에 새기는 주
+
+**메뉴: [낱말 연습](/practice/word) 15분 + 자리 복습 5분**
+
+한글 타자의 속도는 '자주 나오는 글자 조합'을 얼마나 반사적으로 치느냐에서 나옵니다. 낱말 연습은 받침, 이중모음 같은 조합을 압축적으로 훈련시켜 줍니다. 이번 주부터 타수가 눈에 띄게 오르기 시작합니다.
+
+- 요령: 유난히 자주 틀리는 글쇠(보통 ㅋ, ㅌ, ㅊ, ㅍ 같은 바깥쪽 키)를 발견하면 메모해 두고, 다음 날 자리 연습 5분을 그 키에 쓰세요.
+
+## 3주차: 게임 — 한계 속도를 건드리는 주
+
+**메뉴: [짧은 글 연습](/practice/short) 10분 + [산성비 게임](/game/acid-rain) 10분**
+
+편한 속도로만 치면 실력은 그 속도에 머뭅니다. 산성비처럼 시간 압박이 있는 게임은 평소보다 빠른 손놀림을 강제로 끌어내고, 이 '한계 경험'이 반복되면 평균 속도가 따라 올라옵니다. 근력 운동의 점진적 과부하와 같은 원리입니다.
+
+- 요령: 게임은 재미있어서 과몰입하기 쉽습니다. 10분 타이머를 걸어두세요. 이 플랜의 핵심은 강도가 아니라 '매일'입니다.
+
+## 4주차: 필사 — 실전 문장으로 완성하는 주
+
+**메뉴: [긴 글 필사](/transcription) 20분**
+
+실제 타이핑에는 띄어쓰기, 쉼표, 물음표가 섞여 있습니다. 낱말과 게임으로 올린 속도를 실전 문장에서 유지하는 훈련이 마지막 단계입니다. 시 한 편, 짧은 산문 하나를 처음부터 끝까지 완주하는 것을 목표로 하세요. [필사하기 좋은 시 7선](/blog/best-poems-for-transcription)에서 작품을 골라도 좋습니다.
+
+**4주차 마지막 날**, 첫날과 같은 작품으로 기록을 측정해 보세요. 하루 20분을 지켰다면 대부분 60~120타가 올라 있을 겁니다.
+
+## 4주가 끝난 뒤에는
+
+- 300타를 넘겼다면: [짧은 글 연습](/practice/short)을 매일 10분씩 유지하면서 [맞춤법 퀴즈](/quiz)로 정확한 표기까지 챙기세요.
+- 정체기가 왔다면: [평균 타수 가이드](/blog/average-typing-speed)의 정체기 돌파법을 참고하세요. 대부분 300~400타 구간에서 한 번 멈춥니다.
+
+계획은 여기까지 준비해 드렸습니다. 남은 건 오늘의 20분뿐입니다.
+
+> **[🗓️ 1주차 자리 연습부터 시작하기](/practice)**
 `
   }
 ];

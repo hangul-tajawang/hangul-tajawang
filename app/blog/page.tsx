@@ -18,6 +18,18 @@ export const metadata: Metadata = {
   }
 };
 
+// 카테고리별 썸네일 비주얼 (이미지 파일 없이 그라디언트 + 이모지로 구성)
+const CATEGORY_VISUAL: Record<string, { emoji: string; gradient: string }> = {
+  '가이드': { emoji: '⌨️', gradient: 'from-blue-500/90 to-indigo-600/90' },
+  '맞춤법': { emoji: '✏️', gradient: 'from-emerald-500/90 to-teal-600/90' },
+  '게임': { emoji: '🎮', gradient: 'from-violet-500/90 to-purple-600/90' },
+  '필사': { emoji: '📖', gradient: 'from-amber-500/90 to-orange-600/90' },
+  '장비': { emoji: '🖱️', gradient: 'from-slate-500/90 to-zinc-600/90' },
+  '지식': { emoji: '💡', gradient: 'from-cyan-500/90 to-sky-600/90' },
+  '생산성': { emoji: '🚀', gradient: 'from-rose-500/90 to-pink-600/90' },
+};
+const DEFAULT_VISUAL = { emoji: '📝', gradient: 'from-zinc-400/90 to-zinc-500/90' };
+
 export default function BlogIndexPage() {
   return (
     <div className="min-h-screen bg-surface py-12 px-4 sm:px-8">
@@ -35,8 +47,14 @@ export default function BlogIndexPage() {
         </header>
 
         <div className="grid gap-6 sm:gap-8">
-          {blogPosts.map((post, index) => (
-            <Link href={`/blog/${post.id}`} key={post.id} prefetch={false} className="group flex flex-col md:flex-row gap-6 p-6 sm:p-8 bg-surface-lowest hover:bg-surface-lowest/80 border border-outline-variant hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/5 rounded-3xl transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 overflow-hidden" style={{ animationDelay: `${index * 150}ms` }}>
+          {[...blogPosts].sort((a, b) => b.date.localeCompare(a.date)).map((post, index) => {
+            const visual = CATEGORY_VISUAL[post.category] || DEFAULT_VISUAL;
+            return (
+            <Link href={`/blog/${post.id}`} key={post.id} prefetch={false} className="group flex flex-col md:flex-row gap-6 p-6 sm:p-8 bg-surface-lowest hover:bg-surface-lowest/80 border border-outline-variant hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/5 rounded-3xl transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 overflow-hidden" style={{ animationDelay: `${index * 100}ms` }}>
+              <div className={`shrink-0 w-full md:w-44 h-32 md:h-auto md:self-stretch rounded-2xl bg-gradient-to-br ${visual.gradient} flex flex-col items-center justify-center gap-2 transition-transform duration-500 group-hover:scale-[1.03]`}>
+                <span className="text-5xl drop-shadow-sm" aria-hidden="true">{visual.emoji}</span>
+                <span className="text-white/90 text-xs font-black uppercase tracking-widest">{post.category}</span>
+              </div>
               <div className="flex-1 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-4 text-xs font-bold uppercase tracking-wider text-primary">
                   <span className="flex items-center gap-1.5 bg-primary/10 py-1.5 px-3 rounded-full">
@@ -59,7 +77,8 @@ export default function BlogIndexPage() {
                 </div>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
