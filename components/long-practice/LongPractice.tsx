@@ -9,6 +9,7 @@ import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBa
 import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import Link from "next/link";
 import Image from "next/image";
+import { scrollIntoViewOnFocus } from "@/hooks/useVirtualKeyboard";
 
 interface Props {
   externalContent?: any;
@@ -35,12 +36,49 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
   const [commentLoading, setCommentLoading] = useState(false);
   const [related, setRelated] = useState<{ authorOther: any[], popular: any[] }>({ authorOther: [], popular: [] });
 
+  // 모바일 줄 단위 모드 상태
+  // SSR/hydration 시에는 데스크톱 마크업을 렌더하고(mounted=false), 마운트 후 모바일이면 줄 모드로 전환한다.
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [lineIndex, setLineIndex] = useState(0);
+  const [lineInput, setLineInput] = useState("");
+  const lineInputRef = useRef<HTMLInputElement>(null);
+  // 줄 성적 누적값 (리렌더와 무관하게 유지)
+  const accStrokesRef = useRef(0);
+  const accCorrectRef = useRef(0);
+  const accTypedRef = useRef(0);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const currentText = useMemo(() => 
+  const currentText = useMemo(() =>
     externalContent || LONG_TEXT_DB.find(t => t.id === selectedTextId) || LONG_TEXT_DB[0],
   [externalContent, selectedTextId]);
+
+  // 줄 단위 모드용: 공백뿐인 줄을 제외한 줄 배열
+  const lines = useMemo(
+    () => currentText.content.split("\n").filter((l: string) => l.trim().length > 0),
+    [currentText.content]
+  );
+
+  // 마운트 후 뷰포트 폭으로 모바일 여부 판정 + 브레이크포인트 변화 감지
+  useEffect(() => {
+    setMounted(true);
+    const mql = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  // 지문이 바뀌면 줄 진행/누적 초기화
+  useEffect(() => {
+    setLineIndex(0);
+    setLineInput("");
+    accStrokesRef.current = 0;
+    accCorrectRef.current = 0;
+    accTypedRef.current = 0;
+  }, [currentText.content]);
 
   const fetchSocialData = useCallback(async () => {
     if (!externalContent) return;
@@ -122,7 +160,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
     setComments(prev => prev.filter(c => c.id !== id));
   };
 
-  const resetState = () => { setInputValue(""); setStartTime(null); setElapsedSeconds(0); setReport(null); };
+  const resetState = () => {
+    setInputValue(""); setStartTime(null); setElapsedSeconds(0); setReport(null);
+    setLineIndex(0); setLineInput("");
+    accStrokesRef.current = 0; accCorrectRef.current = 0; accTypedRef.current = 0;
+  };
 
   const liveKPM = useMemo(() => {
     if (!startTime || elapsedSeconds < 0.5) return 0;
@@ -160,6 +202,200 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
   const progressValue = Math.min(100, (inputValue.length / currentText.content.length) * 100);
 
+  // ── 모바일 줄 단위 모드 ───────────────────────────────────────────
+  // 줄 완료 처리: 누적값 갱신 후 다음 줄로 이동, 마지막 줄이면 전체 리포트 생성
+  const completeLine = (typedNorm: string, lineNorm: string) => {
+    accStrokesRef.current += TypingUtils.getStrokeCount(typedNorm);
+    let correct = 0;
+    for (let i = 0; i < typedNorm.length; i++) if (typedNorm[i] === lineNorm[i]) correct++;
+    accCorrectRef.current += correct;
+    accTypedRef.current += typedNorm.length;
+
+    if (lineIndex >= lines.length - 1) {
+      // 마지막 줄 → 전체 완료: 누적값으로 기존 report 형식 그대로 생성
+      const secs = startTime ? (Date.now() - startTime) / 1000 : elapsedSeconds;
+      const kpm = secs > 0 ? Math.round((accStrokesRef.current / secs) * 60) : 0;
+      const accuracy = TypingUtils.calculateAccuracy(accCorrectRef.current, accTypedRef.current);
+      setReport({
+        kpm,
+        accuracy,
+        totalStrokes: accStrokesRef.current,
+        correctStrokes: accCorrectRef.current,
+        elapsedSeconds: Math.round(secs),
+        grade: TypingUtils.getGrade(kpm, accuracy),
+        errors: [],
+      });
+      if (externalContent) {
+        SupabaseService.saveResult(externalContent.id, kpm, accuracy, Math.round(secs));
+      }
+    } else {
+      setLineIndex((i) => i + 1);
+      setLineInput("");
+    }
+  };
+
+  const handleLineInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (report) return;
+    const val = e.target.value;
+    if (!startTime && val.length > 0) setStartTime(Date.now());
+    setLineInput(val);
+    // 줄 완료 판정: normalize 길이 도달 && 마지막 글자 일치 (ShortPractice와 동일 규칙)
+    const lineNorm = TypingUtils.normalize(lines[lineIndex] || "");
+    const typedNorm = TypingUtils.normalize(val);
+    if (
+      lineNorm.length > 0 &&
+      typedNorm.length >= lineNorm.length &&
+      typedNorm.charAt(typedNorm.length - 1) === lineNorm.charAt(lineNorm.length - 1)
+    ) {
+      completeLine(typedNorm, lineNorm);
+    }
+  };
+
+  // 현재 줄 글자별 하이라이트 (renderHighlightedText와 동일 규칙)
+  const renderMobileHighlight = (line: string) => {
+    const chars = line.split("");
+    const typedNorm = TypingUtils.normalize(lineInput);
+    return chars.map((char, i) => {
+      const normChar = TypingUtils.normalize(char);
+      let color = "text-zinc-400";
+      let bg = "";
+      const isCurrent = i === lineInput.length;
+      if (isCurrent) {
+        color = "text-primary font-black";
+        bg = "bg-primary/10 ring-4 ring-primary/5 rounded-sm";
+      } else if (i < lineInput.length) {
+        const tChar = typedNorm.charAt(i);
+        if (tChar === normChar) color = "text-on-surface font-bold";
+        else color = "text-red-500 line-through opacity-80";
+      }
+      return (
+        <span key={i} className={`${color} ${bg} transition-all`}>
+          {char}
+        </span>
+      );
+    });
+  };
+
+  // 전체 글자 기준 진행률 계산용
+  const mobileTotalChars = useMemo(
+    () => lines.reduce((a: number, l: string) => a + l.length, 0),
+    [lines]
+  );
+  const mobileCompletedChars = useMemo(
+    () => lines.slice(0, lineIndex).reduce((a: number, l: string) => a + l.length, 0),
+    [lines, lineIndex]
+  );
+
+  // 결과 모달 (데스크톱/모바일 공용 — 동일 JSX)
+  const renderReportModal = () =>
+    report && (
+      <div className="fixed inset-0 bg-on-surface/80 backdrop-blur-xl z-[100] flex items-center justify-center p-6 overflow-y-auto">
+        <div className="relative max-w-2xl w-full my-auto animate-in zoom-in duration-500">
+          <div className={`relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] shadow-2xl ${paperAssets[paperType].bg} p-8 md:p-16 text-center`}>
+              <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
+              <div className="relative z-10 text-on-surface">
+                  <div className="flex justify-center mb-8"><div className="primary-gradient text-white p-6 rounded-full shadow-2xl"><Award size={60} /></div></div>
+                  <h2 className={`display-lg !text-3xl md:!text-5xl mb-4 ${fontFamily}`}>{currentText.title}</h2>
+                  <p className="text-zinc-500 text-xs font-black mb-8 md:mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
+                  <div className="grid grid-cols-3 gap-3 md:gap-8 mb-8 md:mb-16">
+                      <ResultItem label="Keystrokes" value={report.kpm} unit="타" />
+                      <ResultItem label="Accuracy" value={report.accuracy} unit="%" />
+                      <ResultItem label="Time" value={report.elapsedSeconds} unit="s" />
+                  </div>
+                  <div className="relative z-10">
+                      <KeyboardRecommendationBanner
+                        variant="light"
+                        className="!mt-0 !rounded-[2.5rem] border border-zinc-100"
+                        title={report.kpm > 300 ? "놀라운 타자 실력입니다!" : "장비가 실력을 만든다"}
+                        description={report.kpm > 300
+                          ? "이 속도를 온전히 받아낼 '명검'이 필요하지 않으신가요?"
+                          : "오타를 줄이고 속도를 높여줄 전문가 추천 키보드를 만나보세요."}
+                      />
+                  </div>
+              </div>
+          </div>
+          <div className="mt-10 flex gap-6">
+              <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all">연습 종료</button>
+              <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-black rounded-[2rem] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>
+          </div>
+        </div>
+      </div>
+    );
+
+  const renderMobileLineMode = () => {
+    const currentLine = lines[lineIndex] || "";
+    const prevLine = lineIndex > 0 ? lines[lineIndex - 1] : null;
+    const nextLine = lineIndex < lines.length - 1 ? lines[lineIndex + 1] : null;
+    const curNorm = TypingUtils.normalize(currentLine);
+    const typedNorm = TypingUtils.normalize(lineInput);
+
+    // 실시간 타수/정확도 (누적값 + 현재 줄 진행분)
+    const liveStrokes = accStrokesRef.current + TypingUtils.getStrokeCount(typedNorm);
+    const mobileKPM = startTime && elapsedSeconds >= 0.5 ? Math.round((liveStrokes / elapsedSeconds) * 60) : 0;
+    let liveCorrect = 0;
+    for (let i = 0; i < typedNorm.length; i++) if (typedNorm[i] === curNorm[i]) liveCorrect++;
+    const mobileAccuracy = TypingUtils.calculateAccuracy(
+      accCorrectRef.current + liveCorrect,
+      accTypedRef.current + typedNorm.length
+    );
+
+    const mobileProgress = mobileTotalChars > 0
+      ? Math.min(100, ((mobileCompletedChars + lineInput.length) / mobileTotalChars) * 100)
+      : 0;
+
+    return (
+      <div className="flex flex-col gap-4">
+        {/* 컴팩트 헤더 */}
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-base font-black text-on-surface truncate flex-1">{currentText.title}</h1>
+          <span className="shrink-0 px-3 py-1 primary-gradient text-white text-[11px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
+            {lineIndex + 1}/{lines.length}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          <MetricItem icon={<Zap size={18} />} label="현재 타수" value={mobileKPM} unit="타" color="text-primary" />
+          <MetricItem icon={<Target size={18} />} label="정확도" value={mobileAccuracy} unit="%" color="text-green-600" />
+        </div>
+
+        {/* 문장 카드 */}
+        <div className="bg-surface-lowest rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col gap-2">
+          {prevLine && <p className="text-xs text-zinc-400 truncate">{prevLine}</p>}
+          <p className="text-lg sm:text-xl font-bold leading-relaxed break-keep tracking-tight text-on-surface">
+            {renderMobileHighlight(currentLine)}
+          </p>
+          {nextLine && <p className="text-xs text-zinc-400 truncate">{nextLine}</p>}
+        </div>
+
+        {/* 입력창: 줄마다 리마운트해 IME 잔여 조합 제거 */}
+        <input
+          key={lineIndex}
+          ref={lineInputRef}
+          type="text"
+          value={lineInput}
+          onChange={handleLineInputChange}
+          onFocus={() => scrollIntoViewOnFocus(lineInputRef.current)}
+          autoFocus
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          className="w-full h-14 px-4 text-lg text-center bg-surface-lowest rounded-2xl shadow-sm outline-hidden font-bold text-on-surface focus:shadow-xl focus:shadow-primary/5 transition-all"
+          placeholder="이 줄을 그대로 입력하세요"
+        />
+
+        {/* 진행바 (전체 글자 기준) */}
+        <div className="relative h-12 w-full flex items-end">
+          <div className="absolute w-full h-2 bg-surface-high rounded-full mb-2 shadow-inner" />
+          <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${mobileProgress}%` }} />
+          <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${mobileProgress}%`, transform: "translateX(-50%)", bottom: "4px" }}>
+            <div className="text-2xl filter drop-shadow-lg">🐢</div>
+            <div className="text-[10px] font-black text-primary">{Math.round(mobileProgress)}%</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const paperAssets = {
     white: { bg: "bg-surface-lowest", img: "/images/paper/basic.jpg", overlay: "opacity-100" },
     hanji: { bg: "bg-[#fdfcf8]", img: "https://www.transparenttextures.com/patterns/natural-paper.png", overlay: "opacity-100" },
@@ -168,45 +404,20 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
   return (
     <div className="w-full max-w-7xl mx-auto py-4 md:py-12 px-3 md:px-6 flex flex-col gap-4 md:gap-10 relative animate-in fade-in duration-1000">
+      {mounted && isMobile ? (
+        <>
+          {renderReportModal()}
+          {renderMobileLineMode()}
+        </>
+      ) : (
+        <>
       <div className="flex justify-center gap-2 md:gap-8 mb-0 md:mb-4 flex-wrap">
         <MetricItem icon={<Zap size={18}/>} label="현재 타수" value={liveKPM} unit="타" color="text-primary" />
         <MetricItem icon={<Target size={18}/>} label="정확도" value={liveAccuracy} unit="%" color="text-green-600" />
         <MetricItem icon={<Clock size={18}/>} label="진행 시간" value={Math.floor(elapsedSeconds)} unit="초" color="text-secondary" />
       </div>
 
-      {report && (
-        <div className="fixed inset-0 bg-on-surface/80 backdrop-blur-xl z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="relative max-w-2xl w-full my-auto animate-in zoom-in duration-500">
-            <div className={`relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] shadow-2xl ${paperAssets[paperType].bg} p-8 md:p-16 text-center`}>
-                <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
-                <div className="relative z-10 text-on-surface">
-                    <div className="flex justify-center mb-8"><div className="primary-gradient text-white p-6 rounded-full shadow-2xl"><Award size={60} /></div></div>
-                    <h2 className={`display-lg !text-3xl md:!text-5xl mb-4 ${fontFamily}`}>{currentText.title}</h2>
-                    <p className="text-zinc-500 text-xs font-black mb-8 md:mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
-                    <div className="grid grid-cols-3 gap-3 md:gap-8 mb-8 md:mb-16">
-                        <ResultItem label="Keystrokes" value={report.kpm} unit="타" />
-                        <ResultItem label="Accuracy" value={report.accuracy} unit="%" />
-                        <ResultItem label="Time" value={report.elapsedSeconds} unit="s" />
-                    </div>
-                    <div className="relative z-10">
-                        <KeyboardRecommendationBanner 
-                          variant="light" 
-                          className="!mt-0 !rounded-[2.5rem] border border-zinc-100" 
-                          title={report.kpm > 300 ? "놀라운 타자 실력입니다!" : "장비가 실력을 만든다"}
-                          description={report.kpm > 300 
-                            ? "이 속도를 온전히 받아낼 '명검'이 필요하지 않으신가요?" 
-                            : "오타를 줄이고 속도를 높여줄 전문가 추천 키보드를 만나보세요."}
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className="mt-10 flex gap-6">
-                <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all">연습 종료</button>
-                <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-black rounded-[2rem] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>
-            </div>
-          </div>
-        </div>
-      )}
+      {renderReportModal()}
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
@@ -260,6 +471,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
           </div>
         </div>
       </div>
+        </>
+      )}
 
       {/* 키보드 추천 배너 - 긴글 연습 패드 직후에 삽입 */}
       <div className="mt-16 pt-16 border-t border-outline-variant/60 w-full">

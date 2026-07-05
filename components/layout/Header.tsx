@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper, Timer } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
@@ -115,6 +115,7 @@ export const Header: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+                <MobileNavItem href="/test" icon={<Timer size={20} />} label="타자 속도 테스트" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="긴 글 연습" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} />
@@ -166,6 +167,7 @@ export const Header: React.FC = () => {
             </Link>
 
             <nav className="hidden md:flex items-center gap-1">
+                <NavButton icon={<Timer size={18} />} label="타자 테스트" href="/test" />
                 <NavButton icon={<Layout size={18} />} label="타자 연습장" href="/practice" />
                 <NavButton icon={<PenTool size={18} />} label="긴 글 연습" href="/transcription" />
                 <NavButton icon={<Gamepad2 size={18} />} label="한글 게임" href="/game" />

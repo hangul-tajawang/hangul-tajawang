@@ -86,7 +86,10 @@ export const KakaoAdFit: React.FC<KakaoAdFitProps> = ({ unit, width, height, dis
   const containerRef = useRef<HTMLDivElement>(null);
   const adRef = useRef<boolean>(false);
   const [failed, setFailed] = useState(false);
-  const onFailName = `adfitNoAd_${unit.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+  // 같은 유닛이 한 페이지에 두 번 실릴 수 있으므로 인스턴스별 고유 콜백 이름 사용
+  const onFailName = useRef(
+    `adfitNoAd_${unit.replace(/[^a-zA-Z0-9_]/g, "_")}_${Math.random().toString(36).slice(2, 8)}`
+  ).current;
 
   useEffect(() => {
     // Prevent rendering in disabled mode or double rendering in React Strict Mode

@@ -68,7 +68,7 @@ async function main() {
   try {
     // ══ 1. 주요 페이지 가로 오버플로 검사 (390px) ══════════════════════════
     console.log('\n[1] 모바일 레이아웃 (가로 스크롤 없어야 함)');
-    for (const path of ['/', '/practice/short/healing', '/practice/word', '/practice/position', '/transcription/poem_1', '/game/acid-rain', '/game/block-pop', '/game/typing-race', '/quiz/an-vs-anh', '/blog/four-week-typing-plan']) {
+    for (const path of ['/', '/test', '/practice/short/healing', '/practice/word', '/practice/position', '/transcription/poem_15', '/game/acid-rain', '/game/block-pop', '/game/typing-race', '/quiz/dwaetda-vs-dwitda', '/blog/four-week-typing-plan']) {
       await page.goto(BASE + path, { waitUntil: 'networkidle' });
       ok(`${path} 오버플로 없음`, await noHorizontalOverflow(page));
     }
@@ -84,6 +84,33 @@ async function main() {
     ok('문장 완성 → 2번째 문장으로 자동 진행', progressText?.startsWith('2/'), `progress: ${progressText}`);
     const kpmShown = await page.evaluate(() => { const els = [...document.querySelectorAll('span.font-plus-jakarta')]; return els.some(e => Number(e.textContent) > 0); });
     ok('타수 측정값 표시', kpmShown);
+
+    // ══ 2b. 타자 속도 테스트: 시작 → 문장 완성 → 다음 문장 ═══════════════
+    console.log('\n[2b] 1분 타자 속도 테스트 (모바일)');
+    await page.goto(BASE + '/test', { waitUntil: 'networkidle' });
+    await page.locator('button', { hasText: '테스트 시작하기' }).click();
+    await page.waitForTimeout(300);
+    const t1 = await page.evaluate(() => document.querySelector('div.font-plus-jakarta.font-black.select-none')?.textContent);
+    ok('테스트 시작 → 첫 문장 표시', !!t1 && t1.length > 3, `got: ${t1}`);
+    await setInputValue(page, 'input[placeholder="여기에 입력하세요"]', t1);
+    await page.waitForTimeout(400);
+    const t2 = await page.evaluate(() => document.querySelector('div.font-plus-jakarta.font-black.select-none')?.textContent);
+    ok('문장 완성 → 다음 문장 자동 전환', !!t2 && t2 !== t1, `next: ${t2}`);
+    const testKpm = await page.evaluate(() => [...document.querySelectorAll('span.tabular-nums')].map(s => parseInt(s.textContent)).some(n => n > 0));
+    ok('실시간 타수 표시', testKpm);
+
+    // ══ 2c. 모바일 애드핏 슬롯 크기 점검 ══════════════════════════════════
+    console.log('\n[2c] 모바일 애드핏 슬롯 점검 (390px)');
+    await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    const adAudit = await page.evaluate(() => {
+      return [...document.querySelectorAll('ins.kakao_ad_area')].map((ins) => {
+        let el = ins, hidden = false;
+        while (el) { if (getComputedStyle(el).display === 'none') { hidden = true; break; } el = el.parentElement; }
+        return { unit: ins.getAttribute('data-ad-unit'), w: Number(ins.getAttribute('data-ad-width')), hidden };
+      });
+    });
+    console.log('   발견된 슬롯:', JSON.stringify(adAudit));
+    ok('모바일에서 화면(390px)보다 큰 광고 요청 없음', adAudit.every((a) => a.hidden || a.w <= 390));
 
     // ══ 3. 자리 연습: 자소 스트림 판정 (IME 음절 조합 포함) ═══════════════
     console.log('\n[3] 자리 연습 (자소 스트림 + 음절 조합)');
@@ -113,21 +140,21 @@ async function main() {
     const after = await page.evaluate(() => [...document.querySelectorAll('span.font-black')].find(s => /^\d+ \/ \d+$/.test(s.textContent || ''))?.textContent);
     ok('오답 자소는 진행 안 됨', before === after, `${before} → ${after}`);
 
-    // ══ 4. 긴 글 필사: 입력 → 하이라이트/자동 스크롤/타수 ═════════════════
-    console.log('\n[4] 긴 글 필사 (모바일 상하 분할)');
-    await page.goto(BASE + '/transcription/poem_1', { waitUntil: 'networkidle' });
-    const first10 = await page.evaluate(() => {
-      const panel = document.querySelector('div[class*="overflow-y-auto"]');
-      const spans = [...panel.querySelectorAll('span')].slice(0, 10);
-      return spans.map(s => s.querySelector('br') ? '\n' : s.textContent).join('');
-    });
-    ok('원문 로드', first10.length === 10, `got: ${JSON.stringify(first10)}`);
-    await setInputValue(page, 'textarea', first10);
-    await page.waitForTimeout(400);
-    const currentMarker = await page.evaluate(() => !!document.querySelector('[data-current="true"]'));
-    ok('현재 위치 하이라이트 이동', currentMarker);
-    const strokesShown = await page.evaluate(() => [...document.querySelectorAll('span')].some(s => { const t = s.textContent?.trim() || ''; return /^\d+$/.test(t) && Number(t) > 5 && s.closest('div')?.textContent?.includes(':'); }));
-    ok('타수 카운트 동작', strokesShown);
+    // ══ 4. 긴 글 필사: 모바일 "줄 단위 모드" ══════════════════════════════
+    console.log('\n[4] 긴 글 필사 (모바일 줄 단위 모드)');
+    await page.goto(BASE + '/transcription/poem_15', { waitUntil: 'networkidle' });
+    await page.waitForSelector('input[placeholder="이 줄을 그대로 입력하세요"]', { timeout: 10000 });
+    const lineBadge = () => page.evaluate(() => [...document.querySelectorAll('span')].map(s => s.textContent?.trim()).find(t => /^\d+\/\d+$/.test(t || '')));
+    const badge1 = await lineBadge();
+    ok('줄 모드 진입 (진행 배지 표시)', badge1?.startsWith('1/'), `badge: ${badge1}`);
+    const line1 = await page.evaluate(() => document.querySelector('p.font-bold.leading-relaxed')?.textContent);
+    ok('현재 줄 표시', !!line1 && line1.length > 0, `line: ${line1}`);
+    await setInputValue(page, 'input[placeholder="이 줄을 그대로 입력하세요"]', line1);
+    await page.waitForTimeout(300);
+    const badge2 = await lineBadge();
+    ok('줄 완성 → 다음 줄 자동 진행', badge2?.startsWith('2/'), `badge: ${badge2}`);
+    const line2 = await page.evaluate(() => document.querySelector('p.font-bold.leading-relaxed')?.textContent);
+    ok('다음 줄 갱신', !!line2 && line2 !== line1, `line2: ${line2}`);
 
     // ══ 5. 타자 레이스: 단어 입력 → 전진 ══════════════════════════════════
     console.log('\n[5] 타자 레이스 (모바일)');
@@ -171,6 +198,18 @@ async function main() {
       await page.waitForTimeout(200);
       const score = await page.evaluate(() => Number([...document.querySelectorAll('span.text-yellow-400')].map(s => s.textContent?.replace(/,/g, '')).find(t => /^\d+$/.test(t)) || 0));
       ok('단어 격추 → 점수 획득', score > 0, `score: ${score}`);
+    }
+
+    // 포커스 이탈 → 일시정지 오버레이 → 탭하면 재개 (모바일 전용 동작)
+    await page.evaluate(() => document.querySelector('input[placeholder="단어를 입력하세요!"]')?.blur());
+    await page.waitForTimeout(300);
+    const pausedShown = await page.evaluate(() => document.body.textContent?.includes('탭해서 계속'));
+    ok('입력창 포커스 이탈 → 일시정지 오버레이', !!pausedShown);
+    if (pausedShown) {
+      await page.locator('button', { hasText: '탭해서 계속' }).click();
+      await page.waitForTimeout(400);
+      const resumed = await page.evaluate(() => document.activeElement === document.querySelector('input[placeholder="단어를 입력하세요!"]') && !document.body.textContent?.includes('탭해서 계속'));
+      ok('오버레이 탭 → 재개(입력창 재포커스)', resumed);
     }
 
     // ══ 8. 데스크톱 회귀 확인 ═════════════════════════════════════════════
@@ -222,18 +261,21 @@ async function main() {
     await kp.waitForTimeout(300);
     ok('자리: 목표 글자 보임', await isVisible('h2.font-plus-jakarta'));
 
-    // 긴 글 필사: 텍스트영역 포커스 후 원문 현재 위치 + 입력영역 동시 노출
-    await kp.goto(BASE + '/transcription/poem_1', { waitUntil: 'networkidle' });
-    await kp.evaluate(() => document.querySelector('textarea')?.scrollIntoView({ block: 'center' }));
-    await kp.evaluate(() => document.querySelector('textarea')?.focus());
-    await kp.waitForTimeout(500);
-    ok('필사: 원문 현재 글자 보임', await isVisible('[data-current="true"]'));
-    ok('필사: 입력 영역 보임', await isVisible('textarea'));
+    // 긴 글 필사(줄 모드): 현재 줄 + 입력창 동시 노출
+    await kp.goto(BASE + '/transcription/poem_15', { waitUntil: 'networkidle' });
+    await kp.waitForSelector('input[placeholder="이 줄을 그대로 입력하세요"]', { timeout: 10000 });
+    await kp.evaluate(() => document.querySelector('input[placeholder="이 줄을 그대로 입력하세요"]')?.focus());
+    await kp.waitForTimeout(600);
+    ok('필사: 현재 줄 보임', await isVisible('p.font-bold.leading-relaxed'));
+    ok('필사: 입력창 보임', await isVisible('input[placeholder="이 줄을 그대로 입력하세요"]'));
 
     // 산성비: 게임 영역 + 입력창 동시 노출
+    // (실기기 순서 재현: 시작 → 입력창 탭 → 브라우저가 입력창을 화면 안으로 스크롤)
     await kp.goto(BASE + '/game/acid-rain', { waitUntil: 'networkidle' });
     await kp.locator('button', { hasText: '게임 시작' }).click();
     await kp.waitForTimeout(300);
+    await kp.evaluate(() => { const el = document.querySelector('input[placeholder="단어를 입력하세요!"]'); el?.scrollIntoView({ block: 'center' }); el?.focus(); });
+    await kp.waitForTimeout(400);
     ok('산성비: 게임 영역 보임', await isVisible('div.bg-zinc-950'));
     ok('산성비: 입력창 보임', await isVisible('input[placeholder="단어를 입력하세요!"]'));
 

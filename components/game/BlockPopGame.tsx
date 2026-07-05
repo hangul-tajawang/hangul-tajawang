@@ -6,6 +6,8 @@ import { Trophy, RotateCcw, Play, Loader2, User, Star, Flame, Boxes, ChevronRigh
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { SupabaseService } from "@/lib/supabase";
 import { getWordForLevel } from "@/lib/game-words";
+import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
+import { GamePauseOverlay } from "./GamePauseOverlay";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,6 +44,17 @@ export const BlockPopGame: React.FC = () => {
 
   const requestRef = useRef<number | null>(null);
   const lastSpawnTime = useRef<number>(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 모바일 플레이 공통 로직 (뷰포트 높이 고정 / 스크롤 잠금 / 포커스 이탈 일시정지)
+  const { isMobilePlaying, paused, wrapperRef, wrapperHeight, resume } =
+    useMobileGamePlay({ playing: gameState === "playing", inputRef });
+
+  // 일시정지 도중 행 추가 타이머가 밀리지 않게, 재개 시 타이머 기준 시각을 갱신
+  useEffect(() => {
+    if (!paused) return;
+    return () => { lastSpawnTime.current = performance.now(); };
+  }, [paused]);
 
   useEffect(() => {
     setMounted(true);
@@ -92,20 +105,20 @@ export const BlockPopGame: React.FC = () => {
   }, [makeRow]);
 
   const updateGame = useCallback((time: number) => {
-    if (gameState !== "playing") return;
+    if (gameState !== "playing" || paused) return;
     const spawnDelay = Math.max(1000, 2800 - level * 200);
     if (time - lastSpawnTime.current > spawnDelay) {
       addRow();
       lastSpawnTime.current = time;
     }
     requestRef.current = requestAnimationFrame(updateGame);
-  }, [gameState, level, addRow]);
+  }, [gameState, level, addRow, paused]);
 
   useEffect(() => {
-    if (gameState === "playing") requestRef.current = requestAnimationFrame(updateGame);
+    if (gameState === "playing" && !paused) requestRef.current = requestAnimationFrame(updateGame);
     else if (requestRef.current) cancelAnimationFrame(requestRef.current);
     return () => { if (requestRef.current) cancelAnimationFrame(requestRef.current); };
-  }, [gameState, updateGame]);
+  }, [gameState, updateGame, paused]);
 
   // 스택이 천장을 넘으면 게임 오버
   useEffect(() => {
@@ -164,6 +177,7 @@ export const BlockPopGame: React.FC = () => {
   const startGame = () => {
     setRows([]); setScore(0); setLevel(1); setCombo(0); setMaxCombo(0);
     setInputValue(""); setGameState("playing"); lastSpawnTime.current = performance.now();
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const danger = rows.length >= MAX_ROWS - 1;
@@ -201,11 +215,23 @@ export const BlockPopGame: React.FC = () => {
   );
 
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 h-[calc(100dvh-140px)] md:h-[calc(100vh-100px)] max-h-[800px] min-h-[420px] md:min-h-[650px]">
+    <div
+      ref={wrapperRef}
+      className={`w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 ${isMobilePlaying ? "overflow-hidden" : "h-[calc(100dvh-140px)] md:h-[calc(100vh-100px)] max-h-[800px] min-h-[420px] md:min-h-[650px]"}`}
+      style={wrapperHeight ? { height: wrapperHeight } : undefined}
+    >
       {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
 
-      {/* Game Dashboard */}
-      <div className="w-full flex justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
+      {/* Compact Dashboard (모바일 <lg): 점수·레벨·스택게이지 한 줄 */}
+      <div className="flex lg:hidden items-center justify-between gap-2 h-11 px-3 bg-zinc-900 text-white rounded-2xl shadow-lg border border-zinc-800 shrink-0">
+        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">SC</span><span className="text-base font-black text-yellow-400 tabular-nums">{score.toLocaleString()}</span></div>
+        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">LV</span><span className="text-base font-black text-rose-400 tabular-nums">{level}</span></div>
+        {combo > 1 && <span className="text-orange-500 font-black text-sm italic flex items-center gap-0.5"><Flame size={12} fill="currentColor" />{combo}</span>}
+        <div className="flex items-end gap-0.5 h-6">{Array(MAX_ROWS).fill(0).map((_, i) => (<span key={i} className={`w-1.5 rounded-sm transition-all ${i < rows.length ? (danger ? "bg-rose-500" : "bg-emerald-400") : "bg-zinc-700"}`} style={{ height: `${7 + i * 2}px` }} />))}</div>
+      </div>
+
+      {/* Game Dashboard (데스크톱 ≥lg) */}
+      <div className="hidden lg:flex w-full justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
         <div className="flex gap-4 md:gap-8 items-center">
           <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Score</span><span className="text-lg md:text-2xl font-black text-yellow-400">{score.toLocaleString()}</span></div>
           <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Level</span><span className="text-lg md:text-2xl font-black text-rose-400">{level}</span></div>
@@ -223,7 +249,8 @@ export const BlockPopGame: React.FC = () => {
         {/* Main Column: Game Area + Input Area */}
         <div className="flex-1 flex flex-col gap-4 min-w-0">
           {/* Game Area */}
-          <div className={`relative flex-1 bg-zinc-950 overflow-hidden rounded-[2.5rem] border-4 ${danger ? "border-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.3)]" : "border-zinc-900"} transition-all duration-500`} style={{ backgroundImage: "radial-gradient(circle, #18181b 1px, transparent 1px)", backgroundSize: "30px 30px" }}>
+          <div className={`relative flex-1 min-h-[200px] bg-zinc-950 overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border-4 ${danger ? "border-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.3)]" : "border-zinc-900"} transition-all duration-500`} style={{ backgroundImage: "radial-gradient(circle, #18181b 1px, transparent 1px)", backgroundSize: "30px 30px" }}>
+            {isMobilePlaying && paused && <GamePauseOverlay onResume={resume} />}
             {/* 천장 경고선 */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-rose-500/60 to-transparent z-10" />
 
@@ -238,11 +265,11 @@ export const BlockPopGame: React.FC = () => {
             )}
 
             {/* 블록 스택: 바닥에 정렬되어 위로 차오름 */}
-            <div className="absolute inset-0 flex flex-col justify-end gap-2 p-4">
+            <div className="absolute inset-0 flex flex-col justify-end gap-1.5 sm:gap-2 p-2 sm:p-4">
               {rows.map((row, ri) => (
-                <div key={row[0]?.id ?? ri} className="flex justify-center gap-2 sm:gap-3 animate-in slide-in-from-bottom-4 fade-in duration-300">
+                <div key={row[0]?.id ?? ri} className="flex justify-center gap-1.5 sm:gap-3 animate-in slide-in-from-bottom-4 fade-in duration-300">
                   {row.map((blk) => (
-                    <div key={blk.id} className={`px-3 sm:px-5 py-2 sm:py-3 rounded-xl shadow-lg font-black text-base sm:text-lg whitespace-nowrap border-b-4 flex items-center gap-1 ${blockStyle(blk.itemType)}`}>
+                    <div key={blk.id} className={`px-2 sm:px-5 py-1.5 sm:py-3 rounded-lg sm:rounded-xl shadow-lg font-black text-sm sm:text-lg whitespace-nowrap border-b-4 flex items-center gap-1 ${blockStyle(blk.itemType)}`}>
                       {blk.itemType === "bomb" && <span>💣</span>}
                       {blk.itemType === "gold" && <span>✨</span>}
                       {blk.text}
@@ -255,7 +282,7 @@ export const BlockPopGame: React.FC = () => {
 
           {/* Input Area */}
           <div className="w-full shrink-0">
-            <input type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === "playing" ? "border-zinc-900 dark:border-zinc-100 focus:border-rose-500" : "border-zinc-100 dark:border-zinc-800 opacity-50"}`} placeholder={gameState === "playing" ? "블록 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+            <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === "playing" ? "border-zinc-900 dark:border-zinc-100 focus:border-rose-500" : "border-zinc-100 dark:border-zinc-800 opacity-50"}`} placeholder={gameState === "playing" ? "블록 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
           </div>
         </div>
 

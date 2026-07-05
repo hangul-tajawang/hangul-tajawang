@@ -97,6 +97,7 @@ export default async function Home() {
 
         <nav aria-label="주요 메뉴" className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-16">
           {[
+            { href: '/test', label: '1분 타자 속도 테스트' },
             { href: '/practice', label: '타자 연습 (자리/낱말/짧은글)' },
             { href: '/transcription', label: '긴 글 원고지 필사' },
             { href: '/challenge', label: '유저 창작 필사 챌린지' },
