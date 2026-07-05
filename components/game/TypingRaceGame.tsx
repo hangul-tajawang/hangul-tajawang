@@ -8,7 +8,7 @@ import { SupabaseService } from "@/lib/supabase";
 import { getWordForLevel } from "@/lib/game-words";
 import { TypingUtils } from "@/lib/typing-speed";
 import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
-import { GamePauseOverlay } from "./GamePauseOverlay";
+import { MobileGameShell } from "./MobileGameShell";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -63,8 +63,8 @@ export const TypingRaceGame: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const pauseStart = useRef<number>(0);
 
-  // 모바일 플레이 공통 로직 (뷰포트 높이 고정 / 스크롤 잠금 / 포커스 이탈 일시정지)
-  const { isMobilePlaying, paused, wrapperRef, wrapperHeight, resume } =
+  // 모바일 풀스크린 몰입 모드 (visualViewport 동기화 / 스크롤 잠금 / 포커스 이탈 일시정지)
+  const { isMobilePlaying, paused, overlay, resume } =
     useMobileGamePlay({ playing: gameState === "playing", inputRef });
 
   // 일시정지 동안 경과시간·봇 전진을 멈추고, 재개 시 멈춘 만큼 startTime을 보정한다.
@@ -235,21 +235,80 @@ export const TypingRaceGame: React.FC = () => {
     </div>
   );
 
-  return (
-    <div
-      ref={wrapperRef}
-      className={`w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 ${isMobilePlaying ? "overflow-hidden" : ""}`}
-      style={wrapperHeight ? { height: wrapperHeight } : undefined}
-    >
-      {gameState === "finished" && mounted && createPortal(finishModal, document.body)}
+  // 셸(모바일 풀스크린)/인라인(데스크톱) 공용 트랙
+  const raceTrack = (
+    <div className={`relative bg-zinc-950 overflow-hidden ${isMobilePlaying ? "flex-1 min-h-0 rounded-xl p-2.5" : `rounded-[2rem] md:rounded-[2.5rem] border-4 border-zinc-900 p-3 sm:p-8 ${gameState === "ready" ? "min-h-[430px]" : ""}`}`} style={{ backgroundImage: "radial-gradient(circle, #18181b 1px, transparent 1px)", backgroundSize: "30px 30px" }}>
+      {gameState === "ready" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
+          <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
+            <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-[1.5rem] flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
+            <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">타자 레이스</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">단어를 입력해 달리세요! 거북이(200타), 토끼(350타), 치타(500타)와의 500타 경주입니다.</p></div>
+            <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">경주 시작</button>
+          </div>
+        </div>
+      )}
 
-      {/* Compact Dashboard (모바일 <lg): 타수·시간·정확도 한 줄 */}
-      <div className="flex lg:hidden items-center justify-between gap-2 h-11 px-3 bg-zinc-900 text-white rounded-2xl shadow-lg border border-zinc-800 shrink-0">
-        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">타수</span><span className="text-base font-black text-blue-400 tabular-nums">{liveKpm}</span></div>
-        <div className="flex items-center gap-1"><Timer size={14} className="text-yellow-400" /><span className="text-base font-black text-yellow-400 tabular-nums">{elapsed.toFixed(0)}s</span></div>
-        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">정확도</span><span className="text-base font-black text-emerald-400 tabular-nums">{accuracy}%</span></div>
-        {combo > 1 && <span className="text-orange-500 font-black text-sm italic flex items-center gap-0.5"><Flame size={12} fill="currentColor" />{combo}</span>}
+      {/* 결승선 */}
+      <div className="absolute top-0 bottom-0 right-8 sm:right-10 w-1 border-r-4 border-dashed border-zinc-700 z-0" />
+      <div className="absolute top-2 right-4 sm:right-5 text-lg z-0">🏁</div>
+
+      {/* Lanes (모바일 풀스크린에서는 좁은 트랙에 맞게 압축) */}
+      <div className={`relative z-10 flex flex-col ${isMobilePlaying ? "gap-1.5" : "gap-2 sm:gap-5 mt-1 sm:mt-2"}`}>
+        {lanes.map((lane) => {
+          const pct = Math.min(100, (lane.dist / RACE_DISTANCE) * 100);
+          return (
+            <div key={lane.name + lane.emoji} className={`relative rounded-xl sm:rounded-2xl border ${isMobilePlaying ? "h-7" : "h-9 sm:h-14"} ${lane.isPlayer ? "bg-blue-500/10 border-blue-500/40" : "bg-zinc-900/80 border-zinc-800"}`}>
+              <div className={`absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-wider ${lane.color} opacity-70 pointer-events-none`}>
+                {lane.name}{lane.isPlayer ? " (YOU)" : ` · ${BOTS.find(b => b.emoji === lane.emoji)?.cpm}타`}
+              </div>
+              {/* 진행 바 */}
+              <div className={`absolute left-0 top-0 bottom-0 rounded-2xl ${lane.isPlayer ? "bg-blue-500/20" : "bg-zinc-800/60"} transition-all duration-200`} style={{ width: `${pct}%` }} />
+              {/* 러너 */}
+              <div className={`absolute top-1/2 -translate-y-1/2 transition-all duration-200 drop-shadow-lg ${isMobilePlaying ? "text-base" : "text-xl sm:text-3xl"}`} style={{ left: `calc(${pct}% * 0.88 + 8px)` }}>
+                {lane.emoji}
+              </div>
+            </div>
+          );
+        })}
       </div>
+    </div>
+  );
+
+  const raceInput = (
+    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full text-center font-black outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-blue-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 dark:border-zinc-100 focus:border-blue-500") : "border-zinc-100 dark:border-zinc-800 opacity-50"}`}`} placeholder={gameState === "playing" ? "위 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+  );
+
+  // ── 모바일 풀스크린 몰입 모드 ──
+  if (isMobilePlaying && overlay) {
+    const exitGame = () => {
+      if (confirm("경주를 그만하고 결과를 볼까요?")) handleFinish(playerDist);
+      else resume();
+    };
+    const mobileHud = (
+      <>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">타수</span><span className="text-sm font-black text-blue-400 tabular-nums">{liveKpm}</span></span>
+        <span className="flex items-center gap-1"><Timer size={13} className="text-yellow-400" /><span className="text-sm font-black text-yellow-400 tabular-nums">{elapsed.toFixed(0)}s</span></span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">정확도</span><span className="text-sm font-black text-emerald-400 tabular-nums">{accuracy}%</span></span>
+        {combo > 1 && <span className="text-orange-500 font-black text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
+      </>
+    );
+    return (
+      <MobileGameShell overlay={overlay} hud={mobileHud} input={raceInput} paused={paused} onResume={resume} onExit={exitGame}>
+        <div className="w-full h-full flex flex-col gap-2 p-2">
+          {raceTrack}
+          {/* 현재 단어 + 다음 단어 미리보기 */}
+          <div className="shrink-0 flex flex-col items-center gap-1">
+            <div data-race-word className={`px-6 py-2 rounded-xl border-2 text-2xl font-black tracking-wider transition-colors ${isWrongNow ? "bg-rose-900/30 border-rose-500 text-rose-400" : "bg-zinc-900 border-zinc-700 text-white"}`}>{word}</div>
+            {nextWord && <div className="text-[11px] font-bold text-zinc-500">다음: {nextWord}</div>}
+          </div>
+        </div>
+      </MobileGameShell>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700">
+      {gameState === "finished" && mounted && createPortal(finishModal, document.body)}
 
       {/* Game Dashboard (데스크톱 ≥lg) */}
       <div className="hidden lg:flex w-full justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
@@ -265,51 +324,15 @@ export const TypingRaceGame: React.FC = () => {
         </div>
       </div>
 
-      <div className={`w-full flex flex-col lg:flex-row gap-4 ${isMobilePlaying ? "flex-1 min-h-0" : ""}`}>
+      <div className="w-full flex flex-col lg:flex-row gap-4">
         {/* Main Column */}
         <div className="flex-1 flex flex-col gap-3 md:gap-4 min-w-0">
-          {/* Race Track */}
-          <div className={`relative bg-zinc-950 rounded-[2rem] md:rounded-[2.5rem] border-4 border-zinc-900 p-3 sm:p-8 overflow-hidden ${isMobilePlaying ? "flex-1 min-h-0" : ""}`} style={{ backgroundImage: "radial-gradient(circle, #18181b 1px, transparent 1px)", backgroundSize: "30px 30px" }}>
-            {isMobilePlaying && paused && <GamePauseOverlay onResume={resume} />}
-            {gameState === "ready" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
-                <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
-                  <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-[1.5rem] flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
-                  <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">타자 레이스</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">단어를 입력해 달리세요! 거북이(200타), 토끼(350타), 치타(500타)와의 500타 경주입니다.</p></div>
-                  <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">경주 시작</button>
-                </div>
-              </div>
-            )}
-
-            {/* 결승선 */}
-            <div className="absolute top-0 bottom-0 right-8 sm:right-10 w-1 border-r-4 border-dashed border-zinc-700 z-0" />
-            <div className="absolute top-2 right-4 sm:right-5 text-lg z-0">🏁</div>
-
-            {/* Lanes */}
-            <div className="relative z-10 flex flex-col gap-2 sm:gap-5 mt-1 sm:mt-2">
-              {lanes.map((lane) => {
-                const pct = Math.min(100, (lane.dist / RACE_DISTANCE) * 100);
-                return (
-                  <div key={lane.name + lane.emoji} className={`relative h-9 sm:h-14 rounded-xl sm:rounded-2xl border ${lane.isPlayer ? "bg-blue-500/10 border-blue-500/40" : "bg-zinc-900/80 border-zinc-800"}`}>
-                    <div className={`absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-wider ${lane.color} opacity-70 pointer-events-none`}>
-                      {lane.name}{lane.isPlayer ? " (YOU)" : ` · ${BOTS.find(b => b.emoji === lane.emoji)?.cpm}타`}
-                    </div>
-                    {/* 진행 바 */}
-                    <div className={`absolute left-0 top-0 bottom-0 rounded-2xl ${lane.isPlayer ? "bg-blue-500/20" : "bg-zinc-800/60"} transition-all duration-200`} style={{ width: `${pct}%` }} />
-                    {/* 러너 */}
-                    <div className="absolute top-1/2 -translate-y-1/2 text-xl sm:text-3xl transition-all duration-200 drop-shadow-lg" style={{ left: `calc(${pct}% * 0.88 + 8px)` }}>
-                      {lane.emoji}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          {raceTrack}
 
           {/* Word + Input Area */}
           <div className="w-full shrink-0 flex flex-col gap-1.5 md:gap-3">
             <div className="flex items-center justify-center gap-3 md:gap-4">
-              <div className={`px-6 md:px-10 py-2 md:py-4 rounded-[1.25rem] md:rounded-[2rem] border-4 text-xl md:text-5xl font-black tracking-wider transition-colors ${isWrongNow ? "bg-rose-50 dark:bg-rose-900/20 border-rose-500 text-rose-600" : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100"}`}>
+              <div data-race-word className={`px-6 md:px-10 py-2 md:py-4 rounded-[1.25rem] md:rounded-[2rem] border-4 text-xl md:text-5xl font-black tracking-wider transition-colors ${isWrongNow ? "bg-rose-50 dark:bg-rose-900/20 border-rose-500 text-rose-600" : "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100"}`}>
                 {gameState === "playing" ? word : "🏁"}
               </div>
               {gameState === "playing" && nextWord && (
@@ -318,16 +341,12 @@ export const TypingRaceGame: React.FC = () => {
                 </div>
               )}
             </div>
-            {/* 모바일: "다음:" 미리보기를 입력창 위 작은 텍스트로 표시 */}
-            {gameState === "playing" && nextWord && (
-              <div className="sm:hidden text-center text-[11px] font-bold text-zinc-400">다음: {nextWord}</div>
-            )}
-            <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 dark:border-zinc-100 focus:border-blue-500") : "border-zinc-100 dark:border-zinc-800 opacity-50"}`} placeholder={gameState === "playing" ? "위 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+            {raceInput}
           </div>
         </div>
 
-        {/* Rankings Sidebar (모바일 플레이 중에는 게임 영역 확보를 위해 숨김) */}
-        <div className={`${isMobilePlaying ? "hidden" : "flex"} w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex-col shrink-0`}>
+        {/* Rankings Sidebar */}
+        <div className="flex w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex-col shrink-0">
           <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-black">실시간 타수 랭킹</h3></div>
           <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar max-h-96 lg:max-h-none">
             {rankingLoading ? (<div className="flex flex-col items-center justify-center py-10 gap-2"><Loader2 className="animate-spin text-zinc-300" size={20} /></div>) :

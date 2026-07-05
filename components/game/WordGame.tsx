@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getWordForLevel } from "@/lib/game-words";
 import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
-import { GamePauseOverlay } from "./GamePauseOverlay";
+import { MobileGameShell } from "./MobileGameShell";
 
 type ItemType = "normal" | "bomb" | "ice" | "gold";
 type ObstacleType = "normal" | "hidden" | "blinking" | "moving";
@@ -51,8 +51,8 @@ export const WordGame: React.FC = () => {
   const speedMultiplierRef = useRef<number>(1);
   const processedMissedWordsRef = useRef<Set<number>>(new Set());
 
-  // 모바일 플레이 공통 로직 (뷰포트 높이 고정 / 스크롤 잠금 / 포커스 이탈 일시정지)
-  const { isMobilePlaying, paused, wrapperRef, wrapperHeight, resume } =
+  // 모바일 풀스크린 몰입 모드 (visualViewport 동기화 / 스크롤 잠금 / 포커스 이탈 일시정지)
+  const { isMobilePlaying, paused, overlay, resume } =
     useMobileGamePlay({ playing: gameState === "playing", inputRef });
 
   // 일시정지 도중 스폰 타이머가 밀리지 않게, 재개 시 타이머 기준 시각을 갱신
@@ -260,24 +260,55 @@ export const WordGame: React.FC = () => {
     </div>
   );
 
-  return (
-    <div
-      ref={wrapperRef}
-      className={`w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 ${isMobilePlaying ? "overflow-hidden" : "h-[calc(100dvh-140px)] md:h-[calc(100vh-100px)] max-h-[800px] min-h-[420px] md:min-h-[650px]"}`}
-      style={wrapperHeight ? { height: wrapperHeight } : undefined}
-    >
-      {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
-
-      {/* Compact Dashboard (모바일 <lg): 점수·레벨·하트 한 줄 */}
-      <div className="flex lg:hidden items-center justify-between gap-2 h-11 px-3 bg-zinc-900 text-white rounded-2xl shadow-lg border border-zinc-800 shrink-0">
-        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">SC</span><span className="text-base font-black text-yellow-400 tabular-nums">{score.toLocaleString()}</span></div>
-        <div className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">LV</span><span className="text-base font-black text-blue-400 tabular-nums">{level}</span></div>
-        <div className="flex items-center gap-1">
-          {isSlowed && <CloudSnow size={14} className="text-blue-400 animate-pulse" />}
-          {combo > 1 && <span className="text-orange-500 font-black text-sm italic flex items-center gap-0.5"><Flame size={12} fill="currentColor" />{combo}</span>}
-        </div>
-        <div className="flex gap-0.5">{Array(5).fill(0).map((_, i) => (<span key={i} className={`text-xs transition-all ${i < lives ? "grayscale-0" : "grayscale opacity-20"}`}>❤️</span>))}</div>
+  // 셸(모바일 풀스크린)/인라인(데스크톱) 공용 게임 영역 — 위치에 따라 클래스만 분기
+  const gameArea = (
+    <div ref={gameAreaRef} className={`relative overflow-hidden transition-all duration-500 ${isMobilePlaying ? "w-full h-full" : `flex-1 min-h-[200px] bg-zinc-950 rounded-[2rem] md:rounded-[2.5rem] border-4 ${isSlowed ? "border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)]" : "border-zinc-900"}`}`} style={{ backgroundImage: 'radial-gradient(circle, #18181b 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+      {gameState === "ready" && (
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
+          <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
+              <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-[1.5rem] flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
+              <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">산성비 게임</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">떨어지는 단어를 바닥에 닿기 전에 입력하세요!</p></div>
+              <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">게임 시작</button>
+          </div>
       </div>
+      )}
+      {fallingWords.map((word) => (
+      <div key={word.id} className={`absolute px-2.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-xl font-black text-sm md:text-lg whitespace-nowrap flex items-center gap-2 ${!word.isVisible ? 'bg-zinc-900 text-zinc-600 border-b-4 border-zinc-800 scale-95 opacity-50' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-b-4 border-zinc-200 dark:border-zinc-700'}`} style={{ left: `${word.x}px`, top: `${word.y}px` }}>
+          {word.isVisible ? word.text : "???"}
+      </div>
+      ))}
+    </div>
+  );
+
+  const gameInput = (
+    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full text-center font-black outline-hidden transition-all ${isMobilePlaying ? "h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 border-zinc-700 focus:border-blue-500 placeholder:text-zinc-500" : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl ${gameState === 'playing' ? 'border-zinc-900 dark:border-zinc-100 focus:border-blue-500' : 'border-zinc-100 dark:border-zinc-800 opacity-50'}`}`} placeholder={gameState === "playing" ? "단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+  );
+
+  // ── 모바일 풀스크린 몰입 모드: 헤더/광고를 벗어난 포털 셸에서 플레이 ──
+  if (isMobilePlaying && overlay) {
+    const exitGame = () => {
+      if (confirm("게임을 그만하고 결과를 볼까요?")) handleGameOver();
+      else resume();
+    };
+    const mobileHud = (
+      <>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">SC</span><span className="text-sm font-black text-yellow-400 tabular-nums">{score.toLocaleString()}</span></span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">LV</span><span className="text-sm font-black text-blue-400 tabular-nums">{level}</span></span>
+        {isSlowed && <CloudSnow size={13} className="text-blue-400 animate-pulse" />}
+        {combo > 1 && <span className="text-orange-500 font-black text-xs italic flex items-center gap-0.5"><Flame size={11} fill="currentColor" />{combo}</span>}
+        <span className="flex gap-0.5 ml-auto text-[10px]">{Array(5).fill(0).map((_, i) => (<span key={i} className={i < lives ? "" : "grayscale opacity-20"}>❤️</span>))}</span>
+      </>
+    );
+    return (
+      <MobileGameShell overlay={overlay} hud={mobileHud} input={gameInput} paused={paused} onResume={resume} onExit={exitGame}>
+        {gameArea}
+      </MobileGameShell>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-6xl mx-auto flex flex-col gap-2 md:gap-4 py-2 animate-in fade-in duration-700 h-[calc(100dvh-140px)] md:h-[calc(100vh-100px)] max-h-[800px] min-h-[420px] md:min-h-[650px]">
+      {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
 
       {/* Game Dashboard (데스크톱 ≥lg) */}
       <div className="hidden lg:flex w-full justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
@@ -297,29 +328,8 @@ export const WordGame: React.FC = () => {
       <div className="w-full flex flex-col lg:flex-row gap-4 flex-1 overflow-hidden min-h-0">
         {/* Main Column: Game Area + Input Area */}
         <div className="flex-1 flex flex-col gap-4 min-w-0">
-            {/* Game Area */}
-            <div ref={gameAreaRef} className={`relative flex-1 min-h-[200px] bg-zinc-950 overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border-4 ${isSlowed ? 'border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)]' : 'border-zinc-900'} transition-all duration-500`} style={{ backgroundImage: 'radial-gradient(circle, #18181b 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
-                {isMobilePlaying && paused && <GamePauseOverlay onResume={resume} />}
-                {gameState === "ready" && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
-                    <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
-                        <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-[1.5rem] flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
-                        <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">산성비 게임</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">떨어지는 단어를 바닥에 닿기 전에 입력하세요!</p></div>
-                        <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">게임 시작</button>
-                    </div>
-                </div>
-                )}
-                {fallingWords.map((word) => (
-                <div key={word.id} className={`absolute px-2.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-xl font-black text-sm md:text-lg whitespace-nowrap flex items-center gap-2 ${!word.isVisible ? 'bg-zinc-900 text-zinc-600 border-b-4 border-zinc-800 scale-95 opacity-50' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-b-4 border-zinc-200 dark:border-zinc-700'}`} style={{ left: `${word.x}px`, top: `${word.y}px` }}>
-                    {word.isVisible ? word.text : "???"} 
-                </div>
-                ))}
-            </div>
-
-            {/* Input Area: Perfectly matched width with Game Area */}
-            <div className="w-full shrink-0">
-                <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${gameState === 'playing' ? 'border-zinc-900 dark:border-zinc-100 focus:border-blue-500' : 'border-zinc-100 dark:border-zinc-800 opacity-50'}`} placeholder={gameState === "playing" ? "단어를 입력하세요!" : "준비가 되면 시작하세요"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
-            </div>
+            {gameArea}
+            <div className="w-full shrink-0">{gameInput}</div>
         </div>
 
         {/* Rankings Sidebar (모바일에서는 게임 영역 확보를 위해 숨김) */}

@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import { Trophy, RotateCcw, Play, Loader2, Star, Zap, Flame, Brain, Timer, ChevronRight, Keyboard } from "lucide-react";
 import { SupabaseService } from "@/lib/supabase";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
+import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
+import { MobileGameShell } from "./MobileGameShell";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -45,6 +47,10 @@ export const CardFlipGame: React.FC = () => {
   const [rankingLoading, setRankingLoading] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // 모바일 풀스크린 몰입 모드 (visualViewport 동기화 / 스크롤 잠금 / 포커스 이탈 일시정지)
+  const { isMobilePlaying, paused, overlay, resume } =
+    useMobileGamePlay({ playing: gameState === "playing", inputRef });
 
   // 판정 잠금이 풀릴 때마다 입력창으로 포커스 자동 이동
   useEffect(() => {
@@ -100,16 +106,16 @@ export const CardFlipGame: React.FC = () => {
     setTimeout(() => inputRef.current?.focus(), 100); // 시작 직후 포커스
   };
 
-  // 타이머 루프
+  // 타이머 루프 (모바일 일시정지 중에는 시간도 멈춤)
   useEffect(() => {
     let timer: any;
-    if (gameState === "playing" && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0 && !paused) {
       timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
     } else if (timeLeft === 0 && gameState === "playing") {
       handleGameOver();
     }
     return () => clearInterval(timer);
-  }, [gameState, timeLeft]);
+  }, [gameState, timeLeft, paused]);
 
   // 모든 짝을 맞췄는지 체크
   useEffect(() => {
@@ -205,6 +211,58 @@ export const CardFlipGame: React.FC = () => {
     </div>
   );
 
+  // 셸(모바일 풀스크린)/인라인(데스크톱) 공용 카드 그리드
+  const cardBoard = (
+    <div className={`relative overflow-hidden ${isMobilePlaying ? "w-full h-full bg-zinc-950 p-2" : "flex-1 bg-zinc-100 dark:bg-zinc-950 rounded-[2.5rem] p-6 border-4 border-zinc-200 dark:border-zinc-900"}`}>
+      {gameState === "ready" && (
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+              <div className="bg-white dark:bg-zinc-900 p-10 rounded-[3rem] shadow-2xl flex flex-col items-center gap-8 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
+                  <div className="w-20 h-20 bg-purple-50 dark:bg-purple-900/20 rounded-[2rem] flex items-center justify-center text-purple-600 shadow-xl"><Brain size={40} /></div>
+                  <div className="text-center"><h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-2 leading-tight">기억력 타자</h3><p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">카드 뒷면의 단어를 치면 뒤집힙니다.<br/>기억력을 발휘해 짝을 맞추세요!</p></div>
+                  <button onClick={initGame} className="w-full py-5 bg-purple-600 hover:bg-purple-700 text-white text-xl font-black rounded-2xl transition-all shadow-xl shadow-purple-200 dark:shadow-none">게임 시작</button>
+              </div>
+          </div>
+      )}
+      <div className={`grid grid-cols-4 h-full ${isMobilePlaying ? "gap-1.5" : "gap-4"}`}>
+          {cards.map((card) => (
+              <div key={card.id} className={`group relative perspective-1000 transition-all duration-500 ${card.isMatched ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100'}`}>
+                  <div className={`relative w-full h-full transition-transform duration-700 preserve-3d cursor-default ${card.isFlipped ? 'rotate-y-180' : ''}`}>
+                      <div className={`absolute inset-0 backface-hidden rotate-y-180 bg-white dark:bg-zinc-800 flex items-center justify-center shadow-2xl ${isMobilePlaying ? "rounded-xl border-2 border-purple-500 text-2xl" : "rounded-3xl border-4 border-purple-500 text-5xl"}`}>{card.hiddenContent}</div>
+                      <div className={`absolute inset-0 backface-hidden bg-[#f4ecd8] dark:bg-zinc-900 flex flex-col items-center justify-center p-1 text-center shadow-lg group-hover:border-purple-300 transition-colors ${isMobilePlaying ? "rounded-xl border-2 border-zinc-700" : "rounded-3xl border-4 border-zinc-200 dark:border-zinc-800 p-2"}`}>{!isMobilePlaying && <div className="absolute top-3 left-3 opacity-10"><Zap size={24}/></div>}<span className={`font-serif font-black text-zinc-800 dark:text-zinc-300 break-keep ${isMobilePlaying ? "text-sm" : "text-xl md:text-2xl"}`}>{card.triggerWord}</span></div>
+                  </div>
+              </div>
+          ))}
+      </div>
+    </div>
+  );
+
+  const cardInput = (
+    <form onSubmit={handleInput} className={isMobilePlaying ? "w-full" : "w-full max-w-2xl mx-auto shrink-0 pb-2"}>
+      <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} readOnly={isLocked} disabled={gameState !== "playing"} className={`w-full text-center font-black outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isLocked ? "border-zinc-700 opacity-60" : "border-purple-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl ${isLocked ? 'border-zinc-100 opacity-50' : 'border-purple-500 focus:shadow-purple-200/40 focus:ring-4 ring-purple-100'}`}`} placeholder={isLocked ? "판정 대기 중..." : "단어 입력 후 엔터!"} autoFocus autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+    </form>
+  );
+
+  // ── 모바일 풀스크린 몰입 모드 ──
+  if (isMobilePlaying && overlay) {
+    const exitGame = () => {
+      if (confirm("게임을 그만하고 결과를 볼까요?")) handleGameOver();
+      else resume();
+    };
+    const mobileHud = (
+      <>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">SC</span><span className="text-sm font-black text-yellow-400 tabular-nums">{score.toLocaleString()}</span></span>
+        <span className={`flex items-center gap-1 text-sm font-black tabular-nums ${timeLeft < 10 ? "text-red-500 animate-pulse" : "text-blue-400"}`}><Timer size={13} />{timeLeft}s</span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">짝</span><span className="text-sm font-black text-green-400 tabular-nums">{cards.filter(c => c.isMatched).length / 2}/8</span></span>
+        {combo > 1 && <span className="text-orange-500 font-black text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
+      </>
+    );
+    return (
+      <MobileGameShell overlay={overlay} hud={mobileHud} input={cardInput} paused={paused} onResume={resume} onExit={exitGame}>
+        {cardBoard}
+      </MobileGameShell>
+    );
+  }
+
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-4 py-2 animate-in fade-in duration-700 h-[calc(100vh-100px)] max-h-[850px] min-h-[650px]">
       {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
@@ -222,27 +280,7 @@ export const CardFlipGame: React.FC = () => {
       </div>
 
       <div className="w-full flex flex-col lg:flex-row gap-4 flex-1 overflow-hidden min-h-0">
-        <div className="flex-1 bg-zinc-100 dark:bg-zinc-950 rounded-[2.5rem] p-6 border-4 border-zinc-200 dark:border-zinc-900 relative overflow-hidden">
-            {gameState === "ready" && (
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-30 flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-zinc-900 p-10 rounded-[3rem] shadow-2xl flex flex-col items-center gap-8 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
-                        <div className="w-20 h-20 bg-purple-50 dark:bg-purple-900/20 rounded-[2rem] flex items-center justify-center text-purple-600 shadow-xl"><Brain size={40} /></div>
-                        <div className="text-center"><h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-2 leading-tight">기억력 타자</h3><p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">카드 뒷면의 단어를 치면 뒤집힙니다.<br/>기억력을 발휘해 짝을 맞추세요!</p></div>
-                        <button onClick={initGame} className="w-full py-5 bg-purple-600 hover:bg-purple-700 text-white text-xl font-black rounded-2xl transition-all shadow-xl shadow-purple-200 dark:shadow-none">게임 시작</button>
-                    </div>
-                </div>
-            )}
-            <div className="grid grid-cols-4 gap-4 h-full">
-                {cards.map((card, idx) => (
-                    <div key={card.id} className={`group relative perspective-1000 transition-all duration-500 ${card.isMatched ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100'}`}>
-                        <div className={`relative w-full h-full transition-transform duration-700 preserve-3d cursor-default ${card.isFlipped ? 'rotate-y-180' : ''}`}>
-                            <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white dark:bg-zinc-800 rounded-3xl border-4 border-purple-500 flex items-center justify-center text-5xl shadow-2xl">{card.hiddenContent}</div>
-                            <div className="absolute inset-0 backface-hidden bg-[#f4ecd8] dark:bg-zinc-900 rounded-3xl border-4 border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center p-2 text-center shadow-lg group-hover:border-purple-300 transition-colors"><div className="absolute top-3 left-3 opacity-10"><Zap size={24}/></div><span className="font-serif font-black text-zinc-800 dark:text-zinc-300 text-xl md:text-2xl break-keep">{card.triggerWord}</span></div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
+        {cardBoard}
 
         <div className="w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex flex-col shrink-0">
             <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-black">기억력 랭킹</h3></div>
@@ -261,9 +299,7 @@ export const CardFlipGame: React.FC = () => {
         </div>
       </div>
 
-      <form onSubmit={handleInput} className="w-full max-w-2xl mx-auto shrink-0 pb-2">
-        <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} disabled={isLocked || gameState !== "playing"} className={`w-full h-20 px-8 text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[2rem] shadow-xl outline-hidden text-center font-black transition-all ${isLocked ? 'border-zinc-100 opacity-50' : 'border-purple-500 focus:shadow-purple-200/40 focus:ring-4 ring-purple-100'}`} placeholder={isLocked ? "판정 대기 중..." : "카드 뒷면의 단어를 입력!"} autoFocus autoComplete="off" />
-      </form>
+      {cardInput}
 
       <style jsx global>{`
         .perspective-1000 { perspective: 1000px; }

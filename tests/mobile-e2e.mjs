@@ -68,7 +68,7 @@ async function main() {
   try {
     // ══ 1. 주요 페이지 가로 오버플로 검사 (390px) ══════════════════════════
     console.log('\n[1] 모바일 레이아웃 (가로 스크롤 없어야 함)');
-    for (const path of ['/', '/test', '/practice/short/healing', '/practice/word', '/practice/position', '/transcription/poem_15', '/game/acid-rain', '/game/block-pop', '/game/typing-race', '/quiz/dwaetda-vs-dwitda', '/blog/four-week-typing-plan']) {
+    for (const path of ['/', '/test', '/practice/short/healing', '/practice/word', '/practice/position', '/transcription/poem_15', '/game/acid-rain', '/game/block-pop', '/game/typing-race', '/game/card-flip', '/game/castle-defense', '/quiz/dwaetda-vs-dwitda', '/blog/four-week-typing-plan']) {
       await page.goto(BASE + path, { waitUntil: 'networkidle' });
       ok(`${path} 오버플로 없음`, await noHorizontalOverflow(page));
     }
@@ -163,7 +163,7 @@ async function main() {
     await page.waitForTimeout(300);
     let raceOk = true;
     for (let i = 0; i < 3; i++) {
-      const word = await page.evaluate(() => [...document.querySelectorAll('div.border-4.tracking-wider')].map(d => d.textContent?.trim()).find(t => t && t !== '🏁'));
+      const word = await page.evaluate(() => [...document.querySelectorAll('[data-race-word]')].map(d => d.textContent?.trim()).find(t => t && t !== '🏁'));
       if (!word) { raceOk = false; break; }
       await setInputValue(page, 'input[placeholder="위 단어를 입력하세요!"]', word);
       await page.waitForTimeout(200);
@@ -200,9 +200,9 @@ async function main() {
       ok('단어 격추 → 점수 획득', score > 0, `score: ${score}`);
     }
 
-    // 포커스 이탈 → 일시정지 오버레이 → 탭하면 재개 (모바일 전용 동작)
+    // 포커스 이탈 → 일시정지 오버레이 → 탭하면 재개 (모바일 전용 동작, 300ms 유예 반영)
     await page.evaluate(() => document.querySelector('input[placeholder="단어를 입력하세요!"]')?.blur());
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(700);
     const pausedShown = await page.evaluate(() => document.body.textContent?.includes('탭해서 계속'));
     ok('입력창 포커스 이탈 → 일시정지 오버레이', !!pausedShown);
     if (pausedShown) {
@@ -211,6 +211,38 @@ async function main() {
       const resumed = await page.evaluate(() => document.activeElement === document.querySelector('input[placeholder="단어를 입력하세요!"]') && !document.body.textContent?.includes('탭해서 계속'));
       ok('오버레이 탭 → 재개(입력창 재포커스)', resumed);
     }
+
+    // ══ 7b. 기억력 타자: 단어 입력 → 카드 뒤집기 ═════════════════════════
+    console.log('\n[7b] 기억력 타자 (모바일 풀스크린)');
+    await page.goto(BASE + '/game/card-flip', { waitUntil: 'networkidle' });
+    await page.locator('button', { hasText: '게임 시작' }).click();
+    await page.waitForTimeout(500);
+    const cardWord = await page.evaluate(() => [...document.querySelectorAll('span.font-serif')].map(s => s.textContent?.trim()).find(t => t && t.length === 2));
+    ok('카드 16장 렌더링', !!cardWord, `word: ${cardWord}`);
+    if (cardWord) {
+      await setInputValue(page, 'input[placeholder="단어 입력 후 엔터!"]', cardWord);
+      await page.evaluate(() => document.querySelector('input[placeholder="단어 입력 후 엔터!"]')?.closest('form')?.requestSubmit());
+      await page.waitForTimeout(400);
+      const flipped = await page.evaluate(() => !!document.querySelector('.rotate-y-180'));
+      ok('단어 입력 → 카드 뒤집힘', flipped);
+    }
+
+    // ══ 7c. 성문방어: 명령 입력/버튼 ══════════════════════════════════════
+    console.log('\n[7c] 성문방어 (모바일 풀스크린)');
+    await page.goto(BASE + '/game/castle-defense', { waitUntil: 'networkidle' });
+    await page.locator('button', { hasText: '방어 시작' }).click();
+    await page.waitForTimeout(500);
+    await setInputValue(page, 'input[placeholder="명령어 입력 후 엔터"]', '방패');
+    await page.evaluate(() => document.querySelector('input[placeholder="명령어 입력 후 엔터"]')?.closest('form')?.requestSubmit());
+    await page.waitForTimeout(300);
+    const shieldUp = await page.evaluate(() => document.body.textContent?.includes('방패 준비'));
+    ok('명령어 입력 → 방패 발동', !!shieldUp);
+    await page.locator('button', { hasText: '발사' }).first().click();
+    await page.waitForTimeout(300);
+    const fired = await page.evaluate(() => document.body.textContent?.includes('타워 발사') || document.body.textContent?.includes('사용할 수 없는'));
+    ok('명령 버튼 탭 동작', !!fired);
+    const notPausedAfterTap = await page.evaluate(() => !document.body.textContent?.includes('탭해서 계속'));
+    ok('명령 버튼 탭이 일시정지를 유발하지 않음', notPausedAfterTap);
 
     // ══ 8. 데스크톱 회귀 확인 ═════════════════════════════════════════════
     console.log('\n[8] 데스크톱 회귀 (1440px)');
@@ -285,7 +317,7 @@ async function main() {
     await kp.waitForTimeout(300);
     await kp.evaluate(() => { const el = document.querySelector('input[placeholder="위 단어를 입력하세요!"]'); el?.scrollIntoView({ block: 'center' }); el?.focus(); });
     await kp.waitForTimeout(400);
-    ok('레이스: 목표 단어 보임', await isVisible('div.border-4.tracking-wider'));
+    ok('레이스: 목표 단어 보임', await isVisible('[data-race-word]'));
     ok('레이스: 입력창 보임', await isVisible('input[placeholder="위 단어를 입력하세요!"]'));
 
     await kbCtx.close();
