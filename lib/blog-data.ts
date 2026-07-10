@@ -1468,6 +1468,32 @@ PC가 가정과 학교에 보급되면서 흥미로운 일이 벌어집니다. �
 
 - **이런 분에게**: 혼자 하는 연습이 심심해서 자꾸 그만두게 되는 분
 
+## 뭐부터 할지 모르겠다면: 단계별 로드맵
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="200" viewBox="0 0 480 200" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실력 단계별 추천 타자 게임 로드맵">
+    <rect width="480" height="200" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="36" font-family="sans-serif" font-weight="bold" font-size="15" fill="#1E293B" text-anchor="middle">실력 단계별 추천 게임</text>
+    <rect x="30" y="60" width="130" height="80" rx="12" fill="#3B82F6" opacity="0.1"/>
+    <text x="95" y="85" font-family="sans-serif" font-weight="bold" font-size="13" fill="#2563EB" text-anchor="middle">~200타</text>
+    <text x="95" y="108" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">기억력 타자</text>
+    <text x="95" y="127" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">정확도 먼저</text>
+    <path d="M165 100 L183 100" stroke="#94A3B8" stroke-width="2"/>
+    <rect x="188" y="60" width="130" height="80" rx="12" fill="#8B5CF6" opacity="0.1"/>
+    <text x="253" y="85" font-family="sans-serif" font-weight="bold" font-size="13" fill="#7C3AED" text-anchor="middle">200~400타</text>
+    <text x="253" y="108" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">산성비 · 블록 팝핑</text>
+    <text x="253" y="127" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">순발력과 지속력</text>
+    <path d="M323 100 L341 100" stroke="#94A3B8" stroke-width="2"/>
+    <rect x="346" y="60" width="110" height="80" rx="12" fill="#10B981" opacity="0.1"/>
+    <text x="401" y="85" font-family="sans-serif" font-weight="bold" font-size="13" fill="#059669" text-anchor="middle">400타~</text>
+    <text x="401" y="108" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">타자 레이스</text>
+    <text x="401" y="127" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle">성문방어 · 기록 경쟁</text>
+    <text x="240" y="172" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">내 타수를 모른다면 속도 테스트부터 해보세요</text>
+  </svg>
+</div>
+
+내 타수가 어느 구간인지 모르겠다면 [타자 속도 테스트](/test)로 먼저 측정해 보세요. 사이트마다 타수가 다르게 나오는 이유는 [타자 속도 측정 가이드](/blog/how-typing-speed-is-measured)에 정리해 두었습니다.
+
 ## 게임은 반찬, 기본기는 밥
 
 마지막으로 한 번 더 강조하면 — 게임은 이미 아는 자판을 빠르게 만드는 도구지, 자판을 처음 익히는 도구가 아닙니다. 아직 키보드를 보면서 친다면 [자리연습](/practice/position)부터, 기본기가 있다면 게임과 [짧은 글 연습](/practice/short)을 번갈아 하는 게 가장 빠릅니다. 하루 20분 기준의 조합은 [4주 완성 플랜](/blog/four-week-typing-plan)에 정리해 두었습니다.
