@@ -1088,6 +1088,394 @@ PC가 가정과 학교에 보급되면서 흥미로운 일이 벌어집니다. �
 
 > **[🗓️ 1주차 자리 연습부터 시작하기](/practice)**
 `
+  },
+  {
+    id: "how-to-choose-transcription-site",
+    title: "필사 사이트 고르는 법: 온라인 필사, 어디서 어떻게 시작할까?",
+    description: "메모장, 블로그, 전용 필사 사이트까지 — 온라인 필사를 시작하는 방법을 비교하고, 필사 사이트를 고를 때 꼭 확인해야 할 4가지 기준을 정리했습니다.",
+    date: "2026-07-07",
+    category: "필사",
+    keyword: "필사 사이트, 온라인 필사, 필사 타자연습, 필사 하는 법, 타자 필사 사이트",
+    content: `
+# 필사 사이트 고르는 법: 온라인 필사, 어디서 어떻게 시작할까?
+
+필사를 시작하기로 마음먹고 검색창에 '필사 사이트'를 쳐본 분이라면 알 겁니다. 생각보다 선택지가 애매하다는 걸요. 손글씨 필사 커뮤니티는 많은데, 정작 키보드로 필사할 곳은 마땅치 않습니다. 메모장을 열자니 허전하고, 블로그에 쓰자니 공개가 부담스럽고요.
+
+키보드 필사를 어디서 하면 좋을지, 방법별 장단점과 사이트를 고르는 기준을 정리했습니다. (키보드 필사가 손글씨 필사만큼 효과가 있는지 궁금하다면 [키보드 필사의 효과](/blog/transcription-benefits) 글을 먼저 읽어보세요.)
+
+## 온라인 필사, 세 가지 방법 비교
+
+### 1. 메모장·워드에 직접 치기
+가장 간단한 방법입니다. 준비물이 없다는 게 장점이지만, 치명적인 단점이 있습니다. **원문과 대조가 안 됩니다.** 책을 옆에 펴두고 화면과 번갈아 봐야 하니 시선이 계속 끊기고, 오타가 나도 모르고 지나갑니다. 필사의 핵심인 '문장을 빠짐없이 읽기'가 무너지기 쉽습니다.
+
+### 2. 블로그·SNS에 필사 기록 올리기
+'필사 챌린지' 형태로 블로그에 올리는 분들이 많습니다. 기록이 쌓이고 다른 사람의 반응이 동기부여가 되는 건 장점입니다. 다만 이것도 결국 빈 화면에 치는 방식이라 대조 문제는 그대로고, '올리기 위한 필사'가 되면 문장보다 인증에 마음이 가기 쉽습니다.
+
+### 3. 전용 필사 사이트에서 치기
+원문이 화면에 떠 있고, 그 위에 겹쳐 쓰듯 따라 치는 방식입니다. 눈이 원문에서 떨어질 일이 없고, 틀린 글자는 실시간으로 표시됩니다. 필사의 몰입감은 유지하면서 타자 연습 효과까지 함께 얻을 수 있어서, 키보드 필사가 목적이라면 가장 합리적인 선택입니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="230" viewBox="0 0 480 230" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="필사 방법 세 가지 비교표">
+    <rect width="480" height="230" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="38" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">온라인 필사 방법 비교</text>
+    <text x="150" y="72" font-family="sans-serif" font-weight="bold" font-size="12" fill="#64748B" text-anchor="middle">원문 대조</text>
+    <text x="260" y="72" font-family="sans-serif" font-weight="bold" font-size="12" fill="#64748B" text-anchor="middle">오타 확인</text>
+    <text x="370" y="72" font-family="sans-serif" font-weight="bold" font-size="12" fill="#64748B" text-anchor="middle">기록 측정</text>
+    <text x="30" y="105" font-family="sans-serif" font-size="13" fill="#334155">메모장</text>
+    <text x="150" y="105" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">✕</text>
+    <text x="260" y="105" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">✕</text>
+    <text x="370" y="105" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">✕</text>
+    <text x="30" y="145" font-family="sans-serif" font-size="13" fill="#334155">블로그</text>
+    <text x="150" y="145" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">✕</text>
+    <text x="260" y="145" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">✕</text>
+    <text x="370" y="145" font-family="sans-serif" font-size="14" fill="#F59E0B" text-anchor="middle">△</text>
+    <text x="30" y="185" font-family="sans-serif" font-weight="bold" font-size="13" fill="#059669">필사 사이트</text>
+    <text x="150" y="185" font-family="sans-serif" font-size="14" fill="#10B981" text-anchor="middle">◯</text>
+    <text x="260" y="185" font-family="sans-serif" font-size="14" fill="#10B981" text-anchor="middle">◯</text>
+    <text x="370" y="185" font-family="sans-serif" font-size="14" fill="#10B981" text-anchor="middle">◯</text>
+    <line x1="30" y1="120" x2="450" y2="120" stroke="#E2E8F0" stroke-width="1"/>
+    <line x1="30" y1="160" x2="450" y2="160" stroke="#E2E8F0" stroke-width="1"/>
+  </svg>
+</div>
+
+## 필사 사이트를 고르는 4가지 기준
+
+### 1. 필사할 글이 큐레이션되어 있는가
+직접 텍스트를 구해서 붙여 넣어야 한다면 시작 전에 지칩니다. 윤동주, 김소월 같은 검증된 작품이 골라져 있고, 짧은 시부터 긴 산문까지 난이도 선택이 되는 곳이 오래갑니다. 어떤 작품부터 시작할지 막막하다면 [필사하기 좋은 시 7선](/blog/best-poems-for-transcription)을 참고하세요.
+
+### 2. 무료로, 로그인 없이 시작할 수 있는가
+필사는 습관이 되기 전까지가 고비입니다. 결제나 회원가입이 첫 화면을 막고 있으면 '내일 하자'가 되기 쉽습니다. 일단 오늘 밤 한 편을 쳐볼 수 있어야 합니다.
+
+### 3. 타수와 정확도가 기록되는가
+필사의 부수 효과는 타자 실력입니다. 오늘 몇 타로 쳤는지, 정확도가 얼마였는지 수치로 남으면 필사가 '기록 갱신'이라는 또 하나의 재미를 갖게 됩니다. 습관을 만드는 데 이만한 장치가 없습니다.
+
+### 4. 분위기 — 의외로 가장 중요한 것
+필사는 결국 감성의 영역입니다. 삭막한 입력창이 아니라 원고지처럼 글 쓰는 맛이 나는 화면인지, 광고가 몰입을 깨지 않는지. 매일 10분씩 머무를 공간이니 분위기가 마음에 들어야 합니다.
+
+## 한글타자왕에서 필사하기
+
+사실 이 기준 네 가지는 제가 한글타자왕의 [필사 연습](/transcription)을 만들 때 세웠던 원칙이기도 합니다. 디지털 원고지 위에서 윤동주, 김소월, 정지용, 이육사, 한용운의 작품을 무료로, 로그인 없이 바로 필사할 수 있고, 타수와 정확도가 실시간으로 측정됩니다.
+
+다른 사용자가 올린 글로 함께 연습하는 [필사 챌린지](/challenge)도 있으니, 명시가 익숙해지면 도전해 보세요.
+
+> **[📖 원고지 필사 바로 시작하기](/transcription)**
+`
+  },
+  {
+    id: "free-online-typing-practice",
+    title: "무료 타자연습 사이트 고르는 법: 설치 없이 웹에서 바로 시작하기",
+    description: "한컴타자연습 없이도 타자연습 할 수 있을까? 맥·크롬북·회사 PC에서도 되는 웹 타자연습 사이트의 조건과, 실력이 실제로 느는 연습 코스를 정리했습니다.",
+    date: "2026-07-09",
+    category: "가이드",
+    keyword: "무료 타자연습 사이트, 타자연습 사이트, 한글 타자연습, 웹 타자연습, 한컴타자연습 대안",
+    content: `
+# 무료 타자연습 사이트 고르는 법: 설치 없이 웹에서 바로 시작하기
+
+'타자연습' 하면 아직도 많은 분이 한컴타자연습을 떠올립니다. 학교 컴퓨터실에서 다들 한 번씩 해봤으니까요. 그런데 지금 내 자리로 돌아와 보면 상황이 다릅니다. 맥북에는 설치가 안 되고, 크롬북도 마찬가지고, 회사 PC는 프로그램 설치 자체가 막혀 있는 경우가 많습니다.
+
+다행히 요즘은 설치 없이 브라우저에서 바로 되는 타자연습 사이트가 대안이 됩니다. 다만 아무 데서나 연습한다고 실력이 느는 건 아니라서, 어떤 기준으로 골라야 하는지를 정리했습니다.
+
+## 설치형에서 웹으로, 뭐가 달라졌나
+
+설치형 프로그램의 장점은 완성도였습니다. 자리연습부터 게임까지 커리큘럼이 잘 짜여 있었죠. 웹 타자연습은 그 커리큘럼을 그대로 가져오면서 세 가지가 좋아졌습니다.
+
+- **어디서나 같은 환경** — 집 데스크톱, 회사 PC, 맥북 어디서든 브라우저만 열면 이어서 연습할 수 있습니다.
+- **기록이 남는다** — 로그인하면 기기가 바뀌어도 내 타수 기록과 성장 곡선이 유지됩니다.
+- **운영체제를 안 가린다** — 윈도우 전용이던 시절과 달리 맥, 리눅스, 크롬북에서도 동일하게 동작합니다.
+
+## 타자연습 사이트, 이 4가지를 확인하세요
+
+### 1. 단계별 커리큘럼이 있는가
+낱말 게임만 있는 사이트로는 독수리 타법을 못 벗어납니다. **자리연습(기본 손가락 위치) → 낱말 → 짧은 글 → 긴 글**로 이어지는 단계가 있어야 제대로 된 연습이 됩니다. 특히 초보라면 자리연습 없이 시작하는 건 잘못된 손버릇만 굳히는 지름길입니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="150" viewBox="0 0 480 150" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="타자연습 4단계 커리큘럼">
+    <rect width="480" height="150" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <rect x="25" y="55" width="90" height="44" rx="10" fill="#3B82F6"/>
+    <text x="70" y="82" font-family="sans-serif" font-weight="bold" font-size="13" fill="white" text-anchor="middle">자리연습</text>
+    <path d="M120 77 L138 77" stroke="#94A3B8" stroke-width="2"/>
+    <rect x="143" y="55" width="90" height="44" rx="10" fill="#6366F1"/>
+    <text x="188" y="82" font-family="sans-serif" font-weight="bold" font-size="13" fill="white" text-anchor="middle">낱말</text>
+    <path d="M238 77 L256 77" stroke="#94A3B8" stroke-width="2"/>
+    <rect x="261" y="55" width="90" height="44" rx="10" fill="#8B5CF6"/>
+    <text x="306" y="82" font-family="sans-serif" font-weight="bold" font-size="13" fill="white" text-anchor="middle">짧은 글</text>
+    <path d="M356 77 L374 77" stroke="#94A3B8" stroke-width="2"/>
+    <rect x="379" y="55" width="76" height="44" rx="10" fill="#10B981"/>
+    <text x="417" y="82" font-family="sans-serif" font-weight="bold" font-size="13" fill="white" text-anchor="middle">긴 글</text>
+    <text x="240" y="35" font-family="sans-serif" font-weight="bold" font-size="15" fill="#1E293B" text-anchor="middle">실력이 느는 연습 순서</text>
+    <text x="240" y="128" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">건너뛰면 그 단계에서 반드시 정체가 옵니다</text>
+  </svg>
+</div>
+
+### 2. 진짜 무료인가
+'무료'를 내걸고 몇 판 하면 결제 창이 뜨는 곳이 많습니다. 핵심 연습 기능이 제한 없이 무료인지, 시작할 때 회원가입을 강제하지 않는지 확인하세요.
+
+### 3. 타수 측정이 정확한가
+분당 타수(타/분)가 실시간으로 보이고, 정확도가 함께 측정되어야 합니다. 속도만 보여주는 사이트에서 연습하면 오타 습관이 그대로 굳습니다. 내 실력이 어느 정도인지 궁금하다면 [연령대별 평균 타수](/blog/average-typing-speed)와 비교해 보세요.
+
+### 4. 지루하지 않은가
+타자 실력은 결국 누적 시간입니다. 산성비 같은 게임 요소가 있으면 연습을 '오늘도 해야 하는 숙제'가 아니라 '한 판 더'로 만들어 줍니다. 게임이 실제로 실력에 도움이 되는지는 [산성비 게임 분석 글](/blog/acid-rain-typing-game)에서 다뤘습니다.
+
+## 한글타자왕은 이렇게 쓰면 됩니다
+
+한글타자왕은 위 네 가지 기준을 전부 채우는 것을 목표로 만든 웹 타자연습 사이트입니다. 설치 없이, 무료로, 맥에서도 크롬북에서도 됩니다.
+
+- **처음이라면**: [자리연습](/practice/position)으로 손가락 위치부터. 독수리 타법 교정도 여기서 시작합니다.
+- **기본기가 있다면**: [낱말 연습](/practice/word)과 [짧은 글 연습](/practice/short)으로 속도를 올리세요.
+- **지루해질 때쯤**: [산성비 게임](/game/acid-rain)을 비롯한 [타자 게임](/game)으로 순발력을 끌어올리고,
+- **내 위치가 궁금하면**: [타자 속도 테스트](/test)로 현재 타수를 측정해 보세요.
+
+체계적으로 하고 싶다면 [4주 완성 타자 연습 플랜](/blog/four-week-typing-plan)에 하루 20분짜리 커리큘럼을 정리해 두었습니다.
+
+> **[⌨️ 설치 없이 타자연습 시작하기](/practice)**
+`
+  },
+  {
+    id: "mobile-typing-practice",
+    title: "모바일 타자연습, 스마트폰으로 가능할까? 상황별 현실적인 방법",
+    description: "PC가 없을 때 스마트폰으로 타자연습이 되는지, 모바일 연습이 PC 타자 실력에 도움이 되는지, 그리고 지금 폰에서 바로 할 수 있는 방법을 정리했습니다.",
+    date: "2026-07-11",
+    category: "가이드",
+    keyword: "모바일 타자연습, 타자연습 모바일, 스마트폰 타자연습, 타자연습 어플, 모바일 타자게임",
+    content: `
+# 모바일 타자연습, 스마트폰으로 가능할까? 상황별 현실적인 방법
+
+'타자연습 모바일'을 검색해서 들어오신 분이라면 상황은 둘 중 하나일 겁니다. 지금 PC가 없거나, 이동 중이거나. 결론부터 말하면 **스마트폰으로도 타자연습은 됩니다.** 다만 무엇이 되고 무엇이 안 되는지를 알고 해야 시간 낭비가 없습니다.
+
+## 먼저 솔직한 이야기: 모바일 연습의 한계
+
+스마트폰 쿼티 자판은 PC 키보드와 배열이 같습니다. ㅂㅈㄷㄱ 위치도, 쌍자음 치는 법도 동일하죠. 그래서 모바일 연습으로도 **글자 조합 감각**은 확실히 늡니다. 어떤 글자가 어디 있는지, 받침을 어떻게 조합하는지가 빨라집니다.
+
+하지만 PC 타자의 핵심인 **열 손가락 근육 기억**은 모바일로 만들 수 없습니다. 엄지 두 개로 치는 것과 열 손가락으로 치는 건 다른 운동이니까요. 분당 500타를 목표로 한다면 결국 물리 키보드 앞에 앉아야 합니다. ([현실적인 연습 가이드](/blog/ultimate-typing-guide) 참고)
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="210" viewBox="0 0 480 210" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="모바일 타자연습으로 되는 것과 안 되는 것">
+    <rect width="480" height="210" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="38" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">모바일 타자연습으로 되는 것 / 안 되는 것</text>
+    <rect x="30" y="60" width="200" height="120" rx="12" fill="#10B981" opacity="0.08"/>
+    <text x="130" y="88" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">✓ 되는 것</text>
+    <text x="130" y="115" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">자판 배열 암기</text>
+    <text x="130" y="138" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">글자 조합 감각</text>
+    <text x="130" y="161" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">순발력 · 어휘 반응 속도</text>
+    <rect x="250" y="60" width="200" height="120" rx="12" fill="#EF4444" opacity="0.08"/>
+    <text x="350" y="88" font-family="sans-serif" font-weight="bold" font-size="14" fill="#DC2626" text-anchor="middle">✕ 안 되는 것</text>
+    <text x="350" y="115" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">열 손가락 근육 기억</text>
+    <text x="350" y="138" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">시선 독립 훈련</text>
+    <text x="350" y="161" font-family="sans-serif" font-size="12" fill="#334155" text-anchor="middle">분당 400타 이상의 속도</text>
+  </svg>
+</div>
+
+그럼 모바일 연습은 의미가 없냐 하면, 전혀 아닙니다. 목적을 바꾸면 됩니다. 모바일에서는 **게임으로 순발력을 유지하고**, PC에서는 **자리연습으로 손가락을 만드는** 식으로 역할을 나누는 겁니다.
+
+## 지금 폰에서 바로 할 수 있는 것
+
+### 1. 모바일 웹에서 타자 게임 하기
+한글타자왕의 [타자 게임](/game)은 전부 모바일 화면에 맞게 만들어져 있습니다. 게임을 시작하면 전체 화면으로 전환되고, 입력창이 자판 바로 위에 붙어서 폰으로도 쾌적하게 플레이됩니다.
+
+- [산성비](/game/acid-rain) — 떨어지는 단어를 빠르게 입력하는 추억의 그 게임
+- [타자 레이스](/game/typing-race), [블록 팝](/game/block-pop) 같은 순발력 게임들
+
+출퇴근 지하철에서 한 판씩 하기 좋습니다. 실시간 랭킹이 있어서 은근히 승부욕도 자극됩니다.
+
+### 2. 안드로이드 앱으로 연습하기
+브라우저 열기도 귀찮다면 [한글타자왕 안드로이드 앱](https://play.google.com/store/apps/details?id=com.moneytaker.korean_typing)을 설치해 두세요. 홈 화면에서 바로 실행되니 자투리 시간 연습의 진입 장벽이 확 낮아집니다.
+
+### 3. 맞춤법 퀴즈로 '정확한 타자' 챙기기
+타자는 빨리 치는 것 못지않게 맞게 치는 게 중요합니다. 화면이 작아도 전혀 지장 없는 [맞춤법 퀴즈](/quiz)는 모바일에 딱 맞는 콘텐츠입니다. 되/돼, 왠/웬처럼 [한국인이 자주 틀리는 맞춤법](/blog/common-spelling-mistakes)을 퀴즈로 하나씩 잡아보세요.
+
+## 이렇게 조합하면 가장 빠릅니다
+
+1. **이동 중 (모바일)** — 타자 게임 한두 판으로 감각 유지, 맞춤법 퀴즈로 정확도 보강
+2. **집·사무실 (PC)** — [자리연습](/practice/position)과 [짧은 글 연습](/practice/short)으로 열 손가락 훈련
+3. **주 1회 (PC)** — [타자 속도 테스트](/test)로 기록 측정
+
+모바일은 보조, PC는 본 훈련. 이 조합이면 자투리 시간까지 전부 연습 시간이 됩니다.
+
+> **[🎮 폰에서 바로 타자 게임 한 판](/game)**
+`
+  },
+  {
+    id: "how-typing-speed-is-measured",
+    title: "타자 속도 측정의 모든 것: 사이트마다 내 타수가 다르게 나오는 이유",
+    description: "한글 타자 속도의 '타'는 어떻게 계산될까? 타수 계산 원리부터 사이트마다 측정값이 달라지는 4가지 이유, 정확하게 측정하는 요령까지 정리했습니다.",
+    date: "2026-07-08",
+    category: "지식",
+    keyword: "타자 속도 측정, 타자 속도 테스트, 타수 계산, 한글 타자 속도, 타자 테스트",
+    content: `
+# 타자 속도 측정의 모든 것: 사이트마다 내 타수가 다르게 나오는 이유
+
+타자 속도를 재봤는데 어떤 사이트에서는 450타, 다른 곳에서는 380타가 나옵니다. 내 실력이 하루 만에 준 걸까요? 아닙니다. **타수는 측정 방식에 따라 달라지는 값**이라서, 원리를 모르면 숫자에 휘둘리게 됩니다. 오늘은 '타'가 정확히 뭔지부터 짚어보겠습니다.
+
+## '타'는 글자 수가 아니라 키를 누른 횟수다
+
+한글 타자 속도의 단위인 '타/분(타수)'는 1분 동안 입력한 **자모(키 입력)의 수**입니다. 글자 수가 아닙니다. 예를 들어 '안녕하세요' 다섯 글자를 치려면 키보드를 12번 눌러야 합니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="240" viewBox="0 0 480 240" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="안녕하세요의 타수 계산 예시">
+    <rect width="480" height="240" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="40" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">'안녕하세요' = 5글자, 12타</text>
+    <rect x="35" y="65" width="78" height="52" rx="10" fill="#3B82F6" opacity="0.12"/>
+    <text x="74" y="97" font-family="sans-serif" font-weight="bold" font-size="20" fill="#1E293B" text-anchor="middle">안</text>
+    <rect x="123" y="65" width="78" height="52" rx="10" fill="#3B82F6" opacity="0.12"/>
+    <text x="162" y="97" font-family="sans-serif" font-weight="bold" font-size="20" fill="#1E293B" text-anchor="middle">녕</text>
+    <rect x="211" y="65" width="78" height="52" rx="10" fill="#3B82F6" opacity="0.12"/>
+    <text x="250" y="97" font-family="sans-serif" font-weight="bold" font-size="20" fill="#1E293B" text-anchor="middle">하</text>
+    <rect x="299" y="65" width="78" height="52" rx="10" fill="#3B82F6" opacity="0.12"/>
+    <text x="338" y="97" font-family="sans-serif" font-weight="bold" font-size="20" fill="#1E293B" text-anchor="middle">세</text>
+    <rect x="387" y="65" width="58" height="52" rx="10" fill="#3B82F6" opacity="0.12"/>
+    <text x="416" y="97" font-family="sans-serif" font-weight="bold" font-size="20" fill="#1E293B" text-anchor="middle">요</text>
+    <text x="74" y="145" font-family="sans-serif" font-size="13" fill="#2563EB" text-anchor="middle">ㅇ+ㅏ+ㄴ</text>
+    <text x="162" y="145" font-family="sans-serif" font-size="13" fill="#2563EB" text-anchor="middle">ㄴ+ㅕ+ㅇ</text>
+    <text x="250" y="145" font-family="sans-serif" font-size="13" fill="#2563EB" text-anchor="middle">ㅎ+ㅏ</text>
+    <text x="338" y="145" font-family="sans-serif" font-size="13" fill="#2563EB" text-anchor="middle">ㅅ+ㅔ</text>
+    <text x="416" y="145" font-family="sans-serif" font-size="13" fill="#2563EB" text-anchor="middle">ㅇ+ㅛ</text>
+    <text x="74" y="172" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">3타</text>
+    <text x="162" y="172" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">3타</text>
+    <text x="250" y="172" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">2타</text>
+    <text x="338" y="172" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">2타</text>
+    <text x="416" y="172" font-family="sans-serif" font-weight="bold" font-size="14" fill="#059669" text-anchor="middle">2타</text>
+    <text x="240" y="212" font-family="sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">받침이 많은 글일수록 같은 글자 수라도 타수가 높게 나옵니다</text>
+  </svg>
+</div>
+
+그래서 같은 속도로 쳐도 **받침과 쌍자음이 많은 글**은 타수가 높게, '아이가 오이를 사요' 같은 받침 없는 글은 낮게 나옵니다. 영문 타자의 WPM(분당 단어 수)과 한글 타수가 직접 비교가 안 되는 이유이기도 합니다.
+
+## 사이트마다 타수가 다르게 나오는 4가지 이유
+
+### 1. 오타를 어떻게 처리하는가
+가장 큰 변수입니다. 오타 친 키 입력도 타수에 포함하는 곳, 오타 글자만 빼는 곳, 오타가 나면 감점까지 하는 곳이 다 다릅니다. 오타 감점 방식이면 체감보다 타수가 훨씬 낮게 나옵니다.
+
+### 2. 백스페이스 수정을 인정하는가
+수정한 글자를 정타로 인정하는지, 수정에 쓴 시간과 키 입력을 어떻게 계산하는지도 사이트마다 다릅니다. 백스페이스를 자주 쓰는 습관이 있다면 이 차이가 크게 벌어집니다.
+
+### 3. 텍스트 난이도가 다르다
+위에서 본 것처럼 받침 밀도에 따라 타수가 달라지는데, 사이트마다 기본 제공 텍스트의 난이도가 다릅니다. 문장부호와 영문·숫자가 섞인 텍스트는 타수가 더 낮게 나옵니다.
+
+### 4. 측정 시간이 다르다
+15초짜리 짧은 측정은 순간 최고 속도에 가깝고, 3분 이상 긴 글 측정은 지구력이 반영된 실전 속도에 가깝습니다. 짧은 측정값이 보통 10~20% 높게 나옵니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="210" viewBox="0 0 480 210" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="측정 시간에 따른 타수 차이 그래프">
+    <rect width="480" height="210" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="36" font-family="sans-serif" font-weight="bold" font-size="15" fill="#1E293B" text-anchor="middle">측정 시간이 길수록 타수는 낮고 정직해집니다</text>
+    <path d="M60 170 L430 170" stroke="#94A3B8" stroke-width="2"/>
+    <path d="M60 170 L60 60" stroke="#94A3B8" stroke-width="2"/>
+    <path d="M70 75 C 150 80, 230 110, 420 128" stroke="#3B82F6" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="80" cy="76" r="6" fill="#EF4444"/>
+    <text x="98" y="68" font-family="sans-serif" font-size="11" fill="#EF4444">15초: 순간 최고 속도</text>
+    <circle cx="400" cy="127" r="6" fill="#059669"/>
+    <text x="392" y="152" font-family="sans-serif" font-size="11" fill="#059669" text-anchor="end">3분 이상: 실전 속도</text>
+    <text x="245" y="192" font-family="sans-serif" font-size="12" fill="#64748B" text-anchor="middle">측정 시간</text>
+  </svg>
+</div>
+
+## 그래서, 어떻게 측정해야 정확할까
+
+측정의 목적은 '큰 숫자'가 아니라 '성장 추적'입니다. 세 가지만 지키면 됩니다.
+
+1. **항상 같은 사이트, 같은 방식으로** — 절대값보다 변화량이 중요하니 측정 조건을 고정하세요.
+2. **1분 이상 측정** — 15초 순간 속도는 실전과 다릅니다. 최소 1분, 가능하면 긴 글로 재세요.
+3. **정확도를 같이 기록** — 타수 450에 정확도 85%보다 타수 400에 정확도 98%가 실전에서는 훨씬 빠릅니다. 오타 수정 시간까지 포함하면요.
+
+내 타수가 또래 대비 어느 정도인지 궁금하다면 [연령대별 평균 타수 가이드](/blog/average-typing-speed)와 비교해 보고, 측정 결과가 아쉬웠다면 [4주 완성 연습 플랜](/blog/four-week-typing-plan)으로 올려보세요.
+
+한글타자왕의 [타자 속도 테스트](/test)는 실전 문장 기준으로 타수와 정확도를 함께 측정하고, 로그인하면 기록이 남아 성장 곡선을 확인할 수 있습니다.
+
+> **[⏱️ 지금 내 타자 속도 측정하기](/test)**
+`
+  },
+  {
+    id: "best-free-typing-games",
+    title: "무료 타자 게임 5종 완전 정복: 게임마다 느는 실력이 다릅니다",
+    description: "산성비, 성문방어, 블록 팝핑, 기억력 타자, 타자 레이스 — 타자 게임마다 훈련되는 능력이 다릅니다. 내 약점에 맞는 게임 고르는 법을 정리했습니다.",
+    date: "2026-07-10",
+    category: "게임",
+    keyword: "타자 게임, 무료 타자게임, 한글 타자 게임, 타자 게임 추천, 산성비 게임",
+    content: `
+# 무료 타자 게임 5종 완전 정복: 게임마다 느는 실력이 다릅니다
+
+"타자 게임이 연습에 도움이 되나요?"라는 질문에 대한 답은 [산성비 게임 분석 글](/blog/acid-rain-typing-game)에서 다뤘습니다. 결론은 '된다, 단 목적에 맞게 쓰면'이었죠. 오늘은 그 다음 질문입니다. **"그래서 어떤 게임을 해야 하나요?"**
+
+타자 게임은 다 비슷해 보이지만, 게임 방식에 따라 훈련되는 능력이 다릅니다. 헬스장에서 부위별로 기구를 고르듯, 타자 게임도 내 약점에 맞게 골라야 효율이 나옵니다.
+
+<div style="display:flex;justify-content:center;margin:2rem 0;">
+  <svg width="480" height="270" viewBox="0 0 480 270" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="타자 게임 5종별 훈련 능력 매트릭스">
+    <rect width="480" height="270" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="36" font-family="sans-serif" font-weight="bold" font-size="16" fill="#1E293B" text-anchor="middle">게임별 주력 훈련 능력</text>
+    <text x="185" y="66" font-family="sans-serif" font-weight="bold" font-size="11" fill="#64748B" text-anchor="middle">순발력</text>
+    <text x="270" y="66" font-family="sans-serif" font-weight="bold" font-size="11" fill="#64748B" text-anchor="middle">정확도</text>
+    <text x="355" y="66" font-family="sans-serif" font-weight="bold" font-size="11" fill="#64748B" text-anchor="middle">판단력</text>
+    <text x="435" y="66" font-family="sans-serif" font-weight="bold" font-size="11" fill="#64748B" text-anchor="middle">지속력</text>
+    <text x="30" y="97" font-family="sans-serif" font-size="13" fill="#334155">🌧️ 산성비</text>
+    <text x="185" y="97" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="270" y="97" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="355" y="97" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="435" y="97" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●</text>
+    <text x="30" y="134" font-family="sans-serif" font-size="13" fill="#334155">🏰 성문방어</text>
+    <text x="185" y="134" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="270" y="134" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="355" y="134" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="435" y="134" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="30" y="171" font-family="sans-serif" font-size="13" fill="#334155">🧱 블록 팝핑</text>
+    <text x="185" y="171" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="270" y="171" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="355" y="171" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●</text>
+    <text x="435" y="171" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="30" y="208" font-family="sans-serif" font-size="13" fill="#334155">🃏 기억력 타자</text>
+    <text x="185" y="208" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●</text>
+    <text x="270" y="208" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="355" y="208" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="435" y="208" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●</text>
+    <text x="30" y="245" font-family="sans-serif" font-size="13" fill="#334155">🏁 타자 레이스</text>
+    <text x="185" y="245" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●●</text>
+    <text x="270" y="245" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●●</text>
+    <text x="355" y="245" font-family="sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">●</text>
+    <text x="435" y="245" font-family="sans-serif" font-size="13" fill="#10B981" text-anchor="middle">●●</text>
+    <line x1="25" y1="110" x2="455" y2="110" stroke="#E2E8F0" stroke-width="1"/>
+    <line x1="25" y1="147" x2="455" y2="147" stroke="#E2E8F0" stroke-width="1"/>
+    <line x1="25" y1="184" x2="455" y2="184" stroke="#E2E8F0" stroke-width="1"/>
+    <line x1="25" y1="221" x2="455" y2="221" stroke="#E2E8F0" stroke-width="1"/>
+  </svg>
+</div>
+
+## 1. 산성비 — 순발력의 왕도
+
+[산성비](/game/acid-rain)는 하늘에서 떨어지는 단어를 바닥에 닿기 전에 입력하는, 타자 게임의 원형 같은 게임입니다. '단어를 보는 즉시 손이 나가는' 반응 속도를 기르는 데 이만한 게 없습니다. 아이템 기믹과 실시간 랭킹이 있어서 은근히 오래 잡게 됩니다.
+
+- **이런 분에게**: 낱말 연습은 할 만큼 했는데 실전에서 첫 키가 늦게 나가는 분
+
+## 2. 성문방어 — 읽고 판단하며 치는 훈련
+
+[성문방어](/game/castle-defense)는 발사·방패·번개·수리 같은 **명령어를 상황에 맞게 골라 입력하며** 60초 동안 성문을 지키는 게임입니다. 단순히 보이는 대로 치는 게 아니라 '지금 뭘 쳐야 하지?'를 판단하면서 쳐야 해서, 생각하면서 타이핑하는 실전 감각(채팅, 업무 메신저)에 가장 가깝습니다.
+
+- **이런 분에게**: 따라 치는 건 빠른데 머릿속 문장을 칠 때 느려지는 분
+
+## 3. 블록 팝핑 — 지속력과 멘탈 관리
+
+[블록 팝핑](/game/block-pop)은 아래에서 차오르는 단어 블록을 천장에 닿기 전에 터뜨리는 게임입니다. 산성비가 '떨어지는 것을 막는' 수비라면, 블록 팝핑은 쌓이는 압박을 계속 걷어내는 지구전입니다. 후반으로 갈수록 속도 압박이 커져서 한계 속도를 끌어올리는 과부하 훈련이 됩니다.
+
+- **이런 분에게**: 처음엔 빠른데 30초만 지나면 급격히 느려지는 분
+
+## 4. 기억력 타자 — 정확도 집중 훈련
+
+[기억력 타자](/game/card-flip)는 마우스 없이 오직 타자로 카드를 뒤집어 짝을 맞추는 게임입니다. 속도 압박이 약한 대신 **한 번에 정확히 입력하는 것**이 중요해서, 오타 습관을 잡는 데 좋습니다. 카드 위치를 외우는 기억력 게임이기도 해서 아이들 연습용으로도 인기가 많습니다.
+
+- **이런 분에게**: 속도는 나오는데 정확도가 90%를 못 넘는 분, 초등학생 자녀 ([초등학생 타자 가이드](/blog/kids-typing-guide) 참고)
+
+## 5. 타자 레이스 — 기록 경쟁의 재미
+
+[타자 레이스](/game/typing-race)는 거북이, 토끼, 치타와 경주하며 단어를 입력해 결승선을 통과하는 게임입니다. 상대가 눈에 보이는 경쟁 구도라서 혼자 연습할 때보다 확실히 손이 빨라집니다. 치타를 이기는 날이 오면 [속도 테스트](/test)에서 기록을 재보세요. 꽤 올라 있을 겁니다.
+
+- **이런 분에게**: 혼자 하는 연습이 심심해서 자꾸 그만두게 되는 분
+
+## 게임은 반찬, 기본기는 밥
+
+마지막으로 한 번 더 강조하면 — 게임은 이미 아는 자판을 빠르게 만드는 도구지, 자판을 처음 익히는 도구가 아닙니다. 아직 키보드를 보면서 친다면 [자리연습](/practice/position)부터, 기본기가 있다면 게임과 [짧은 글 연습](/practice/short)을 번갈아 하는 게 가장 빠릅니다. 하루 20분 기준의 조합은 [4주 완성 플랜](/blog/four-week-typing-plan)에 정리해 두었습니다.
+
+다섯 게임 모두 무료고, 모바일에서도 됩니다. ([모바일 타자연습 가이드](/blog/mobile-typing-practice))
+
+> **[🎮 내 약점에 맞는 게임 고르러 가기](/game)**
+`
   }
 ];
 
