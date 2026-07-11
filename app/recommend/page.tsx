@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Keyboard, ArrowRight, Sparkles, Zap, ChevronRight } from "lucide-react";
+import { Keyboard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { KeyboardAdBanner } from "@/components/layout/KeyboardAdBanner";
@@ -58,14 +58,101 @@ export default function RecommendIndexPage() {
             </div>
           </Link>
 
-          {/* Coming Soon Placeholder */}
-          <div className="bg-surface-low/30 rounded-[3rem] p-8 md:p-10 flex flex-col items-center justify-center text-center border-2 border-dashed border-zinc-200">
-             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-zinc-300 mb-6">
-                <Sparkles size={24} />
-             </div>
-             <h3 className="headline-md !text-xl text-zinc-400 mb-2">Next Curation</h3>
-             <p className="text-zinc-400 text-sm font-medium">프리미엄 기계식 라인업 <br/>준비 중입니다.</p>
-          </div>
+          {/* AULA 독거미 Card */}
+          <Link href="/recommend/aula-dokgeomi" prefetch={false} className="group block">
+            <div className="bg-surface-lowest rounded-[3rem] p-8 md:p-10 shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform">
+                <Keyboard size={120} />
+              </div>
+
+              <div className="aspect-square bg-surface-low rounded-[2rem] mb-8 overflow-hidden relative">
+                <Image
+                  src="/keyboard/aura.jpg"
+                  alt="AULA 독거미 유선 기계식 키보드"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">Best Value</span>
+                  <span className="px-3 py-1 bg-zinc-100 text-zinc-400 text-[10px] font-black rounded-full uppercase tracking-widest">Mechanical</span>
+                </div>
+                <h3 className="headline-md !text-2xl group-hover:text-primary transition-colors">AULA 독거미 유선</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2">
+                  국민 가성비 기계식의 표준. 명확한 타건감으로 타자 연습의 재미가 달라집니다.
+                </p>
+                <div className="pt-4 flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
+                  리뷰 보기 <ArrowRight size={14} />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 한성 GK868B Card */}
+          <Link href="/recommend/hansung-gk868b" prefetch={false} className="group block">
+            <div className="bg-surface-lowest rounded-[3rem] p-8 md:p-10 shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform">
+                <Keyboard size={120} />
+              </div>
+
+              <div className="aspect-square bg-surface-low rounded-[2rem] mb-8 overflow-hidden relative">
+                <Image
+                  src="/keyboard/gk868b-1.jpg"
+                  alt="한성 GK868B 무접점 키보드"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">3-Year Review</span>
+                  <span className="px-3 py-1 bg-zinc-100 text-zinc-400 text-[10px] font-black rounded-full uppercase tracking-widest">무접점</span>
+                </div>
+                <h3 className="headline-md !text-2xl group-hover:text-primary transition-colors">한성 GK868B</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2">
+                  매일 6시간씩 3년을 함께한 무접점. 35g 키압의 가벼움과 보글보글 타건음의 실사용기.
+                </p>
+                <div className="pt-4 flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
+                  3년 실사용 후기 보기 <ArrowRight size={14} />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* OMIIYA 108 Card */}
+          <Link href="/recommend/omiiya-108" prefetch={false} className="group block">
+            <div className="bg-surface-lowest rounded-[3rem] p-8 md:p-10 shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform">
+                <Keyboard size={120} />
+              </div>
+
+              <div className="aspect-square bg-surface-low rounded-[2rem] mb-8 overflow-hidden relative">
+                <Image
+                  src="/keyboard/omiiya.png"
+                  alt="OMIIYA 108키 멤브레인 저소음 키보드"
+                  fill
+                  className="object-contain p-8 group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">Office Pick</span>
+                  <span className="px-3 py-1 bg-zinc-100 text-zinc-400 text-[10px] font-black rounded-full uppercase tracking-widest">Silent</span>
+                </div>
+                <h3 className="headline-md !text-2xl group-hover:text-primary transition-colors">OMIIYA 108 저소음</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2">
+                  옆자리가 모르는 저소음 멤브레인. 사무실에서 눈치 없이 연습량을 쌓는 풀배열.
+                </p>
+                <div className="pt-4 flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
+                  리뷰 보기 <ArrowRight size={14} />
+                </div>
+              </div>
+            </div>
+          </Link>
 
         </div>
       </section>

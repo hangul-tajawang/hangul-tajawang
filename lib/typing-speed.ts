@@ -47,9 +47,9 @@ export class TypingUtils {
   static normalize(text: string): string {
     if (!text) return "";
     return text
-      .replace(/[“ ” 「 」]/g, '"')
-      .replace(/[‘ ’ \`]/g, "'")
-      .replace(/[… ⋯]/g, "...")
+      .replace(/[“”「」]/g, '"')
+      .replace(/[‘’`]/g, "'")
+      .replace(/[…⋯]/g, "...")
       .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
       .trim();
   }

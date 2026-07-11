@@ -196,7 +196,14 @@ export const WordGame: React.FC = () => {
 
   const handleGameOver = async () => {
     setGameState("gameover");
-    if (user) await SupabaseService.saveGameScore("acid-rain", score, level, maxCombo);
+    if (user) {
+      try {
+        await SupabaseService.saveGameScore("acid-rain", score, level, maxCombo);
+        await fetchRankings(); // 방금 저장한 기록까지 반영해 다시 로드
+      } catch (e) {
+        console.error("게임 점수 저장 실패:", e);
+      }
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

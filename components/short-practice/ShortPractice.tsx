@@ -125,15 +125,16 @@ export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialC
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60dvh] md:min-h-[80vh] w-full max-w-5xl mx-auto p-4 py-6 md:py-20 overflow-hidden">
-      <div className="mb-6 md:mb-16 flex flex-wrap justify-center gap-3 md:gap-8">
+    <div className="flex flex-col items-center justify-center min-h-[60dvh] md:min-h-[70dvh] w-full max-w-5xl mx-auto p-4 py-6 md:py-8 overflow-x-clip">
+      {/* 노트북처럼 세로가 짧은 화면에서 입력 중에도 실시간 타수가 보이도록 상단에 고정 */}
+      <div className="sticky top-20 z-30 mb-6 md:mb-8 flex flex-wrap justify-center gap-3 md:gap-8">
         <MetricBadge icon={<Zap size={18}/>} label="현재 타수" value={lastReport?.kpm || 0} unit="타" color="text-primary" />
         <MetricBadge icon={<Target size={18}/>} label="정확도" value={lastReport?.accuracy || 0} unit="%" color="text-green-600" />
         <MetricBadge icon={<Clock size={18}/>} label="진행 상황" value={`${currentIndex + 1}/${shuffledSentences.length}`} unit="" color="text-secondary" />
       </div>
 
       <div className={`relative w-full max-w-4xl transition-all duration-700 ease-in-out ${isFlying ? 'translate-x-[120%] -translate-y-32 rotate-12 opacity-0' : 'translate-x-0 opacity-100'}`}>
-        <div className="w-full bg-surface-lowest shadow-[0_40px_80px_rgba(21,28,39,0.08)] p-6 pt-10 sm:p-12 md:p-20 flex flex-col justify-center items-center text-center rounded-[2rem] md:rounded-[3rem] relative overflow-hidden">
+        <div className="w-full bg-surface-lowest shadow-[0_40px_80px_rgba(21,28,39,0.08)] p-6 pt-10 sm:p-12 md:p-12 flex flex-col justify-center items-center text-center rounded-[2rem] md:rounded-[3rem] relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
           <div className="absolute top-4 md:top-10 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.4em] whitespace-nowrap">
               <Sparkles size={14} /> Short Sentence <Sparkles size={14} />
@@ -143,7 +144,7 @@ export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialC
         </div>
       </div>
 
-      <div className="w-full max-w-3xl mt-6 md:mt-20 relative group">
+      <div className="w-full max-w-3xl mt-6 md:mt-12 relative group">
         <input
           key={`${activeCategory}-${currentIndex}`}
           ref={inputRef}
@@ -156,7 +157,7 @@ export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialC
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck={false}
-          className={`w-full h-16 md:h-28 px-5 md:px-12 text-xl sm:text-2xl md:text-4xl bg-surface-lowest rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_40px_rgba(21,28,39,0.04)] outline-hidden transition-all text-center font-plus-jakarta font-bold ${isFlying ? 'text-green-500 scale-95 opacity-50' : 'text-on-surface focus:shadow-xl focus:shadow-primary/5'}`}
+          className={`w-full h-16 md:h-24 px-5 md:px-12 text-xl sm:text-2xl md:text-4xl bg-surface-lowest rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_40px_rgba(21,28,39,0.04)] outline-hidden transition-all text-center font-plus-jakarta font-bold ${isFlying ? 'text-green-500 scale-95 opacity-50' : 'text-on-surface focus:shadow-xl focus:shadow-primary/5'}`}
           placeholder="문장을 입력해 주세요"
         />
         <div className="absolute -bottom-16 left-0 w-full flex flex-col items-center gap-4">

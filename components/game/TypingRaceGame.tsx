@@ -144,7 +144,14 @@ export const TypingRaceGame: React.FC = () => {
     setFinalKpm(kpm);
     setFinalRank(rank);
     setGameState("finished");
-    if (user) await SupabaseService.saveGameScore("typing-race", kpm, rank, maxCombo);
+    if (user) {
+      try {
+        await SupabaseService.saveGameScore("typing-race", kpm, rank, maxCombo);
+        await fetchRankings(); // 방금 저장한 기록까지 반영해 다시 로드
+      } catch (e) {
+        console.error("게임 점수 저장 실패:", e);
+      }
+    }
   }, [botDists, user, maxCombo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

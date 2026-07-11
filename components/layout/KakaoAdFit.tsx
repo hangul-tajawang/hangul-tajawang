@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Keyboard, Sparkles, ArrowRight } from 'lucide-react';
 
@@ -86,10 +86,11 @@ export const KakaoAdFit: React.FC<KakaoAdFitProps> = ({ unit, width, height, dis
   const containerRef = useRef<HTMLDivElement>(null);
   const adRef = useRef<boolean>(false);
   const [failed, setFailed] = useState(false);
-  // 같은 유닛이 한 페이지에 두 번 실릴 수 있으므로 인스턴스별 고유 콜백 이름 사용
-  const onFailName = useRef(
-    `adfitNoAd_${unit.replace(/[^a-zA-Z0-9_]/g, "_")}_${Math.random().toString(36).slice(2, 8)}`
-  ).current;
+  // 같은 유닛이 한 페이지에 두 번 실릴 수 있으므로 인스턴스별 고유 콜백 이름 사용.
+  // SSR로 렌더된 data-ad-onfail 속성과 클라이언트의 window 등록 이름이 일치해야 하므로
+  // 난수 대신 hydration-safe한 useId를 사용한다.
+  const instanceId = useId().replace(/[^a-zA-Z0-9_]/g, "");
+  const onFailName = `adfitNoAd_${unit.replace(/[^a-zA-Z0-9_]/g, "_")}_${instanceId}`;
 
   useEffect(() => {
     // Prevent rendering in disabled mode or double rendering in React Strict Mode

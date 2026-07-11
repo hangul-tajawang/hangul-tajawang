@@ -127,7 +127,12 @@ export const CardFlipGame: React.FC = () => {
   const handleGameOver = async () => {
     setGameState("gameover");
     if (user) {
-      await SupabaseService.saveGameScore("card-flip", score, 1, maxCombo);
+      try {
+        await SupabaseService.saveGameScore("card-flip", score, 1, maxCombo);
+        await fetchRankings(); // 방금 저장한 기록까지 반영해 다시 로드
+      } catch (e) {
+        console.error("게임 점수 저장 실패:", e);
+      }
     }
   };
 

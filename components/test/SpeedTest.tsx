@@ -261,8 +261,8 @@ export const SpeedTest: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto py-4 md:py-10 px-4">
-      {/* 대시보드 */}
-      <div className="flex justify-center gap-3 md:gap-6 mb-4 md:mb-10">
+      {/* 대시보드 — 노트북처럼 세로가 짧은 화면에서 입력 중에도 타이머/실시간 타수가 보이도록 상단 고정 */}
+      <div className="sticky top-20 z-30 flex justify-center gap-3 md:gap-6 mb-4 md:mb-10">
         <div className="flex items-center gap-2 bg-surface-lowest px-4 py-2.5 md:px-6 md:py-3 rounded-2xl shadow-sm">
           <Timer size={18} className={timeLeft <= 10 && gameState === "running" ? "text-red-500 animate-pulse" : "text-primary"} />
           <span className={`text-xl md:text-2xl font-black tabular-nums ${timeLeft <= 10 && gameState === "running" ? "text-red-500" : "text-on-surface"}`}>{Math.ceil(timeLeft)}s</span>

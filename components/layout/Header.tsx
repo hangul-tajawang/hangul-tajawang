@@ -10,7 +10,6 @@ import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
 export const Header: React.FC = () => {
-  console.log("🚀 [Header] Rendering...");
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -82,9 +81,16 @@ export const Header: React.FC = () => {
       }
     });
 
+    // 카카오 로그인 페이지에서 뒤로가기로 돌아오면(bfcache 복원) 스피너가 남아있지 않도록 해제
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setLoading(false);
+    };
+    window.addEventListener('pageshow', onPageShow);
+
     return () => {
       isMounted = false;
       subscription.unsubscribe();
+      window.removeEventListener('pageshow', onPageShow);
     };
   }, [router]);
 
@@ -154,20 +160,21 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-50 w-full">
       <div className="w-full bg-surface/80 backdrop-blur-md">
         <div className="container mx-auto max-w-7xl h-16 flex items-center justify-between px-4 lg:px-8">
-            <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group">
+            <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group shrink-0">
                 <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:scale-110 transition-transform">한</div>
-                <span className="editorial-heading text-xl">한글타자왕</span>
+                <span className="editorial-heading text-xl whitespace-nowrap">한글타자왕</span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-1">
+            {/* 데스크톱 내비: 1024px 미만은 햄버거 메뉴, 1024~1280px은 핵심 6개, 1280px~ 전체, 1536px~ 아이콘 표시 */}
+            <nav className="hidden lg:flex items-center gap-1 min-w-0">
                 <NavButton icon={<Timer size={18} />} label="타자 테스트" href="/test" />
                 <NavButton icon={<Layout size={18} />} label="타자 연습장" href="/practice" />
                 <NavButton icon={<PenTool size={18} />} label="긴 글 연습" href="/transcription" />
                 <NavButton icon={<Gamepad2 size={18} />} label="한글 게임" href="/game" />
                 <NavButton icon={<BookOpenCheck size={18} />} label="맞춤법 퀴즈" href="/quiz" />
                 <NavButton icon={<Users size={18} />} label="필사 챌린지" href="/challenge" />
-                <NavButton icon={<Keyboard size={18} />} label="키보드 추천" href="/recommend" />
-                <NavButton icon={<Newspaper size={18} />} label="블로그" href="/blog" />
+                <NavButton icon={<Keyboard size={18} />} label="키보드 추천" href="/recommend" className="hidden xl:flex" />
+                <NavButton icon={<Newspaper size={18} />} label="블로그" href="/blog" className="hidden xl:flex" />
             </nav>
 
             <div className="flex items-center gap-2">
@@ -178,7 +185,7 @@ export const Header: React.FC = () => {
                 ) : (
                     <>
                         {user && <NotificationDrawer userId={user.id} />}
-                        <div className="hidden md:flex items-center gap-2">
+                        <div className="hidden lg:flex items-center gap-2">
                             {user ? (
                                 <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
                                     {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={32} height={32} className="w-8 h-8 rounded-full object-cover" /> : <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold text-xs">U</div>}
@@ -190,7 +197,7 @@ export const Header: React.FC = () => {
                                 </button>
                             )}
                         </div>
-                        <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 md:hidden text-zinc-600 hover:bg-surface-low rounded-xl">
+                        <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 lg:hidden text-zinc-600 hover:bg-surface-low rounded-xl">
                             <Menu size={24} />
                         </button>
                     </>
@@ -203,10 +210,10 @@ export const Header: React.FC = () => {
   );
 };
 
-function NavButton({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
+function NavButton({ icon, label, href, className = "flex" }: { icon: React.ReactNode; label: string; href: string; className?: string }) {
   return (
-    <Link href={href} prefetch={false} className="flex items-center gap-2 px-4 py-2 text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all">
-      {icon}
+    <Link href={href} prefetch={false} className={`${className} items-center gap-2 px-3 py-2 text-sm whitespace-nowrap text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all`}>
+      <span className="hidden 2xl:inline-flex">{icon}</span>
       <span>{label}</span>
     </Link>
   );

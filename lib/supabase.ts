@@ -298,9 +298,11 @@ export class SupabaseService {
   }
 
   static async getGameRankings(gameType: string, limit: number = 10) {
+    // 한 유저가 랭킹을 독점하지 않도록 유저별 최고 기록만 남긴다
     const { data, error } = await supabase
       .from('game_scores')
       .select(`
+        user_id,
         score,
         level,
         max_combo,
@@ -309,9 +311,18 @@ export class SupabaseService {
       `)
       .eq('game_type', gameType)
       .order('score', { ascending: false })
-      .limit(limit);
-      
+      .limit(200);
+
     if (error) throw error;
-    return data;
+
+    const seen = new Set<string>();
+    const rankings = [];
+    for (const row of data ?? []) {
+      if (seen.has(row.user_id)) continue;
+      seen.add(row.user_id);
+      rankings.push(row);
+      if (rankings.length >= limit) break;
+    }
+    return rankings;
   }
 }
