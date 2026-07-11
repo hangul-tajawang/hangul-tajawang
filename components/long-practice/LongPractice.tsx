@@ -5,6 +5,7 @@ import { LONG_TEXT_DB } from "@/lib/long-text-data";
 import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
+import { track } from "@/lib/analytics";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import Link from "next/link";
@@ -123,11 +124,15 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (!startTime && val.length > 0) setStartTime(Date.now());
+    if (!startTime && val.length > 0) {
+      setStartTime(Date.now());
+      track('pilsa_start', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library' });
+    }
     setInputValue(val);
     if (val.length >= currentText.content.length) {
       const finalReport = TypingUtils.generateReport(currentText.content, val, 0, elapsedSeconds);
       setReport(finalReport);
+      track('pilsa_complete', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library', kpm: finalReport.kpm, accuracy: finalReport.accuracy });
       if (externalContent) {
         SupabaseService.saveResult(externalContent.id, finalReport.kpm, finalReport.accuracy, Math.round(elapsedSeconds));
       }
@@ -225,6 +230,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
         grade: TypingUtils.getGrade(kpm, accuracy),
         errors: [],
       });
+      track('pilsa_complete', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library', kpm, accuracy });
       if (externalContent) {
         SupabaseService.saveResult(externalContent.id, kpm, accuracy, Math.round(secs));
       }
@@ -237,7 +243,10 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
   const handleLineInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (report) return;
     const val = e.target.value;
-    if (!startTime && val.length > 0) setStartTime(Date.now());
+    if (!startTime && val.length > 0) {
+      setStartTime(Date.now());
+      track('pilsa_start', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library' });
+    }
     setLineInput(val);
     // 줄 완료 판정: normalize 길이 도달 && 마지막 글자 일치 (ShortPractice와 동일 규칙)
     const lineNorm = TypingUtils.normalize(lines[lineIndex] || "");

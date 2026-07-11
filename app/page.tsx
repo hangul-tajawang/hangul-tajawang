@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import HomeClient from './HomeClient';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { getDailyPilsa, getKstDateString, getPilsaExcerpt } from '@/lib/daily-pilsa';
+
+// 오늘의 필사·인기 챌린지가 빌드 시점에 고정되지 않도록 1시간마다 재검증
+export const revalidate = 3600;
 
 // ── 홈페이지 메타데이터 (Server Component에서 export) ──────────────────────
 export const metadata: Metadata = {
@@ -55,6 +59,8 @@ const HOME_FAQ = [
 // ── 서버 컴포넌트 (기본 export) ───────────────────────────────────────────
 export default async function Home() {
   const popularContents = await fetchPopularChallenges();
+  const dailyPilsa = getDailyPilsa();
+  const dailyDate = getKstDateString();
 
   // FAQ 리치 결과를 위한 구조화 데이터
   const faqJsonLd = {
@@ -94,6 +100,25 @@ export default async function Home() {
           <strong> 산성비 게임</strong>으로 순발력을 기를 수 있습니다. 연습이 지루해질 때쯤
           <strong> 맞춤법 퀴즈</strong>로 한국어 실력까지 함께 다져보세요.
         </p>
+
+        {/* 오늘의 필사 — 매일 바뀌는 한국 문학 한 편 (습관 루프의 시작점) */}
+        <Link
+          prefetch={false}
+          href={`/transcription/${dailyPilsa.id}`}
+          className="group block mb-16 p-8 md:p-10 rounded-[2.5rem] border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,74,198,0.12)]"
+        >
+          <p className="text-primary font-black text-sm mb-3">✍️ 오늘의 필사 · {dailyDate}</p>
+          <p className="text-2xl md:text-3xl font-black mb-2 group-hover:text-primary transition-colors">
+            {dailyPilsa.title}
+          </p>
+          <p className="text-sm font-bold text-zinc-500 mb-5">
+            {dailyPilsa.author} · {dailyPilsa.wordCount}자
+          </p>
+          <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-loose line-clamp-2">
+            {getPilsaExcerpt(dailyPilsa)}
+          </p>
+          <span className="mt-5 inline-block font-black text-primary">지금 필사하기 →</span>
+        </Link>
 
         <nav aria-label="주요 메뉴" className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-16">
           {[

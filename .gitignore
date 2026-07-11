@@ -44,3 +44,7 @@ next-env.d.ts
 gsc-service-account.json
 *-service-account.json
 helpful-reactor-*.json
+
+# MCP 설정 (Supabase 액세스 토큰 포함 — 커밋 금지)
+.mcp.json
+scripts/usage-events.sql

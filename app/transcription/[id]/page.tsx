@@ -57,8 +57,28 @@ export default async function TranscriptionDetailPage({ params }: Props) {
   const prevText = currentIndex > 0 ? LONG_TEXT_DB[currentIndex - 1] : null;
   const nextText = currentIndex < LONG_TEXT_DB.length - 1 ? LONG_TEXT_DB[currentIndex + 1] : null;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: text.title,
+    author: { '@type': 'Person', name: text.author },
+    genre: text.category,
+    inLanguage: 'ko',
+    url: `https://www.hangul-tajawang.com/transcription/${text.id}`,
+    description: `${text.author}의 '${text.title}' 전문을 타이핑으로 필사하며 타자 속도와 정확도를 측정할 수 있는 온라인 필사 페이지입니다.`,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: '한글타자왕',
+      url: 'https://www.hangul-tajawang.com',
+    },
+  };
+
   return (
     <div className="w-full py-8 text-on-surface">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex flex-col items-center">
         <LongPractice initialTextId={text.id} />
 
