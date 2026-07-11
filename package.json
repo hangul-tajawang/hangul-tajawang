@@ -10,7 +10,8 @@
     "lint": "eslint",
     "seo:indexnow": "node scripts/submit-indexnow.mjs",
     "seo:gsc": "node scripts/submit-gsc-sitemap.mjs",
-    "test:mobile": "node tests/mobile-e2e.mjs"
+    "test:mobile": "node tests/mobile-e2e.mjs",
+    "stats": "node scripts/pilsa-stats.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
