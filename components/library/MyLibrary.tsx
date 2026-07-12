@@ -53,7 +53,10 @@ const fmtDate = (iso: string) => {
 };
 
 // ── 문장 카드 캔버스 (1080×1350, 인스타 4:5 · 원고지 감성) ────────────────
-function drawSentenceCard(sentence: string, record: PilsaRecord): HTMLCanvasElement | null {
+// 여러 문장을 함께 담는다 — 분량에 따라 글자 크기를 자동 조절.
+export const SENTENCE_CARD_MAX_CHARS = 280;
+
+function drawSentenceCard(sentences: string[], record: PilsaRecord): HTMLCanvasElement | null {
   const c = document.createElement("canvas");
   c.width = 1080; c.height = 1350;
   const ctx = c.getContext("2d");
@@ -74,23 +77,48 @@ function drawSentenceCard(sentence: string, record: PilsaRecord): HTMLCanvasElem
   ctx.textAlign = "center";
   ctx.fillStyle = "#a05252";
   ctx.font = "700 30px serif";
-  ctx.fillText("오늘 새긴 문장", 540, 160);
+  ctx.fillText(sentences.length > 1 ? "오늘 새긴 문장들" : "오늘 새긴 문장", 540, 160);
 
-  // 본문 (자동 줄바꿈, 세리프)
-  ctx.fillStyle = "#2f2a24";
-  ctx.font = "700 52px serif";
-  const maxWidth = 820;
-  const lines: string[] = [];
-  let line = "";
-  for (const ch of sentence) {
-    if (ctx.measureText(line + ch).width > maxWidth) { lines.push(line); line = ch; }
-    else line += ch;
+  // 분량에 따라 글자 크기 자동 조절
+  const totalChars = sentences.reduce((a, s) => a + s.length, 0);
+  const fontSize = totalChars <= 70 ? 52 : totalChars <= 150 ? 42 : 34;
+  const lineHeight = Math.round(fontSize * 1.8);
+  const gap = Math.round(lineHeight * 0.45); // 문장 사이 여백
+
+  // 문장별 자동 줄바꿈 (문장 경계 유지)
+  ctx.font = `700 ${fontSize}px serif`;
+  const maxWidth = 840;
+  const blocks: string[][] = sentences.map((sentence) => {
+    const lines: string[] = [];
+    let line = "";
+    for (const ch of sentence) {
+      if (ctx.measureText(line + ch).width > maxWidth) { lines.push(line); line = ch; }
+      else line += ch;
+    }
+    if (line) lines.push(line);
+    return lines;
+  });
+
+  // 본문 영역(약 200~1060px)에 맞춰 넘치면 마지막 줄 말줄임
+  const areaTop = 220, areaBottom = 1060;
+  const maxLines = Math.floor((areaBottom - areaTop - (blocks.length - 1) * gap) / lineHeight);
+  let flat: { text: string; gapBefore: boolean }[] = [];
+  blocks.forEach((lines, bi) => {
+    lines.forEach((l, li) => flat.push({ text: l, gapBefore: bi > 0 && li === 0 }));
+  });
+  if (flat.length > maxLines) {
+    flat = flat.slice(0, maxLines);
+    flat[flat.length - 1].text = flat[flat.length - 1].text.slice(0, -1) + "…";
   }
-  if (line) lines.push(line);
-  const shown = lines.slice(0, 8);
-  const lineHeight = 92;
-  const startY = 675 - ((shown.length - 1) * lineHeight) / 2;
-  shown.forEach((l, i) => ctx.fillText(l, 540, startY + i * lineHeight));
+
+  const totalHeight = flat.length * lineHeight + flat.filter((f) => f.gapBefore).length * gap;
+  let y = (areaTop + areaBottom) / 2 - totalHeight / 2 + lineHeight * 0.7;
+  ctx.fillStyle = "#2f2a24";
+  for (const f of flat) {
+    if (f.gapBefore) y += gap;
+    ctx.fillText(f.text, 540, y);
+    y += lineHeight;
+  }
 
   // 출처 + 기록
   ctx.fillStyle = "#6b5d4f";
@@ -144,7 +172,9 @@ function BookCover({ record, onClick }: { record: PilsaRecord; onClick: () => vo
 
 // ── 책 상세 (판권 간지 + 본문 + 문장 카드) ─────────────────────────────────
 function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => void }) {
-  const [selectedLine, setSelectedLine] = useState<string | null>(null);
+  // 여러 문장 선택 (본문 순서 유지) — 줄 인덱스로 관리
+  const [selectedIdx, setSelectedIdx] = useState<Set<number>>(new Set());
+  const [limitHit, setLimitHit] = useState(false);
   // 본문이 로컬에 없으면 서버에서 로드 — 챌린지(typing_contents) / DB 전용 책방 화(book_episodes)
   const [fetchedContent, setFetchedContent] = useState("");
   useEffect(() => {
@@ -163,9 +193,34 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
   const first = record.completions[0];
   const bestKpm = Math.max(0, ...record.completions.map((c) => c.kpm));
 
+  // 선택 문장들 (본문 등장 순서대로)
+  const selectedSentences = useMemo(
+    () => Array.from(selectedIdx).sort((a, b) => a - b).map((i) => lines[i]?.trim() || "").filter(Boolean),
+    [selectedIdx, lines]
+  );
+  const selectedChars = selectedSentences.reduce((a, s) => a + s.length, 0);
+
+  const toggleLine = (i: number) => {
+    setLimitHit(false);
+    setSelectedIdx((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) {
+        next.delete(i);
+      } else {
+        const addChars = lines[i]?.trim().length || 0;
+        if (selectedChars + addChars > SENTENCE_CARD_MAX_CHARS) {
+          setLimitHit(true);
+          return prev;
+        }
+        next.add(i);
+      }
+      return next;
+    });
+  };
+
   const downloadCard = () => {
-    if (!selectedLine) return;
-    const canvas = drawSentenceCard(selectedLine, record);
+    if (selectedSentences.length === 0) return;
+    const canvas = drawSentenceCard(selectedSentences, record);
     if (!canvas) return;
     (window as any).dataLayer?.push({ event: "pilsa_card_download", work: record.title });
     canvas.toBlob((blob) => {
@@ -209,12 +264,12 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
 
         {/* 본문 — 문장을 탭하면 카드로 만들 수 있음 */}
         <div className="px-6 md:px-10 py-8">
-          <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 본문 · 문장을 누르면 카드로 간직할 수 있어요</p>
+          <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 본문 · 문장을 여러 개 골라 카드로 간직할 수 있어요</p>
           <div className="font-serif text-[17px] leading-loose text-[#2f2a24] dark:text-zinc-200">
             {lines.map((l, i) =>
               l.trim() ? (
-                <p key={i} onClick={() => setSelectedLine(l.trim())}
-                  className={`cursor-pointer rounded-lg px-2 -mx-2 transition-colors break-keep ${selectedLine === l.trim() ? "bg-[#a05252]/15 ring-1 ring-[#a05252]/30" : "hover:bg-[#a05252]/5"}`}>
+                <p key={i} onClick={() => toggleLine(i)}
+                  className={`cursor-pointer rounded-lg px-2 -mx-2 transition-colors break-keep ${selectedIdx.has(i) ? "bg-[#a05252]/15 ring-1 ring-[#a05252]/30" : "hover:bg-[#a05252]/5"}`}>
                   {l}
                 </p>
               ) : <br key={i} />
@@ -223,9 +278,19 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
         </div>
 
         {/* 문장 카드 저장 바 */}
-        {selectedLine && (
+        {selectedSentences.length > 0 && (
           <div className="sticky bottom-0 bg-[#faf6ec]/95 dark:bg-zinc-900/95 backdrop-blur border-t border-[#e5dcc8] dark:border-zinc-800 px-6 py-4 flex items-center gap-3 animate-in slide-in-from-bottom duration-300">
-            <p className="flex-1 text-sm font-bold text-[#2f2a24] dark:text-zinc-200 truncate">"{selectedLine}"</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-[#2f2a24] dark:text-zinc-200 truncate">&quot;{selectedSentences[0]}&quot;</p>
+              <p className={`text-[11px] font-bold ${limitHit ? "text-red-500" : "text-[#a89a8a]"}`}>
+                {limitHit
+                  ? `카드에 담기엔 너무 길어요 (최대 ${SENTENCE_CARD_MAX_CHARS}자)`
+                  : `${selectedSentences.length}개 문장 · ${selectedChars}자`}
+              </p>
+            </div>
+            <button onClick={() => { setSelectedIdx(new Set()); setLimitHit(false); }} className="shrink-0 px-3 py-2.5 text-xs font-black text-[#a89a8a] hover:text-[#a05252] transition-colors">
+              비우기
+            </button>
             <button onClick={downloadCard} className="shrink-0 px-5 py-2.5 bg-[#a05252] text-white text-sm font-black rounded-full flex items-center gap-1.5 hover:scale-105 transition-transform">
               <Download size={14} /> 문장 카드 저장
             </button>

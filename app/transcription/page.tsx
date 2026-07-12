@@ -127,7 +127,8 @@ export default function TranscriptionPage() {
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {LONG_TEXT_DB.map((text, i) => (
+        {/* 연재(책방) 화는 책방에서만 진열 — 여기는 단편·시·수필만 */}
+        {LONG_TEXT_DB.filter((text) => !text.seriesId).map((text, i) => (
           <Link prefetch={false}
             key={text.id}
             href={`/transcription/${text.id}`}
