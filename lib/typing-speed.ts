@@ -47,9 +47,10 @@ export class TypingUtils {
   static normalize(text: string): string {
     if (!text) return "";
     return text
-      .replace(/[“”「」]/g, '"')
+      .replace(/[“”「」『』]/g, '"')
       .replace(/[‘’`]/g, "'")
       .replace(/[…⋯]/g, "...")
+      .replace(/[—–―]/g, "-") // 줄표(일반 키보드로 입력 불가)는 하이픈으로 판정
       .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
       .trim();
   }

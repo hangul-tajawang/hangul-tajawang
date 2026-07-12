@@ -63,6 +63,28 @@ We avoid the "card-on-gray" cliché. Depth is achieved through **Tonal Layering*
 - **Base:** A large `surface-container-lowest` area with an `xl` (1.5rem) roundedness.
 - **Current Word:** Highlighted with a `secondary_container` background and `on_secondary_container` text.
 - **Caret:** A 3px thick vertical bar using the `tertiary` (#784b00) color to ensure it stands out against the blue-heavy palette.
+- **Korean prose measure:** Desktop source and input panes use a 1.8 line-height and natural Korean word wrapping. Mobile presents one readable paragraph at a time with the neighboring paragraphs visible as context; paragraph breaks must never become characters the user has to guess.
+- **Resume contract:** Progress is saved after 2% with the active paragraph, partial paragraph input, elapsed time, and accuracy counters. Re-entry restores automatically and offers an explicit “처음부터” escape. A partial serialized episode appears immediately in My Library as its parent book with episode number and percent.
+
+### Story Cover (The Illustrated Jacket)
+
+- **Artwork:** Every current serialized book uses a 3:4 narrative illustration generated for that story. Artwork contains no embedded typography; title, author, and series label remain semantic HTML for accurate Korean rendering and accessibility.
+- **Material:** A dark lower-third scrim, narrow book-spine shadow, warm paper highlight, and restrained ambient shadow make the cover read as a physical jacket at thumbnail and hero sizes.
+- **Fallback:** Future books without commissioned art retain the existing palette-and-pattern procedural cover until an illustration is supplied.
+- **States:** Shelf rest, actionable hover/focus lift, preview hero, My Library in-progress overlay, and completed/complete-series badge.
+
+### Bookstore Discovery Controls
+
+- **Sort choices:** 기본순 preserves the editorial shelf order; 조회순, 좋아요순, 댓글순 reorder descending by the selected public metric with editorial order as the stable tie-breaker.
+- **Responsive control:** Use one horizontally scrollable segmented control on mobile and an inline control on tablet/desktop. Every option remains a real button with `aria-pressed`; selected state uses the primary gradient, while inactive states use tonal surfaces.
+- **Card metrics:** Each jacket exposes views, likes, and comments in a single compact row. Zero is shown instead of hiding the metric so users can understand what each sort means.
+- **Loading behavior:** The shelf order must not jump repeatedly. Fetch the three metric sources together and apply one state update; on a partial backend failure, keep the affected metric at zero and leave the shelf usable.
+
+### Long-form Paragraph Contract
+
+- **Source preservation:** For serialized bookstore prose, two newlines in source content define a paragraph break. Desktop renders those breaks as visible paragraph spacing; mobile removes the need to type blank lines and joins an incidental single newline with a space, while retaining each blank-line-delimited paragraph as one focused step. Poetry and legacy short-form works retain their intentional line-by-line steps.
+- **Wrapping:** Korean prose uses `word-break: keep-all` with an overflow fallback for unusually long unspaced tokens. No horizontal scrolling is allowed in the reading surface at 375, 768, or 1280px.
+- **Input parity:** Desktop input preserves pasted newlines exactly. Mobile progress and completion calculations operate on paragraph text only, so invisible blank-line characters never block completion.
 
 ### Buttons & Interaction
 

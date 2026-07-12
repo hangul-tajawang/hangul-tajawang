@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { LONG_TEXT_DB } from '@/lib/long-text-data';
+import { LONG_TEXT_DB, PILSA_SERIES } from '@/lib/long-text-data';
 import { LongPractice } from '@/components/long-practice/LongPractice';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -35,6 +35,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: `지금 바로 '${text.title}' 한글 타자 연습을 시작하세요. 타수와 정확도를 측정해 드립니다!`,
       url: `https://www.hangul-tajawang.com/transcription/${resolvedParams.id}`,
       type: "article",
+      images: [
+        text.seriesId
+          ? {
+              url: `https://www.hangul-tajawang.com/images/book-covers/${text.seriesId}.jpg`,
+              width: 900,
+              height: 1200,
+              alt: `${text.title} 표지`,
+            }
+          : {
+              url: "https://www.hangul-tajawang.com/ogimage.png",
+              width: 1200,
+              height: 630,
+              alt: "한글타자왕 필사 연습",
+            },
+      ],
     }
   };
 }
@@ -80,17 +95,32 @@ export default async function TranscriptionDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="flex flex-col items-center">
+        {/* 연재물이면 시리즈 배너 */}
+        {text.seriesId && (() => {
+          const series = PILSA_SERIES.find((s) => s.id === text.seriesId);
+          return series ? (
+            <Link
+              prefetch={false}
+              href={`/transcription/series/${series.id}`}
+              className="mb-2 inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-900/40 rounded-full text-sm font-black text-rose-700 dark:text-rose-300 hover:scale-105 transition-transform"
+            >
+              📖 {series.title} · {text.episode}화 / {series.totalEpisodes}화 — 목차 보기 →
+            </Link>
+          ) : null;
+        })()}
         <LongPractice initialTextId={text.id} />
 
         {/* SEO HTML Content */}
         <article className="mt-20 w-full max-w-5xl px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h2 className="text-3xl font-black mb-8 border-b border-surface-high pb-4">{text.title} 한글 타자 연습</h2>
+            <h2 className="text-3xl font-black mb-8 border-b border-surface-high pb-4 break-keep text-balance">
+              {text.title} <span className="whitespace-nowrap">한글 타자 연습</span>
+            </h2>
             <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
                 <p className="leading-relaxed mb-8">
                     이 페이지는 <strong>{text.author}</strong>의 <strong>'{text.title}'</strong> 전문을 제공하며, 이를 활용하여 한글 타자 연습을 하실 수 있도록 구성되어 있습니다.
                     상단의 감성적인 원고지 화면에서 제시된 글을 따라 입력하며 연습을 진행해보세요.
                     이 한글 타자 연습 서비스는 연습 중인 사용자의 <strong>타자 속도(타수)</strong>와 <strong>정확도</strong>를 실시간으로 매우 정확하게 측정해 드립니다. 
-                    지속적인练习(연습)을 통해 타자 실력을 향상시키고 자신만의 기록을 세워보세요!
+                    지속적인 연습을 통해 타자 실력을 향상시키고 자신만의 기록을 세워보세요!
                 </p>
                 <div className="bg-surface-low p-10 rounded-[2.5rem] whitespace-pre-wrap leading-loose font-medium text-lg border border-surface-high shadow-inner">
                     <h3 className="text-2xl font-bold mb-6 text-primary">{text.title} 전문</h3>

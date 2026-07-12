@@ -16,9 +16,12 @@ export default function RecommendIndexPage() {
           장비의 미학: <br />
           <span className="text-primary italic">선별된</span> 키보드 컬렉션
         </h1>
-        <p className="text-lg md:text-xl text-zinc-500 max-w-2xl mb-12 font-medium leading-relaxed tracking-[-0.01em]">
+        <p className="text-lg md:text-xl text-zinc-500 max-w-2xl mb-8 font-medium leading-relaxed tracking-[-0.01em]">
           수많은 키보드 중 오직 타자 연습의 리듬과 <br className="hidden sm:block" />
           집중력을 높여줄 제품들만 엄선했습니다.
+        </p>
+        <p className="text-xs text-zinc-400 max-w-2xl leading-relaxed break-keep bg-surface-low rounded-full px-6 py-3">
+          이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
         </p>
       </section>
 
@@ -159,6 +162,12 @@ export default function RecommendIndexPage() {
 
       <div className="mt-16 pt-16 border-t border-outline-variant/60">
         <KeyboardAdBanner />
+      </div>
+
+      <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 mt-16">
+        <p className="text-xs text-zinc-400 leading-relaxed break-keep text-center">
+          이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
+        </p>
       </div>
     </div>
   );

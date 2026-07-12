@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { User, Keyboard, Trophy, Clock, Heart, BookOpen, Trash2, Edit3, Loader2, ChevronRight, Settings, MessageSquare, Play, X, Save, Sparkles, Zap, Target, Layout, Camera, LogOut } from "lucide-react";
+import { User, Keyboard, Trophy, Clock, Heart, BookOpen, Trash2, Edit3, Loader2, ChevronRight, Settings, MessageSquare, Play, X, Save, Sparkles, Zap, Target, Layout, Camera, LogOut, Library } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
+import { MyLibrary } from "@/components/library/MyLibrary";
 import { useRouter } from "next/navigation";
 
 export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({ onStartChallenge }) => {
@@ -15,7 +16,7 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
   const [myContents, setMyContents] = useState<any[]>([]);
   const [likedContents, setLikedContents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'records' | 'my-posts' | 'likes'>('records');
+  const [activeTab, setActiveTab] = useState<'records' | 'library' | 'my-posts' | 'likes'>('records');
 
   // Edit Profile State
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -247,12 +248,14 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
       {/* Navigation Tabs */}
       <div className="flex justify-center md:justify-start gap-3 mb-10 bg-zinc-100 dark:bg-zinc-800 p-2 rounded-[2rem] w-fit shadow-inner mx-auto md:mx-0">
         <TabBtn active={activeTab === 'records'} label="연습 기록" icon={<Clock size={16}/>} onClick={() => setActiveTab('records')} />
+        <TabBtn active={activeTab === 'library'} label="내 서재" icon={<Library size={16}/>} onClick={() => setActiveTab('library')} />
         <TabBtn active={activeTab === 'my-posts'} label="나의 챌린지" icon={<Layout size={16}/>} onClick={() => setActiveTab('my-posts')} />
         <TabBtn active={activeTab === 'likes'} label="좋아요 한 글" icon={<Heart size={16}/>} onClick={() => setActiveTab('likes')} />
       </div>
 
       {/* Tab Content Area */}
       <div className="min-h-[50vh] animate-in slide-in-from-bottom-4 duration-700">
+        {activeTab === 'library' && <MyLibrary />}
         {activeTab === 'records' && (
             <div className="space-y-4">
                 {resultsWithAttempt.length > 0 ? resultsWithAttempt.map((r, i) => (

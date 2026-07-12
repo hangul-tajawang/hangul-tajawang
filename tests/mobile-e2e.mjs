@@ -143,18 +143,120 @@ async function main() {
     // ══ 4. 긴 글 필사: 모바일 "줄 단위 모드" ══════════════════════════════
     console.log('\n[4] 긴 글 필사 (모바일 줄 단위 모드)');
     await page.goto(BASE + '/transcription/poem_15', { waitUntil: 'networkidle' });
-    await page.waitForSelector('input[placeholder="이 줄을 그대로 입력하세요"]', { timeout: 10000 });
-    const lineBadge = () => page.evaluate(() => [...document.querySelectorAll('span')].map(s => s.textContent?.trim()).find(t => /^\d+\/\d+$/.test(t || '')));
+    await page.waitForSelector('input[placeholder="이 문단을 그대로 입력하세요"]', { timeout: 10000 });
+    const lineBadge = () => page.evaluate(() => [...document.querySelectorAll('span')].map(s => s.textContent?.trim()).find(t => /^문단 \d+\/\d+$/.test(t || '')));
     const badge1 = await lineBadge();
-    ok('줄 모드 진입 (진행 배지 표시)', badge1?.startsWith('1/'), `badge: ${badge1}`);
-    const line1 = await page.evaluate(() => document.querySelector('p.font-bold.leading-relaxed')?.textContent);
+    ok('문단 모드 진입 (진행 배지 표시)', badge1?.startsWith('문단 1/'), `badge: ${badge1}`);
+    const line1 = await page.evaluate(() => document.querySelector('p[lang="ko"]')?.textContent);
     ok('현재 줄 표시', !!line1 && line1.length > 0, `line: ${line1}`);
-    await setInputValue(page, 'input[placeholder="이 줄을 그대로 입력하세요"]', line1);
+    await setInputValue(page, 'input[placeholder="이 문단을 그대로 입력하세요"]', line1);
     await page.waitForTimeout(300);
     const badge2 = await lineBadge();
-    ok('줄 완성 → 다음 줄 자동 진행', badge2?.startsWith('2/'), `badge: ${badge2}`);
-    const line2 = await page.evaluate(() => document.querySelector('p.font-bold.leading-relaxed')?.textContent);
+    ok('문단 완성 → 다음 문단 자동 진행', badge2?.startsWith('문단 2/'), `badge: ${badge2}`);
+    const line2 = await page.evaluate(() => document.querySelector('p[lang="ko"]')?.textContent);
     ok('다음 줄 갱신', !!line2 && line2 !== line1, `line2: ${line2}`);
+
+    // ══ 4c. 내 서재: 완주 → 책 꽂힘 → 문장 카드 / 이어하기 ═══════════════
+    console.log('\n[4c] 내 서재 (완주 기록 + 이어하기)');
+    // 짧은 시(호수, 6줄)를 끝까지 완주
+    await page.goto(BASE + '/transcription/poem_20', { waitUntil: 'networkidle' });
+    await page.waitForSelector('input[placeholder="이 문단을 그대로 입력하세요"]');
+    for (let i = 0; i < 6; i++) {
+      const line = await page.evaluate(() => document.querySelector('p[lang="ko"]')?.textContent?.trim());
+      if (!line) break;
+      await setInputValue(page, 'input[placeholder="이 문단을 그대로 입력하세요"]', line);
+      await page.waitForTimeout(150);
+      const doneModal = await page.evaluate(() => document.body.textContent?.includes('내 서재 보기'));
+      if (doneModal) break;
+    }
+    const shelfCta = await page.evaluate(() => document.body.textContent?.includes('서재에 꽂혔습니다'));
+    ok('완주 → 결과 모달에 서재 안내', !!shelfCta);
+
+    // 서재에 책이 꽂혔는지
+    await page.goto(BASE + '/library', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(400);
+    const bookOnShelf = await page.evaluate(() => [...document.querySelectorAll('button h3')].some(h => h.textContent?.includes('호수')));
+    ok('서재에 「호수」 책 꽂힘', bookOnShelf);
+    // 책 펼치기 → 문장 선택 → 카드 저장 바
+    await page.locator('button', { hasText: '호수' }).first().click();
+    await page.waitForTimeout(400);
+    const bookOpened = await page.evaluate(() => document.body.textContent?.includes('초판'));
+    ok('책 상세: 판권(초판 기록) 표시', !!bookOpened);
+    await page.locator('p', { hasText: '보고 싶은 마음' }).last().click();
+    await page.waitForTimeout(300);
+    const cardBar = await page.evaluate(() => document.body.textContent?.includes('문장 카드 저장'));
+    ok('문장 선택 → 카드 저장 바 표시', !!cardBar);
+
+    // 이어하기: 다른 작품을 절반만 치고 재방문
+    await page.goto(BASE + '/transcription/poem_16', { waitUntil: 'networkidle' });
+    await page.waitForSelector('input[placeholder="이 문단을 그대로 입력하세요"]');
+    const firstLine = await page.evaluate(() => document.querySelector('p[lang="ko"]')?.textContent?.trim());
+    await setInputValue(page, 'input[placeholder="이 문단을 그대로 입력하세요"]', firstLine);
+    await page.waitForTimeout(1200); // 진행 자동저장(800ms 디바운스) 대기
+    await page.goto(BASE + '/transcription/poem_16', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(400);
+    const resumeShown = await page.evaluate(() => document.body.textContent?.includes('이어 쓰는 중이에요'));
+    ok('재방문 → 이어하기 배너 표시', !!resumeShown);
+    if (resumeShown) {
+      const badge = await page.evaluate(() => [...document.querySelectorAll('span')].map(s => s.textContent?.trim()).find(t => /^문단 \d+\/\d+$/.test(t || '')));
+      ok('이어하기 → 진행 위치 복원', !!badge && !badge.startsWith('문단 1/'), `badge: ${badge}`);
+    }
+
+    // ══ 4d. 오리지널 연재소설: 시리즈 페이지 → 1화 완주 → 다음 화 CTA → 서재 ═
+    console.log('\n[4d] 연재소설 「일곱 번째 공책」');
+    await page.goto(BASE + '/transcription/series/novel7', { waitUntil: 'networkidle' });
+    const epCount = await page.evaluate(() => [...document.querySelectorAll('ol a')].length);
+    ok('시리즈 목차 12화 렌더링', epCount === 12, `episodes: ${epCount}`);
+    const startCta = await page.evaluate(() => document.body.textContent?.includes('1화부터 새기기 시작'));
+    ok('시작 CTA 표시', !!startCta);
+
+    // 1화 페이지: 시리즈 배너 확인 후 완주
+    await page.goto(BASE + '/transcription/novel7_ep1', { waitUntil: 'networkidle' });
+    const seriesBanner = await page.evaluate(() => document.body.textContent?.includes('1화 / 12화'));
+    ok('화 페이지에 시리즈 배너', !!seriesBanner);
+    await page.waitForSelector('input[placeholder="이 문단을 그대로 입력하세요"]');
+    for (let i = 0; i < 40; i++) {
+      const doneModal = await page.evaluate(() => document.body.textContent?.includes('다음 화 새기기'));
+      if (doneModal) break;
+      const line = await page.evaluate(() => document.querySelector('p[lang="ko"]')?.textContent?.trim());
+      if (!line) break;
+      await setInputValue(page, 'input[placeholder="이 문단을 그대로 입력하세요"]', line);
+      await page.waitForTimeout(80);
+    }
+    const nextEpCta = await page.evaluate(() => document.body.textContent?.includes('다음 화 새기기'));
+    ok('1화 완주 → "다음 화 새기기" CTA', !!nextEpCta);
+
+    // 서재: 연재가 한 권의 책(1/12화 새기는 중)으로 묶였는지
+    await page.goto(BASE + '/library', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(400);
+    const seriesBook = await page.evaluate(() => {
+      const btn = [...document.querySelectorAll('button')].find(b => b.textContent?.includes('일곱 번째 공책'));
+      return btn ? btn.textContent : null;
+    });
+    ok('서재에 연재 책 한 권으로 표시', !!seriesBook && seriesBook.includes('1/12'), `cover: ${seriesBook?.slice(0, 60)}`);
+    // 시리즈 상세: 화별 목차
+    await page.locator('button', { hasText: '일곱 번째 공책' }).first().click();
+    await page.waitForTimeout(400);
+    const seriesDetail = await page.evaluate(() => document.body.textContent?.includes('1/12화 새김') && document.body.textContent?.includes('새기러 가기'));
+    ok('연재 책 상세: 판권 + 화별 목차', !!seriesDetail);
+    await page.locator('button[aria-label="닫기"]').click();
+    await page.waitForTimeout(200);
+
+    // ══ 4e. 책방: 표지 → 미리보기 → 새기기 CTA / 투고 페이지 ═══════════════
+    console.log('\n[4e] 책방 + 원고 투고');
+    await page.goto(BASE + '/books', { waitUntil: 'networkidle' });
+    ok('/books 오버플로 없음', await noHorizontalOverflow(page));
+    const coverCount = await page.evaluate(() => [...document.querySelectorAll('a[href^="/transcription/"]')].length);
+    ok('책 표지 링크 렌더링(SEO 크롤 가능)', coverCount >= 9, `covers: ${coverCount}`);
+    // 표지 클릭 → 미리보기 오버레이
+    await page.locator('a[href="/transcription/series/novel7"]').first().click();
+    await page.waitForTimeout(400);
+    const preview = await page.evaluate(() => document.body.textContent?.includes('1화부터 새기기') && document.body.textContent?.includes('일곱 번째 공책'));
+    ok('미리보기 오버레이(분량·새기기 CTA)', !!preview);
+    // 투고 페이지
+    await page.goto(BASE + '/books/submit', { waitUntil: 'networkidle' });
+    const submitPage = await page.evaluate(() => document.body.textContent?.includes('원고'));
+    ok('투고 페이지 렌더링', !!submitPage);
 
     // ══ 5. 타자 레이스: 단어 입력 → 전진 ══════════════════════════════════
     console.log('\n[5] 타자 레이스 (모바일)');
@@ -190,7 +292,7 @@ async function main() {
     console.log('\n[7] 산성비 (모바일)');
     await page.goto(BASE + '/game/acid-rain', { waitUntil: 'networkidle' });
     await page.locator('button', { hasText: '게임 시작' }).click();
-    await page.waitForTimeout(3200); // 첫 단어 스폰(레벨1 주기 2.75초) 대기
+    await page.waitForTimeout(4200); // 첫 단어 스폰(레벨1 주기 2.75초) + 여유 대기
     const fallingWord = await page.evaluate(() => [...document.querySelectorAll('div.whitespace-nowrap')].map(d => d.textContent?.trim()).find(t => t && !t.includes('폭탄') && !t.includes('얼음') && !t.includes('황금') && t !== '???'));
     ok('단어 낙하 시작', !!fallingWord, `word: ${fallingWord}`);
     if (fallingWord) {
@@ -295,11 +397,11 @@ async function main() {
 
     // 긴 글 필사(줄 모드): 현재 줄 + 입력창 동시 노출
     await kp.goto(BASE + '/transcription/poem_15', { waitUntil: 'networkidle' });
-    await kp.waitForSelector('input[placeholder="이 줄을 그대로 입력하세요"]', { timeout: 10000 });
-    await kp.evaluate(() => document.querySelector('input[placeholder="이 줄을 그대로 입력하세요"]')?.focus());
+    await kp.waitForSelector('input[placeholder="이 문단을 그대로 입력하세요"]', { timeout: 10000 });
+    await kp.evaluate(() => document.querySelector('input[placeholder="이 문단을 그대로 입력하세요"]')?.focus());
     await kp.waitForTimeout(600);
-    ok('필사: 현재 줄 보임', await isVisible('p.font-bold.leading-relaxed'));
-    ok('필사: 입력창 보임', await isVisible('input[placeholder="이 줄을 그대로 입력하세요"]'));
+    ok('필사: 현재 문단 보임', await isVisible('p[lang="ko"]'));
+    ok('필사: 입력창 보임', await isVisible('input[placeholder="이 문단을 그대로 입력하세요"]'));
 
     // 산성비: 게임 영역 + 입력창 동시 노출
     // (실기기 순서 재현: 시작 → 입력창 탭 → 브라우저가 입력창을 화면 안으로 스크롤)

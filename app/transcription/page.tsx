@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { LONG_TEXT_DB } from "@/lib/long-text-data";
 import { getDailyPilsa, getKstDateString, getPilsaExcerpt } from "@/lib/daily-pilsa";
 import Link from "next/link";
-import { BookOpen, Edit3, Keyboard, CalendarDays, ArrowRight } from "lucide-react";
+import { BookOpen, Edit3, Keyboard, CalendarDays, ArrowRight, Store } from "lucide-react";
 
 // 오늘의 필사가 매일 갱신되도록 정적 캐시를 1시간마다 재검증
 export const revalidate = 3600;
@@ -103,6 +103,27 @@ export default function TranscriptionPage() {
         <span className="mt-6 inline-flex items-center gap-2 font-black text-primary">
           지금 필사하기 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </span>
+      </Link>
+
+      {/* 책방으로 유도하는 가벼운 배너 */}
+      <Link
+        prefetch={false}
+        href="/books"
+        className="group flex items-center gap-4 mb-10 px-6 py-5 rounded-3xl bg-surface-low border border-surface-high hover:border-primary/50 transition-all"
+      >
+        <div className="shrink-0 w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+          <Store size={22} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-black text-on-surface break-keep">📚 책방에서 책을 골라볼까요?</p>
+          <p className="text-sm font-medium text-zinc-500 break-keep">
+            표지를 눌러 미리 읽어보고, 마음에 드는 책을 골라 새겨보세요.
+          </p>
+        </div>
+        <ArrowRight
+          size={18}
+          className="shrink-0 text-primary group-hover:translate-x-1 transition-transform"
+        />
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

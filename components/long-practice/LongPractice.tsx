@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { LONG_TEXT_DB } from "@/lib/long-text-data";
+import { LONG_TEXT_DB, PILSA_SERIES } from "@/lib/long-text-data";
 import { TypingUtils, TypingReport } from "@/lib/typing-speed";
-import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight } from "lucide-react";
+import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight, Feather } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { track } from "@/lib/analytics";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
@@ -11,6 +11,8 @@ import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import Link from "next/link";
 import Image from "next/image";
 import { scrollIntoViewOnFocus } from "@/hooks/useVirtualKeyboard";
+import { recordCompletion, saveProgress, clearProgress, getRecord, PilsaSourceMeta, PilsaProgress } from "@/lib/pilsa-library";
+import { ShareButton } from "@/components/books/ShareButton";
 
 interface Props {
   externalContent?: any;
@@ -18,6 +20,73 @@ interface Props {
 }
 
 type FontType = "font-noto" | "font-myeongjo" | "font-batang" | "font-dodum" | "font-pen" | "font-brush" | "font-gaegu" | "font-poor" | "font-dokdo" | "font-gamja" | "font-single" | "font-yeon" | "font-stylish" | "font-jua";
+
+function createMobileSegments(content: string, isSerializedBook: boolean): string[] {
+  const normalized = content.replace(/\r\n?/g, "\n").trim();
+  if (!normalized) return [];
+  if (!isSerializedBook) {
+    return normalized.split("\n").filter((line) => line.trim().length > 0);
+  }
+  return normalized
+    .split(/\n[\t ]*\n+/)
+    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
+    .filter(Boolean);
+}
+
+function keepKoreanCounterTogether(title: string): string {
+  return title.replace(/([가-힣0-9]+) (권|화|장|편|개|명)(?=의?(?:\s|$))/g, "$1\u00a0$2");
+}
+
+function mobileProgressFromDesktopInput(
+  input: string,
+  segments: readonly string[],
+  isSerializedBook: boolean,
+): { lineIndex: number; lineInput: string } {
+  if (!input || segments.length === 0) return { lineIndex: 0, lineInput: "" };
+  const typedSegments = createMobileSegments(input, isSerializedBook);
+  const endsAtBoundary = isSerializedBook ? /\n[\t ]*\n+$/.test(input) : /\n+$/.test(input);
+  const lineIndex = Math.min(
+    endsAtBoundary ? typedSegments.length : Math.max(0, typedSegments.length - 1),
+    segments.length - 1,
+  );
+  return {
+    lineIndex,
+    lineInput: endsAtBoundary ? "" : (typedSegments.at(-1) || "").slice(0, segments[lineIndex].length),
+  };
+}
+
+function desktopInputFromMobileProgress(
+  segments: readonly string[],
+  lineIndex: number,
+  lineInput: string,
+  isSerializedBook: boolean,
+): string {
+  const delimiter = isSerializedBook ? "\n\n" : "\n";
+  const completed = segments.slice(0, lineIndex).join(delimiter);
+  return completed ? `${completed}${delimiter}${lineInput}` : lineInput;
+}
+
+function mobileAccumulatorsFromDesktopInput(
+  input: string,
+  segments: readonly string[],
+  completedSegments: number,
+  isSerializedBook: boolean,
+): { strokes: number; correct: number; typed: number } {
+  const typedSegments = createMobileSegments(input, isSerializedBook);
+  let strokes = 0;
+  let correct = 0;
+  let typed = 0;
+  for (let segmentIndex = 0; segmentIndex < completedSegments; segmentIndex += 1) {
+    const target = TypingUtils.normalize(segments[segmentIndex] || "");
+    const entered = TypingUtils.normalize(typedSegments[segmentIndex] || "");
+    strokes += TypingUtils.getStrokeCount(entered);
+    typed += entered.length;
+    for (let charIndex = 0; charIndex < entered.length; charIndex += 1) {
+      if (entered[charIndex] === target[charIndex]) correct += 1;
+    }
+  }
+  return { strokes, correct, typed };
+}
 
 export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }) => {
   const [selectedTextId, setSelectedTextId] = useState(initialTextId || LONG_TEXT_DB[0].id);
@@ -55,12 +124,39 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
   const currentText = useMemo(() =>
     externalContent || LONG_TEXT_DB.find(t => t.id === selectedTextId) || LONG_TEXT_DB[0],
   [externalContent, selectedTextId]);
+  const displayTitle = useMemo(() => keepKoreanCounterTogether(currentText.title), [currentText.title]);
 
-  // 줄 단위 모드용: 공백뿐인 줄을 제외한 줄 배열
   const lines = useMemo(
-    () => currentText.content.split("\n").filter((l: string) => l.trim().length > 0),
-    [currentText.content]
+    () => createMobileSegments(currentText.content, Boolean(currentText.seriesId)),
+    [currentText.content, currentText.seriesId]
   );
+
+  // ── 내 서재 (필사 기록) ───────────────────────────────────────────────
+  const sourceMeta = useMemo<PilsaSourceMeta>(() =>
+    externalContent
+      ? {
+          sourceType: "challenge",
+          sourceId: String(externalContent.id),
+          title: externalContent.title || "무제",
+          author: externalContent.profiles?.nickname || "익명",
+          category: "챌린지",
+          content: externalContent.content,
+        }
+      : {
+          sourceType: "work",
+          sourceId: currentText.id,
+          title: currentText.title,
+          author: currentText.author,
+          category: currentText.category,
+        },
+  [externalContent, currentText]);
+
+  // 이어하기: 저장된 진행 스냅샷이 있으면 배너로 제안
+  const [resume, setResume] = useState<PilsaProgress | null>(null);
+
+  // 진행 시간은 100ms마다 갱신되므로 자동저장 디바운스가 깨지지 않게 ref로 미러링
+  const elapsedRef = useRef(0);
+  useEffect(() => { elapsedRef.current = elapsedSeconds; }, [elapsedSeconds]);
 
   // 마운트 후 뷰포트 폭으로 모바일 여부 판정 + 브레이크포인트 변화 감지
   useEffect(() => {
@@ -72,14 +168,44 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
     return () => mql.removeEventListener("change", update);
   }, []);
 
-  // 지문이 바뀌면 줄 진행/누적 초기화
   useEffect(() => {
+    const saved = getRecord(sourceMeta.sourceType, sourceMeta.sourceId)?.progress;
+    setReport(null);
+    if (saved) {
+      const hasMobileSnapshot = Boolean(saved.lineInput) || (saved.lineIndex || 0) > 0;
+      const mobileProgress = hasMobileSnapshot
+        ? {
+            lineIndex: Math.min(saved.lineIndex || 0, Math.max(0, lines.length - 1)),
+            lineInput: saved.lineInput || "",
+          }
+        : mobileProgressFromDesktopInput(saved.inputValue || "", lines, Boolean(currentText.seriesId));
+      const desktopInput = saved.inputValue || desktopInputFromMobileProgress(
+        lines,
+        mobileProgress.lineIndex,
+        mobileProgress.lineInput,
+        Boolean(currentText.seriesId),
+      );
+      setInputValue(desktopInput);
+      setLineIndex(mobileProgress.lineIndex);
+      setLineInput(mobileProgress.lineInput);
+      accStrokesRef.current = saved.accStrokes || 0;
+      accCorrectRef.current = saved.accCorrect || 0;
+      accTypedRef.current = saved.accTyped || 0;
+      setElapsedSeconds(saved.elapsedSeconds || 0);
+      setStartTime(Date.now() - (saved.elapsedSeconds || 0) * 1000);
+      setResume(saved);
+      return;
+    }
+    setInputValue("");
     setLineIndex(0);
     setLineInput("");
+    setStartTime(null);
+    setElapsedSeconds(0);
+    setResume(null);
     accStrokesRef.current = 0;
     accCorrectRef.current = 0;
     accTypedRef.current = 0;
-  }, [currentText.content]);
+  }, [currentText.seriesId, lines, sourceMeta.sourceId, sourceMeta.sourceType]);
 
   const fetchSocialData = useCallback(async () => {
     if (!externalContent) return;
@@ -133,6 +259,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       const finalReport = TypingUtils.generateReport(currentText.content, val, 0, elapsedSeconds);
       setReport(finalReport);
       track('pilsa_complete', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library', kpm: finalReport.kpm, accuracy: finalReport.accuracy });
+      // 내 서재에 책으로 기록
+      recordCompletion(sourceMeta, { date: new Date().toISOString(), kpm: finalReport.kpm, accuracy: finalReport.accuracy, seconds: Math.round(elapsedSeconds) });
       if (externalContent) {
         SupabaseService.saveResult(externalContent.id, finalReport.kpm, finalReport.accuracy, Math.round(elapsedSeconds));
       }
@@ -170,6 +298,56 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
     setLineIndex(0); setLineInput("");
     accStrokesRef.current = 0; accCorrectRef.current = 0; accTypedRef.current = 0;
   };
+
+  // ── 이어하기: 진행 스냅샷 자동 저장 (입력이 멈춘 뒤 800ms 디바운스) ──
+  useEffect(() => {
+    if (report) return;
+    const desktopTotalChars = Math.max(1, currentText.content.length);
+    const mobileTotalChars = Math.max(1, lines.reduce((sum: number, line: string) => sum + line.length, 0));
+    const completedChars = lines.slice(0, lineIndex).reduce((a: number, l: string) => a + l.length, 0);
+    const percent = isMobile
+      ? ((completedChars + lineInput.length) / mobileTotalChars) * 100
+      : (inputValue.length / desktopTotalChars) * 100;
+    if (percent < 2) return;
+    const t = setTimeout(() => {
+      const desktopProgress = mobileProgressFromDesktopInput(inputValue, lines, Boolean(currentText.seriesId));
+      const desktopAccumulators = mobileAccumulatorsFromDesktopInput(
+        inputValue,
+        lines,
+        desktopProgress.lineIndex,
+        Boolean(currentText.seriesId),
+      );
+      saveProgress(sourceMeta, {
+        inputValue: isMobile
+          ? desktopInputFromMobileProgress(lines, lineIndex, lineInput, Boolean(currentText.seriesId))
+          : inputValue,
+        lineInput: isMobile ? lineInput : desktopProgress.lineInput,
+        lineIndex: isMobile ? lineIndex : desktopProgress.lineIndex,
+        accStrokes: isMobile ? accStrokesRef.current : desktopAccumulators.strokes,
+        accCorrect: isMobile ? accCorrectRef.current : desktopAccumulators.correct,
+        accTyped: isMobile ? accTypedRef.current : desktopAccumulators.typed,
+        elapsedSeconds: Math.round(elapsedRef.current),
+        percent: Math.round(percent),
+        updatedAt: new Date().toISOString(),
+      });
+    }, 800);
+    return () => clearTimeout(t);
+  }, [inputValue, isMobile, lineIndex, lineInput, report, sourceMeta, currentText.content.length, currentText.seriesId, lines]);
+
+  const dismissResume = () => {
+    clearProgress(sourceMeta.sourceType, sourceMeta.sourceId);
+    resetState();
+    setResume(null);
+  };
+
+  const resumeBanner = resume && !report ? (
+    <div className="w-full max-w-3xl mx-auto mb-3 flex items-center justify-between gap-3 px-4 md:px-5 py-3 bg-primary/10 border border-primary/30 rounded-2xl animate-in fade-in duration-500">
+      <p className="text-xs md:text-sm font-bold text-on-surface break-keep">저장된 {Math.round(resume.percent)}% 지점부터 이어 쓰는 중이에요</p>
+      <div className="flex gap-1.5 shrink-0 items-center">
+        <button onClick={dismissResume} className="px-4 py-2 bg-surface-lowest text-xs font-black text-zinc-500 rounded-full hover:text-primary transition-colors">처음부터</button>
+      </div>
+    </div>
+  ) : null;
 
   const liveKPM = useMemo(() => {
     if (!startTime || elapsedSeconds < 0.5) return 0;
@@ -231,6 +409,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
         errors: [],
       });
       track('pilsa_complete', { content_id: currentText.id, source: externalContent ? 'challenge' : 'library', kpm, accuracy });
+      // 내 서재에 책으로 기록
+      recordCompletion(sourceMeta, { date: new Date().toISOString(), kpm, accuracy, seconds: Math.round(secs) });
       if (externalContent) {
         SupabaseService.saveResult(externalContent.id, kpm, accuracy, Math.round(secs));
       }
@@ -323,7 +503,41 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
                   </div>
               </div>
           </div>
-          <div className="mt-10 flex gap-6">
+          {/* 연재물: 다음 화 이어가기 / 완간 축하 */}
+          {!externalContent && currentText.seriesId && (() => {
+            const nextEp = LONG_TEXT_DB.find(
+              (t) => t.seriesId === currentText.seriesId && t.episode === (currentText.episode || 0) + 1
+            );
+            return nextEp ? (
+              <Link prefetch={false} href={`/transcription/${nextEp.id}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-black rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform">
+                다음 화 새기기 → {nextEp.title}
+              </Link>
+            ) : (
+              <Link prefetch={false} href={`/transcription/series/${currentText.seriesId}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-black rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform">
+                <Award size={18} /> 완간을 새기셨습니다! 시리즈 페이지 보기 →
+              </Link>
+            );
+          })()}
+          {/* 완주 직후 공유 — 시리즈면 책을, 아니면 이 글을 공유 */}
+          {!externalContent && (() => {
+            const series = currentText.seriesId ? PILSA_SERIES.find((s) => s.id === currentText.seriesId) : null;
+            const shareUrl = series
+              ? `https://www.hangul-tajawang.com/transcription/series/${series.id}`
+              : `https://www.hangul-tajawang.com/transcription/${currentText.id}`;
+            return (
+              <ShareButton
+                url={shareUrl}
+                title={series ? `${series.title} — 한글타자왕 오리지널 연재` : `${currentText.title} — 한글타자왕 필사`}
+                text={series ? series.logline : `'${currentText.title}'을 키보드로 한 자 한 자 새겨보세요.`}
+                label={series ? "이 책 공유하기" : "이 글 공유하기"}
+                className="mt-6 w-full py-4 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+              />
+            );
+          })()}
+          <Link prefetch={false} href="/library" className="mt-8 block text-center text-white font-black text-sm md:text-base hover:underline underline-offset-4">
+            <BookOpen size={18} className="inline-block mr-1.5" /> 방금 새긴 책이 서재에 꽂혔습니다 · 내 서재 보기 →
+          </Link>
+          <div className="mt-6 flex gap-6">
               <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all">연습 종료</button>
               <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-black rounded-[2rem] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>
           </div>
@@ -356,9 +570,9 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       <div className="flex flex-col gap-4">
         {/* 컴팩트 헤더 */}
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-base font-black text-on-surface truncate flex-1">{currentText.title}</h1>
+          <h1 className="text-base font-black text-on-surface truncate flex-1">{displayTitle}</h1>
           <span className="shrink-0 px-3 py-1 primary-gradient text-white text-[11px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
-            {lineIndex + 1}/{lines.length}
+            문단 {lineIndex + 1}/{lines.length}
           </span>
         </div>
         <div className="flex gap-2">
@@ -368,11 +582,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
         {/* 문장 카드 */}
         <div className="bg-surface-lowest rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col gap-2">
-          {prevLine && <p className="text-xs text-zinc-400 truncate">{prevLine}</p>}
-          <p className="text-lg sm:text-xl font-bold leading-relaxed break-keep tracking-tight text-on-surface">
+          {prevLine && <p className="text-xs leading-relaxed text-zinc-400 line-clamp-2 break-keep">{prevLine}</p>}
+          <p lang="ko" className="text-lg sm:text-xl font-bold leading-[1.85] whitespace-pre-wrap break-keep [overflow-wrap:anywhere] tracking-tight text-on-surface">
             {renderMobileHighlight(currentLine)}
           </p>
-          {nextLine && <p className="text-xs text-zinc-400 truncate">{nextLine}</p>}
+          {nextLine && <p className="text-xs leading-relaxed text-zinc-400 line-clamp-2 break-keep">{nextLine}</p>}
         </div>
 
         {/* 입력창: 줄마다 리마운트해 IME 잔여 조합 제거 */}
@@ -388,8 +602,9 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck={false}
+          aria-label={`${lineIndex + 1}번째 문단 필사 입력`}
           className="w-full h-14 px-4 text-lg text-center bg-surface-lowest rounded-2xl shadow-sm outline-hidden font-bold text-on-surface focus:shadow-xl focus:shadow-primary/5 transition-all"
-          placeholder="이 줄을 그대로 입력하세요"
+          placeholder="이 문단을 그대로 입력하세요"
         />
 
         {/* 진행바 (전체 글자 기준) */}
@@ -397,7 +612,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
           <div className="absolute w-full h-2 bg-surface-high rounded-full mb-2 shadow-inner" />
           <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${mobileProgress}%` }} />
           <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${mobileProgress}%`, transform: "translateX(-50%)", bottom: "4px" }}>
-            <div className="text-2xl filter drop-shadow-lg">🐢</div>
+            <Feather size={22} className="text-primary drop-shadow-lg" />
             <div className="text-[10px] font-black text-primary">{Math.round(mobileProgress)}%</div>
           </div>
         </div>
@@ -416,6 +631,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       {mounted && isMobile ? (
         <>
           {renderReportModal()}
+          {resumeBanner}
           {renderMobileLineMode()}
         </>
       ) : (
@@ -426,13 +642,15 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
         <MetricItem icon={<Clock size={18}/>} label="진행 시간" value={Math.floor(elapsedSeconds)} unit="초" color="text-secondary" />
       </div>
 
+      {resumeBanner}
+
       {renderReportModal()}
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
             <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-2 block">{externalContent ? "Challenge Transcription" : "Editorial Practice"}</span>
-            <h1 className="display-lg !text-2xl md:!text-5xl text-on-surface flex items-center gap-4">
-                {currentText.title} {!externalContent && <span className="text-2xl text-zinc-500 hidden md:inline-block ml-2 opacity-60"> 한글 타자 연습</span>}
+            <h1 className="display-lg !text-2xl md:!text-5xl text-on-surface flex items-center gap-4 break-keep text-balance">
+                {displayTitle} {!externalContent && <span className="text-2xl text-zinc-500 hidden lg:inline-block ml-2 opacity-60 whitespace-nowrap"> 한글 타자 연습</span>}
             </h1>
             <p className="text-sm text-zinc-400 font-black flex items-center gap-2 mt-2 md:mt-4"><BookOpen size={14} className="text-primary" /> {currentText.author} · {currentText.source}</p>
         </div>
@@ -457,24 +675,23 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
 
         {/* 원문: 모바일에선 상단 42% 고정 + 현재 위치 자동 스크롤, 데스크톱에선 좌측 절반 */}
         <div ref={scrollRef} className={`h-[42%] md:h-auto shrink-0 md:shrink md:flex-1 p-5 sm:p-8 md:p-20 overflow-y-auto relative border-b md:border-b-0 md:border-r border-on-surface/5 z-10 ${fontFamily}`} style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }}>
-            <div className="max-w-none text-left tracking-tight whitespace-pre-wrap select-none text-on-surface">{renderHighlightedText()}</div>
+            <div lang="ko" className="max-w-[42rem] text-left tracking-tight whitespace-pre-wrap break-keep [overflow-wrap:anywhere] select-none text-on-surface">{renderHighlightedText()}</div>
         </div>
 
         <div className={`flex-1 min-h-0 p-5 sm:p-8 md:p-20 relative flex flex-col bg-on-surface/5 backdrop-blur-sm z-10 ${fontFamily}`}>
-          <div className="flex justify-between items-center mb-3 md:mb-10">
-            <span className="px-4 py-1.5 primary-gradient text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20 hidden sm:inline-flex">Active Transcription</span>
+          <div className="flex justify-end items-center mb-3 md:mb-10">
             <div className="flex gap-4 md:gap-8 text-sm font-black text-zinc-400">
                 <span className="flex items-center gap-2"><Keyboard size={16}/> {TypingUtils.getStrokeCount(inputValue)}</span>
                 <span className="flex items-center gap-2"><Clock size={16}/> {Math.floor(elapsedSeconds/60)}:{String(Math.floor(elapsedSeconds)%60).padStart(2,'0')}</span>
             </div>
           </div>
-          <textarea ref={textareaRef} value={inputValue} onChange={handleInputChange} autoCorrect="off" autoCapitalize="off" spellCheck={false} className="flex-1 min-h-0 w-full bg-transparent resize-none outline-hidden leading-relaxed z-10 py-0 text-on-surface placeholder:text-zinc-400/30" style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }} placeholder="이곳에 필사를 시작하세요..." />
+          <textarea ref={textareaRef} lang="ko" aria-label="필사 입력" value={inputValue} onChange={handleInputChange} autoCorrect="off" autoCapitalize="off" spellCheck={false} className="flex-1 min-h-0 w-full max-w-[42rem] bg-transparent resize-none outline-hidden leading-relaxed whitespace-pre-wrap break-keep [overflow-wrap:anywhere] z-10 py-0 text-on-surface placeholder:text-zinc-400/30" style={{ fontSize: `${fontSize}px`, lineHeight: 1.8 }} placeholder="이곳에 필사를 시작하세요..." />
 
           <div className="mt-4 md:mt-12 relative h-12 md:h-16 w-full flex items-end">
               <div className="absolute w-full h-2 bg-surface-high rounded-full mb-2 shadow-inner" />
               <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${progressValue}%` }} />
               <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${progressValue}%`, transform: 'translateX(-50%)', bottom: '8px' }}>
-                  <div className="text-4xl filter drop-shadow-lg">🐢</div>
+                  <Feather size={28} className="text-primary drop-shadow-lg" />
                   <div className="text-[10px] font-black text-primary mt-2">{Math.round(progressValue)}%</div>
               </div>
           </div>
@@ -484,7 +701,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
       )}
 
       {/* 키보드 추천 배너 - 긴글 연습 패드 직후에 삽입 */}
-      <div className="mt-16 pt-16 border-t border-outline-variant/60 w-full">
+      <div className="mt-4 pt-4 md:mt-16 md:pt-16 border-t border-outline-variant/60 w-full">
         <KeyboardAdBanner />
       </div>
 
@@ -578,8 +795,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
             </div>
             <div className="relative z-10 text-center md:text-left flex-1">
                 <div className="inline-flex px-5 py-1.5 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest mb-8 shadow-lg shadow-primary/20">커뮤니티와 함께</div>
-                <h2 className="display-lg !text-3xl md:!text-5xl mb-6">유저들이 만든 글은 어때요?</h2>
-                <p className="text-zinc-400 font-medium text-xl leading-relaxed max-w-xl">매일 새로운 감성 명문이 올라오는 필사 챌린지에서 다른 유저들과 소통하며 연습해 보세요.</p>
+                <h2 className="display-lg !text-3xl md:!text-5xl mb-6 break-keep text-balance">유저들이 만든 글은 <span className="whitespace-nowrap">어때요?</span></h2>
+                <p className="text-zinc-400 font-medium text-xl leading-relaxed max-w-xl break-keep text-balance">매일 새로운 감성 명문이 올라오는 필사 챌린지에서 다른 유저들과 소통하며 연습해 보세요.</p>
             </div>
             <Link prefetch={false} 
                 href="/challenge" 

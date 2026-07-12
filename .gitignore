@@ -49,3 +49,4 @@ helpful-reactor-*.json
 .mcp.json
 scripts/usage-events.sql
 stats/
+*.sql
