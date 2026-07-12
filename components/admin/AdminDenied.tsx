@@ -1,4 +1,4 @@
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert } from 'lucide-react';
 
 /** 비관리자/비로그인 안내 — 현재 이메일을 보여줘서 ADMIN_EMAILS 설정을 돕는다 */
 export function AdminDenied({ email }: { email: string | null }) {
@@ -10,13 +10,13 @@ export function AdminDenied({ email }: { email: string | null }) {
       <h1 className="text-2xl font-black mb-3">관리자 전용 페이지입니다</h1>
       {email ? (
         <p className="text-sm text-zinc-500 font-medium leading-relaxed break-keep">
-          현재 <strong className="text-on-surface">{email}</strong> 계정으로 로그인되어 있지만
-          관리자 목록에 없습니다. 이 이메일을 환경변수 <code className="px-1.5 py-0.5 bg-surface-high rounded text-xs">ADMIN_EMAILS</code>에
-          추가하면 접근할 수 있습니다.
+          현재 <strong className="text-on-surface">{email}</strong> 계정으로
+          로그인감지 완료했습니다. 위험 접근으로 구분합니다.
         </p>
       ) : (
         <p className="text-sm text-zinc-500 font-medium leading-relaxed break-keep">
-          먼저 카카오 로그인을 해주세요. 로그인 후 이메일이 관리자 목록에 있으면 자동으로 열립니다.
+          먼저 카카오 로그인을 해주세요. 로그인 후 이메일이 관리자 목록에 있으면
+          자동으로 열립니다.
         </p>
       )}
     </div>

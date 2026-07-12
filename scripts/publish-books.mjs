@@ -73,8 +73,10 @@ const bookRows = works.map((w) => ({
   published_episodes: w.episodes.length,
   cover_palette: w.cover.palette,
   cover_pattern: w.cover.pattern,
+  // 표지는 Storage가 원본 — 앱이 웹 배포와 무관하게 표지를 볼 수 있어야 한다.
+  // 로컬 jpg가 있으면 퍼블리시 때 Storage에 업로드(아래)하고 그 공개 URL을 넣는다.
   cover_image_url: existsSync(join(ROOT, `public/images/book-covers/${w.id}.jpg`))
-    ? `${SITE}/images/book-covers/${w.id}.jpg`
+    ? `__STORAGE_COVER__/${w.id}.jpg`
     : null,
   author_sns_url: w.authorProfile?.sns ?? null,
   author_blog_url: w.authorProfile?.blog ?? null,
@@ -159,6 +161,26 @@ if (!probe.ok) {
     delete b.author_image_url;
     delete b.author_bio;
     delete b.sort_order;
+  }
+}
+
+// 표지 업로드 (book-assets/covers/) — 이미 있으면 건너뛰고, 없으면 올린 뒤 공개 URL로 치환
+for (const b of bookRows) {
+  if (!b.cover_image_url?.startsWith('__STORAGE_COVER__')) continue;
+  const file = b.cover_image_url.replace('__STORAGE_COVER__/', '');
+  const publicUrl = `${url}/storage/v1/object/public/book-assets/covers/${file}`;
+  const head = await fetch(publicUrl, { method: 'HEAD' });
+  if (!head.ok) {
+    const img = readFileSync(join(ROOT, `public/images/book-covers/${file}`));
+    const up = await fetch(`${url}/storage/v1/object/book-assets/covers/${file}`, {
+      method: 'POST',
+      headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'image/jpeg', 'x-upsert': 'true' },
+      body: img,
+    });
+    if (!up.ok) console.warn(`⚠️  표지 업로드 실패(${file}): ${up.status} — cover_image_url 은 비웁니다.`);
+    b.cover_image_url = up.ok ? publicUrl : null;
+  } else {
+    b.cover_image_url = publicUrl;
   }
 }
 

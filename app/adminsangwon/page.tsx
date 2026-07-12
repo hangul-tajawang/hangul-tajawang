@@ -60,7 +60,7 @@ export default async function AdminPage({ searchParams }: Props) {
               </p>
             </div>
             <Link href={`/transcription/series/${b.id}`} className="shrink-0 text-xs font-black text-zinc-400 hover:text-primary" target="_blank">보기</Link>
-            <Link href={`/admin/book?id=${b.id}`} className="shrink-0 px-3.5 py-2 rounded-full bg-surface-high text-xs font-black hover:text-primary transition-colors">수정</Link>
+            <Link href={`/adminsangwon/book?id=${b.id}`} className="shrink-0 px-3.5 py-2 rounded-full bg-surface-high text-xs font-black hover:text-primary transition-colors">수정</Link>
             <DeleteButton id={b.id} label={`「${b.title}」을(를) 내릴까요? 화 본문도 삭제됩니다.`} action={deleteBook} />
           </li>
         ))}
@@ -91,7 +91,7 @@ export default async function AdminPage({ searchParams }: Props) {
               {a.bio && <p className="text-xs font-bold text-zinc-500 truncate">{a.bio}</p>}
             </div>
             <Link href={`/authors/${a.id}`} className="shrink-0 text-xs font-black text-zinc-400 hover:text-primary" target="_blank">보기</Link>
-            <Link href={`/admin/author?id=${a.id}`} className="shrink-0 px-3.5 py-2 rounded-full bg-surface-high text-xs font-black hover:text-primary transition-colors">수정</Link>
+            <Link href={`/adminsangwon/author?id=${a.id}`} className="shrink-0 px-3.5 py-2 rounded-full bg-surface-high text-xs font-black hover:text-primary transition-colors">수정</Link>
             <DeleteButton id={a.id} label={`작가 ${a.name}(${a.id})을(를) 삭제할까요?`} action={deleteAuthor} />
           </li>
         ))}
