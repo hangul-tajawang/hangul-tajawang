@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase';
-import { LONG_TEXT_DB, PILSA_SERIES } from '@/lib/long-text-data';
+import { LONG_TEXT_DB } from '@/lib/long-text-data';
+import { fetchBooksSafe, fetchAuthorsSafe } from '@/lib/books-db';
 import { BASIC_PRACTICE_STEPS } from '@/lib/word-data';
 import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import { QUIZ_DATA } from '@/lib/quiz-data';
@@ -61,17 +62,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  // 3. 하드코딩된 콘텐츠 페이지 (고정 날짜 사용)
-  // 오리지널 연재 시리즈 랜딩 페이지
-  const seriesPages = PILSA_SERIES.map(series => ({
-    url: `${baseUrl}/transcription/series/${series.id}`,
+  // 3. 콘텐츠 페이지
+  // 오리지널 연재(책방)는 DB 기준 — publish만 하면 사이트맵에도 자동 반영
+  const books = await fetchBooksSafe();
+  const seriesPages = books.map(book => ({
+    url: `${baseUrl}/transcription/series/${book.id}`,
     lastModified: CONTENT_LAST_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
-  const longTextPages = LONG_TEXT_DB.map(text => ({
-    url: `${baseUrl}/transcription/${text.id}`,
+  // 작가 페이지 (authors 테이블 미생성 시 빈 배열)
+  const authors = await fetchAuthorsSafe();
+  const authorPages = authors.map(author => ({
+    url: `${baseUrl}/authors/${author.id}`,
+    lastModified: CONTENT_LAST_UPDATED,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  // 화 페이지: 정적 콘텐츠 + DB 책방 화 (중복 제거)
+  const longTextIds = new Set(LONG_TEXT_DB.map(text => text.id));
+  for (const book of books) for (const e of book.episodesMeta) longTextIds.add(e.id);
+  const longTextPages = Array.from(longTextIds).map(id => ({
+    url: `${baseUrl}/transcription/${id}`,
     lastModified: CONTENT_LAST_UPDATED,
     changeFrequency: 'monthly' as const,
     priority: 0.9,
@@ -122,6 +136,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...blogPages,
     ...seriesPages,
+    ...authorPages,
     ...longTextPages,
     ...shortPages,
     ...wordPages,

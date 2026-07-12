@@ -71,6 +71,7 @@ function PatternDef({ id, kind, accent }: { id: string; kind: Pattern; accent: s
 
 export function BookCoverArt({
   seriesId,
+  imageUrl,
   title,
   author,
   cover,
@@ -79,6 +80,8 @@ export function BookCoverArt({
   className = "",
 }: {
   seriesId?: string;
+  /** 일러스트 표지 URL — 명시하면 이것을 사용(null이면 절차 생성 표지), 생략하면 seriesId 규칙 경로 */
+  imageUrl?: string | null;
   title: string;
   author: string;
   cover?: { palette: string; pattern: string };
@@ -86,6 +89,8 @@ export function BookCoverArt({
   priority?: boolean;
   className?: string;
 }) {
+  const artUrl =
+    imageUrl !== undefined ? imageUrl : seriesId ? `/images/book-covers/${seriesId}.jpg` : null;
   const p = palette(cover?.palette);
   const kind = patternName(cover?.pattern);
   const uid = stableId(`${cover?.palette}-${cover?.pattern}-${title}`);
@@ -122,9 +127,9 @@ export function BookCoverArt({
         <rect x="18" y="18" width="264" height="364" fill="none" stroke={p.accent} strokeOpacity="0.35" strokeWidth="1" />
       </svg>
 
-      {seriesId && (
+      {artUrl && (
         <Image
-          src={`/images/book-covers/${seriesId}.jpg`}
+          src={artUrl}
           alt=""
           fill
           loading={priority ? "eager" : "lazy"}
@@ -134,7 +139,7 @@ export function BookCoverArt({
         />
       )}
 
-      {seriesId && <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/5 to-black/85" />}
+      {artUrl && <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/5 to-black/85" />}
 
       {/* 책등(spine) 그림자 */}
       <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-black/30" />
@@ -145,8 +150,8 @@ export function BookCoverArt({
 
       {/* 제목·작가 오버레이 */}
       <div
-        className={`absolute inset-0 flex flex-col items-center px-4 pl-6 text-center ${seriesId ? "justify-end pb-6 sm:pb-8" : "justify-center"}`}
-        style={{ color: seriesId ? "#fff" : p.fg }}
+        className={`absolute inset-0 flex flex-col items-center px-4 pl-6 text-center ${artUrl ? "justify-end pb-6 sm:pb-8" : "justify-center"}`}
+        style={{ color: artUrl ? "#fff" : p.fg }}
       >
         {badge && (
           <span

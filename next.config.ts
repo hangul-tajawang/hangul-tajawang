@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
+  experimental: {
+    serverActions: {
+      // admin 표지·프로필 이미지 업로드 (기본 1MB → 8MB)
+      bodySizeLimit: '8mb',
+    },
+  },
   async redirects() {
     return [
       {

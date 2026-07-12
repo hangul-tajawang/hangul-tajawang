@@ -22,6 +22,8 @@ export interface PilsaSeries {
   description: string;
   /** 토큰 표지: 팔레트 × 패턴 (BookCoverArt 절차 생성) */
   cover?: { palette: string; pattern: string };
+  /** 작가 프로필 (선택) — 투고 작가 SNS·블로그 링크 게재용. md 메타 `작가 SNS` 등에서 생성 */
+  authorProfile?: { sns?: string; blog?: string; image?: string; bio?: string };
 }
 
 export const PILSA_SERIES: PilsaSeries[] = [

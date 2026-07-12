@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PILSA_SERIES, getSeriesEpisodes } from "@/lib/long-text-data";
 import { getLibrary } from "@/lib/pilsa-library";
 
 export type SeriesProgress = {
@@ -18,6 +17,11 @@ export type SeriesProgress = {
 
 export type SeriesProgressById = Readonly<Record<string, SeriesProgress>>;
 
+export interface ProgressBookInput {
+  readonly id: string;
+  readonly episodesMeta: readonly { id: string; episode: number }[];
+}
+
 const EMPTY: SeriesProgressById = {};
 
 /**
@@ -25,7 +29,7 @@ const EMPTY: SeriesProgressById = {};
  * SSR에서는 빈 상태(순수 진열)로 렌더하고, 마운트 후 로컬 서재 기록을 입힌다.
  * (SeriesTOC와 동일한 판정 규칙)
  */
-export function useSeriesProgress(): SeriesProgressById {
+export function useSeriesProgress(books: readonly ProgressBookInput[]): SeriesProgressById {
   const [progress, setProgress] = useState<SeriesProgressById>(EMPTY);
 
   useEffect(() => {
@@ -33,15 +37,14 @@ export function useSeriesProgress(): SeriesProgressById {
     const byId = new Map(lib.filter((r) => r.sourceType === "work").map((r) => [r.sourceId, r]));
 
     const next: Record<string, SeriesProgress> = {};
-    for (const series of PILSA_SERIES) {
-      const episodes = getSeriesEpisodes(series.id);
+    for (const book of books) {
       let done = 0;
       let inProgressId: string | null = null;
       let inProgressNumber = 0;
       let inProgressPercent = 0;
       let firstUndoneId: string | null = null;
       let firstUndoneNumber = 0;
-      for (const ep of episodes) {
+      for (const ep of book.episodesMeta) {
         const rec = byId.get(ep.id);
         if (rec && rec.completions.length > 0) {
           done++;
@@ -57,10 +60,10 @@ export function useSeriesProgress(): SeriesProgressById {
           firstUndoneNumber = ep.episode || 0;
         }
       }
-      const allDone = episodes.length > 0 && done === episodes.length;
-      next[series.id] = {
+      const allDone = book.episodesMeta.length > 0 && done === book.episodesMeta.length;
+      next[book.id] = {
         done,
-        published: episodes.length,
+        published: book.episodesMeta.length,
         allDone,
         started: done > 0 || inProgressId !== null,
         nextEpisodeId: allDone ? null : inProgressId || firstUndoneId,
@@ -69,7 +72,7 @@ export function useSeriesProgress(): SeriesProgressById {
       };
     }
     setProgress(next);
-  }, []);
+  }, [books]);
 
   return progress;
 }

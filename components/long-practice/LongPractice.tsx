@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { LONG_TEXT_DB, PILSA_SERIES } from "@/lib/long-text-data";
+import { LONG_TEXT_DB, PILSA_SERIES, type LongTextData } from "@/lib/long-text-data";
 import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight, Feather } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
@@ -17,6 +17,10 @@ import { ShareButton } from "@/components/books/ShareButton";
 interface Props {
   externalContent?: any;
   initialTextId?: string;
+  /** DB(책방)에서 온 화 — LONG_TEXT_DB에 없어도 동작 */
+  dbText?: LongTextData;
+  /** dbText일 때 다음 화 (undefined면 정적 DB에서 탐색) */
+  dbNextText?: { id: string; title: string } | null;
 }
 
 type FontType = "font-noto" | "font-myeongjo" | "font-batang" | "font-dodum" | "font-pen" | "font-brush" | "font-gaegu" | "font-poor" | "font-dokdo" | "font-gamja" | "font-single" | "font-yeon" | "font-stylish" | "font-jua";
@@ -88,7 +92,7 @@ function mobileAccumulatorsFromDesktopInput(
   return { strokes, correct, typed };
 }
 
-export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }) => {
+export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, dbText, dbNextText }) => {
   const [selectedTextId, setSelectedTextId] = useState(initialTextId || LONG_TEXT_DB[0].id);
   const [inputValue, setInputValue] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -122,8 +126,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const currentText = useMemo(() =>
-    externalContent || LONG_TEXT_DB.find(t => t.id === selectedTextId) || LONG_TEXT_DB[0],
-  [externalContent, selectedTextId]);
+    externalContent || dbText || LONG_TEXT_DB.find(t => t.id === selectedTextId) || LONG_TEXT_DB[0],
+  [externalContent, dbText, selectedTextId]);
   const displayTitle = useMemo(() => keepKoreanCounterTogether(currentText.title), [currentText.title]);
 
   const lines = useMemo(
@@ -505,9 +509,12 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
           </div>
           {/* 연재물: 다음 화 이어가기 / 완간 축하 */}
           {!externalContent && currentText.seriesId && (() => {
-            const nextEp = LONG_TEXT_DB.find(
-              (t) => t.seriesId === currentText.seriesId && t.episode === (currentText.episode || 0) + 1
-            );
+            // DB(책방) 화는 서버가 내려준 다음 화, 정적 콘텐츠는 정적 DB 탐색
+            const nextEp = dbNextText !== undefined
+              ? dbNextText
+              : LONG_TEXT_DB.find(
+                  (t) => t.seriesId === currentText.seriesId && t.episode === (currentText.episode || 0) + 1
+                );
             return nextEp ? (
               <Link prefetch={false} href={`/transcription/${nextEp.id}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-black rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform">
                 다음 화 새기기 → {nextEp.title}
@@ -521,15 +528,15 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId }
           {/* 완주 직후 공유 — 시리즈면 책을, 아니면 이 글을 공유 */}
           {!externalContent && (() => {
             const series = currentText.seriesId ? PILSA_SERIES.find((s) => s.id === currentText.seriesId) : null;
-            const shareUrl = series
-              ? `https://www.hangul-tajawang.com/transcription/series/${series.id}`
+            const shareUrl = currentText.seriesId
+              ? `https://www.hangul-tajawang.com/transcription/series/${currentText.seriesId}`
               : `https://www.hangul-tajawang.com/transcription/${currentText.id}`;
             return (
               <ShareButton
                 url={shareUrl}
                 title={series ? `${series.title} — 한글타자왕 오리지널 연재` : `${currentText.title} — 한글타자왕 필사`}
                 text={series ? series.logline : `'${currentText.title}'을 키보드로 한 자 한 자 새겨보세요.`}
-                label={series ? "이 책 공유하기" : "이 글 공유하기"}
+                label={currentText.seriesId ? "이 책 공유하기" : "이 글 공유하기"}
                 className="mt-6 w-full py-4 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               />
             );

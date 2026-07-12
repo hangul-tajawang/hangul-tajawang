@@ -15,33 +15,17 @@ import {
   Heart,
   MessageSquare,
 } from "lucide-react";
-import {
-  PILSA_SERIES,
-  getSeriesEpisodes,
-} from "@/lib/long-text-data";
-import type { PilsaSeries } from "@/lib/long-text-data";
+import type { ShelfBook } from "@/lib/books-db";
 import { BookCoverArt } from "@/components/books/BookCoverArt";
-import {
-  BOOK_EDITORIAL_ORDER,
-  BOOK_SORT_OPTIONS,
-  type BookSortKey,
-} from "@/components/books/bookSort";
+import { BOOK_SORT_OPTIONS, type BookSortKey } from "@/components/books/bookSort";
 import { useBookSocialMetrics } from "@/components/books/useBookSocialMetrics";
 import type { BookMetrics } from "@/components/books/useBookSocialMetrics";
 import { useSeriesProgress } from "@/components/books/useSeriesProgress";
 import type { SeriesProgress } from "@/components/books/useSeriesProgress";
 
-// 미리보기 발췌 (첫 ~N자, 문단 유지)
-function previewExcerpt(content: string, maxLength = 250): string {
-  const trimmed = content.trim();
-  if (trimmed.length <= maxLength) return trimmed;
-  return trimmed.slice(0, maxLength);
-}
-
 // ── 연재 상태: 공개 화수가 예정 화수에 못 미치면 "연재 중" ──────────────────
-function seriesStatus(series: PilsaSeries): { completed: boolean; published: number } {
-  const published = getSeriesEpisodes(series.id).length;
-  return { completed: published >= series.totalEpisodes, published };
+function seriesStatus(book: ShelfBook): { completed: boolean; published: number } {
+  return { completed: book.publishedEpisodes >= book.totalEpisodes, published: book.publishedEpisodes };
 }
 
 // ── 진열 표지 (토큰 표지 + 미리보기 진입) ────────────────────────────────────
@@ -51,7 +35,7 @@ function SeriesShelfCover({
   progress,
   onPreview,
 }: {
-  series: PilsaSeries;
+  series: ShelfBook;
   metrics: BookMetrics;
   progress?: SeriesProgress;
   onPreview: () => void;
@@ -71,7 +55,7 @@ function SeriesShelfCover({
     >
       <div className="relative">
         <BookCoverArt
-          seriesId={series.id}
+          imageUrl={series.coverImageUrl}
           title={series.title}
           author={series.author}
           cover={series.cover}
@@ -118,9 +102,8 @@ function SeriesShelfCover({
 }
 
 // ── 미리보기 오버레이 (연재) ─────────────────────────────────────────────────
-function SeriesPreview({ series, metrics, progress, onClose }: { series: PilsaSeries; metrics: BookMetrics; progress?: SeriesProgress; onClose: () => void }) {
-  const episodes = useMemo(() => getSeriesEpisodes(series.id), [series.id]);
-  const firstEp = episodes[0];
+function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBook; metrics: BookMetrics; progress?: SeriesProgress; onClose: () => void }) {
+  const firstEp = series.episodesMeta[0];
   const status = seriesStatus(series);
   const reading = !!progress?.started && !progress.allDone && !!progress.nextEpisodeId;
 
@@ -161,13 +144,13 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: PilsaSe
           <p className="text-sm font-medium text-[#6b5d4f] dark:text-zinc-400 leading-relaxed break-keep">
             {series.description}
           </p>
-          {firstEp && (
+          {firstEp && series.previewExcerpt && (
             <div className="relative mt-6 pt-6 border-t border-[#e5dcc8] dark:border-zinc-800">
               <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-3">
-                1화 · {firstEp.title}
+                1화 · {firstEp.title.replace(/^1화\.\s*/, "")}
               </p>
               <p className="font-serif text-[15px] leading-loose text-[#2f2a24] dark:text-zinc-200 whitespace-pre-wrap break-keep [overflow-wrap:anywhere] line-clamp-4">
-                {previewExcerpt(firstEp.content, 200)}
+                {series.previewExcerpt.slice(0, 200)}
                 <span className="text-[#a05252]/60">…</span>
               </p>
             </div>
@@ -206,18 +189,30 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: PilsaSe
   );
 }
 
-// ── 책방 본체 (장편 전용) ────────────────────────────────────────────────────
-export const BookStore: React.FC = () => {
-  const [previewSeries, setPreviewSeries] = useState<PilsaSeries | null>(null);
-  const [sortKey, setSortKey] = useState<BookSortKey>("editorial");
-  const metrics = useBookSocialMetrics();
-  const progressById = useSeriesProgress();
+// 한 페이지에 진열하는 책 수 (2·3·4열 그리드 공배수)
+const SHELF_PAGE_SIZE = 12;
 
-  const sortedSeries = useMemo(() => [...PILSA_SERIES].sort((left, right) => {
-    const editorialDifference = (BOOK_EDITORIAL_ORDER.get(left.id) || 0) - (BOOK_EDITORIAL_ORDER.get(right.id) || 0);
+// ── 책방 본체 (장편 전용) — 서버에서 DB로 읽은 books 를 받는다 ────────────────
+export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
+  const [previewSeries, setPreviewSeries] = useState<ShelfBook | null>(null);
+  const [sortKey, setSortKey] = useState<BookSortKey>("editorial");
+  const [page, setPage] = useState(1);
+  const bookIds = useMemo(() => books.map((b) => b.id), [books]);
+  const metrics = useBookSocialMetrics(bookIds);
+  const progressById = useSeriesProgress(books);
+
+  // 기본순 = 서버가 내려준 진열 순서
+  const editorialOrder = useMemo(() => new Map(books.map((b, i) => [b.id, i])), [books]);
+
+  const sortedSeries = useMemo(() => [...books].sort((left, right) => {
+    const editorialDifference = (editorialOrder.get(left.id) || 0) - (editorialOrder.get(right.id) || 0);
     if (sortKey === "editorial") return editorialDifference;
-    return metrics[right.id][sortKey] - metrics[left.id][sortKey] || editorialDifference;
-  }), [metrics, sortKey]);
+    return (metrics[right.id]?.[sortKey] || 0) - (metrics[left.id]?.[sortKey] || 0) || editorialDifference;
+  }), [books, editorialOrder, metrics, sortKey]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedSeries.length / SHELF_PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedSeries = sortedSeries.slice((currentPage - 1) * SHELF_PAGE_SIZE, currentPage * SHELF_PAGE_SIZE);
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-10">
@@ -239,7 +234,7 @@ export const BookStore: React.FC = () => {
               key={option.key}
               type="button"
               aria-pressed={sortKey === option.key}
-              onClick={() => setSortKey(option.key)}
+              onClick={() => { setSortKey(option.key); setPage(1); }}
               className={`shrink-0 rounded-full px-4 py-2 text-sm font-black transition-colors ${sortKey === option.key ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
             >
               {option.label}
@@ -247,10 +242,43 @@ export const BookStore: React.FC = () => {
           ))}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-7 p-4 md:p-7 bg-surface-low rounded-[2rem] border-b-8 border-[#c9a97a]/40">
-          {sortedSeries.map((s) => (
+          {pagedSeries.map((s) => (
             <SeriesShelfCover key={s.id} series={s} metrics={metrics[s.id]} progress={progressById[s.id]} onPreview={() => setPreviewSeries(s)} />
           ))}
         </div>
+
+        {/* 서가 페이지네이션 */}
+        {totalPages > 1 && (
+          <nav className="mt-6 flex items-center justify-center gap-2" aria-label="서가 페이지">
+            <button
+              type="button"
+              onClick={() => setPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+              className="px-4 py-2 rounded-full bg-surface-high text-sm font-black text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
+            >
+              ← 이전
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              <button
+                key={n}
+                type="button"
+                aria-current={n === currentPage ? "page" : undefined}
+                onClick={() => setPage(n)}
+                className={`w-9 h-9 rounded-full text-sm font-black transition-colors ${n === currentPage ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => setPage(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              className="px-4 py-2 rounded-full bg-surface-high text-sm font-black text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
+            >
+              다음 →
+            </button>
+          </nav>
+        )}
       </section>
 
       {/* 단편·시 안내 */}

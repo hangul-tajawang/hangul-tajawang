@@ -145,11 +145,14 @@ function BookCover({ record, onClick }: { record: PilsaRecord; onClick: () => vo
 // ── 책 상세 (판권 간지 + 본문 + 문장 카드) ─────────────────────────────────
 function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => void }) {
   const [selectedLine, setSelectedLine] = useState<string | null>(null);
-  // 다른 기기에서 동기화된 챌린지 책은 본문이 로컬에 없을 수 있으므로 서버에서 로드
+  // 본문이 로컬에 없으면 서버에서 로드 — 챌린지(typing_contents) / DB 전용 책방 화(book_episodes)
   const [fetchedContent, setFetchedContent] = useState("");
   useEffect(() => {
     if (record.sourceType === "challenge" && !record.content) {
       supabase.from("typing_contents").select("content").eq("id", record.sourceId).maybeSingle()
+        .then(({ data }) => setFetchedContent(data?.content || ""));
+    } else if (record.sourceType === "work" && !contentOf(record)) {
+      supabase.from("book_episodes").select("content").eq("id", record.sourceId).maybeSingle()
         .then(({ data }) => setFetchedContent(data?.content || ""));
     }
   }, [record]);

@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "books:build": "node scripts/build-books.mjs",
+    "books:publish": "node scripts/publish-books.mjs",
     "seo:indexnow": "node scripts/submit-indexnow.mjs",
     "seo:gsc": "node scripts/submit-gsc-sitemap.mjs",
     "test:mobile": "node tests/mobile-e2e.mjs",

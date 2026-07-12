@@ -19,7 +19,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -81,6 +81,16 @@ function parseWork(fileName, fallbackIndex) {
   const logline = meta['로그라인'] || '';
   const description = meta['소개'] || logline;
 
+  // 작가 아이디 (선택) — authors 테이블 슬러그. 있으면 /authors/{id} 페이지에 작품이 쌓인다
+  const authorId = meta['작가 아이디'] || null;
+
+  // 작가 프로필 (선택) — 투고 보상 "작가 SNS·블로그 링크 게재"용
+  const authorProfile = {};
+  if (meta['작가 SNS']) authorProfile.sns = meta['작가 SNS'];
+  if (meta['작가 블로그']) authorProfile.blog = meta['작가 블로그'];
+  if (meta['작가 프로필']) authorProfile.image = meta['작가 프로필'];
+  if (meta['작가 소개']) authorProfile.bio = meta['작가 소개'];
+
   // 분류/난이도: 동화면 동화/초급, 그 외 소설/중급
   const isTale = /동화/.test(form);
   const category = isTale ? '동화' : '소설';
@@ -134,9 +144,21 @@ function parseWork(fileName, fallbackIndex) {
 
   return {
     id, title, author, logline, description, cover, source,
-    category, difficulty, ho, episodes,
+    category, difficulty, ho, episodes, authorId,
     totalEpisodes: Math.max(declaredTotal, episodes.length),
+    authorProfile: Object.keys(authorProfile).length > 0 ? authorProfile : null,
   };
+}
+
+// ── 작가 프로필 렌더 (없으면 빈 문자열 → 기존 출력과 바이트 동일) ──
+function renderAuthorProfile(ap) {
+  if (!ap) return '';
+  const fields = [];
+  if (ap.sns) fields.push(`sns: '${escSingle(ap.sns)}'`);
+  if (ap.blog) fields.push(`blog: '${escSingle(ap.blog)}'`);
+  if (ap.image) fields.push(`image: '${escSingle(ap.image)}'`);
+  if (ap.bio) fields.push(`bio: '${escSingle(ap.bio)}'`);
+  return `\n    authorProfile: { ${fields.join(', ')} },`;
 }
 
 // ── PILSA_SERIES 엔트리 렌더 ──
@@ -150,7 +172,7 @@ function renderSeriesEntry(w) {
     totalEpisodes: ${w.totalEpisodes},
     description:
       '${escSingle(w.description)}',
-    cover: { palette: '${escSingle(w.cover.palette)}', pattern: '${escSingle(w.cover.pattern)}' },
+    cover: { palette: '${escSingle(w.cover.palette)}', pattern: '${escSingle(w.cover.pattern)}' },${renderAuthorProfile(w.authorProfile)}
   },`;
 }
 
@@ -184,58 +206,68 @@ function replaceBetween(src, startMark, endMark, inner, label) {
   return src.slice(0, afterStart) + inner + '\n' + src.slice(beforeEnd);
 }
 
-// ── 실행 ──
-const files = readdirSync(WORKS_DIR)
-  .filter((f) => f.endsWith('.md'))
-  .sort();
+// ── 원고 전체 파싱 (publish-books.mjs 도 같은 파서를 사용한다) ──
+export function parseAllWorks() {
+  const files = readdirSync(WORKS_DIR)
+    .filter((f) => f.endsWith('.md') && !/^readme\.md$/i.test(f))
+    .sort();
 
-const works = files.map((f, i) => parseWork(f, i)).sort((a, b) => a.ho - b.ho);
+  const works = files.map((f, i) => parseWork(f, i)).sort((a, b) => a.ho - b.ho);
 
-// id 중복 검사
-const seen = new Set();
-for (const w of works) {
-  if (seen.has(w.id)) {
-    console.error(`❌ 시리즈 아이디 중복: ${w.id}`);
-    process.exit(1);
+  // id 중복 검사
+  const seen = new Set();
+  for (const w of works) {
+    if (seen.has(w.id)) {
+      console.error(`❌ 시리즈 아이디 중복: ${w.id}`);
+      process.exit(1);
+    }
+    seen.add(w.id);
   }
-  seen.add(w.id);
+  return works;
 }
 
-const seriesInner = works.map(renderSeriesEntry).join('\n');
+// ── 실행 (직접 실행할 때만 — publish-books.mjs 가 import 할 때는 파서만 노출) ──
+const IS_MAIN = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
 
-const episodesInner = works
-  .map((w) => {
-    const header = `  // --- 오리지널 연재소설: ${w.title} (전 ${w.totalEpisodes}화) ---`;
-    const body = w.episodes.map((ep) => renderEpisodeEntry(w, ep)).join('\n');
-    return `${header}\n${body}`;
-  })
-  .join('\n');
+if (IS_MAIN) {
+  const works = parseAllWorks();
 
-let ts = readFileSync(TARGET, 'utf8');
-ts = replaceBetween(
-  ts,
-  '// === build-books:series:start ===',
-  '// === build-books:series:end ===',
-  seriesInner,
-  'series'
-);
-ts = replaceBetween(
-  ts,
-  '// === build-books:episodes:start ===',
-  '// === build-books:episodes:end ===',
-  episodesInner,
-  'episodes'
-);
-writeFileSync(TARGET, ts);
+  const seriesInner = works.map(renderSeriesEntry).join('\n');
 
-const totalEps = works.reduce((a, w) => a + w.episodes.length, 0);
-const totalChars = works.reduce(
-  (a, w) => a + w.episodes.reduce((b, ep) => b + ep.wordCount, 0),
-  0
-);
-console.log(
-  `✅ 책방 빌드 완료 · 시리즈 ${works.length}편 / 화 ${totalEps}편 / 총 ${totalChars.toLocaleString()}자(공백 제외)`
-);
-for (const w of works) {
-  console.log(`   · ${w.id.padEnd(10)} ${w.title} (전 ${w.totalEpisodes}화, 표지 ${w.cover.palette}/${w.cover.pattern})`);
+  const episodesInner = works
+    .map((w) => {
+      const header = `  // --- 오리지널 연재소설: ${w.title} (전 ${w.totalEpisodes}화) ---`;
+      const body = w.episodes.map((ep) => renderEpisodeEntry(w, ep)).join('\n');
+      return `${header}\n${body}`;
+    })
+    .join('\n');
+
+  let ts = readFileSync(TARGET, 'utf8');
+  ts = replaceBetween(
+    ts,
+    '// === build-books:series:start ===',
+    '// === build-books:series:end ===',
+    seriesInner,
+    'series'
+  );
+  ts = replaceBetween(
+    ts,
+    '// === build-books:episodes:start ===',
+    '// === build-books:episodes:end ===',
+    episodesInner,
+    'episodes'
+  );
+  writeFileSync(TARGET, ts);
+
+  const totalEps = works.reduce((a, w) => a + w.episodes.length, 0);
+  const totalChars = works.reduce(
+    (a, w) => a + w.episodes.reduce((b, ep) => b + ep.wordCount, 0),
+    0
+  );
+  console.log(
+    `✅ 책방 빌드 완료 · 시리즈 ${works.length}편 / 화 ${totalEps}편 / 총 ${totalChars.toLocaleString()}자(공백 제외)`
+  );
+  for (const w of works) {
+    console.log(`   · ${w.id.padEnd(10)} ${w.title} (전 ${w.totalEpisodes}화, 표지 ${w.cover.palette}/${w.cover.pattern})`);
+  }
 }

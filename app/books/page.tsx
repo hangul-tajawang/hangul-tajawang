@@ -1,6 +1,10 @@
 import { Metadata } from "next";
 import { BookStore } from "@/components/books/BookStore";
+import { fetchBooksSafe } from "@/lib/books-db";
 import { BookOpen } from "lucide-react";
+
+// DB(ISR)에서 읽는다 — publish 후 재배포 없이 최대 5분 안에 반영
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "책방 - 오리지널 장편 연재소설 필사",
@@ -33,7 +37,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BooksPage() {
+export default async function BooksPage() {
+  const books = await fetchBooksSafe();
   return (
     <div className="w-full py-6 md:py-10 text-on-surface">
       <div className="text-center mb-4 md:mb-8 px-4">
@@ -42,7 +47,7 @@ export default function BooksPage() {
           표지를 눌러 미리 읽어보고, 마음에 들면 새기세요
         </p>
       </div>
-      <BookStore />
+      <BookStore books={books} />
     </div>
   );
 }

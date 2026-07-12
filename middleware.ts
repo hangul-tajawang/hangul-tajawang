@@ -16,8 +16,26 @@ export async function middleware(request: NextRequest) {
   }
   // ────────────────────────────────────────────────────────────────────────
 
-  // 보호된 라우트(예: /mypage)가 아니면 Supabase API 호출을 생략하여 트래픽 최적화
-  if (!pathname.startsWith('/mypage')) {
+  // ── /adminsangwon: 허용 IP 외에는 존재 자체를 숨긴다 (404) ──────────────
+  if (pathname.startsWith('/adminsangwon')) {
+    const allowed = (process.env.ADMIN_ALLOWED_IPS || '193.186.4.174')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const clientIp = (request.headers.get('x-forwarded-for') || '')
+      .split(',')[0]
+      .trim();
+    const isLocalDev =
+      process.env.NODE_ENV === 'development' &&
+      (clientIp === '' || clientIp === '::1' || clientIp === '127.0.0.1');
+    if (!isLocalDev && !allowed.includes(clientIp)) {
+      return new NextResponse(null, { status: 404 });
+    }
+    // 허용 IP → 세션 갱신을 위해 아래 Supabase 처리로 진행
+  }
+
+  // 보호된 라우트(예: /mypage, /adminsangwon)가 아니면 Supabase API 호출을 생략하여 트래픽 최적화
+  if (!pathname.startsWith('/mypage') && !pathname.startsWith('/adminsangwon')) {
     return NextResponse.next({
       request: {
         headers: request.headers,
