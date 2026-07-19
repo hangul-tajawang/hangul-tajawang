@@ -96,6 +96,23 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   // quiz 코스(세계 수도 등)는 질문(name)을 보여주고 정답(fact)을 입력한다 — 1단계 진행
   const isQuiz = course.flow === "quiz";
   const unit = course.unitLabel || "항목";
+
+  // 순서 코스의 문제 라벨 — "조선 3대 왕은?" / "고구려 5대 왕은?" / "원자번호 6번, 이 원소는?"
+  // 초성만으로는 무엇을 묻는지 알 수 없으므로 라인별 대수를 함께 보여준다.
+  const sequenceQuestion = (() => {
+    if (isQuiz) return null;
+    if (course.ui === "periodic") return `원자번호 ${stationIndex + 1}번, 이 원소는?`;
+    let offset = 0;
+    for (const line of course.lines) {
+      if (stationIndex < offset + line.stations.length) {
+        const local = stationIndex - offset + 1;
+        const prefix = line.name || (course.id === "joseon-kings" ? "조선" : "");
+        return prefix ? `${prefix} ${local}대 왕은?` : `${local}번째 ${unit}은?`;
+      }
+      offset += line.stations.length;
+    }
+    return null;
+  })();
   const target = isQuiz ? station.fact : phase === "traveling" ? station.name : station.fact;
   const normTarget = TypingUtils.normalize(target);
 
@@ -269,7 +286,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 onPointerDown={(e) => e.preventDefault()}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
               >
-                <Lightbulb size={13} /> 힌트
+                <Lightbulb size={13} /> 정답 보기
               </button>
             )}
           </div>
@@ -281,6 +298,20 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
         </>
       ) : phase === "traveling" ? (
         <>
+          {sequenceQuestion && (
+            <p className={`font-black ${compact ? "text-sm text-zinc-300 mb-1" : "text-base text-on-surface mb-2"}`}>
+              {sequenceQuestion}
+            </p>
+          )}
+          {/* 주기율표: 원소기호가 곧 문제 — 크게 보여준다 */}
+          {course.ui === "periodic" && station.reading && (
+            <p
+              className={`font-black ${compact ? "text-3xl mb-1" : "text-5xl mb-2"}`}
+              style={{ color: course.lines[0]?.color || "#10b981" }}
+            >
+              {station.reading}
+            </p>
+          )}
           <div className="flex items-center justify-center gap-3">
             <span className={`editorial-heading tracking-[0.15em] ${compact ? "text-2xl text-white" : "text-4xl"}`}>
               {hintShown || showAllNames ? station.name : chosungOf(station.name)}
@@ -293,7 +324,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 onPointerDown={(e) => e.preventDefault()}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
               >
-                <Lightbulb size={13} /> 힌트
+                <Lightbulb size={13} /> 정답 보기
               </button>
             )}
           </div>
