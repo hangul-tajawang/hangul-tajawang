@@ -30,7 +30,15 @@ export const metadata: Metadata = {
   },
 };
 
+// 허브 진열 순서 — 수도 → 조선 → 국기 → 주기율표 → 삼국
+const COURSE_ORDER = ['world-capitals', 'joseon-kings', 'flag-quiz', 'periodic-table', 'three-kingdoms'];
+const orderIndex = (id: string) => {
+  const i = COURSE_ORDER.indexOf(id);
+  return i === -1 ? 999 : i;
+};
+
 export default function JourneyHubPage() {
+  const orderedCourses = [...JOURNEY_COURSES].sort((a, b) => orderIndex(a.id) - orderIndex(b.id));
   return (
     <div className="w-full max-w-6xl mx-auto py-10 px-4">
       <h1 className="sr-only">지식타자 - 지식을 쌓으며 타자 실력을 높이는 암기 타자, 조선 왕조·세계 수도·주기율표</h1>
@@ -52,7 +60,7 @@ export default function JourneyHubPage() {
 
       {/* 코스 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-        {JOURNEY_COURSES.map((course) => {
+        {orderedCourses.map((course) => {
           const stations = getCourseStations(course);
           return (
             <Link
@@ -85,7 +93,7 @@ export default function JourneyHubPage() {
           <div className="text-4xl opacity-60">🚧</div>
           <p className="font-black text-secondary/70">새 코스 준비 중</p>
           <p className="text-xs text-secondary/70 font-medium leading-relaxed">
-            한국사 연표, 삼국 왕 계보 코스가
+            한국사 연표 등 새 코스가
             <br />
             차례로 추가될 예정입니다.
           </p>

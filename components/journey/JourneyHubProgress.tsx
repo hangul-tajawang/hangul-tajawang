@@ -16,7 +16,7 @@ export const JourneyHubProgress: React.FC<{ courseId: string; totalStations: num
     const summary = getJourneySummary()[courseId];
     if (!summary) return;
     if (summary.resumeStation !== null) {
-      setLabel(`${summary.resumeStation}/${totalStations}역 · 이어가기`);
+      setLabel(`${summary.resumeStation}/${totalStations} · 이어가기`);
     } else if (summary.completions > 0) {
       setLabel(`완주 ${summary.completions}회 · 최고 ${summary.bestKpm}타`);
     }

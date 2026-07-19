@@ -95,7 +95,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   const station = stations[Math.min(stationIndex, stations.length - 1)];
   // quiz 코스(세계 수도 등)는 질문(name)을 보여주고 정답(fact)을 입력한다 — 1단계 진행
   const isQuiz = course.flow === "quiz";
-  const unit = course.unitLabel || "역";
+  const unit = course.unitLabel || "항목";
   const target = isQuiz ? station.fact : phase === "traveling" ? station.name : station.fact;
   const normTarget = TypingUtils.normalize(target);
 
@@ -202,6 +202,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   const revealHint = () => {
     setHintShown(true);
     track("journey_hint", { course: course.id, station: station.id });
+    // 혹시 포커스를 잃었더라도 즉시 되돌려 일시정지를 막는다
+    inputRef.current?.focus();
   };
 
   /** 플레이 중단 — 스냅샷 저장 후 준비 화면으로 */
@@ -220,20 +222,41 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   // ── 프롬프트 카드 (이동 중: 다음 역 맞히기 / 도착: 지식 문장 필사)
   const promptCard = (compact: boolean) => (
     <div
-      className={`w-full rounded-[1.75rem] transition-colors text-center ${compact ? "p-3" : "p-6"} ${
-        isWrongNow
-          ? "bg-rose-50 shadow-[0_20px_40px_rgba(190,18,60,0.08)]"
-          : phase === "arrived"
-            ? "bg-secondary-container/60 shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
-            : "bg-surface-lowest shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
+      className={`w-full rounded-[1.75rem] transition-colors text-center ${
+        compact
+          ? // 모바일 셸은 항상 어두운 배경 — 라이트 테마에서도 흰 글자가 보이게 카드도 어둡게 고정
+            `p-3 ${isWrongNow ? "bg-rose-950/70" : "bg-zinc-900"}`
+          : `p-6 ${
+              isWrongNow
+                ? "bg-rose-50 shadow-[0_20px_40px_rgba(190,18,60,0.08)]"
+                : phase === "arrived"
+                  ? "bg-secondary-container/60 shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
+                  : "bg-surface-lowest shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
+            }`
       }`}
     >
       {isQuiz ? (
         <>
-          <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white mb-1.5" : "text-2xl mb-3"}`}>
-            {station.name}
-            {course.questionSuffix || "은(는)?"}
-          </p>
+          {course.ui === "flags" ? (
+            <div className={`flex flex-col items-center ${compact ? "gap-1 mb-1.5" : "gap-2 mb-3"}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://flagcdn.com/w160/${station.id}.png`}
+                alt="어느 나라의 국기일까요?"
+                width={compact ? 60 : 84}
+                height={compact ? 40 : 56}
+                className="rounded-md shadow-md"
+              />
+              <p className={`editorial-heading leading-snug ${compact ? "text-base text-white" : "text-xl"}`}>
+                이 국기의 나라는?
+              </p>
+            </div>
+          ) : (
+            <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white mb-1.5" : "text-2xl mb-3"}`}>
+              {station.name}
+              {course.questionSuffix || "은(는)?"}
+            </p>
+          )}
           <div className="flex items-center justify-center gap-3">
             <span className={`font-black tracking-[0.2em] ${compact ? "text-xl text-violet-300" : "text-3xl text-primary"}`}>
               {hintShown || showAllNames ? station.fact : chosungOf(station.fact)}
@@ -242,6 +265,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
               <button
                 type="button"
                 onClick={revealHint}
+                // 입력창 포커스를 뺏지 않는다 — blur 시 모바일 셸이 일시정지되는 것 방지
+                onPointerDown={(e) => e.preventDefault()}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
               >
                 <Lightbulb size={13} /> 힌트
@@ -264,6 +289,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
               <button
                 type="button"
                 onClick={revealHint}
+                // 입력창 포커스를 뺏지 않는다 — blur 시 모바일 셸이 일시정지되는 것 방지
+                onPointerDown={(e) => e.preventDefault()}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
               >
                 <Lightbulb size={13} /> 힌트
@@ -401,18 +428,9 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-4 items-start">
         {/* 노선도 카드 */}
         <div className="relative w-full bg-surface-lowest rounded-[2rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-4 md:p-6 overflow-hidden">
-          <JourneyViz
-            course={course}
-            stations={stations}
-            currentIndex={stationIndex}
-            phase={phase}
-            finished={gameState === "finished"}
-            showAllNames={showAllNames || gameState !== "playing"}
-            variant="full"
-          />
-
-          {gameState === "ready" && (
-            <div className="absolute inset-0 flex items-center justify-center bg-surface/60 backdrop-blur-sm z-10 p-4">
+          {/* 준비 상태에선 긴 시각화 대신 컴팩트한 시작 카드 — 스크롤 없이 바로 시작 */}
+          {gameState === "ready" ? (
+            <div className="flex items-center justify-center py-14 px-4">
               <div className="glass-card !rounded-[2.5rem] p-8 flex flex-col items-center gap-5 max-w-sm w-full">
                 <div className="text-5xl">{course.emoji}</div>
                 <div className="text-center">
@@ -452,6 +470,16 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 )}
               </div>
             </div>
+          ) : (
+            <JourneyViz
+              course={course}
+              stations={stations}
+              currentIndex={stationIndex}
+              phase={phase}
+              finished={gameState === "finished"}
+              showAllNames={showAllNames || gameState !== "playing"}
+              variant="full"
+            />
           )}
         </div>
 

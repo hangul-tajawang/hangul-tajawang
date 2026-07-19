@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "dev-node22",
+      "runtimeExecutable": "/Users/mac/.nvm/versions/node/v22.21.0/bin/node",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }

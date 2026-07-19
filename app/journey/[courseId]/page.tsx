@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${course.title} 순서 외우기 - ${course.subtitle} 타자 게임`,
-    description: `${course.description} ${stations.length}개 역을 타자로 완주하며 순서를 외워보세요.`,
+    description: `${course.description} ${stations.length}개 항목을 타자로 완주하며 순서를 외워보세요.`,
     keywords: [...course.keywords, '한글 타자 연습', '한글타자왕'],
     alternates: {
       canonical: `https://www.hangul-tajawang.com/journey/${course.id}`,
@@ -68,8 +68,8 @@ export default async function JourneyCoursePage({ params }: Props) {
             <h2 className="text-2xl font-black">{course.title} 한눈에 보기</h2>
           </div>
           <p className="text-sm text-secondary leading-relaxed font-medium mb-8 max-w-2xl">
-            여정을 시작하기 전이나 완주한 뒤 복습할 때 참고하세요. 표의 순서 그대로
-            노선의 역 순서입니다{course.groups ? ` (${course.groups.map((g) => g.label).join(' · ')})` : ''}.
+            시작하기 전이나 완주한 뒤 복습할 때 참고하세요. 표의 순서가 그대로
+            코스의 진행 순서입니다{course.groups ? ` (${course.groups.map((g) => g.label).join(' · ')})` : ''}.
           </p>
           <div className="overflow-x-auto rounded-2xl bg-surface-lowest shadow-[0_20px_40px_rgba(21,28,39,0.06)]">
             <table className="w-full text-sm">

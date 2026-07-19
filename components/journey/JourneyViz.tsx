@@ -40,6 +40,7 @@ export function revealState(
 export const JourneyViz: React.FC<JourneyVizProps> = (props) => {
   switch (props.course.ui) {
     case "worldmap":
+    case "flags": // 국기 퀴즈도 국기 칩 시각화 재사용 (내부에서 course.ui로 분기)
       return <JourneyWorldMap {...props} />;
     case "periodic":
       return <JourneyPeriodic {...props} />;

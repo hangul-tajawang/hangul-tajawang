@@ -35,7 +35,7 @@ export const JourneyPeriodic: React.FC<JourneyVizProps> = ({
             ? "border-transparent text-white shadow-lg scale-105 z-10"
             : revealed
             ? "border-outline-variant/50 bg-surface-lowest text-on-surface"
-            : "border-dashed border-outline-variant/50 bg-surface-low text-secondary/50"
+            : "border-dashed border-outline-variant/50 bg-surface-low text-secondary"
         }`}
         style={isCurrent ? { backgroundColor: color } : undefined}
         title={revealed ? `${idx + 1}. ${station.name}` : `${idx + 1}`}
@@ -43,7 +43,13 @@ export const JourneyPeriodic: React.FC<JourneyVizProps> = ({
         <span className={`${compact ? "text-[8px]" : "text-[9px]"} font-bold leading-none opacity-70 self-start ml-1 mt-1`}>
           {idx + 1}
         </span>
-        <span className={`${compact ? "text-sm" : "text-base"} font-black leading-none -mt-1`}>{station.reading}</span>
+        {/* 원소기호 — 배경과의 대비가 무너지지 않게 항상 라인 색으로 명시 */}
+        <span
+          className={`${compact ? "text-sm" : "text-base"} font-black leading-none -mt-1`}
+          style={!isCurrent ? { color } : undefined}
+        >
+          {station.reading}
+        </span>
         <span className={`${compact ? "text-[8px]" : "text-[9px]"} font-bold leading-tight mb-1 truncate max-w-full px-0.5`}>
           {revealed ? station.name : state === "q" ? "???" : ""}
         </span>
