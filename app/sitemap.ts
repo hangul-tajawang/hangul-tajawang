@@ -6,6 +6,7 @@ import { BASIC_PRACTICE_STEPS } from '@/lib/word-data';
 import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import { QUIZ_DATA } from '@/lib/quiz-data';
 import { blogPosts } from '@/lib/blog-data';
+import { JOURNEY_COURSES } from '@/lib/journey-data';
 
 // 사이트맵을 1시간마다 재생성 (매 요청마다 DB 쿼리 방지)
 export const revalidate = 3600;
@@ -37,6 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/game/block-pop',
     '/game/castle-defense',
     '/game/typing-race',
+    '/journey',
+    ...JOURNEY_COURSES.map((course) => `/journey/${course.id}`),
     '/quiz',
     '/recommend',
     '/recommend/abko-mk108',

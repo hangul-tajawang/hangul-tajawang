@@ -20,7 +20,12 @@ function getVisitorId(): string | null {
   }
 }
 
-export type UsageEventName = 'pilsa_start' | 'pilsa_complete';
+export type UsageEventName =
+  | 'pilsa_start'
+  | 'pilsa_complete'
+  | 'journey_start'
+  | 'journey_complete'
+  | 'journey_hint';
 
 // 계측 실패가 사용자 경험을 해치지 않도록 항상 조용히 무시한다.
 export function track(

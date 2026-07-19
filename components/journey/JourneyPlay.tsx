@@ -1,0 +1,466 @@
+"use client";
+
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Play, Eye, EyeOff, Lightbulb, MapPin, Timer } from "lucide-react";
+import { TypingUtils } from "@/lib/typing-speed";
+import { track } from "@/lib/analytics";
+import { getCourseStations, type JourneyCourse } from "@/lib/journey-data";
+import {
+  getJourneyRecord,
+  saveJourneySnapshot,
+  recordJourneyCompletion,
+  clearJourneySnapshot,
+  type JourneySnapshot,
+} from "@/lib/journey-progress";
+import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
+import { MobileGameShell } from "@/components/game/MobileGameShell";
+import { JourneyMap } from "./JourneyMap";
+import { JourneyComplete } from "./JourneyComplete";
+
+const CHOSEONG = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+
+/** "세종" → "ㅅㅈ" (한글 외 문자는 그대로) */
+function chosungOf(text: string): string {
+  return Array.from(text)
+    .map((ch) => {
+      const code = ch.charCodeAt(0);
+      if (code >= 0xac00 && code <= 0xd7a3) return CHOSEONG[Math.floor((code - 0xac00) / 588)];
+      return ch;
+    })
+    .join("");
+}
+
+type Phase = "traveling" | "arrived";
+
+/** 마지막 글자(IME 조합 중일 수 있음)를 뺀 입력이 접두어가 아니면 오타 */
+function checkWrong(normTarget: string, normInput: string): boolean {
+  if (normInput.length === 0 || normTarget.startsWith(normInput)) return false;
+  return !normTarget.startsWith(normInput.slice(0, -1));
+}
+
+export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => {
+  const stations = getCourseStations(course);
+
+  const [gameState, setGameState] = useState<"ready" | "playing" | "finished">("ready");
+  const [stationIndex, setStationIndex] = useState(0);
+  const [phase, setPhase] = useState<Phase>("traveling");
+  const [inputValue, setInputValue] = useState("");
+  const [mistakes, setMistakes] = useState(0);
+  const [completedTargets, setCompletedTargets] = useState(0);
+  const [accStrokes, setAccStrokes] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
+  const [showAllNames, setShowAllNames] = useState(false);
+  const [hintShown, setHintShown] = useState(false);
+  const [finalStats, setFinalStats] = useState<{ kpm: number; accuracy: number; seconds: number } | null>(null);
+  const [resumeSnapshot, setResumeSnapshot] = useState<JourneySnapshot | null>(null);
+  const [completionCount, setCompletionCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  const startTime = useRef(0);
+  const pauseStart = useRef(0);
+  const wasWrong = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { isMobilePlaying, paused, overlay, resume } = useMobileGamePlay({
+    playing: gameState === "playing",
+    inputRef,
+  });
+
+  useEffect(() => {
+    setMounted(true);
+    const record = getJourneyRecord(course.id);
+    if (record?.progress) setResumeSnapshot(record.progress);
+    setCompletionCount(record?.completions.length || 0);
+  }, [course.id]);
+
+  // 일시정지 동안 시간이 흐르지 않도록 재개 시 startTime 보정
+  useEffect(() => {
+    if (!paused) return;
+    pauseStart.current = performance.now();
+    return () => {
+      startTime.current += performance.now() - pauseStart.current;
+    };
+  }, [paused]);
+
+  // 경과 시간 틱
+  useEffect(() => {
+    if (gameState !== "playing" || paused) return;
+    const timer = setInterval(() => {
+      setElapsed((performance.now() - startTime.current) / 1000);
+    }, 250);
+    return () => clearInterval(timer);
+  }, [gameState, paused]);
+
+  const station = stations[Math.min(stationIndex, stations.length - 1)];
+  const target = phase === "traveling" ? station.name : station.fact;
+  const normTarget = TypingUtils.normalize(target);
+
+  const currentSnapshot = useCallback(
+    (nextIndex: number, nextPhase: Phase, strokes: number, targets: number, mistakeCount: number): JourneySnapshot => ({
+      stationIndex: nextIndex,
+      phase: nextPhase,
+      accStrokes: strokes,
+      completedTargets: targets,
+      mistakes: mistakeCount,
+      elapsedSeconds: (performance.now() - startTime.current) / 1000,
+      updatedAt: new Date().toISOString(),
+    }),
+    []
+  );
+
+  const finish = useCallback(
+    (strokes: number, targets: number, mistakeCount: number) => {
+      const seconds = (performance.now() - startTime.current) / 1000;
+      const kpm = seconds > 0 ? Math.round((strokes / seconds) * 60) : 0;
+      const accuracy = TypingUtils.calculateAccuracy(targets, targets + mistakeCount);
+      setFinalStats({ kpm, accuracy, seconds });
+      setGameState("finished");
+      setCompletionCount((n) => n + 1);
+      setResumeSnapshot(null);
+      recordJourneyCompletion(course.id, {
+        date: new Date().toISOString(),
+        kpm,
+        accuracy,
+        seconds: Math.round(seconds),
+      });
+      track("journey_complete", { course: course.id, kpm, accuracy });
+    },
+    [course.id]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    if (gameState !== "playing") return;
+
+    if (TypingUtils.normalize(value) === normTarget) {
+      const strokes = accStrokes + TypingUtils.getStrokeCount(normTarget);
+      const targets = completedTargets + 1;
+      setAccStrokes(strokes);
+      setCompletedTargets(targets);
+      setInputValue("");
+      wasWrong.current = false;
+
+      if (phase === "traveling") {
+        // 역 이름 완성 → 도착, 지식 문장 공개
+        setPhase("arrived");
+      } else {
+        // 지식 문장 완성 → 다음 역으로 출발
+        if (stationIndex >= stations.length - 1) {
+          finish(strokes, targets, mistakes);
+          return;
+        }
+        const nextIndex = stationIndex + 1;
+        setStationIndex(nextIndex);
+        setPhase("traveling");
+        setHintShown(false);
+        saveJourneySnapshot(course.id, currentSnapshot(nextIndex, "traveling", strokes, targets, mistakes));
+      }
+      return;
+    }
+
+    // 오타 판정 — 마지막 글자는 IME 조합 중일 수 있으므로("세종" 입력 중 "셎")
+    // 마지막 글자를 뺀 입력이 목표의 접두어가 아닐 때만 틀린 것으로 본다.
+    const isWrong = checkWrong(normTarget, TypingUtils.normalize(value));
+    if (isWrong && !wasWrong.current) setMistakes((m) => m + 1);
+    wasWrong.current = isWrong;
+  };
+
+  const startGame = (resumeRun: boolean) => {
+    if (resumeRun && resumeSnapshot) {
+      setStationIndex(resumeSnapshot.stationIndex);
+      setPhase(resumeSnapshot.phase);
+      setAccStrokes(resumeSnapshot.accStrokes);
+      setCompletedTargets(resumeSnapshot.completedTargets);
+      setMistakes(resumeSnapshot.mistakes);
+      startTime.current = performance.now() - resumeSnapshot.elapsedSeconds * 1000;
+      setElapsed(resumeSnapshot.elapsedSeconds);
+    } else {
+      clearJourneySnapshot(course.id);
+      setResumeSnapshot(null);
+      setStationIndex(0);
+      setPhase("traveling");
+      setAccStrokes(0);
+      setCompletedTargets(0);
+      setMistakes(0);
+      startTime.current = performance.now();
+      setElapsed(0);
+    }
+    setInputValue("");
+    setHintShown(false);
+    wasWrong.current = false;
+    setFinalStats(null);
+    setGameState("playing");
+    track("journey_start", { course: course.id, resume: resumeRun });
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
+  const revealHint = () => {
+    setHintShown(true);
+    track("journey_hint", { course: course.id, station: station.id });
+  };
+
+  /** 플레이 중단 — 스냅샷 저장 후 준비 화면으로 */
+  const exitToReady = () => {
+    const snapshot = currentSnapshot(stationIndex, phase, accStrokes, completedTargets, mistakes);
+    saveJourneySnapshot(course.id, snapshot);
+    if (snapshot.stationIndex >= 1) setResumeSnapshot(snapshot);
+    setGameState("ready");
+    setInputValue("");
+  };
+
+  const liveKpm = elapsed > 1 ? Math.round((accStrokes / elapsed) * 60) : 0;
+  const accuracy = TypingUtils.calculateAccuracy(completedTargets, completedTargets + mistakes);
+  const isWrongNow = checkWrong(normTarget, TypingUtils.normalize(inputValue));
+
+  // ── 프롬프트 카드 (이동 중: 다음 역 맞히기 / 도착: 지식 문장 필사)
+  const promptCard = (compact: boolean) => (
+    <div
+      className={`w-full rounded-[1.75rem] transition-colors text-center ${compact ? "p-3" : "p-6"} ${
+        isWrongNow
+          ? "bg-rose-50 shadow-[0_20px_40px_rgba(190,18,60,0.08)]"
+          : phase === "arrived"
+            ? "bg-secondary-container/60 shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
+            : "bg-surface-lowest shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
+      }`}
+    >
+      {phase === "traveling" ? (
+        <>
+          <p className={`font-black uppercase tracking-[0.25em] ${compact ? "text-[9px] mb-1 text-zinc-500" : "text-[10px] mb-3 text-secondary"}`}>
+            {stationIndex + 1}번째 역 — 다음 역 이름은?
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <span className={`editorial-heading tracking-[0.15em] ${compact ? "text-2xl text-white" : "text-4xl"}`}>
+              {hintShown || showAllNames ? station.name : chosungOf(station.name)}
+            </span>
+            {!hintShown && !showAllNames && (
+              <button
+                type="button"
+                onClick={revealHint}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
+              >
+                <Lightbulb size={13} /> 힌트
+              </button>
+            )}
+          </div>
+          {!compact && (
+            <p className="mt-3 text-xs font-medium text-secondary/70 leading-relaxed">
+              초성을 보고 이름을 떠올려 입력하세요.
+              <br />
+              이름을 완성하면 열차가 출발합니다.
+            </p>
+          )}
+        </>
+      ) : (
+        <>
+          <p className={`font-black uppercase tracking-[0.2em] ${compact ? "text-[9px] mb-1 text-violet-300" : "text-[10px] mb-3 text-primary"}`}>
+            <MapPin size={11} className="inline -mt-0.5 mr-1" />
+            {station.name}
+            {station.year ? ` · ${station.year}` : ""} 도착
+          </p>
+          <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white" : "text-2xl text-on-secondary-container"}`}>
+            {station.fact}
+          </p>
+          {!compact && (
+            <p className="mt-3 text-xs font-medium text-secondary leading-relaxed">
+              {station.detail ? station.detail : "이 문장을 그대로 새기면 다음 역으로 출발합니다."}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  );
+
+  const journeyInput = (
+    <input
+      ref={inputRef}
+      type="text"
+      value={inputValue}
+      onChange={handleInputChange}
+      disabled={gameState !== "playing"}
+      className={`w-full text-center font-black outline-hidden transition-all ${
+        isMobilePlaying
+          ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-violet-500"}`
+          : `h-16 px-5 text-2xl text-on-surface bg-surface-lowest rounded-[1.5rem] shadow-[0_20px_40px_rgba(21,28,39,0.08)] placeholder:text-zinc-300 placeholder:text-base ring-2 ${
+              gameState === "playing"
+                ? isWrongNow
+                  ? "ring-rose-400"
+                  : "ring-transparent focus:ring-primary-container"
+                : "ring-transparent opacity-50"
+            }`
+      }`}
+      placeholder={
+        gameState !== "playing"
+          ? "출발 준비가 되면 시작하세요"
+          : phase === "traveling"
+            ? "다음 역 이름을 입력하세요"
+            : "위 문장을 그대로 입력하세요"
+      }
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
+      spellCheck={false}
+    />
+  );
+
+  const completeModal = gameState === "finished" && finalStats && (
+    <JourneyComplete
+      course={course}
+      stationCount={stations.length}
+      kpm={finalStats.kpm}
+      accuracy={finalStats.accuracy}
+      seconds={finalStats.seconds}
+      completionCount={completionCount}
+      onRestart={() => startGame(false)}
+    />
+  );
+
+  // ── 모바일 풀스크린 몰입 모드
+  if (isMobilePlaying && overlay) {
+    const exitGame = () => {
+      if (confirm("여정을 잠시 멈출까요? 진행 상황은 저장됩니다.")) exitToReady();
+      else resume();
+    };
+    const mobileHud = (
+      <>
+        <span className="flex items-center gap-1">
+          <span className="text-[9px] text-zinc-500 font-black uppercase">역</span>
+          <span className="text-sm font-black text-violet-400 tabular-nums">
+            {Math.min(stationIndex + 1, stations.length)}/{stations.length}
+          </span>
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="text-[9px] text-zinc-500 font-black uppercase">타수</span>
+          <span className="text-sm font-black text-blue-400 tabular-nums">{liveKpm}</span>
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="text-[9px] text-zinc-500 font-black uppercase">정확도</span>
+          <span className="text-sm font-black text-emerald-400 tabular-nums">{accuracy}%</span>
+        </span>
+      </>
+    );
+    return (
+      <>
+        <MobileGameShell overlay={overlay} hud={mobileHud} input={journeyInput} paused={paused} onResume={resume} onExit={exitGame}>
+          <div className="w-full h-full flex flex-col justify-center gap-3 p-3 bg-zinc-950">
+            <JourneyMap
+              course={course}
+              stations={stations}
+              currentIndex={stationIndex}
+              phase={phase}
+              showAllNames={showAllNames}
+              variant="strip"
+            />
+            {promptCard(true)}
+          </div>
+        </MobileGameShell>
+        {mounted && completeModal && createPortal(completeModal, document.body)}
+      </>
+    );
+  }
+
+  const statCell = (label: string, value: React.ReactNode, accent?: string) => (
+    <div className="flex flex-col items-center justify-center py-3 rounded-2xl bg-surface-low">
+      <span className="text-[9px] text-secondary/70 uppercase font-black tracking-widest mb-0.5">{label}</span>
+      <span className={`text-xl font-black tabular-nums ${accent || "text-on-surface"}`}>{value}</span>
+    </div>
+  );
+
+  return (
+    <div className="w-full flex flex-col gap-4 py-2 animate-in fade-in duration-700">
+      {mounted && completeModal && createPortal(completeModal, document.body)}
+
+      {/* 노트북에서 스크롤 없이 한 화면: 좌측 노선도 / 우측 계기판·프롬프트·입력 */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-4 items-start">
+        {/* 노선도 카드 */}
+        <div className="relative w-full bg-surface-lowest rounded-[2rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-4 md:p-6 overflow-hidden">
+          <JourneyMap
+            course={course}
+            stations={stations}
+            currentIndex={stationIndex}
+            phase={phase}
+            finished={gameState === "finished"}
+            showAllNames={showAllNames || gameState !== "playing"}
+            variant="full"
+          />
+
+          {gameState === "ready" && (
+            <div className="absolute inset-0 flex items-center justify-center bg-surface/60 backdrop-blur-sm z-10 p-4">
+              <div className="glass-card !rounded-[2.5rem] p-8 flex flex-col items-center gap-5 max-w-sm w-full">
+                <div className="text-5xl">{course.emoji}</div>
+                <div className="text-center">
+                  <h3 className="editorial-heading text-2xl mb-1">{course.title}</h3>
+                  <p className="text-secondary text-xs font-medium leading-relaxed">
+                    {course.subtitle}. 초성을 보고 다음 역 이름을 입력해 이동하고, 도착하면 공개되는 핵심 지식 한 줄까지 새겨야 출발합니다.
+                  </p>
+                </div>
+                {resumeSnapshot ? (
+                  <div className="w-full flex flex-col gap-2">
+                    <button
+                      onClick={() => startGame(true)}
+                      className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+                    >
+                      <Play size={20} fill="currentColor" /> {resumeSnapshot.stationIndex + 1}번째 역부터 이어가기
+                    </button>
+                    <button
+                      onClick={() => startGame(false)}
+                      className="w-full py-3 bg-surface-high text-secondary text-sm font-black rounded-2xl transition-all active:scale-95"
+                    >
+                      처음부터 다시 출발
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => startGame(false)}
+                    className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <Play size={20} fill="currentColor" /> 여정 출발
+                  </button>
+                )}
+                {completionCount > 0 && (
+                  <p className="text-[11px] font-bold text-secondary/70">지금까지 {completionCount}번 완주했어요</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 사이드 패널: 계기판 + 프롬프트 + 입력 */}
+        <div className="flex flex-col gap-3 lg:sticky lg:top-20">
+          <div className="bg-surface-lowest rounded-[1.75rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-3">
+            <div className="grid grid-cols-2 gap-2">
+              {statCell(
+                "역 진행",
+                `${gameState === "playing" ? Math.min(stationIndex + 1, stations.length) : 0}/${stations.length}`,
+                "text-primary"
+              )}
+              {statCell("현재 타수", liveKpm, "text-primary-container")}
+              {statCell(
+                "시간",
+                <span className="flex items-center gap-1">
+                  <Timer size={15} className="text-secondary" />
+                  {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, "0")}
+                </span>
+              )}
+              {statCell("정확도", `${accuracy}%`)}
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAllNames((v) => !v)}
+              className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-black transition-colors ${
+                showAllNames ? "bg-surface-high text-secondary" : "primary-gradient text-white"
+              }`}
+            >
+              {showAllNames ? <Eye size={14} /> : <EyeOff size={14} />}
+              {showAllNames ? "이름 전체 보기 중 — 암기 모드로" : "암기 모드 (이름 숨김)"}
+            </button>
+          </div>
+
+          {gameState === "playing" && promptCard(false)}
+          {journeyInput}
+        </div>
+      </div>
+    </div>
+  );
+};

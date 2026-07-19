@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper, Timer, Store } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper, Timer, Store, TramFront } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
@@ -126,6 +126,7 @@ export const Header: React.FC = () => {
                 <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="긴 글 연습" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/books" icon={<Store size={20} />} label="책방" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/recommend" icon={<Keyboard size={20} />} label="키보드 추천" onClick={() => setIsMobileMenuOpen(false)} />
@@ -173,7 +174,8 @@ export const Header: React.FC = () => {
                 <NavButton icon={<PenTool size={18} />} label="긴 글 연습" href="/transcription" />
                 <NavButton icon={<Store size={18} />} label="책방" href="/books" />
                 <NavButton icon={<Gamepad2 size={18} />} label="한글 게임" href="/game" />
-                <NavButton icon={<BookOpenCheck size={18} />} label="맞춤법 퀴즈" href="/quiz" />
+                <NavButton icon={<TramFront size={18} />} label="지식타자" href="/journey" />
+                <NavButton icon={<BookOpenCheck size={18} />} label="맞춤법 퀴즈" href="/quiz" className="hidden xl:flex" />
                 <NavButton icon={<Users size={18} />} label="필사 챌린지" href="/challenge" />
                 <NavButton icon={<Keyboard size={18} />} label="키보드 추천" href="/recommend" className="hidden xl:flex" />
                 <NavButton icon={<Newspaper size={18} />} label="블로그" href="/blog" className="hidden xl:flex" />

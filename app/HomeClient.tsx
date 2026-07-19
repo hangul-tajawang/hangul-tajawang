@@ -17,6 +17,7 @@ import {
   ArrowRight,
   Smartphone,
   Keyboard,
+  TramFront,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -53,7 +54,7 @@ export default function HomeClient({ initialPopular }: Props) {
 
       {/* Feature Section */}
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <FeatureCard
             href="/practice"
             icon={<Layout className="text-primary" size={28} />}
@@ -76,18 +77,25 @@ export default function HomeClient({ initialPopular }: Props) {
             step="03"
           />
           <FeatureCard
+            href="/journey"
+            icon={<TramFront className="text-violet-600" size={28} />}
+            title="지식타자"
+            description="태정태세문단세를 한 역씩 <br/>타자로 정복하는 암기 학습"
+            step="04"
+          />
+          <FeatureCard
             href="/challenge"
             icon={<Users className="text-purple-600" size={28} />}
             title="오픈 챌린지"
             description="커뮤니티와 함께 호흡하는 <br/>필사 및 랭킹 시스템"
-            step="04"
+            step="05"
           />
           <FeatureCard
             href="/recommend"
             icon={<Keyboard className="text-amber-600" size={28} />}
             title="장비의 미학"
             description="당신의 리듬을 완성해줄 <br/>선별된 키보드 추천"
-            step="05"
+            step="06"
           />
         </div>
       </section>
