@@ -132,6 +132,8 @@ export function BookCoverArt({
           src={artUrl}
           alt=""
           fill
+          // 업로드 시 800px WebP로 미리 리사이즈해 저장하므로 Vercel 이미지 최적화(변형 과금) 우회.
+          unoptimized
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 220px"

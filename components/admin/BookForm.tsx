@@ -29,6 +29,36 @@ export interface BookFormInitial {
 const field = "w-full px-4 py-3 rounded-xl border border-surface-high bg-surface-lowest font-medium text-sm focus:outline-none focus:border-primary/60";
 const label = "block text-xs font-black text-zinc-500 mb-1.5 mt-5";
 
+// 표지를 업로드 전 클라이언트에서 폭 800px WebP(품질 0.82)로 축소·재인코딩한다.
+// 저장 파일이 ~50–100KB로 작아지고, 웹은 unoptimized로 원본을 그대로 서빙하므로
+// Vercel 이미지 최적화(변형) 과금을 전혀 소비하지 않는다.
+const MAX_COVER_WIDTH = 800;
+async function resizeCover(file: File): Promise<File> {
+  if (!file.type.startsWith("image/")) return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_COVER_WIDTH / bitmap.width);
+    const w = Math.round(bitmap.width * scale);
+    const h = Math.round(bitmap.height * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/webp", 0.82)
+    );
+    if (!blob) return file;
+    // 이미 원본이 더 작으면(재인코딩이 손해면) 원본 유지
+    if (blob.size >= file.size) return file;
+    return new File([blob], file.name, { type: "image/webp" });
+  } catch {
+    return file; // 실패 시 원본 그대로 업로드 (기능 저하 없이 폴백)
+  }
+}
+
 export function BookForm({
   authors,
   initial,
@@ -48,6 +78,10 @@ export function BookForm({
   const onSubmit = (formData: FormData) => {
     setResult(null);
     startTransition(async () => {
+      const coverFile = formData.get("coverFile");
+      if (coverFile instanceof File && coverFile.size > 0) {
+        formData.set("coverFile", await resizeCover(coverFile));
+      }
       const r = await saveBook(formData);
       setResult(r);
       if (r.ok) router.refresh();

@@ -22,6 +22,13 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   images: {
+    // Vercel 이미지 최적화(변형) 과금을 전면 차단.
+    //   실제 변형 소비의 주범은 책표지(소스 9개)가 아니라 유저 아바타였다:
+    //   profiles.avatar_url 88개(Supabase 58 / Kakao 30)가 리더보드·헤더·댓글·알림 등에서 next/image로 최적화됐고,
+    //   Supabase 아바타의 ?v=<타임스탬프> 캐시버스터 탓에 프사를 바꿀 때마다 새 소스=새 변형이 생겨 dedup이 무력화됐다.
+    //   전역 unoptimized로 카카오 포함 전 이미지를 원본 그대로 서빙 → 변형 소비 0, 앞으로 추가되는 이미지도 자동 커버.
+    //   (표지는 업로드 시 800px WebP 리사이즈, 카카오/기존 아바타는 원래 작아 부작용 없음.)
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',

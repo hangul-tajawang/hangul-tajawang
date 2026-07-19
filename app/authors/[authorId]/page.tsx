@@ -71,6 +71,7 @@ export default async function AuthorPage({ params }: Props) {
             alt={`${author.name} 작가 프로필`}
             width={112}
             height={112}
+            unoptimized
             className="w-28 h-28 rounded-full object-cover shadow-xl shrink-0"
           />
         ) : (

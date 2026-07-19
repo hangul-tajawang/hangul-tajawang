@@ -116,6 +116,7 @@ export default async function SeriesPage({ params }: Props) {
               alt={`${series.author} 작가 프로필`}
               width={56}
               height={56}
+              unoptimized
               className="w-14 h-14 rounded-full object-cover shrink-0"
             />
           )}
