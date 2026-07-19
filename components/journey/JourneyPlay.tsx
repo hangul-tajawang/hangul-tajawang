@@ -93,7 +93,10 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   }, [gameState, paused]);
 
   const station = stations[Math.min(stationIndex, stations.length - 1)];
-  const target = phase === "traveling" ? station.name : station.fact;
+  // quiz 코스(세계 수도 등)는 질문(name)을 보여주고 정답(fact)을 입력한다 — 1단계 진행
+  const isQuiz = course.flow === "quiz";
+  const unit = course.unitLabel || "역";
+  const target = isQuiz ? station.fact : phase === "traveling" ? station.name : station.fact;
   const normTarget = TypingUtils.normalize(target);
 
   const currentSnapshot = useCallback(
@@ -142,11 +145,11 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       setInputValue("");
       wasWrong.current = false;
 
-      if (phase === "traveling") {
-        // 역 이름 완성 → 도착, 지식 문장 공개
+      if (!isQuiz && phase === "traveling") {
+        // 이름 완성 → 도착, 지식 문장 공개
         setPhase("arrived");
       } else {
-        // 지식 문장 완성 → 다음 역으로 출발
+        // (quiz: 정답 입력 / sequence: 지식 문장 완성) → 다음으로 이동
         if (stationIndex >= stations.length - 1) {
           finish(strokes, targets, mistakes);
           return;
@@ -225,11 +228,34 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
             : "bg-surface-lowest shadow-[0_20px_40px_rgba(21,28,39,0.06)]"
       }`}
     >
-      {phase === "traveling" ? (
+      {isQuiz ? (
         <>
-          <p className={`font-black uppercase tracking-[0.25em] ${compact ? "text-[9px] mb-1 text-zinc-500" : "text-[10px] mb-3 text-secondary"}`}>
-            {stationIndex + 1}번째 역 — 다음 역 이름은?
+          <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white mb-1.5" : "text-2xl mb-3"}`}>
+            {station.name}
+            {course.questionSuffix || "은(는)?"}
           </p>
+          <div className="flex items-center justify-center gap-3">
+            <span className={`font-black tracking-[0.2em] ${compact ? "text-xl text-violet-300" : "text-3xl text-primary"}`}>
+              {hintShown || showAllNames ? station.fact : chosungOf(station.fact)}
+            </span>
+            {!hintShown && !showAllNames && (
+              <button
+                type="button"
+                onClick={revealHint}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
+              >
+                <Lightbulb size={13} /> 힌트
+              </button>
+            )}
+          </div>
+          {!compact && (
+            <p className="mt-3 text-xs font-medium text-secondary/70 leading-relaxed">
+              초성 힌트를 보고 정답을 입력하면 다음 문제로 넘어갑니다.
+            </p>
+          )}
+        </>
+      ) : phase === "traveling" ? (
+        <>
           <div className="flex items-center justify-center gap-3">
             <span className={`editorial-heading tracking-[0.15em] ${compact ? "text-2xl text-white" : "text-4xl"}`}>
               {hintShown || showAllNames ? station.name : chosungOf(station.name)}
@@ -246,9 +272,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
           </div>
           {!compact && (
             <p className="mt-3 text-xs font-medium text-secondary/70 leading-relaxed">
-              초성을 보고 이름을 떠올려 입력하세요.
-              <br />
-              이름을 완성하면 열차가 출발합니다.
+              초성을 보고 다음 {unit} 이름을 떠올려 입력하세요.
             </p>
           )}
         </>
@@ -264,7 +288,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
           </p>
           {!compact && (
             <p className="mt-3 text-xs font-medium text-secondary leading-relaxed">
-              {station.detail ? station.detail : "이 문장을 그대로 새기면 다음 역으로 출발합니다."}
+              {station.detail ? station.detail : "이 문장을 그대로 새기면 다음으로 출발합니다."}
             </p>
           )}
         </>
@@ -293,9 +317,11 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       placeholder={
         gameState !== "playing"
           ? "출발 준비가 되면 시작하세요"
-          : phase === "traveling"
-            ? "다음 역 이름을 입력하세요"
-            : "위 문장을 그대로 입력하세요"
+          : isQuiz
+            ? "정답을 입력하세요"
+            : phase === "traveling"
+              ? `다음 ${unit} 이름을 입력하세요`
+              : "위 문장을 그대로 입력하세요"
       }
       autoComplete="off"
       autoCorrect="off"
@@ -325,7 +351,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
     const mobileHud = (
       <>
         <span className="flex items-center gap-1">
-          <span className="text-[9px] text-zinc-500 font-black uppercase">역</span>
+          <span className="text-[9px] text-zinc-500 font-black uppercase">진행</span>
           <span className="text-sm font-black text-violet-400 tabular-nums">
             {Math.min(stationIndex + 1, stations.length)}/{stations.length}
           </span>
@@ -392,7 +418,10 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 <div className="text-center">
                   <h3 className="editorial-heading text-2xl mb-1">{course.title}</h3>
                   <p className="text-secondary text-xs font-medium leading-relaxed">
-                    {course.subtitle}. 초성을 보고 다음 역 이름을 입력해 이동하고, 도착하면 공개되는 핵심 지식 한 줄까지 새겨야 출발합니다.
+                    {course.subtitle}.{" "}
+                    {isQuiz
+                      ? "질문을 보고 초성 힌트로 정답을 떠올려 입력하세요."
+                      : `초성을 보고 다음 ${unit} 이름을 입력해 이동하고, 도착하면 공개되는 핵심 지식 한 줄까지 새겨야 출발합니다.`}
                   </p>
                 </div>
                 {resumeSnapshot ? (
@@ -401,7 +430,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                       onClick={() => startGame(true)}
                       className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
                     >
-                      <Play size={20} fill="currentColor" /> {resumeSnapshot.stationIndex + 1}번째 역부터 이어가기
+                      <Play size={20} fill="currentColor" /> {resumeSnapshot.stationIndex + 1}번째부터 이어가기
                     </button>
                     <button
                       onClick={() => startGame(false)}
@@ -415,7 +444,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                     onClick={() => startGame(false)}
                     className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
                   >
-                    <Play size={20} fill="currentColor" /> 여정 출발
+                    <Play size={20} fill="currentColor" /> 시작하기
                   </button>
                 )}
                 {completionCount > 0 && (
@@ -431,7 +460,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
           <div className="bg-surface-lowest rounded-[1.75rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-3">
             <div className="grid grid-cols-2 gap-2">
               {statCell(
-                "역 진행",
+                "진행",
                 `${gameState === "playing" ? Math.min(stationIndex + 1, stations.length) : 0}/${stations.length}`,
                 "text-primary"
               )}

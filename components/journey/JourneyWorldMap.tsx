@@ -28,8 +28,9 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
   const chip = (station: (typeof stations)[number], idx: number, compact: boolean) => {
     const state = revealState(idx, currentIndex, phase, finished, showAllNames);
     const isCurrent = idx === currentIndex && !finished;
-    const label = state === "name" ? station.name : state === "q" ? "???" : "•";
-    const showCapital = state === "name";
+    // 퀴즈 방식: 문제로 나온 나라는 이름을 항상 공개하고 지도에서 하이라이트, 수도(fact)만 정답 후 공개
+    const label = state === "hidden" ? "•" : station.name;
+    const showCapital = state === "name" && !isCurrent;
     return (
       <div
         key={station.id}
