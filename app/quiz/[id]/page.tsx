@@ -50,6 +50,10 @@ export default async function QuizDetailPage({ params }: Props) {
   
   const data = QUIZ_DATA[currentIndex];
   const nextData = currentIndex < QUIZ_DATA.length - 1 ? QUIZ_DATA[currentIndex + 1] : null;
+  // 관련 맞춤법 문제 — 목록에서 이어지는 6개(순환)로 내부 링크를 강화한다
+  const relatedQuizzes = Array.from({ length: 6 }, (_, i) =>
+    QUIZ_DATA[(currentIndex + 1 + i) % QUIZ_DATA.length]
+  ).filter((q) => q.id !== data.id);
 
   // AEO & SEO: FAQ Schema Markup
   const jsonLd = {
@@ -120,6 +124,31 @@ export default async function QuizDetailPage({ params }: Props) {
                         <PenTool size={20} /> 실전 짧은 글 타자 연습 가기
                     </Link>
                 </div>
+
+                {/* 관련 맞춤법 문제 — 내부 링크 */}
+                <section className="mt-16 pt-10 border-t border-surface-high not-prose">
+                    <h2 className="text-2xl font-black mb-6 text-zinc-900 dark:text-zinc-100">이런 맞춤법도 자주 틀려요</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {relatedQuizzes.map((q) => (
+                            <Link
+                                key={q.id}
+                                prefetch={false}
+                                href={`/quiz/${q.id}`}
+                                className="group flex items-center justify-between gap-4 p-5 bg-surface-low rounded-2xl border border-surface-high hover:border-blue-500/50 transition-all"
+                            >
+                                <span className="font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                                    {q.aeoQuestion}
+                                </span>
+                                <span className="text-blue-500 shrink-0 group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="mt-8 text-center">
+                        <Link prefetch={false} href="/quiz" className="text-sm font-black text-blue-600 dark:text-blue-400 hover:underline">
+                            맞춤법 문제 전체 보기 →
+                        </Link>
+                    </div>
+                </section>
             </div>
         </article>
       </div>

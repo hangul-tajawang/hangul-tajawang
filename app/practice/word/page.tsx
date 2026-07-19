@@ -1,8 +1,23 @@
 import { Metadata } from 'next';
 import { BASIC_PRACTICE_STEPS } from '@/lib/word-data';
 import Link from 'next/link';
-import { Keyboard, ArrowRight } from 'lucide-react';
+import { Keyboard, ArrowRight, BookOpenText, Lightbulb, HeartPulse, HelpCircle } from 'lucide-react';
 import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
+
+const WORD_FAQ = [
+  {
+    q: '낱말 연습은 자리 연습과 무엇이 다른가요?',
+    a: '자리 연습이 개별 자음·모음의 위치를 외우는 단계라면, 낱말 연습은 그 글자들을 이어 실제 단어를 완성하는 단계입니다. 손가락이 자판 위치를 아는 것을 넘어, 자연스러운 손놀림의 흐름을 만드는 훈련이라 타수를 본격적으로 끌어올리는 구간입니다.',
+  },
+  {
+    q: '어떤 단계(Step)부터 시작해야 하나요?',
+    a: '반드시 첫 번째 기본 자리(중간 줄) 단계부터 순서대로 진행하세요. 손가락이 중심 위치를 확실히 기억한 뒤 윗줄·아랫줄로 넓혀가야 오타가 줄고, 나중에 문장을 칠 때 속도가 무너지지 않습니다.',
+  },
+  {
+    q: '독수리 타법도 교정할 수 있나요?',
+    a: '네. 낱말 연습은 두 손가락만 쓰는 독수리 타법을 교정하는 데 특히 효과적입니다. 처음에는 느려도 정해진 손가락으로만 치는 원칙을 지키면, 며칠 안에 화면만 보고도 단어를 입력하는 감각이 생깁니다.',
+  },
+];
 
 export const metadata: Metadata = {
   title: "한글 낱말 연습 목록 - 단계별 자판 단어 연습",
@@ -55,6 +70,96 @@ export default function WordPracticeListPage() {
           </Link>
         ))}
       </div>
+
+      {/* SEO 및 정보 섹션 — 낱말 타자 연습 가이드 */}
+      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-4 space-y-16 text-left">
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-primary">
+            <BookOpenText size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">단계별 낱말 연습이란</h2>
+          </div>
+          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+            <strong className="text-on-surface">낱말 타자 연습</strong>은 키보드 자판을 영역별(중간 줄·윗 줄·아랫 줄)로 나누어,
+            해당 위치의 글자로 이루어진 단어를 반복해서 치며 손가락에 자판을 각인시키는 훈련입니다.
+            낱개의 자음·모음 위치를 익히는 자리 연습에서 한 걸음 나아가, 실제 <strong className="text-on-surface">단어 단위의 손놀림</strong>을
+            몸에 새기는 과정이라 타수를 본격적으로 끌어올리는 가장 중요한 구간입니다.
+          </p>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-amber-500">
+            <Lightbulb size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">효과적인 낱말 연습법</h2>
+          </div>
+          <ul className="space-y-4">
+            {[
+              ['순서대로 차근차근', '기본 자리 → 윗줄 → 아랫줄 → 쌍자음 순으로 진행하세요. 한 단계를 건너뛰면 나중에 오타의 원인이 됩니다.'],
+              ['정해진 손가락 지키기', '느리더라도 각 키에 배정된 손가락으로만 치세요. 이 원칙이 무너지면 독수리 타법이 다시 굳어집니다.'],
+              ['화면만 보고 치기', '단어가 짧아 무자판 훈련에 적합합니다. 손이 아니라 화면의 단어만 보며 입력하는 연습을 하세요.'],
+              ['속도보다 리듬', '한 글자씩 끊어 치기보다 단어를 하나의 흐름으로 이어 치는 감각을 익히면 타수가 자연스럽게 올라갑니다.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-3">
+                <span className="text-amber-500 mt-1 shrink-0">✔</span>
+                <span className="text-zinc-600 dark:text-zinc-400 leading-relaxed break-keep">
+                  <strong className="text-on-surface">{t}:</strong> {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-emerald-600">
+            <HeartPulse size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">낱말 연습의 효과</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              ['타수 향상', '단어 단위 반복이 손가락의 이동 거리를 최적화해 분당 타수를 눈에 띄게 끌어올립니다.'],
+              ['오타 감소', '올바른 손가락 배치가 몸에 배어, 빠르게 쳐도 틀리지 않는 정확한 타이핑이 가능해집니다.'],
+              ['타법 교정', '독수리 타법을 근본적으로 교정해, 자판을 보지 않고 치는 터치 타이핑의 토대를 만듭니다.'],
+            ].map(([t, d]) => (
+              <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
+                <h3 className="font-black mb-2 text-on-surface">{t}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed break-keep">{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-500">
+            <HelpCircle size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+          </div>
+          <div className="space-y-4">
+            {WORD_FAQ.map((f) => (
+              <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
+                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                  {f.q}
+                  <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
+                </summary>
+                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: WORD_FAQ.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }

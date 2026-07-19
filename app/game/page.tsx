@@ -1,7 +1,22 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag } from "lucide-react";
+import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag, BookOpenText, HelpCircle } from "lucide-react";
+
+const GAME_FAQ = [
+  {
+    q: '게임으로 타자 연습이 정말 되나요?',
+    a: '네. 떨어지는 단어를 입력하거나 봇과 경주하는 게임은 정해진 시간 안에 정확히 쳐야 하는 압박을 만들어, 지루한 반복 없이도 순간 반응 속도와 타수를 끌어올립니다. 재미 덕분에 자연스럽게 연습 시간이 길어지는 것도 큰 장점입니다.',
+  },
+  {
+    q: '어떤 게임부터 하면 좋나요?',
+    a: '타자가 익숙하지 않다면 속도 부담이 적은 타자 레이스로 시작하고, 익숙해지면 산성비·블록 팝핑처럼 시간 압박이 있는 게임으로 넘어가세요. 성문방어와 기억력 타자는 명령어·기억까지 더해져 난이도가 높은 편입니다.',
+  },
+  {
+    q: '게임 점수가 랭킹에 반영되나요?',
+    a: '로그인 후 플레이하면 게임별 최고 점수가 실시간 랭킹보드에 자동 등록되어 다른 유저들과 순위를 겨룰 수 있습니다. 목표 점수가 생기면 연습 동기도 훨씬 강해집니다.',
+  },
+];
 
 export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
@@ -88,6 +103,67 @@ export default function GameHubPage() {
             게임 시작하기 <ChevronRight size={20} />
         </Link>
       </div>
+
+      {/* SEO 및 정보 섹션 — 타자 게임 안내 */}
+      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 space-y-16 text-left">
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-600">
+            <BookOpenText size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">게임처럼 즐기는 한글 타자 연습</h2>
+          </div>
+          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+            반복되는 연습이 지루하다면 게임이 답입니다. 한글타자왕의 타자 게임은 하늘에서 떨어지는 단어를 막고,
+            AI 봇과 속도를 겨루고, 명령어로 성문을 지키는 다양한 방식으로 <strong className="text-on-surface">순간 반응 속도와 타수</strong>를
+            끌어올립니다. 재미가 붙는 만큼 연습 시간도 자연스럽게 길어지고, 실시간 랭킹이 더 높은 점수에 도전하게 만듭니다.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              ['산성비 · 블록 팝핑', '시간 안에 단어를 쳐야 하는 압박형. 순간 판단력과 손 속도를 집중적으로 훈련합니다.'],
+              ['타자 레이스', 'AI 봇과의 경주형. 내 타수가 200·350·500타와 실시간으로 비교되어 실력이 한눈에 보입니다.'],
+              ['성문방어', '발사·방패·번개 등 명령어를 입력하는 전략형. 정확한 단어 입력과 순발력을 함께 요구합니다.'],
+              ['기억력 타자', '카드를 타자로 뒤집어 짝을 맞추는 두뇌형. 타이핑과 집중력을 동시에 자극합니다.'],
+            ].map(([t, d]) => (
+              <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
+                <h3 className="font-black mb-2 text-on-surface">{t}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed break-keep">{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-500">
+            <HelpCircle size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+          </div>
+          <div className="space-y-4">
+            {GAME_FAQ.map((f) => (
+              <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
+                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                  {f.q}
+                  <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
+                </summary>
+                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: GAME_FAQ.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }

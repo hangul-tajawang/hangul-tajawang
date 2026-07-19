@@ -1,8 +1,23 @@
 import { Metadata } from 'next';
 import { QUIZ_DATA } from '@/lib/quiz-data';
 import Link from 'next/link';
-import { BookOpen, AlertTriangle } from 'lucide-react';
+import { BookOpen, AlertTriangle, BookOpenText, Lightbulb, HelpCircle } from 'lucide-react';
 import { KeyboardAdSidebar } from '@/components/layout/KeyboardAdSidebar';
+
+const QUIZ_FAQ = [
+  {
+    q: '맞춤법 퀴즈는 어떻게 진행되나요?',
+    a: '헷갈리기 쉬운 맞춤법 주제를 고르면 빈칸이 있는 문장이 나옵니다. 알맞은 표기를 선택하면 정답 여부와 함께 왜 그것이 맞는지에 대한 상세한 해설이 표시됩니다. 단순히 외우는 것이 아니라 원리를 이해하도록 구성되어 있습니다.',
+  },
+  {
+    q: '왜 한국인도 맞춤법을 자주 틀리나요?',
+    a: '\'되/돼\', \'낫다/낳다\', \'바람/바램\'처럼 발음이 비슷하거나 규칙이 헷갈리는 표현이 많기 때문입니다. 평소 무심코 쓰던 표현을 퀴즈로 한 번 짚고 해설로 원리를 익히면, 문서·메일·SNS에서 실수를 크게 줄일 수 있습니다.',
+  },
+  {
+    q: '타자 연습과 맞춤법이 무슨 관계인가요?',
+    a: '빠르게 치는 것만큼 바르게 쓰는 것도 글쓰기의 기본입니다. 타자 연습으로 속도를, 맞춤법 퀴즈로 정확한 표기를 함께 익히면 실무에서 신뢰받는 글을 더 빠르게 완성할 수 있습니다.',
+  },
+];
 
 export const metadata: Metadata = {
   title: "자주 틀리는 한글 맞춤법 사전 및 퀴즈",
@@ -56,6 +71,76 @@ export default function QuizListPage() {
           </Link>
         ))}
       </div>
+
+      {/* SEO 및 정보 섹션 — 한글 맞춤법 가이드 */}
+      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-4 space-y-16 text-left">
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-600">
+            <BookOpenText size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">헷갈리는 한글 맞춤법, 퀴즈로 정복하기</h2>
+          </div>
+          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+            한글 맞춤법은 규칙이 촘촘해 성인도 자주 실수합니다. <strong className="text-on-surface">한글타자왕 맞춤법 퀴즈</strong>는
+            <strong className="text-on-surface"> 되/돼, 낫다/낳다/낮다, 바람/바램, 든지/던지</strong>처럼 일상에서 가장 많이 틀리는 표현을 모아,
+            직접 골라 풀고 해설로 원리를 이해하도록 구성했습니다. 무작정 암기하는 대신 "왜 이게 맞는지"를 익혀
+            문서·이메일·SNS 글쓰기에서 실수를 줄이는 것이 목표입니다.
+          </p>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-amber-500">
+            <Lightbulb size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">이렇게 활용해보세요</h2>
+          </div>
+          <ul className="space-y-4">
+            {[
+              ['취약한 것부터', '평소 자신 없던 주제를 먼저 골라 풀어보세요. 틀린 문제일수록 해설이 오래 기억에 남습니다.'],
+              ['해설까지 꼭 읽기', '정답을 맞혀도 해설을 읽어 원리를 확인하세요. 비슷한 다른 표현까지 함께 정리할 수 있습니다.'],
+              ['타자 연습과 병행', '맞춤법으로 정확한 표기를, 타자 연습으로 속도를 함께 키우면 글쓰기 전반이 탄탄해집니다.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-3">
+                <span className="text-amber-500 mt-1 shrink-0">✔</span>
+                <span className="text-zinc-600 dark:text-zinc-400 leading-relaxed break-keep">
+                  <strong className="text-on-surface">{t}:</strong> {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-500">
+            <HelpCircle size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+          </div>
+          <div className="space-y-4">
+            {QUIZ_FAQ.map((f) => (
+              <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
+                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                  {f.q}
+                  <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
+                </summary>
+                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: QUIZ_FAQ.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }

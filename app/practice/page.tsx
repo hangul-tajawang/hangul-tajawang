@@ -1,8 +1,23 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Keyboard, Layout, PenTool, MousePointer2, ChevronRight, Star, Sparkles } from "lucide-react";
+import { Keyboard, Layout, PenTool, MousePointer2, ChevronRight, Star, Sparkles, BookOpenText, HelpCircle } from "lucide-react";
 import { KeyboardAdBanner } from "@/components/layout/KeyboardAdBanner";
+
+const PRACTICE_FAQ = [
+  {
+    q: '타자 연습, 어떤 순서로 하는 게 좋나요?',
+    a: '자판 위치가 익숙하지 않다면 자리 연습 → 낱말 연습 → 짧은 글 연습 순서를 추천합니다. 손가락이 자판을 기억한 뒤 단어, 문장으로 단계를 넓혀가야 오타 없이 속도가 붙습니다. 이미 자판이 익숙하다면 낱말이나 짧은 글부터 시작해도 좋습니다.',
+  },
+  {
+    q: '독수리 타법을 고치고 싶어요.',
+    a: '자리 연습부터 시작하세요. 각 키에 배정된 올바른 손가락으로만 치는 원칙을 지키며 낱말 연습으로 넘어가면, 두 손가락에 의존하던 습관이 며칠 안에 교정됩니다.',
+  },
+  {
+    q: '하루에 얼마나 연습해야 하나요?',
+    a: '몰아서 오래 하기보다 하루 10~15분씩 꾸준히 하는 편이 훨씬 효과적입니다. 손가락의 근육 기억은 반복 빈도에 비례해 자리 잡기 때문입니다.',
+  },
+];
 
 export const metadata: Metadata = {
   title: "타자 연습 모드 선택 - 자리/낱말/짧은글",
@@ -68,9 +83,68 @@ export default function PracticePage() {
         </Link>
       </div>
 
+      {/* SEO 및 정보 섹션 — 연습 모드 선택 가이드 */}
+      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 space-y-16 text-left">
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-primary">
+            <BookOpenText size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">어떤 연습 모드를 골라야 할까요</h2>
+          </div>
+          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+            한글타자왕은 실력과 목적에 맞춰 세 가지 타자 연습 모드를 제공합니다. 자신의 단계에 맞는 모드를 골라
+            <strong className="text-on-surface"> 자리 → 낱말 → 짧은 글</strong> 순으로 넓혀가면 오타 없이 타수를 끌어올릴 수 있습니다.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              ['자리 연습', 'ㅁㄴㅇㄹ 기본 자리부터 자판 위치와 올바른 손가락 배치를 익히는 기초 단계. 독수리 타법 교정의 출발점입니다.'],
+              ['낱말 연습', '자판이 손에 익었다면 실제 단어를 치며 손놀림의 흐름과 정확도를 다지는 단계입니다.'],
+              ['짧은 글 연습', '명언·힐링·속담 등 테마 문장을 치며 속도와 정확도를 실전 감각으로 끌어올리는 단계입니다.'],
+            ].map(([t, d]) => (
+              <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
+                <h3 className="font-black mb-2 text-on-surface">{t}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed break-keep">{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-5">
+          <div className="flex items-center gap-3 text-blue-500">
+            <HelpCircle size={28} />
+            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+          </div>
+          <div className="space-y-4">
+            {PRACTICE_FAQ.map((f) => (
+              <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
+                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                  {f.q}
+                  <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
+                </summary>
+                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
       <div className="mt-16 pt-16 border-t border-outline-variant/60">
         <KeyboardAdBanner />
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: PRACTICE_FAQ.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }
