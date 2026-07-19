@@ -15,7 +15,7 @@ import {
 } from "@/lib/journey-progress";
 import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
 import { MobileGameShell } from "@/components/game/MobileGameShell";
-import { JourneyMap } from "./JourneyMap";
+import { JourneyViz } from "./JourneyViz";
 import { JourneyComplete } from "./JourneyComplete";
 
 const CHOSEONG = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
@@ -344,7 +344,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       <>
         <MobileGameShell overlay={overlay} hud={mobileHud} input={journeyInput} paused={paused} onResume={resume} onExit={exitGame}>
           <div className="w-full h-full flex flex-col justify-center gap-3 p-3 bg-zinc-950">
-            <JourneyMap
+            <JourneyViz
               course={course}
               stations={stations}
               currentIndex={stationIndex}
@@ -375,7 +375,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-4 items-start">
         {/* 노선도 카드 */}
         <div className="relative w-full bg-surface-lowest rounded-[2rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-4 md:p-6 overflow-hidden">
-          <JourneyMap
+          <JourneyViz
             course={course}
             stations={stations}
             currentIndex={stationIndex}

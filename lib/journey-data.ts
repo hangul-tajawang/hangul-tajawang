@@ -20,6 +20,9 @@ export interface JourneyStation {
   detail?: string;
   /** 니모닉 그룹 id (JourneyCourse.groups 참조) */
   group?: string;
+  /** 그리드형 UI(주기율표 등)에서의 배치 좌표 — row=주기, col=족(1~18) */
+  row?: number;
+  col?: number;
 }
 
 export interface JourneyLine {
@@ -41,6 +44,8 @@ export interface JourneyCourse {
   description: string;
   category: '역사' | '지리' | '과학' | '상식';
   emoji: string;
+  /** 시각화 UI — 미지정 시 지하철 노선도(subway). 코스 컨셉별 전용 UI 선택 */
+  ui?: 'subway' | 'worldmap' | 'periodic';
   /** 코스별 SEO 키워드 */
   keywords: string[];
   /** 니모닉 청크 (태정태세문단세 등) — 노선도 행 라벨로 사용 */
@@ -105,6 +110,102 @@ export const JOURNEY_COURSES: JourneyCourse[] = [
           { id: 'cheoljong', name: '철종', year: '1849~1863', fact: '강화도령으로 불리다 왕이 되다', detail: '강화도에서 농사짓다 하루아침에 왕이 됐다.', group: 'g4' },
           { id: 'gojong', name: '고종', year: '1863~1907', fact: '대한제국을 선포하고 황제가 되다', detail: '흥선대원군의 아들. 헤이그 특사 사건으로 강제 퇴위됐다.', group: 'g4' },
           { id: 'sunjong', name: '순종', year: '1907~1910', fact: '조선의 마지막 왕이 되다', detail: '1910년 경술국치로 나라를 잃었다.', group: 'g4' },
+        ],
+      },
+    ],
+  },
+
+  // ── 세계 수도 (지도형 UI) ──────────────────────────────────────────────
+  {
+    id: 'world-capitals',
+    title: '세계 수도 27',
+    subtitle: '대륙별로 짚어가는 주요국 수도',
+    description:
+      '아시아부터 오세아니아까지, 대륙을 옮겨가며 주요 나라의 수도를 한 나라씩 타자로 정복합니다. 나라 이름을 입력해 이동하고, 도착하면 그 나라의 수도를 타이핑해야 다음으로 넘어갑니다.',
+    category: '지리',
+    emoji: '🌍',
+    ui: 'worldmap',
+    keywords: ['세계 수도 외우기', '나라별 수도', '세계지리 암기', '수도 퀴즈', '한글타자왕'],
+    groups: [
+      { id: 'asia', label: '아시아' },
+      { id: 'europe', label: '유럽' },
+      { id: 'americas', label: '아메리카' },
+      { id: 'africa', label: '아프리카' },
+      { id: 'oceania', label: '오세아니아' },
+    ],
+    lines: [
+      {
+        id: 'main',
+        color: '#0ea5e9',
+        stations: [
+          { id: 'kr', name: '대한민국', fact: '서울', detail: '한반도 남쪽의 나라, 수도는 서울', group: 'asia' },
+          { id: 'jp', name: '일본', fact: '도쿄', detail: '섬나라, 수도는 도쿄', group: 'asia' },
+          { id: 'cn', name: '중국', fact: '베이징', detail: '인구가 가장 많은 나라 중 하나, 수도는 베이징', group: 'asia' },
+          { id: 'in', name: '인도', fact: '뉴델리', detail: '남아시아의 대국, 수도는 뉴델리', group: 'asia' },
+          { id: 'th', name: '태국', fact: '방콕', detail: '동남아시아, 수도는 방콕', group: 'asia' },
+          { id: 'vn', name: '베트남', fact: '하노이', detail: '수도는 하노이(최대 도시는 호찌민)', group: 'asia' },
+          { id: 'gb', name: '영국', fact: '런던', detail: '수도는 런던', group: 'europe' },
+          { id: 'fr', name: '프랑스', fact: '파리', detail: '수도는 파리', group: 'europe' },
+          { id: 'de', name: '독일', fact: '베를린', detail: '수도는 베를린', group: 'europe' },
+          { id: 'it', name: '이탈리아', fact: '로마', detail: '수도는 로마', group: 'europe' },
+          { id: 'es', name: '스페인', fact: '마드리드', detail: '수도는 마드리드', group: 'europe' },
+          { id: 'ru', name: '러시아', fact: '모스크바', detail: '세계에서 가장 넓은 나라, 수도는 모스크바', group: 'europe' },
+          { id: 'us', name: '미국', fact: '워싱턴', detail: '수도는 워싱턴 D.C.(최대 도시는 뉴욕)', group: 'americas' },
+          { id: 'ca', name: '캐나다', fact: '오타와', detail: '수도는 오타와', group: 'americas' },
+          { id: 'mx', name: '멕시코', fact: '멕시코시티', detail: '수도는 멕시코시티', group: 'americas' },
+          { id: 'br', name: '브라질', fact: '브라질리아', detail: '남미 최대국, 수도는 브라질리아', group: 'americas' },
+          { id: 'ar', name: '아르헨티나', fact: '부에노스아이레스', detail: '수도는 부에노스아이레스', group: 'americas' },
+          { id: 'pe', name: '페루', fact: '리마', detail: '수도는 리마', group: 'americas' },
+          { id: 'eg', name: '이집트', fact: '카이로', detail: '수도는 카이로', group: 'africa' },
+          { id: 'za', name: '남아프리카공화국', fact: '프리토리아', detail: '행정 수도는 프리토리아', group: 'africa' },
+          { id: 'ke', name: '케냐', fact: '나이로비', detail: '수도는 나이로비', group: 'africa' },
+          { id: 'ng', name: '나이지리아', fact: '아부자', detail: '수도는 아부자(최대 도시는 라고스)', group: 'africa' },
+          { id: 'ma', name: '모로코', fact: '라바트', detail: '수도는 라바트', group: 'africa' },
+          { id: 'et', name: '에티오피아', fact: '아디스아바바', detail: '수도는 아디스아바바', group: 'africa' },
+          { id: 'au', name: '오스트레일리아', fact: '캔버라', detail: '수도는 캔버라(최대 도시는 시드니)', group: 'oceania' },
+          { id: 'nz', name: '뉴질랜드', fact: '웰링턴', detail: '수도는 웰링턴', group: 'oceania' },
+          { id: 'fj', name: '피지', fact: '수바', detail: '남태평양 섬나라, 수도는 수바', group: 'oceania' },
+        ],
+      },
+    ],
+  },
+
+  // ── 주기율표 1~20 (그리드형 UI) ────────────────────────────────────────
+  {
+    id: 'periodic-table',
+    title: '주기율표 1~20',
+    subtitle: '수소부터 칼슘까지, 원소 순서 정복',
+    description:
+      '수소(H)부터 칼슘(Ca)까지 원자번호 순으로 원소를 한 칸씩 타자로 정복합니다. 원소 이름을 입력해 이동하고, 도착하면 그 원소의 핵심 한 줄을 타이핑합니다. 원소기호는 각 칸에 함께 표시됩니다.',
+    category: '과학',
+    emoji: '🧪',
+    ui: 'periodic',
+    keywords: ['주기율표 외우기', '원소 순서', '원소기호', '화학 암기', '수헬리베붕탄질산', '한글타자왕'],
+    lines: [
+      {
+        id: 'main',
+        color: '#10b981',
+        stations: [
+          { id: 'h', name: '수소', reading: 'H', fact: '우주에서 가장 가벼운 원소', row: 1, col: 1 },
+          { id: 'he', name: '헬륨', reading: 'He', fact: '풍선을 띄우는 비활성 기체', row: 1, col: 18 },
+          { id: 'li', name: '리튬', reading: 'Li', fact: '배터리에 쓰이는 가장 가벼운 금속', row: 2, col: 1 },
+          { id: 'be', name: '베릴륨', reading: 'Be', fact: '가볍고 단단한 금속', row: 2, col: 2 },
+          { id: 'b', name: '붕소', reading: 'B', fact: '유리를 강하게 만드는 준금속', row: 2, col: 13 },
+          { id: 'c', name: '탄소', reading: 'C', fact: '모든 생명체의 뼈대가 되는 원소', row: 2, col: 14 },
+          { id: 'n', name: '질소', reading: 'N', fact: '공기의 약 78%를 차지하는 기체', row: 2, col: 15 },
+          { id: 'o', name: '산소', reading: 'O', fact: '호흡에 꼭 필요한 원소', row: 2, col: 16 },
+          { id: 'f', name: '플루오린', reading: 'F', fact: '치약에 들어가는 반응성 큰 원소', row: 2, col: 17 },
+          { id: 'ne', name: '네온', reading: 'Ne', fact: '네온사인을 밝히는 기체', row: 2, col: 18 },
+          { id: 'na', name: '나트륨', reading: 'Na', fact: '소금을 이루는 금속', row: 3, col: 1 },
+          { id: 'mg', name: '마그네슘', reading: 'Mg', fact: '불꽃놀이의 밝은 흰빛을 내는 금속', row: 3, col: 2 },
+          { id: 'al', name: '알루미늄', reading: 'Al', fact: '캔과 포일에 쓰이는 가벼운 금속', row: 3, col: 13 },
+          { id: 'si', name: '규소', reading: 'Si', fact: '반도체의 핵심 재료', row: 3, col: 14 },
+          { id: 'p', name: '인', reading: 'P', fact: '성냥과 DNA에 들어가는 원소', row: 3, col: 15 },
+          { id: 's', name: '황', reading: 'S', fact: '노란색을 띠고 화산에서 볼 수 있는 원소', row: 3, col: 16 },
+          { id: 'cl', name: '염소', reading: 'Cl', fact: '수돗물 소독에 쓰이는 기체', row: 3, col: 17 },
+          { id: 'ar', name: '아르곤', reading: 'Ar', fact: '공기 중 세 번째로 많은 기체', row: 3, col: 18 },
+          { id: 'k', name: '칼륨', reading: 'K', fact: '바나나에 많이 든 원소', row: 4, col: 1 },
+          { id: 'ca', name: '칼슘', reading: 'Ca', fact: '뼈와 이를 이루는 원소', row: 4, col: 2 },
         ],
       },
     ],
