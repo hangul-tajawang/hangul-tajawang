@@ -82,7 +82,8 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    "google-adsense-account": "ca-pub-5720611278808953",
+    // 블루컴즈 애드센스 (이관 후 재심사용) — 이전 개인 계정: ca-pub-5720611278808953
+    "google-adsense-account": "ca-pub-6359187702715364",
   },
 };
 
@@ -93,6 +94,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Script id="gtm-script" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-NCVLQG83');`}
         </Script>
+        <Script
+          id="adsense-script"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6359187702715364"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <Script id="clarity-script" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "voys6pz476");`}
         </Script>
