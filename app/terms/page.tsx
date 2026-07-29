@@ -11,7 +11,14 @@ export const metadata: Metadata = {
   }
 };
 
+// 매시간 재생성(ISR) → 2026-09-01 00:00(KST) 이후 재생성 시점에 개정판으로 자동 전환
+export const revalidate = 3600;
+
+const TRANSFER_DATE = new Date("2026-09-01T00:00:00+09:00");
+
 export default function TermsOfService() {
+  // 영업양도 시행일(2026-09-01) 이후 여부 — 운영자 정의·문의처·시행일자가 바뀐다
+  const transferred = new Date() >= TRANSFER_DATE;
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans py-12 px-4">
       <div className="container mx-auto max-w-3xl bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
@@ -22,17 +29,30 @@ export default function TermsOfService() {
           </Link>
           <Scale size={48} className="text-blue-600 mb-4" />
           <h1 className="text-3xl font-black mb-2">이용약관</h1>
-          <p className="text-zinc-500 text-sm font-medium">시행일자: 2026. 07. 12</p>
+          <p className="text-zinc-500 text-sm font-medium">시행일자: {transferred ? "2026. 09. 01" : "2026. 07. 12"}</p>
         </div>
 
         {/* Content */}
         <div className="p-8 md:p-12 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed break-keep">
+          {!transferred && (
+            <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-2xl p-5 text-sm text-blue-900 dark:text-blue-200">
+              <strong>[개정 예고]</strong> 2026년 9월 1일자로 서비스 운영 주체가 블루커뮤니케이션즈 주식회사로
+              변경(영업 양도)됨에 따라 본 약관의 운영자·문의처가 개정될 예정입니다. 자세한 내용은{" "}
+              <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600 dark:hover:text-blue-300">
+                운영 주체 변경 안내
+              </Link>
+              를 확인해 주세요.
+            </div>
+          )}
           <section>
             <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제1조 (목적)
             </h2>
-            <p>본 약관은 '한글타자왕'(이하 "서비스")이 제공하는 타자 연습 및 관련 제반 서비스의 이용과 관련하여, 운영자와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+            <p>
+              본 약관은 '한글타자왕'(이하 "서비스")이 제공하는 타자 연습 및 관련 제반 서비스의 이용과 관련하여, 운영자와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+              {transferred && <> 본 약관에서 "운영자"란 서비스를 운영하는 블루커뮤니케이션즈 주식회사를 말합니다.</>}
+            </p>
           </section>
 
           <section>
@@ -151,7 +171,7 @@ export default function TermsOfService() {
                 <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center">
                   <Mail size={20} />
                 </div>
-                withanalog@gmail.com
+                {transferred ? "bluecomms.ailab@gmail.com" : "withanalog@gmail.com"}
               </div>
             </div>
           </section>
@@ -161,7 +181,7 @@ export default function TermsOfService() {
         <div className="p-8 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 text-center flex justify-center gap-6 text-sm font-bold text-zinc-400">
           <Link prefetch={false} href="/privacy" className="hover:text-zinc-600 transition-colors">개인정보처리방침</Link>
           <span>·</span>
-          <span>© 2026 한글타자왕</span>
+          <span>© 2026 {transferred ? "블루커뮤니케이션즈 주식회사" : "한글타자왕"}</span>
         </div>
       </div>
     </div>
