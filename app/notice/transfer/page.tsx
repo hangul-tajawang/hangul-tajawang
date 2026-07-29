@@ -24,14 +24,14 @@ export default function TransferNoticePage() {
           <h1 className="text-2xl md:text-3xl font-black mb-2 break-keep">
             서비스 운영 주체 변경(영업 양도)에 따른<br />개인정보 이전 안내
           </h1>
-          <p className="text-zinc-500 text-sm font-medium">게시일: 2026. 07. 29 · 이전 예정일: 2026. 08. 29 (변경 시 본 공지로 재안내)</p>
+          <p className="text-zinc-500 text-sm font-medium">게시일: 2026. 07. 29 · 이전일: 2026. 08. 29</p>
         </div>
 
         <div className="p-8 md:p-12 space-y-10 text-zinc-700 dark:text-zinc-300 leading-relaxed break-keep">
           <section>
             <p>
               안녕하세요, 한글타자왕입니다. 그동안 개인 개발자가 운영해 온 한글타자왕 웹사이트 및 모바일 앱(한글타자왕) 서비스가
-              <strong> 2026년 8월 29일(예정)자로 블루커뮤니케이션즈 주식회사에 양도</strong>되어 운영 주체가 변경될 예정입니다. 이전 예정일이 변경되는 경우 본 공지를 통해 다시 안내드립니다. 기존 개발자는 블루커뮤니케이션즈 주식회사 소속 개발자로 합류하여 지금과 동일하게 서비스 개발과 운영을 계속 이어갑니다.
+              <strong> 2026년 8월 29일(예정)자로 블루커뮤니케이션즈 주식회사에 양도</strong>되어 운영 주체가 변경될 예정입니다. 기존 개발자는 블루커뮤니케이션즈 주식회사 소속 개발자로 합류하여 지금과 동일하게 서비스 개발과 운영을 계속 이어갑니다.
             </p>
             <p className="mt-3">
               이에 「개인정보 보호법」 제27조에 따라 회원님의 개인정보 이전에 관한 사항을 아래와 같이 안내드립니다.
