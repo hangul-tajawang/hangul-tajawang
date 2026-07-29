@@ -11,6 +11,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PrivacyConsentModal } from "@/components/layout/PrivacyConsentModal";
 import { TopAdBanner } from "@/components/layout/TopAdBanner";
+import { TransferNoticeBanner } from "@/components/layout/TransferNoticeBanner";
 import { KakaoAdFit } from "@/components/layout/KakaoAdFit";
 
 const plusJakartaSans = Plus_Jakarta_Sans({ variable: "--font-plus-jakarta", subsets: ["latin"] });
@@ -117,6 +118,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCVLQG83" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} /></noscript>
         <PrivacyConsentModal />
         <Header />
+        <TransferNoticeBanner />
         <TopAdBanner />
         <div className="flex w-full">
           {/* 좌측 160x600 광고 - 슬롯보다 넓은 반응형 소재가 본문을 덮지 않도록 160px로 클리핑 */}
