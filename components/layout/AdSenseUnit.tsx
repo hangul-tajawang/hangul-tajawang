@@ -5,7 +5,18 @@ import Link from 'next/link';
 import { Keyboard, Sparkles, ArrowRight } from 'lucide-react';
 
 const AD_CLIENT = 'ca-pub-6359187702715364'; // 블루커뮤니케이션즈
-const AD_SLOT = '6851097346'; // 블루_한글타자왕_웹_디스플레이 (전 지면 공용)
+
+// 지면(label)별 광고 단위 — 애드센스 보고서에서 위치별 수익을 구분하기 위해 분리
+const AD_SLOTS: Record<string, string> = {
+  'top-banner-pc': '3566458458',     // 블루_한글타자왕_상단배너
+  'top-banner-mobile': '3566458458',
+  'sidebar-left': '2253376787',      // 블루_한글타자왕_사이드바
+  'sidebar-right': '2253376787',
+  'content-banner-pc': '9940295116', // 블루_한글타자왕_본문
+  'content-banner-mobile': '9940295116',
+  'keyboard-sidebar': '9940295116',
+};
+const DEFAULT_SLOT = '6851097346';   // 블루_한글타자왕_웹_디스플레이 (예비/공용)
 
 interface AdSenseUnitProps {
   width: number;
@@ -146,7 +157,7 @@ export const AdSenseUnit: React.FC<AdSenseUnitProps> = ({ width, height, label, 
         className="adsbygoogle"
         style={{ display: 'inline-block', width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
         data-ad-client={AD_CLIENT}
-        data-ad-slot={AD_SLOT}
+        data-ad-slot={AD_SLOTS[label] ?? DEFAULT_SLOT}
       ></ins>
     </div>
   );
