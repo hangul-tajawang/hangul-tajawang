@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Sparkles, X, ChevronLeft } from "lucide-react";
-import { KakaoAdFit } from "./KakaoAdFit";
+import { AdSenseUnit } from "./AdSenseUnit";
 
 export const KeyboardAdSidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -41,8 +41,8 @@ export const KeyboardAdSidebar: React.FC = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center">
-        {/* 카카오 애드핏 사이드바 (300x250) */}
-        <KakaoAdFit unit="DAN-vwbEDGtI7juY66tG" width={300} height={250} />
+        {/* 애드센스 사이드 사각형 (300x250) */}
+        <AdSenseUnit label="keyboard-sidebar" width={300} height={250} />
       </div>
     </div>
   );

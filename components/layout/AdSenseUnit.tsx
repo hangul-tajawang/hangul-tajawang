@@ -1,25 +1,27 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Keyboard, Sparkles, ArrowRight } from 'lucide-react';
 
-interface KakaoAdFitProps {
-  unit: string;
+const AD_CLIENT = 'ca-pub-6359187702715364'; // 블루커뮤니케이션즈
+const AD_SLOT = '6851097346'; // 블루_한글타자왕_웹_디스플레이 (전 지면 공용)
+
+interface AdSenseUnitProps {
   width: number;
   height: number;
+  /** GA4 하우스배너 집계용 지면 이름 (예: "sidebar-left") */
+  label: string;
   disabled?: boolean;
 }
 
 /**
- * 애드핏 NO-AD 폴백 하우스 배너.
- * 애드핏이 광고를 채우지 못한 슬롯(fill rate 미달분)을 버리지 않고
- * 쿠팡 파트너스 키보드 추천 페이지로 연결되는 자체 배너로 회수한다.
- * 슬롯 비율에 따라 세로형(160x600) / 사각형(300x250) / 가로형(320x100)으로 렌더링.
+ * 애드센스 미충족(unfilled) 폴백 하우스 배너.
+ * 광고가 채워지지 않은 슬롯을 버리지 않고 쿠팡 파트너스 키보드 추천 페이지로
+ * 연결되는 자체 배너로 회수한다. (애드핏 시절 폴백 구조 승계)
  */
 const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }> = ({ width, height, unit }) => {
   useEffect(() => {
-    // GTM으로 폴백 노출 집계 (GA4에서 하우스배너 성과 추적용)
     (window as any).dataLayer?.push({ event: 'house_ad_impression', ad_unit: unit, ad_size: `${width}x${height}` });
   }, [unit, width, height]);
 
@@ -82,38 +84,40 @@ const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }>
   );
 };
 
-export const KakaoAdFit: React.FC<KakaoAdFitProps> = ({ unit, width, height, disabled = false }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const adRef = useRef<boolean>(false);
+export const AdSenseUnit: React.FC<AdSenseUnitProps> = ({ width, height, label, disabled = false }) => {
+  const insRef = useRef<HTMLModElement>(null);
+  const pushedRef = useRef(false);
   const [failed, setFailed] = useState(false);
-  // 같은 유닛이 한 페이지에 두 번 실릴 수 있으므로 인스턴스별 고유 콜백 이름 사용.
-  // SSR로 렌더된 data-ad-onfail 속성과 클라이언트의 window 등록 이름이 일치해야 하므로
-  // 난수 대신 hydration-safe한 useId를 사용한다.
-  const instanceId = useId().replace(/[^a-zA-Z0-9_]/g, "");
-  const onFailName = `adfitNoAd_${unit.replace(/[^a-zA-Z0-9_]/g, "_")}_${instanceId}`;
 
   useEffect(() => {
-    // Prevent rendering in disabled mode or double rendering in React Strict Mode
-    if (disabled || adRef.current) return;
+    // React Strict Mode 이중 실행 방지 + disabled 모드
+    if (disabled || pushedRef.current || !insRef.current) return;
+    pushedRef.current = true;
 
-    const adFitWindow = window as unknown as Window & Record<string, ((element: HTMLModElement) => void) | undefined>;
-    // 애드핏 광고 미수신(NO-AD) → 하우스 배너로 전환해 노출 낭비를 회수
-    adFitWindow[onFailName] = () => {
+    try {
+      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+    } catch {
       setFailed(true);
-      if (process.env.NODE_ENV !== "production") {
-        console.warn(`[adfit] no ad returned for ${unit} → house ad fallback`);
+      return;
+    }
+
+    // 애드센스는 채움 결과를 ins의 data-ad-status 속성으로 알려준다 → unfilled면 하우스 배너로 회수
+    const ins = insRef.current;
+    const check = () => {
+      if (ins.getAttribute('data-ad-status') === 'unfilled') {
+        setFailed(true);
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(`[adsense] unfilled slot at ${label} → house ad fallback`);
+        }
+        return true;
       }
+      return false;
     };
-
-    const script = document.createElement('script');
-    script.src = 'https://t1.kakaocdn.net/kas/static/ba.min.js';
-    script.async = true;
-    script.type = 'text/javascript';
-    script.charset = 'utf-8';
-    containerRef.current?.appendChild(script);
-
-    adRef.current = true;
-  }, [disabled, onFailName, unit]);
+    if (check()) return;
+    const observer = new MutationObserver(() => { if (check()) observer.disconnect(); });
+    observer.observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
+    return () => observer.disconnect();
+  }, [disabled, label]);
 
   if (disabled) {
     return (
@@ -121,9 +125,8 @@ export const KakaoAdFit: React.FC<KakaoAdFitProps> = ({ unit, width, height, dis
         className="flex flex-col items-center justify-center bg-surface-high border-2 border-dashed border-outline-variant text-zinc-400 text-sm font-bold rounded-2xl p-4 text-center my-4"
         style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
       >
-        <span>Kakao AdFit 영역</span>
+        <span>AdSense 영역</span>
         <span className="text-xs font-normal mt-1 opacity-70">{width} x {height}</span>
-        <span className="text-xs font-normal mt-1 opacity-70 break-all">{unit}</span>
       </div>
     );
   }
@@ -131,20 +134,19 @@ export const KakaoAdFit: React.FC<KakaoAdFitProps> = ({ unit, width, height, dis
   if (failed) {
     return (
       <div className="flex items-center justify-center w-full my-4 overflow-hidden" style={{ minHeight: `${height}px` }}>
-        <HouseAdFallback width={width} height={height} unit={unit} />
+        <HouseAdFallback width={width} height={height} unit={label} />
       </div>
     );
   }
 
   return (
-    <div ref={containerRef} className="flex items-center justify-center w-full my-4 overflow-hidden" style={{ minHeight: `${height}px` }}>
+    <div className="flex items-center justify-center w-full my-4 overflow-hidden" style={{ minHeight: `${height}px` }}>
       <ins
-        className="kakao_ad_area"
-        style={{ display: 'none', width: '100%' }}
-        data-ad-unit={unit}
-        data-ad-width={width}
-        data-ad-height={height}
-        data-ad-onfail={onFailName}
+        ref={insRef}
+        className="adsbygoogle"
+        style={{ display: 'inline-block', width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
+        data-ad-client={AD_CLIENT}
+        data-ad-slot={AD_SLOT}
       ></ins>
     </div>
   );

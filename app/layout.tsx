@@ -12,7 +12,7 @@ import { Footer } from "@/components/layout/Footer";
 import { PrivacyConsentModal } from "@/components/layout/PrivacyConsentModal";
 import { TopAdBanner } from "@/components/layout/TopAdBanner";
 import { TransferNoticeBanner } from "@/components/layout/TransferNoticeBanner";
-import { KakaoAdFit } from "@/components/layout/KakaoAdFit";
+import { AdSenseUnit } from "@/components/layout/AdSenseUnit";
 
 const plusJakartaSans = Plus_Jakarta_Sans({ variable: "--font-plus-jakarta", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -124,7 +124,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {/* 좌측 160x600 광고 - 슬롯보다 넓은 반응형 소재가 본문을 덮지 않도록 160px로 클리핑 */}
           <aside className="hidden xl:flex shrink-0 w-[180px] items-start justify-center pt-8 px-2">
             <div className="sticky top-28 w-[160px] max-w-[160px] overflow-hidden">
-              <KakaoAdFit unit="DAN-07GIKaryVfOS8YDz" width={160} height={600} />
+              <AdSenseUnit label="sidebar-left" width={160} height={600} />
             </div>
           </aside>
 
@@ -136,7 +136,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {/* 우측 160x600 광고 - 좌측과 동일하게 클리핑 */}
           <aside className="hidden xl:flex shrink-0 w-[180px] items-start justify-center pt-8 px-2">
             <div className="sticky top-28 w-[160px] max-w-[160px] overflow-hidden">
-              <KakaoAdFit unit="DAN-1HADJiJOZbdlAc0V" width={160} height={600} />
+              <AdSenseUnit label="sidebar-right" width={160} height={600} />
             </div>
           </aside>
         </div>
