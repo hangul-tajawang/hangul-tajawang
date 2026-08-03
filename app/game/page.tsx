@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag, BookOpenText, HelpCircle, TrendingUp } from "lucide-react";
+import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag, BookOpenText, HelpCircle } from "lucide-react";
 
 const GAME_FAQ = [
   {
@@ -61,7 +61,11 @@ export default function GameHubPage() {
 
         <GameCard
           href="/game/stairs"
-          icon={<TrendingUp size={40} className="text-emerald-500" />}
+          icon={
+            // 이미지 변형 과금 방지로 next/image 대신 일반 img 사용
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/game/stairs/card-chick.png" alt="계단 오르는 병아리" width={64} height={64} draggable={false} className="w-16 h-16 object-contain select-none pointer-events-none drop-shadow" />
+          }
           title="글자 계단"
           description="끝없이 이어지는 타자 계단! <br/>단어를 쳐서 한 칸씩 올라가세요!"
           difficulty="Medium"
@@ -93,15 +97,6 @@ export default function GameHubPage() {
           description="거북이, 토끼, 치타와 경주! <br/>단어를 입력해 결승선을 통과하세요!"
           difficulty="Easy"
           color="blue"
-        />
-
-        <GameCard
-          href="/game/stairs"
-          icon={<TrendingUp size={40} className="text-emerald-500" />}
-          title="글자 계단"
-          description="무한의 계단처럼 끝없이! <br/>단어를 쳐서 한 칸씩 올라가세요!"
-          difficulty="Medium"
-          color="emerald"
         />
       </div>
 

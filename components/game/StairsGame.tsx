@@ -178,7 +178,9 @@ export const StairsGame: React.FC = () => {
   }, [gameState]);
 
   // 게이지 감소 루프. 첫 정타 전(ready 직후)에는 감소하지 않고,
-  // 감소 속도는 초당 6에서 시작해 층수에 따라 점증(상한 초당 16).
+  // 감소 속도는 초당 5에서 시작해 층수에 따라 완만히 점증한다.
+  // 회복량(정타 시)이 단어 타수에 비례하므로, 감소는 계속 상승시켜
+  // 고수도 결국 벽에 부딪히게 해 층수 랭킹이 무한대로 벌어지지 않도록 한다.
   const updateGame = useCallback((time: number) => {
     if (paused) return;
     if (lastFrame.current === 0) lastFrame.current = time;
@@ -186,7 +188,7 @@ export const StairsGame: React.FC = () => {
     lastFrame.current = time;
 
     if (startedRef.current && !gameOverRef.current) {
-      const drain = Math.min(16, 6 + floorRef.current * 0.05);
+      const drain = Math.min(120, 5 + floorRef.current * 0.09);
       setGauge((g) => Math.max(0, g - drain * dt));
     }
 
@@ -244,16 +246,17 @@ export const StairsGame: React.FC = () => {
       const newFloor = floor + 1;
       setFloor(newFloor);
       floorRef.current = newFloor;
-      totalStrokes.current += TypingUtils.getStrokeCount(target.word);
+      const strokes = TypingUtils.getStrokeCount(target.word);
+      totalStrokes.current += strokes;
       setWordsTyped((n) => n + 1);
 
       const newCombo = combo + 1;
       setCombo(newCombo);
       if (newCombo > maxCombo) setMaxCombo(newCombo);
 
-      // 게이지 회복: 정타 +18에서 층수에 따라 소폭 감소(최소 +10),
-      // 콤보 5·10·20 도달 시 보너스 소량
-      const recover = Math.max(10, 18 - newFloor * 0.06);
+      // 게이지 회복: 친 단어의 타수에 비례(긴 단어일수록 더 많이 회복)해서
+      // 91층 이후 긴 단어가 순손실이 되던 '절벽'을 없앤다. 콤보 5·10·20 보너스.
+      const recover = Math.max(6, strokes * 3.9);
       const comboBonus = newCombo === 5 || newCombo === 10 || newCombo === 20 ? 8 : 0;
       setGauge((g) => Math.min(100, g + recover + comboBonus));
 

@@ -167,21 +167,21 @@ export const Header: React.FC = () => {
                 <span className="editorial-heading text-xl whitespace-nowrap">한글타자왕</span>
             </Link>
 
-            {/* 데스크톱 내비: 1024px 미만은 햄버거 메뉴, 1024~1280px은 핵심 6개, 1280px~ 전체, 1536px~ 아이콘 표시 */}
-            <nav className="hidden lg:flex items-center gap-1 min-w-0">
-                <NavButton icon={<Timer size={18} />} label="타자 테스트" href="/test" />
-                <NavButton icon={<Layout size={18} />} label="타자 연습장" href="/practice" />
-                <NavButton icon={<PenTool size={18} />} label="긴 글 연습" href="/transcription" />
-                <NavButton icon={<Store size={18} />} label="책방" href="/books" />
-                <NavButton icon={<Gamepad2 size={18} />} label="한글 게임" href="/game" />
-                <NavButton icon={<TramFront size={18} />} label="지식타자" href="/journey" />
-                <NavButton icon={<BookOpenCheck size={18} />} label="맞춤법 퀴즈" href="/quiz" className="hidden xl:flex" />
-                <NavButton icon={<Users size={18} />} label="필사 챌린지" href="/challenge" />
-                <NavButton icon={<Keyboard size={18} />} label="키보드 추천" href="/recommend" className="hidden xl:flex" />
-                <NavButton icon={<Newspaper size={18} />} label="블로그" href="/blog" className="hidden xl:flex" />
+            {/* 데스크톱 내비(텍스트 전용): 1024px 미만은 햄버거, 1024~1151px은 핵심 7개, 1152px~ 전체 10개 */}
+            <nav className="hidden lg:flex items-center gap-0.5 min-w-0">
+                <NavButton label="타자 테스트" href="/test" />
+                <NavButton label="타자 연습장" href="/practice" />
+                <NavButton label="긴 글 연습" href="/transcription" />
+                <NavButton label="책방" href="/books" />
+                <NavButton label="한글 게임" href="/game" />
+                <NavButton label="지식타자" href="/journey" />
+                <NavButton label="맞춤법 퀴즈" href="/quiz" className="hidden min-[1152px]:flex" />
+                <NavButton label="필사 챌린지" href="/challenge" />
+                <NavButton label="키보드 추천" href="/recommend" className="hidden min-[1152px]:flex" />
+                <NavButton label="블로그" href="/blog" className="hidden min-[1152px]:flex" />
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
                 {loading ? (
                     <div className="w-10 h-10 flex items-center justify-center">
                         <Loader2 className="animate-spin text-zinc-300" size={20} />
@@ -214,10 +214,9 @@ export const Header: React.FC = () => {
   );
 };
 
-function NavButton({ icon, label, href, className = "flex" }: { icon: React.ReactNode; label: string; href: string; className?: string }) {
+function NavButton({ label, href, className = "flex" }: { label: string; href: string; className?: string }) {
   return (
-    <Link href={href} prefetch={false} className={`${className} items-center gap-2 px-3 py-2 text-sm whitespace-nowrap text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all`}>
-      <span className="hidden 2xl:inline-flex">{icon}</span>
+    <Link href={href} prefetch={false} className={`${className} items-center px-2.5 py-2 text-sm whitespace-nowrap text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all`}>
       <span>{label}</span>
     </Link>
   );
