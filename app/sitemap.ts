@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/game/block-pop',
     '/game/castle-defense',
     '/game/typing-race',
+    '/game/stairs',
     '/journey',
     ...JOURNEY_COURSES.map((course) => `/journey/${course.id}`),
     '/quiz',
