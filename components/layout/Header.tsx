@@ -191,10 +191,15 @@ export const Header: React.FC = () => {
                         {user && <NotificationDrawer userId={user.id} />}
                         <div className="hidden lg:flex items-center gap-2">
                             {user ? (
-                                <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
-                                    {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={32} height={32} className="w-8 h-8 rounded-full object-cover" /> : <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold text-xs">U</div>}
-                                    <span className="text-sm font-bold text-zinc-700">마이페이지</span>
-                                </Link>
+                                <>
+                                    <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
+                                        {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={32} height={32} className="w-8 h-8 rounded-full object-cover" /> : <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold text-xs">U</div>}
+                                        <span className="text-sm font-bold text-zinc-700">마이페이지</span>
+                                    </Link>
+                                    <button onClick={handleLogout} title="로그아웃" aria-label="로그아웃" className="p-2.5 text-zinc-400 hover:text-red-500 hover:bg-surface-low rounded-full transition-all">
+                                        <LogOut size={16} />
+                                    </button>
+                                </>
                             ) : (
                                 <button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-[#FEE500] text-black rounded-full text-sm font-bold hover:opacity-90">
                                     <Zap size={14} fill="currentColor" /> 시작하기

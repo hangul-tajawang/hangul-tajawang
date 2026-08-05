@@ -231,8 +231,8 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
                 </div>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                     <p className="text-zinc-400 font-bold">{user.email}</p>
-                    <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-red-500 rounded-xl text-[10px] font-black transition-all">
-                        <LogOut size={12} /> 로그아웃
+                    <button onClick={handleLogout} className="flex items-center gap-2 px-5 py-2.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl text-xs font-black transition-all">
+                        <LogOut size={14} /> 로그아웃
                     </button>
                 </div>
                 
