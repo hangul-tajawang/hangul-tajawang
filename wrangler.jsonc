@@ -8,6 +8,11 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // 실도메인 연결 (커스텀 도메인 — DNS 레코드·인증서를 Cloudflare가 자동 관리)
+  "routes": [
+    { "pattern": "www.hangul-tajawang.com", "custom_domain": true },
+    { "pattern": "hangul-tajawang.com", "custom_domain": true }
+  ],
   // OpenNext가 재검증(revalidate) 요청을 자기 자신에게 보낼 때 사용
   "services": [
     { "binding": "WORKER_SELF_REFERENCE", "service": "hangul-tajawang" }
