@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// next dev에서 Cloudflare 바인딩(R2/D1/DO)에 접근할 수 있게 해준다. 프로덕션 빌드에는 영향 없음.
+initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),

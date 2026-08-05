@@ -22,9 +22,13 @@ export async function middleware(request: NextRequest) {
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
-    const clientIp = (request.headers.get('x-forwarded-for') || '')
-      .split(',')[0]
-      .trim();
+    // Cloudflare에서는 cf-connecting-ip가 위조 불가한 실제 클라이언트 IP.
+    // x-forwarded-for는 Cloudflare가 클라이언트 값을 보존·추가하므로 첫 요소를 믿으면 스푸핑 가능.
+    // (Vercel/로컬에서는 cf-connecting-ip가 없으므로 기존 XFF 폴백으로 동일 동작)
+    const clientIp = (
+      request.headers.get('cf-connecting-ip') ??
+      (request.headers.get('x-forwarded-for') || '').split(',')[0]
+    ).trim();
     const isLocalDev =
       process.env.NODE_ENV === 'development' &&
       (clientIp === '' || clientIp === '::1' || clientIp === '127.0.0.1');

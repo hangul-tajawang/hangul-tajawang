@@ -1,0 +1,47 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hangul-tajawang",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // OpenNext가 재검증(revalidate) 요청을 자기 자신에게 보낼 때 사용
+  "services": [
+    { "binding": "WORKER_SELF_REFERENCE", "service": "hangul-tajawang" }
+  ],
+  // ISR/SSG 페이지 캐시 저장소.
+  // R2가 정석이지만 카드 등록(본인확인)이 필요해서 우선 KV 사용 — 무료 한도: 읽기 10만/일, 쓰기 1천/일, 1GB.
+  // 대표님 복귀 후 R2 활성화되면: 아래를 r2_buckets 블록으로 교체 + open-next.config.ts에서 kv→r2 스왑.
+  // "r2_buckets": [{ "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "hangul-tajawang-inc-cache" }],
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "9b9f453e938048cdb0bb97c2e1a4368a"
+    }
+  ],
+  // updateTag("books") 온디맨드 재검증용 태그 캐시
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "hangul-tajawang-tag-cache",
+      "database_id": "4903cc22-1776-4e17-ae0c-c92cb8d345a8"
+    }
+  ],
+  // 시간 기반 revalidate 백그라운드 재생성 큐
+  "durable_objects": {
+    "bindings": [
+      { "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" }
+    ]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DOQueueHandler"] }],
+  // 공개 값만 여기에. 시크릿(SUPABASE_SERVICE_ROLE_KEY, ADMIN_EMAILS,
+  // ADMIN_ALLOWED_IPS, KAKAO_PLATFORM_APP_KEY)은 `npx wrangler secret put`으로 등록.
+  // NEXT_PUBLIC_*은 빌드타임에 인라인되지만 middleware가 런타임 process.env로도 읽으므로 중복 선언.
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://lxvbibfmvsrdstwwlkdm.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dmJpYmZtdnNyZHN0d3dsa2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjg2MTEsImV4cCI6MjA4Nzg0NDYxMX0.QL-98SP7Q1mShLQbzl-tLQUVZSyZJSIAyYgrIX_tge8"
+  }
+}
