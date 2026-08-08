@@ -99,12 +99,7 @@ export const SpeedTest: React.FC = () => {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [gameState, finishTest]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (gameState !== "running") return;
-    const val = e.target.value;
-    if (!startTimeRef.current && val.length > 0) startTimeRef.current = Date.now();
-    setInputValue(val);
-
+  const checkComplete = (val: string) => {
     const typedNorm = TypingUtils.normalize(val);
     if (typedNorm.length >= targetNorm.length &&
         typedNorm.charAt(typedNorm.length - 1) === targetNorm.charAt(targetNorm.length - 1)) {
@@ -112,6 +107,20 @@ export const SpeedTest: React.FC = () => {
       setSentenceIndex((prev) => (prev + 1) % sentences.length);
       setInputValue("");
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (gameState !== "running") return;
+    const val = e.target.value;
+    if (!startTimeRef.current && val.length > 0) startTimeRef.current = Date.now();
+    setInputValue(val);
+    checkComplete(val);
+  };
+
+  // 일부 브라우저/IME는 마지막 글자 조합이 끝나야 값이 확정됨 — 조합 종료 시 한 번 더 판정
+  const handleCompositionEnd = (e: React.CompositionEvent<HTMLInputElement>) => {
+    if (gameState !== "running") return;
+    checkComplete((e.target as HTMLInputElement).value);
   };
 
   // 문장 하이라이트 (ShortPractice와 동일한 패턴)
@@ -289,6 +298,7 @@ export const SpeedTest: React.FC = () => {
         type="text"
         value={inputValue}
         onChange={handleInputChange}
+        onCompositionEnd={handleCompositionEnd}
         onFocus={() => scrollIntoViewOnFocus(inputRef.current)}
         disabled={gameState !== "running"}
         autoFocus
