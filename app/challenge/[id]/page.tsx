@@ -4,7 +4,9 @@ import { LongPractice } from "@/components/long-practice/LongPractice";
 import { notFound } from "next/navigation";
 import React from "react";
 
-export const revalidate = 60; // 60초 캐싱을 통해 무분별한 SSR 트래픽 방지
+// 캐싱으로 무분별한 SSR 트래픽 방지. 60초였으나 페이지당 하루 1,440회 캐시 쓰기가 발생해
+// 다른 ISR 페이지와 동일한 300초로 조정 (하루 288회). 유저 창작글이라 5분 지연은 무방.
+export const revalidate = 300;
 
 interface Props {
   params: Promise<{ id: string }>;

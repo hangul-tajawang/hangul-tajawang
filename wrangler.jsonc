@@ -18,13 +18,12 @@
     { "binding": "WORKER_SELF_REFERENCE", "service": "hangul-tajawang" }
   ],
   // ISR/SSG 페이지 캐시 저장소.
-  // R2가 정석이지만 카드 등록(본인확인)이 필요해서 우선 KV 사용 — 무료 한도: 읽기 10만/일, 쓰기 1천/일, 1GB.
-  // 대표님 복귀 후 R2 활성화되면: 아래를 r2_buckets 블록으로 교체 + open-next.config.ts에서 kv→r2 스왑.
-  // "r2_buckets": [{ "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "hangul-tajawang-inc-cache" }],
-  "kv_namespaces": [
+  // KV 무료 한도(쓰기 1천/일)를 revalidate 주기가 넘겨 2026-08-12 put 차단 발생 → R2로 전환.
+  // R2 무료 한도: 저장 10GB, Class A(쓰기) 100만/월, Class B(읽기) 1천만/월.
+  "r2_buckets": [
     {
-      "binding": "NEXT_INC_CACHE_KV",
-      "id": "9b9f453e938048cdb0bb97c2e1a4368a"
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "hangul-tajawang-inc-cache"
     }
   ],
   // updateTag("books") 온디맨드 재검증용 태그 캐시
