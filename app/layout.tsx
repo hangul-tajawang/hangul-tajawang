@@ -46,6 +46,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.hangul-tajawang.com"),
   title: {
     default: "한글타자왕 - 무료 한글타자연습사이트 | 낱말/짧은글/필사/게임",
     template: "%s | 한글타자왕"

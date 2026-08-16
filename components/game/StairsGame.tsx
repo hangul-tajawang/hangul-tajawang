@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { Trophy, RotateCcw, Play, Loader2, User, Star, Flame, ChevronRight, TrendingUp, Gauge as GaugeIcon } from "lucide-react";
+import { Trophy, RotateCcw, Play, Loader2, User, Star, Flame, ChevronRight, TrendingUp, Gauge as GaugeIcon, Volume2, VolumeX } from "lucide-react";
 import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { SupabaseService } from "@/lib/supabase";
 import { getStairWord } from "@/lib/stairs-words";
 import { TypingUtils } from "@/lib/typing-speed";
 import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
 import { MobileGameShell } from "./MobileGameShell";
+import { sound } from "@/lib/sound-manager";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -92,6 +93,7 @@ export const StairsGame: React.FC = () => {
   const [banner, setBanner] = useState<string | null>(null); // 마일스톤 돌파 배너
   const [finalKpm, setFinalKpm] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [muted, setMuted] = useState(false);
 
   const [rankings, setRankings] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
@@ -153,6 +155,7 @@ export const StairsGame: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
+    setMuted(sound.muted);
     const loadUser = async () => {
       const currentUser = await SupabaseService.getCurrentUser();
       if (currentUser) {
@@ -212,6 +215,7 @@ export const StairsGame: React.FC = () => {
   const triggerGameOver = () => {
     if (gameOverRef.current) return;
     gameOverRef.current = true;
+    sound.thud(); // 추락음
     setFalling(true); // 캐릭터 추락 애니메이션
     fallTimer.current = setTimeout(() => finalizeGameOver(), 700);
   };
@@ -237,6 +241,7 @@ export const StairsGame: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    if (value.length > inputValue.length) sound.tick(); // 키 입력 틱
     setInputValue(value);
     if (gameState !== "playing" || !target) return;
 
@@ -268,6 +273,9 @@ export const StairsGame: React.FC = () => {
       if (hopTimer.current) clearTimeout(hopTimer.current);
       hopTimer.current = setTimeout(() => setHopping(false), 250);
 
+      // 등반 효과음 (콤보가 오를수록 피치 상승)
+      sound.blip({ freq: 500 + Math.min(newCombo, 24) * 16, type: "triangle", dur: 0.09, vol: 0.09, slideTo: 780 + Math.min(newCombo, 24) * 22 });
+
       // 착지 이펙트: 먼지 퍼프 + "+1층" 플로팅 + 실제 게이지 회복량 플로팅
       addFx({ kind: "dust", floor: newFloor, col: target.col }, 900);
       addFx({ kind: "float", floor: newFloor, col: target.col, label: newCombo >= 5 ? `+1층 x${newCombo}콤보` : "+1층", strong: newCombo >= 5 }, 1000);
@@ -276,6 +284,7 @@ export const StairsGame: React.FC = () => {
       // 50층 단위 마일스톤: 깃발 반짝이 + 돌파 배너
       if (target.type === "milestone") {
         addFx({ kind: "sparkle", floor: newFloor, col: target.col }, 1100);
+        sound.milestone();
         setBanner(`${newFloor}층 돌파!`);
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         bannerTimer.current = setTimeout(() => setBanner(null), 800);
@@ -293,6 +302,7 @@ export const StairsGame: React.FC = () => {
     if (isWrong && !wasWrong.current) {
       setCombo(0);
       setMistakes((m) => m + 1);
+      sound.land(); // 오타 피드백(하강 톤)
       // 캐릭터 좌우 흔들림 피드백 (입력창 rose 테두리와 함께)
       setShaking(true);
       if (shakeTimer.current) clearTimeout(shakeTimer.current);
@@ -302,6 +312,7 @@ export const StairsGame: React.FC = () => {
   };
 
   const startGame = () => {
+    sound.initSynth(); // 첫 제스처에서 오디오 컨텍스트 준비(합성음만)
     const base: Stair = { floor: 0, direction: "right", col: 0, word: "", type: "normal" };
     const arr: Stair[] = [base, ...growStairs(base, 25)];
     setStairs(arr);
@@ -546,6 +557,9 @@ export const StairsGame: React.FC = () => {
         <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">층</span><span className="text-sm font-black text-emerald-400 tabular-nums">{floor}</span></span>
         <span className="flex-1 min-w-[60px] max-w-[140px] flex items-center gap-1"><GaugeIcon size={12} className={gaugeText} />{gaugeBar(true)}</span>
         {combo > 1 && <span className="text-orange-500 font-black text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
+        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => setMuted(sound.toggleMuted())} aria-label="음소거" className={`shrink-0 text-zinc-400 ${combo > 1 ? "" : "ml-auto"}`}>
+          {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+        </button>
       </>
     );
     return (
@@ -569,6 +583,9 @@ export const StairsGame: React.FC = () => {
         </div>
         <div className="flex items-center gap-4 shrink-0">
           {combo > 1 && <div className="animate-bounce"><span className="text-orange-500 font-black text-lg italic flex items-center gap-1"><Flame size={16} fill="currentColor" /> {combo}</span></div>}
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => setMuted(sound.toggleMuted())} aria-label="음소거 토글" className="w-9 h-9 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center hover:bg-zinc-700 transition-colors shrink-0">
+            {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
           <div className="h-8 w-px bg-zinc-800 hidden sm:block"></div>
           <div className="text-right hidden sm:block"><div className="text-[9px] text-zinc-500 font-black uppercase tracking-widest leading-tight">Climbing Mode</div><div className="font-black text-zinc-300 text-sm leading-tight">글자 계단</div></div>
         </div>

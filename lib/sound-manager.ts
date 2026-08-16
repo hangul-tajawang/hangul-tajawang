@@ -59,8 +59,8 @@ class SoundManager {
     return this.mutedValue;
   }
 
-  // 첫 제스처에서 호출. 컨텍스트 생성 + 버퍼 프리로드.
-  init() {
+  // AudioContext만 생성/재개 (버퍼 프리로드 없음). 첫 사용자 제스처에서 호출.
+  private ensureContext() {
     if (typeof window === "undefined") return;
     if (!this.ctx) {
       const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -71,7 +71,17 @@ class SoundManager {
       this.masterGain.connect(this.ctx.destination);
     }
     if (this.ctx.state === "suspended") void this.ctx.resume();
-    if (!this.loaded && !this.loading) void this.preload();
+  }
+
+  // 성문방어용: 컨텍스트 + m4a 버퍼 프리로드
+  init() {
+    this.ensureContext();
+    if (this.ctx && !this.loaded && !this.loading) void this.preload();
+  }
+
+  // 합성음만 쓰는 게임용(글자 계단 등): 컨텍스트만 준비
+  initSynth() {
+    this.ensureContext();
   }
 
   private async preload() {
@@ -107,19 +117,55 @@ class SoundManager {
     src.start();
   }
 
-  // 오실레이터 합성 키스트로크 틱 (용량 0)
-  tick() {
+  // 범용 합성 톤 1발 (용량 0)
+  blip({ freq = 660, type = "square", dur = 0.08, vol = 0.08, slideTo }: { freq?: number; type?: OscillatorType; dur?: number; vol?: number; slideTo?: number } = {}) {
     if (this.mutedValue || !this.ctx || !this.masterGain) return;
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = "square";
-    osc.frequency.value = 660 + Math.random() * 120;
-    gain.gain.setValueAtTime(0.06, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+    if (slideTo) osc.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), now + dur);
+    gain.gain.setValueAtTime(vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
     osc.connect(gain).connect(this.masterGain);
     osc.start(now);
-    osc.stop(now + 0.06);
+    osc.stop(now + dur + 0.02);
+  }
+
+  // 오실레이터 합성 키스트로크 틱 (용량 0)
+  tick() {
+    this.blip({ freq: 660 + Math.random() * 120, type: "square", dur: 0.05, vol: 0.06 });
+  }
+
+  // ── 글자 계단 전용 합성 효과음 ──
+  step() {
+    // 한 칸 오를 때 짧은 상승 블립 (콤보 강도로 피치 상승)
+    this.blip({ freq: 520, type: "triangle", dur: 0.09, vol: 0.09, slideTo: 760 });
+  }
+  jump() {
+    this.blip({ freq: 300, type: "square", dur: 0.12, vol: 0.08, slideTo: 620 });
+  }
+  land() {
+    this.blip({ freq: 200, type: "sine", dur: 0.1, vol: 0.09, slideTo: 90 });
+  }
+  milestone() {
+    // 10칸 단위 등 구간 달성 짧은 2음
+    if (this.mutedValue || !this.ctx || !this.masterGain) return;
+    const now = this.ctx.currentTime;
+    [660, 990].forEach((f, i) => {
+      const t = now + i * 0.08;
+      const osc = this.ctx!.createOscillator();
+      const gain = this.ctx!.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = f;
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.12, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      osc.connect(gain).connect(this.masterGain!);
+      osc.start(t);
+      osc.stop(t + 0.2);
+    });
   }
 
   // 웨이브 클리어 팡파레 (상승 3음 아르페지오)
