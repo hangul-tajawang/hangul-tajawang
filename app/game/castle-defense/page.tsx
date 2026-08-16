@@ -27,9 +27,29 @@ export const metadata: Metadata = {
   },
 };
 
+const GAME_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  name: "한글 타자 성문방어",
+  alternateName: "성문방어 타자 게임",
+  url: "https://www.hangul-tajawang.com/game/castle-defense",
+  description:
+    "적의 머리 위 한글 단어를 정확히 타이핑해 화살을 쏘고, 점점 강해지는 웨이브와 보스를 막아내는 무료 온라인 타워 디펜스 타자 게임.",
+  inLanguage: "ko",
+  genre: ["타워 디펜스", "타자 연습", "캐주얼"],
+  gamePlatform: ["Web Browser", "PC", "Mobile Web"],
+  applicationCategory: "Game",
+  operatingSystem: "Any",
+  playMode: "SinglePlayer",
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" },
+  publisher: { "@type": "Organization", name: "한글타자왕" },
+};
+
 export default function CastleDefensePage() {
   return (
     <div className="w-full">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(GAME_JSONLD) }} />
       <h1 className="sr-only">한글 타자 게임 성문방어 - 무료 온라인 단어 타이핑 타워 디펜스</h1>
 
       <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 pt-4">

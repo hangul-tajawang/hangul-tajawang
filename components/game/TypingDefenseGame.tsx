@@ -398,6 +398,11 @@ export const TypingDefenseGame: React.FC = () => {
   // ── 렌더 조각 ──
   const gateLow = snapshot.gateHealth <= 3 && gameState === "playing";
 
+  // 현재 점수 기준 실시간 예상 순위 (랭킹 보드는 상위 10위)
+  const liveRank = rankings.length > 0 ? rankings.filter((r) => r.score > snapshot.score).length + 1 : null;
+  const inTop10 = liveRank !== null && liveRank <= 10;
+  const gapToTop10 = rankings.length >= 10 ? Math.max(0, (rankings[9]?.score ?? 0) - snapshot.score + 1) : 0;
+
   const battlefield = (
     <div
       ref={battlefieldRef}
@@ -536,7 +541,24 @@ export const TypingDefenseGame: React.FC = () => {
         <StatusItem label="Combo" value={`${snapshot.combo}`} icon={<Sparkles size={18} />} tone="text-purple-400" />
         <StatusItem label="Score" value={snapshot.score.toLocaleString()} icon={<Trophy size={18} />} tone="text-yellow-400" />
       </div>
-      {muteButton}
+      <div className="flex items-center gap-3">
+        {liveRank !== null && (
+          <div className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl border ${inTop10 ? "bg-yellow-400/10 border-yellow-400/30" : "bg-white/[0.05] border-white/10"}`}>
+            <Trophy size={15} className="text-yellow-400 shrink-0" />
+            {inTop10 ? (
+              <>
+                <span className="text-[9px] font-black text-yellow-400 uppercase tracking-[0.15em]">Top 10</span>
+                <span className="text-lg font-black text-yellow-300 tabular-nums leading-none">{liveRank}위</span>
+              </>
+            ) : (
+              <span className="text-[11px] font-black text-zinc-300 whitespace-nowrap">
+                TOP10까지 <span className="text-yellow-300 tabular-nums">{gapToTop10.toLocaleString()}</span>점
+              </span>
+            )}
+          </div>
+        )}
+        {muteButton}
+      </div>
     </div>
   );
 
