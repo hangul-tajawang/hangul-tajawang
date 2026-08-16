@@ -1,0 +1,28 @@
+Castle Defense (성문방어) game assets
+=====================================
+
+Art: "Tiny Swords" by Pixel Frog
+  https://pixelfrog-assets.itch.io/tiny-swords
+  License: free for personal and commercial use, modification allowed.
+  Redistribution/reselling of the asset pack itself is not permitted.
+  Only the individual sprites used by this game are bundled here.
+
+Sound effects: derived from the Tiny Swords community project
+  https://github.com/higorini/tiny-swords (assets/sfx)
+  Converted from WAV to AAC/m4a for web delivery.
+
+Bundled sprites (frame size noted where animated):
+  castle.png              320x256  성문(플레이어 기지)
+  tower.png               128x256  방어 타워
+  archer_idle.png         192x192 x6  궁수 대기
+  archer_shoot.png        192x192 x8  궁수 발사
+  arrow.png               64x64       화살
+  enemy_*_warrior_run.png 192x192 x6  적 전사 이동(red/purple/black)
+  enemy_*_warrior_idle.png192x192 x8  적 전사 대기
+  dust.png                16x16       먼지 파티클
+
+Audio:
+  shoot.m4a     화살 발사
+  hit.m4a       적 피격
+  kill.m4a      적 격파
+  gate_hit.m4a  성문 피격

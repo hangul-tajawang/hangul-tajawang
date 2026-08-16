@@ -5,151 +5,160 @@ import { createPortal } from "react-dom";
 import {
   ArrowRight,
   Castle,
-  Crosshair,
   Heart,
   Keyboard,
   Loader2,
   RotateCcw,
   Shield,
   Sparkles,
-  Timer,
+  Swords,
   Trophy,
+  Volume2,
+  VolumeX,
+  Wrench,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { SupabaseService } from "@/lib/supabase";
 import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
 import { MobileGameShell } from "./MobileGameShell";
+import { AdSenseUnit } from "../layout/AdSenseUnit";
+import { sound } from "@/lib/sound-manager";
 import {
-  TYPING_DEFENSE_MAX_GATE_HEALTH,
+  EnemyVariant,
+  TYPING_DEFENSE_BASE_GATE_HEALTH,
+  TYPING_DEFENSE_SKILLS,
   TypingDefenseCommandResult,
   TypingDefenseEnemy,
   TypingDefenseEngine,
   TypingDefenseState,
+  UpgradeId,
+  UpgradeOption,
 } from "@/lib/typing-defense-engine";
 
-type GameState = "ready" | "playing" | "gameover";
-type BattleEffectType = "hit" | "lightning" | "shield" | "repair";
+const ASSET = "/game/castle-defense";
+const ARROW_MS = 150;
+const HIT_STOP_MS = 60;
 
-interface BattleEffect {
-  id: number;
-  type: BattleEffectType;
-  lane: number;
-  distance: number;
-  label: string;
-}
+type GameState = "ready" | "playing" | "gameover";
 
 interface GameRanking {
   score: number;
   level: number;
   max_combo: number;
   created_at?: string;
-  profiles?: {
-    nickname?: string | null;
-    avatar_url?: string | null;
-  } | null;
+  profiles?: { nickname?: string | null; avatar_url?: string | null } | null;
 }
-
 interface ProfileSummary {
   nickname?: string | null;
 }
 
-const COMMANDS = [
-  { command: "발사", description: "가장 가까운 적", icon: Crosshair },
-  { command: "방패", description: "피해 1회 방어", icon: Shield },
-  { command: "번개", description: "많은 라인 정리", icon: Zap },
-  { command: "수리", description: "성문 체력 회복", icon: Heart },
-];
+// ── 이펙트 시스템 ──────────────────────────────────────────
+type Effect =
+  | { id: number; kind: "arrow"; fromX: number; fromY: number; toX: number; toY: number; angle: number }
+  | { id: number; kind: "death"; x: number; y: number; variant: EnemyVariant }
+  | { id: number; kind: "dust"; x: number; y: number; dx: number; dy: number }
+  | { id: number; kind: "float"; x: number; y: number; label: string; color: string }
+  | { id: number; kind: "lightning"; lane: number }
+  | { id: number; kind: "gateBanner"; label: string; color: string };
 
-const initialEngine = new TypingDefenseEngine();
+// 유니온에 대해 분배적으로 id를 제거 (Omit이 유니온을 뭉개는 문제 회피)
+type DistributiveOmit<T, K extends keyof never> = T extends unknown ? Omit<T, K> : never;
+type EffectInput = DistributiveOmit<Effect, "id">;
+
+const SKILL_META: Record<(typeof TYPING_DEFENSE_SKILLS)[number], { icon: React.ElementType; desc: string; color: string }> = {
+  번개: { icon: Zap, desc: "붐비는 라인 정리", color: "text-yellow-500" },
+  방패: { icon: Shield, desc: "피해 1회 방어", color: "text-blue-500" },
+  수리: { icon: Wrench, desc: "성문 +2 회복", color: "text-green-500" },
+};
+
+const ENEMY_SHEET: Record<EnemyVariant, string> = {
+  red: `${ASSET}/enemy_red_warrior_run.png`,
+  purple: `${ASSET}/enemy_purple_warrior_run.png`,
+  black: `${ASSET}/enemy_black_warrior_run.png`,
+};
+
+// (lane, distance) → 전장 내 퍼센트 좌표
+function posOf(lane: number, distance: number) {
+  const x = [16.666, 50, 83.333][lane] ?? 50;
+  const y = 10 + (1 - distance) * 62; // distance 1 → 10%, 0 → 72% (상단 라벨 잘림 방지)
+  return { x, y };
+}
+const GATE_ORIGIN = { x: 50, y: 82 };
 
 function normalizeRankings(value: unknown): GameRanking[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is GameRanking => {
-    if (!item || typeof item !== "object") return false;
-    const candidate = item as Partial<GameRanking>;
-    return typeof candidate.score === "number";
-  });
+  return value.filter((item): item is GameRanking => !!item && typeof item === "object" && typeof (item as GameRanking).score === "number");
 }
-
 function normalizeProfile(value: unknown): ProfileSummary | null {
   if (!value || typeof value !== "object") return null;
-  const candidate = value as ProfileSummary;
-  return { nickname: candidate.nickname ?? null };
+  return { nickname: (value as ProfileSummary).nickname ?? null };
 }
 
-function feedbackText(result: TypingDefenseCommandResult | null) {
-  switch (result) {
-    case TypingDefenseCommandResult.Hit:
-      return "타워 발사! 가장 가까운 적을 막았습니다.";
-    case TypingDefenseCommandResult.Guarded:
-      return "방패 준비! 다음 피해를 막습니다.";
-    case TypingDefenseCommandResult.AreaHit:
-      return "번개 발동! 가장 붐비는 라인을 정리했습니다.";
-    case TypingDefenseCommandResult.Repaired:
-      return "성문을 수리했습니다.";
-    case TypingDefenseCommandResult.Invalid:
-      return "없는 명령어입니다. 발사/방패/번개/수리 중 입력하세요.";
-    case TypingDefenseCommandResult.Unavailable:
-      return "지금은 사용할 수 없는 명령입니다.";
-    case null:
-      return "명령어를 입력해 60초 동안 성문을 지키세요.";
-  }
-}
-
-function nearestEnemy(enemies: TypingDefenseEnemy[]) {
-  if (enemies.length === 0) return null;
-  return enemies.reduce((current, next) => (current.distance <= next.distance ? current : next));
-}
-
-function busiestLane(enemies: TypingDefenseEnemy[]) {
-  if (enemies.length === 0) return null;
-  const laneCounts = [0, 0, 0];
-  for (const enemy of enemies) laneCounts[enemy.lane] = (laneCounts[enemy.lane] ?? 0) + 1;
-  let targetLane = 0;
-  for (let lane = 1; lane < laneCounts.length; lane++) {
-    if (laneCounts[lane] > laneCounts[targetLane]) targetLane = lane;
-  }
-  return targetLane;
-}
+const initialEngine = new TypingDefenseEngine();
 
 export const TypingDefenseGame: React.FC = () => {
   const engineRef = useRef(initialEngine);
-  const tickTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const spawnTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number | null>(null);
+  const hitStopUntilRef = useRef(0);
   const nextEffectIdRef = useRef(0);
   const hasSavedScoreRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const battlefieldRef = useRef<HTMLDivElement>(null);
+
+  // 이전 프레임 비교용
+  const prevGateRef = useRef(TYPING_DEFENSE_BASE_GATE_HEALTH);
+  const prevWaveRef = useRef(1);
+  const prevPhaseRef = useRef<TypingDefenseState["wavePhase"]>("spawning");
 
   const [snapshot, setSnapshot] = useState<TypingDefenseState>(engineRef.current.state);
   const [gameState, setGameState] = useState<GameState>("ready");
   const [inputValue, setInputValue] = useState("");
-  const [lastResult, setLastResult] = useState<TypingDefenseCommandResult | null>(null);
-  const [effects, setEffects] = useState<BattleEffect[]>([]);
+  const [targetId, setTargetId] = useState<number | null>(null);
+  const [effects, setEffects] = useState<Effect[]>([]);
+  const [waveBanner, setWaveBanner] = useState<string | null>(null);
+  const [muted, setMutedState] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState<ProfileSummary | null>(null);
   const [rankings, setRankings] = useState<GameRanking[]>([]);
   const [rankingLoading, setRankingLoading] = useState(false);
 
-  // 모바일 풀스크린 몰입 모드 (visualViewport 동기화 / 스크롤 잠금 / 포커스 이탈 일시정지)
-  const { isMobilePlaying, paused, overlay, resume } =
-    useMobileGamePlay({ playing: gameState === "playing", inputRef });
-
-  // 엔진 타이머(tick/spawn)가 일시정지를 존중하도록 ref로 미러링
+  const { isMobile, isMobilePlaying, paused, overlay, resume } = useMobileGamePlay({ playing: gameState === "playing", inputRef });
   const pausedRef = useRef(false);
-  useEffect(() => { pausedRef.current = paused; }, [paused]);
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
-  const syncSnapshot = useCallback(() => {
-    setSnapshot(engineRef.current.state);
+  // ── 이펙트 추가/제거 ──
+  const addEffect = useCallback((effect: EffectInput, ttl: number) => {
+    const id = nextEffectIdRef.current++;
+    setEffects((cur) => [...cur, { ...effect, id } as Effect]);
+    window.setTimeout(() => setEffects((cur) => cur.filter((e) => e.id !== id)), ttl);
+    return id;
   }, []);
 
-  const clearTimers = useCallback(() => {
-    if (tickTimerRef.current) clearInterval(tickTimerRef.current);
-    if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
-    tickTimerRef.current = null;
-    spawnTimerRef.current = null;
+  const triggerShake = useCallback((strong = false) => {
+    const el = battlefieldRef.current;
+    if (!el) return;
+    const amp = strong ? 8 : 4;
+    el.animate(
+      [
+        { transform: "translate(0,0)" },
+        { transform: `translate(${-amp}px, ${amp / 2}px)` },
+        { transform: `translate(${amp}px, ${-amp / 2}px)` },
+        { transform: `translate(${-amp * 0.6}px, 0)` },
+        { transform: "translate(0,0)" },
+      ],
+      { duration: strong ? 380 : 300, easing: "ease-in-out" },
+    );
+  }, []);
+
+  const clearRaf = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
+    lastTsRef.current = null;
   }, []);
 
   const fetchRankings = useCallback(async () => {
@@ -166,6 +175,7 @@ export const TypingDefenseGame: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
+    setMutedState(sound.muted);
     const loadUser = async () => {
       const user = await SupabaseService.getCurrentUser();
       setIsLoggedIn(Boolean(user));
@@ -176,240 +186,328 @@ export const TypingDefenseGame: React.FC = () => {
     };
     loadUser();
     fetchRankings();
-    return clearTimers;
-  }, [clearTimers, fetchRankings]);
+    return clearRaf;
+  }, [clearRaf, fetchRankings]);
 
   const finishGame = useCallback(async () => {
-    clearTimers();
+    clearRaf();
     setGameState("gameover");
-    syncSnapshot();
+    sound.thud();
+    const state = engineRef.current.state;
+    setSnapshot(state);
     if (isLoggedIn && !hasSavedScoreRef.current) {
       hasSavedScoreRef.current = true;
-      const state = engineRef.current.state;
       try {
-        await SupabaseService.saveGameScore("castle-defense", state.score, state.gateHealth > 0 ? 1 : 0, state.bestCombo);
+        await SupabaseService.saveGameScore("castle-defense", state.score, state.wave, state.bestCombo);
         await fetchRankings();
       } catch (error) {
         console.error(error);
       }
     }
-  }, [clearTimers, fetchRankings, isLoggedIn, syncSnapshot]);
+  }, [clearRaf, fetchRankings, isLoggedIn]);
 
-  const scheduleEffectRemoval = useCallback((effectId: number) => {
-    window.setTimeout(() => {
-      setEffects((current) => current.filter((effect) => effect.id !== effectId));
-    }, 760);
-  }, []);
+  // ── rAF 루프 ──
+  const loop = useCallback(
+    (now: number) => {
+      const last = lastTsRef.current ?? now;
+      let dt = now - last;
+      lastTsRef.current = now;
+      if (dt > 100) dt = 100; // 탭 전환 등으로 큰 dt 클램프
 
-  const addEffect = useCallback(
-    (effect: Omit<BattleEffect, "id">) => {
-      const nextEffect = { ...effect, id: nextEffectIdRef.current };
-      nextEffectIdRef.current++;
-      setEffects((current) => [...current, nextEffect]);
-      scheduleEffectRemoval(nextEffect.id);
+      if (!pausedRef.current) {
+        const effDt = now < hitStopUntilRef.current ? 0 : dt;
+        engineRef.current.tick(effDt);
+        const state = engineRef.current.state;
+
+        // 성문 피격 감지 → 흔들림/사운드
+        if (state.gateHealth < prevGateRef.current) {
+          triggerShake(state.gateHealth <= 3);
+          sound.play("gate_hit", { volume: 0.9 });
+          const p = posOf(1, 0);
+          addEffect({ kind: "float", x: p.x, y: 74, label: "-1", color: "text-red-400" }, 820);
+        }
+        prevGateRef.current = state.gateHealth;
+
+        // 웨이브 전환 감지
+        if (state.wavePhase !== prevPhaseRef.current) {
+          if (state.wavePhase === "intermission") {
+            setWaveBanner(`웨이브 ${state.wave} 클리어!`);
+            sound.fanfare();
+          }
+          prevPhaseRef.current = state.wavePhase;
+        }
+        if (state.wave > prevWaveRef.current && state.wavePhase === "spawning") {
+          setWaveBanner(`웨이브 ${state.wave}`);
+          prevWaveRef.current = state.wave;
+        }
+
+        setSnapshot(state);
+        if (state.isFinished) {
+          finishGame();
+          return;
+        }
+      }
+      rafRef.current = requestAnimationFrame(loop);
     },
-    [scheduleEffectRemoval],
+    [addEffect, finishGame, triggerShake],
   );
 
-  const ensureMinimumEnemies = useCallback(() => {
-    const engine = engineRef.current;
-    while (engine.state.isRunning && engine.state.enemies.length < 2) {
-      engine.spawnEnemy();
-    }
-  }, []);
-
   const startGame = useCallback(() => {
-    clearTimers();
+    clearRaf();
+    sound.init();
     engineRef.current = new TypingDefenseEngine();
     engineRef.current.start();
-    engineRef.current.spawnEnemy();
-    engineRef.current.spawnEnemy();
     hasSavedScoreRef.current = false;
+    prevGateRef.current = TYPING_DEFENSE_BASE_GATE_HEALTH;
+    prevWaveRef.current = 1;
+    prevPhaseRef.current = "spawning";
     setInputValue("");
-    setLastResult(null);
+    setTargetId(null);
     setEffects([]);
+    setWaveBanner("웨이브 1");
     setGameState("playing");
-    syncSnapshot();
-    tickTimerRef.current = setInterval(() => {
-      if (pausedRef.current) return; // 모바일 일시정지 중에는 시간·적 이동 정지
-      engineRef.current.tick();
-      ensureMinimumEnemies();
-      syncSnapshot();
-      if (engineRef.current.state.isFinished) {
-        finishGame();
-      }
-    }, 1000);
-    spawnTimerRef.current = setInterval(() => {
-      if (pausedRef.current) return;
-      engineRef.current.spawnEnemy();
-      syncSnapshot();
-    }, 4800);
+    setSnapshot(engineRef.current.state);
+    lastTsRef.current = null;
+    rafRef.current = requestAnimationFrame(loop);
     window.setTimeout(() => inputRef.current?.focus(), 80);
-  }, [clearTimers, ensureMinimumEnemies, finishGame, syncSnapshot]);
+  }, [clearRaf, loop]);
 
-  const submitCommand = useCallback(
-    (rawCommand: string) => {
-      if (!engineRef.current.state.isRunning) return;
-      const command = rawCommand.trim();
-      const enemiesBeforeCommand = engineRef.current.state.enemies;
-      const targetEnemy = command === "발사" ? nearestEnemy(enemiesBeforeCommand) : null;
-      const lightningLane = command === "번개" ? busiestLane(enemiesBeforeCommand) : null;
-      const result = engineRef.current.submitCommand(rawCommand);
+  // ── 입력 처리 ──
+  const clearInput = useCallback(() => {
+    setInputValue("");
+    if (inputRef.current) inputRef.current.value = "";
+    setTargetId(null);
+  }, []);
 
-      if (result === TypingDefenseCommandResult.Hit && targetEnemy) {
-        addEffect({ type: "hit", lane: targetEnemy.lane, distance: targetEnemy.distance, label: `+${100 + engineRef.current.state.combo * 15}` });
-      }
-      if (result === TypingDefenseCommandResult.AreaHit && lightningLane !== null) {
-        addEffect({ type: "lightning", lane: lightningLane, distance: 0, label: "번개" });
-      }
-      if (result === TypingDefenseCommandResult.Guarded) {
-        addEffect({ type: "shield", lane: -1, distance: 0, label: "방패" });
-      }
-      if (result === TypingDefenseCommandResult.Repaired) {
-        addEffect({ type: "repair", lane: -1, distance: 0, label: "+1" });
+  const handleInput = useCallback(
+    (raw: string) => {
+      const engine = engineRef.current;
+      if (!engine.state.isRunning) return;
+      const input = raw.trim();
+      if (!input) return;
+
+      const match = engine.matchPrefix(input);
+      const targetEnemy = match.targetId !== null ? engine.state.enemies.find((e) => e.id === match.targetId) ?? null : null;
+      const outcome = engine.submitInput(input);
+      const combo = engine.state.combo;
+
+      if (outcome.kind === "fire" && targetEnemy) {
+        const to = posOf(targetEnemy.lane, targetEnemy.distance);
+        const dx = to.x - GATE_ORIGIN.x;
+        const dy = to.y - GATE_ORIGIN.y;
+        const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+        addEffect({ kind: "arrow", fromX: GATE_ORIGIN.x, fromY: GATE_ORIGIN.y, toX: to.x, toY: to.y, angle }, ARROW_MS + 60);
+        sound.play("shoot", { pitch: 1 + Math.min(combo * 0.02, 0.4), volume: 0.7 });
+        const variant = targetEnemy.variant;
+        const killed = outcome.killed;
+        if (killed) {
+          hitStopUntilRef.current = performance.now() + HIT_STOP_MS;
+          window.setTimeout(() => {
+            addEffect({ kind: "death", x: to.x, y: to.y, variant }, 360);
+            for (let i = 0; i < 5; i++) {
+              addEffect({ kind: "dust", x: to.x, y: to.y, dx: (Math.random() - 0.5) * 40, dy: -10 - Math.random() * 20 }, 520);
+            }
+            addEffect({ kind: "float", x: to.x, y: to.y, label: `+${outcome.gainedScore}`, color: combo >= 5 ? "text-yellow-300" : "text-white" }, 820);
+            if (combo >= 3) addEffect({ kind: "float", x: to.x, y: to.y - 6, label: `콤보 x${combo}`, color: "text-purple-300" }, 820);
+            sound.play("kill", { pitch: 1 + Math.min(combo * 0.03, 0.5), volume: 0.85 });
+          }, ARROW_MS);
+        } else {
+          // 명중했지만 아직 살아있음(보스·방패병) — 피격 연출만
+          window.setTimeout(() => {
+            for (let i = 0; i < 3; i++) {
+              addEffect({ kind: "dust", x: to.x, y: to.y, dx: (Math.random() - 0.5) * 30, dy: -8 - Math.random() * 14 }, 460);
+            }
+            addEffect({ kind: "float", x: to.x, y: to.y, label: targetEnemy.kind === "boss" ? "명중!" : "막힘!", color: targetEnemy.kind === "boss" ? "text-orange-300" : "text-blue-300" }, 700);
+            sound.play("hit", { pitch: 1.05, volume: 0.8 });
+          }, ARROW_MS);
+        }
+      } else if (outcome.kind === "skill") {
+        if (outcome.result === TypingDefenseCommandResult.Unavailable) {
+          triggerShake(false);
+        } else if (outcome.skill === "번개" && outcome.lane !== null) {
+          addEffect({ kind: "lightning", lane: outcome.lane }, 520);
+          triggerShake(true);
+          sound.play("kill", { pitch: 0.7, volume: 0.9 });
+          if (outcome.gainedScore > 0) {
+            const p = posOf(outcome.lane, 0.5);
+            addEffect({ kind: "float", x: p.x, y: p.y, label: `+${outcome.gainedScore}`, color: "text-yellow-300" }, 820);
+          }
+        } else if (outcome.skill === "방패") {
+          addEffect({ kind: "gateBanner", label: "방패 +1", color: "text-blue-200 border-blue-300" }, 700);
+          sound.tick();
+        } else if (outcome.skill === "수리") {
+          addEffect({ kind: "gateBanner", label: "+2 수리", color: "text-green-200 border-green-300" }, 700);
+          const p = posOf(1, 0);
+          addEffect({ kind: "float", x: p.x, y: 74, label: "+2", color: "text-green-300" }, 820);
+          sound.fanfare();
+        }
       }
 
-      setLastResult(result);
-      setInputValue("");
-      ensureMinimumEnemies();
-      syncSnapshot();
-      window.setTimeout(() => inputRef.current?.focus(), 30);
-      if (engineRef.current.state.isFinished) finishGame();
+      clearInput();
+      setSnapshot(engine.state);
+      window.setTimeout(() => inputRef.current?.focus(), 20);
+      if (engine.state.isFinished) finishGame();
     },
-    [addEffect, ensureMinimumEnemies, finishGame, syncSnapshot],
+    [addEffect, clearInput, finishGame, triggerShake],
+  );
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const v = event.target.value;
+      if (v.length > inputValue.length) sound.tick();
+      setInputValue(v);
+
+      const engine = engineRef.current;
+      const trimmed = v.trim();
+      const match = engine.matchPrefix(trimmed);
+      setTargetId(match.targetId);
+
+      if (gameState !== "playing" || !trimmed) return;
+      const isSkill = (TYPING_DEFENSE_SKILLS as readonly string[]).includes(trimmed);
+      const ambiguous = engine.state.enemies.some((e) => e.word !== trimmed && e.word.startsWith(trimmed));
+      // 스킬어이거나, 다른 적 단어의 접두어가 아닌 완전 일치 → 즉시 발사
+      if (isSkill || (match.exact && !ambiguous)) {
+        handleInput(trimmed);
+      }
+    },
+    [gameState, handleInput, inputValue.length],
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    submitCommand(inputValue);
+    handleInput(inputValue);
   };
 
-  const resultModal = gameState === "gameover" && (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
-      <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
-      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
-        <div className="inline-flex p-6 bg-blue-50 dark:bg-blue-900/20 rounded-full mb-8">
-          <Castle className="w-20 h-20 text-blue-600" />
-        </div>
-        <h2 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-3 tracking-tighter">
-          {snapshot.gateHealth > 0 ? "성문 방어 성공!" : "성문이 무너졌어요"}
-        </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 font-bold mb-10">60초 동안의 방어 기록입니다.</p>
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <ResultTile label="Score" value={snapshot.score.toLocaleString()} />
-          <ResultTile label="Kills" value={snapshot.kills.toLocaleString()} />
-          <ResultTile label="Best Combo" value={snapshot.bestCombo.toLocaleString()} />
-          <ResultTile label="Mistakes" value={snapshot.mistakes.toLocaleString()} />
-        </div>
-        {!isLoggedIn ? (
-          <div className="mb-6 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] border border-blue-100 dark:border-blue-900/30">
-            <p className="text-sm font-bold text-blue-600 mb-4 flex items-center justify-center gap-2">
-              <Sparkles size={16} fill="currentColor" /> 랭킹에 기록을 남겨보세요.
-            </p>
-            <button
-              onClick={() => SupabaseService.signInWithKakao()}
-              className="w-full py-4 bg-[#FEE500] text-black font-black rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95"
-            >
-              카카오로 로그인하고 저장
-            </button>
-          </div>
-        ) : (
-          <div className="mb-6 text-sm font-black text-green-600">랭킹에 기록이 반영되었습니다.</div>
-        )}
-        <KeyboardRecommendationBanner variant="light" className="!mt-0 mb-6 !p-4 !rounded-3xl border border-zinc-100" />
-        <div className="flex flex-col gap-4">
-          <button
-            onClick={startGame}
-            className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"
-          >
-            <RotateCcw size={24} /> 다시 도전하기
-          </button>
-          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">
-            목록으로 돌아가기 <ArrowRight size={16} />
-          </Link>
+  const toggleMute = useCallback(() => {
+    const next = sound.toggleMuted();
+    setMutedState(next);
+  }, []);
+
+  const chooseUpgrade = useCallback((id: UpgradeId) => {
+    const engine = engineRef.current;
+    engine.applyUpgrade(id);
+    const state = engine.state;
+    prevWaveRef.current = state.wave;
+    prevPhaseRef.current = state.wavePhase;
+    setWaveBanner(state.isBossWave ? `⚔️ 보스 웨이브 ${state.wave}` : `웨이브 ${state.wave}`);
+    if (state.isBossWave) sound.thud();
+    setSnapshot(state);
+    window.setTimeout(() => inputRef.current?.focus(), 20);
+  }, []);
+
+  // ── 렌더 조각 ──
+  const gateLow = snapshot.gateHealth <= 3 && gameState === "playing";
+
+  const battlefield = (
+    <div
+      ref={battlefieldRef}
+      className={`relative overflow-hidden bg-gradient-to-b from-sky-900 via-slate-900 to-emerald-950 ${
+        isMobilePlaying ? "flex-1 min-h-0 rounded-xl" : "flex-1 min-h-[220px] rounded-[2rem] border-4 border-slate-900 shadow-2xl"
+      }`}
+    >
+      {/* 지면 그리드 */}
+      <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(148,163,184,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.10) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
+
+      {/* 레인 */}
+      {[0, 1, 2].map((lane) => (
+        <div key={lane} className="absolute top-[2%] bottom-[16%] rounded-2xl border border-white/5 bg-white/[0.03]" style={{ left: `${lane * 33.333 + 2}%`, width: "29.333%" }} />
+      ))}
+
+      {/* 성문(성 + 궁수) */}
+      <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: "1%", width: isMobilePlaying ? 96 : 132 }}>
+        <div
+          className={`relative w-full ${gateLow ? "cd-danger rounded-2xl" : ""}`}
+          style={{ aspectRatio: "320 / 256", backgroundImage: `url(${ASSET}/castle.png)`, backgroundSize: "contain", backgroundRepeat: "no-repeat", imageRendering: "pixelated" }}
+        >
+          <div
+            className="cd-sprite cd-anim-6 absolute left-1/2 -translate-x-1/2"
+            style={{ top: isMobilePlaying ? -24 : -34, transform: `translateX(-50%) scale(${isMobilePlaying ? 0.28 : 0.38})`, transformOrigin: "center bottom", backgroundImage: `url(${ASSET}/archer_idle.png)` }}
+          />
         </div>
       </div>
-    </div>
-  );
 
-  // 셸(모바일 풀스크린)/인라인(데스크톱) 공용 전장
-  const battlefield = (
-    <div className={`relative bg-slate-950 overflow-hidden ${isMobilePlaying ? "flex-1 min-h-0 rounded-xl" : "h-[520px] sm:h-[580px] rounded-[2.5rem] border-4 border-slate-900 shadow-2xl"}`}>
-      <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(rgba(148,163,184,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
+      {/* 적 */}
+      {snapshot.enemies.map((enemy) => (
+        <EnemyView key={enemy.id} enemy={enemy} input={inputValue.trim()} isTarget={enemy.id === targetId} compact={isMobilePlaying} />
+      ))}
+
+      {/* 이펙트 */}
+      {effects.map((effect) => (
+        <EffectView key={effect.id} effect={effect} compact={isMobilePlaying} />
+      ))}
+
+      {/* 웨이브 배너 */}
+      {waveBanner && gameState === "playing" && (
+        <div key={waveBanner} className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="cd-banner px-8 py-4 rounded-3xl bg-black/60 backdrop-blur-sm border-2 border-yellow-400/60 text-yellow-200 font-black text-3xl sm:text-4xl tracking-tight shadow-2xl" onAnimationEnd={() => setWaveBanner(null)}>
+            {waveBanner}
+          </div>
+        </div>
+      )}
+
+      {/* 시작 오버레이 */}
       {gameState === "ready" && (
-        <div className="absolute inset-0 z-30 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-6">
-          <div className="bg-white dark:bg-zinc-900 p-8 sm:p-10 rounded-[3rem] shadow-2xl flex flex-col items-center gap-7 max-w-md w-full border border-zinc-200 dark:border-zinc-800 text-center">
-            <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] flex items-center justify-center text-blue-600 shadow-xl">
-              <Castle size={42} />
+        <div className="absolute inset-0 z-30 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 p-5 sm:p-7 rounded-[2rem] shadow-2xl flex flex-col items-center gap-3 sm:gap-4 max-w-md w-full max-h-full overflow-auto border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl shrink-0">
+              <Castle className="w-7 h-7 sm:w-9 sm:h-9" />
             </div>
             <div>
-              <h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-3 leading-tight">한글 타자 게임 성문방어</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">
-                발사, 방패, 번개, 수리 명령으로 타워를 운용하고 60초 동안 성문을 지키세요.
+              <h3 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1.5 leading-tight">한글 타자 성문방어</h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm font-medium leading-relaxed">
+                적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 위급하면 <b>번개·방패·수리</b> 스킬을 입력하세요.
               </p>
             </div>
-            <button onClick={startGame} className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white text-xl font-black rounded-2xl transition-all shadow-xl shadow-blue-200 dark:shadow-none">
+            <button onClick={startGame} className="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg sm:text-xl font-black rounded-2xl transition-all shadow-xl shadow-blue-200 dark:shadow-none active:scale-95 shrink-0">
               방어 시작
             </button>
           </div>
         </div>
       )}
-
-      <div className={`absolute rounded-[1.5rem] border border-blue-200/40 bg-blue-200/15 flex items-center justify-center text-blue-100 font-black shadow-[0_0_30px_rgba(59,130,246,0.15)] ${isMobilePlaying ? "inset-x-2 bottom-2 h-10 text-sm" : "inset-x-5 bottom-5 h-20"}`}>
-        <Castle className="mr-2" size={isMobilePlaying ? 18 : 28} /> 성문
-      </div>
-
-      {[0, 1, 2].map((lane) => (
-        <div
-          key={lane}
-          className={`absolute rounded-[1.5rem] border border-white/10 bg-white/[0.04] ${isMobilePlaying ? "top-2 bottom-14" : "top-5 bottom-32"}`}
-          style={{ left: `${lane * 33.333 + 2}%`, width: "29.333%" }}
-        />
-      ))}
-
-      {effects.map((effect) => (
-        <BattleEffectView key={effect.id} effect={effect} compact={isMobilePlaying} />
-      ))}
-
-      {snapshot.enemies.map((enemy) => (
-        <EnemyView key={enemy.id} enemy={enemy} compact={isMobilePlaying} />
-      ))}
     </div>
   );
 
-  const commandPanel = (
-    <div className={isMobilePlaying ? "shrink-0 pt-1.5" : "bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 shadow-lg"}>
-      <div className={`grid grid-cols-4 ${isMobilePlaying ? "gap-1.5" : "gap-3 mb-4"}`}>
-        {COMMANDS.map(({ command, description, icon: Icon }) => (
+  const skillBar = (
+    <div className={`grid grid-cols-3 ${isMobilePlaying ? "gap-1.5 shrink-0" : "gap-3"}`}>
+      {TYPING_DEFENSE_SKILLS.map((skill) => {
+        const meta = SKILL_META[skill];
+        const cd = snapshot.skillCooldowns[skill];
+        const disabled = gameState !== "playing" || cd > 0;
+        const Icon = meta.icon;
+        return (
           <button
-            key={command}
+            key={skill}
             type="button"
-            onMouseDown={(e) => e.preventDefault()} /* 탭해도 입력창 포커스를 뺏지 않음 */
-            onClick={() => submitCommand(command)}
-            disabled={gameState !== "playing"}
-            className={`rounded-2xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 text-blue-700 dark:text-blue-300 disabled:opacity-40 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] transition-all ${isMobilePlaying ? "p-1.5 rounded-lg" : "p-3"}`}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => handleInput(skill)}
+            disabled={disabled}
+            className={`relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] transition-all ${isMobilePlaying ? "p-1.5 rounded-xl" : "p-3"}`}
           >
-            <div className={`flex items-center justify-center gap-1.5 font-black ${isMobilePlaying ? "text-xs" : "text-base gap-2"}`}>
-              <Icon size={isMobilePlaying ? 13 : 16} /> {command}
+            {cd > 0 && <div className="absolute inset-0 bg-zinc-900/60 flex items-center justify-center text-white font-black text-lg tabular-nums">{(cd / 1000).toFixed(1)}</div>}
+            <div className={`flex items-center justify-center gap-1.5 font-black ${meta.color} ${isMobilePlaying ? "text-xs" : "text-base"}`}>
+              <Icon size={isMobilePlaying ? 14 : 18} /> {skill}
             </div>
-            {!isMobilePlaying && <div className="mt-1 text-[10px] font-bold opacity-70">{description}</div>}
+            {!isMobilePlaying && <div className="mt-1 text-[10px] font-bold text-zinc-400">{meta.desc}</div>}
           </button>
-        ))}
-      </div>
-      <p className={`text-center font-bold text-zinc-500 dark:text-zinc-400 ${isMobilePlaying ? "text-[10px] mt-1 truncate" : "text-sm"}`}>{feedbackText(lastResult)}</p>
+        );
+      })}
     </div>
   );
 
   const commandInput = (
-    <form onSubmit={handleSubmit} className={isMobilePlaying ? "w-full" : "w-full max-w-2xl mx-auto shrink-0 pb-2"}>
+    <form onSubmit={handleSubmit} className={isMobilePlaying ? "w-full" : "w-full shrink-0"}>
       <input
         ref={inputRef}
         type="text"
         value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
+        onChange={handleChange}
         disabled={gameState !== "playing"}
-        className={`w-full text-center font-black outline-hidden transition-all ${isMobilePlaying ? "h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 border-blue-500 placeholder:text-zinc-500" : "h-14 md:h-20 px-5 md:px-8 text-2xl sm:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl border-blue-500 focus:shadow-blue-200/40 focus:ring-4 ring-blue-100 disabled:opacity-60"}`}
-        placeholder={gameState === "playing" ? "명령어 입력 후 엔터" : "시작 후 입력 가능"}
+        className={`w-full text-center font-black outline-hidden transition-all ${
+          isMobilePlaying
+            ? "h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 border-blue-500 placeholder:text-zinc-500"
+            : "h-14 px-5 text-2xl sm:text-3xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] shadow-xl border-blue-500 focus:ring-4 ring-blue-100 disabled:opacity-60"
+        }`}
+        placeholder={gameState === "playing" ? "적 단어를 입력하세요" : "시작 후 입력 가능"}
         autoFocus
         autoComplete="off"
         autoCorrect="off"
@@ -419,7 +517,102 @@ export const TypingDefenseGame: React.FC = () => {
     </form>
   );
 
-  // ── 모바일 풀스크린 몰입 모드 ──
+  const showUpgrades = gameState === "playing" && snapshot.wavePhase === "intermission" && snapshot.upgradeChoices.length > 0;
+  const upgradeModalNode =
+    showUpgrades && mounted ? createPortal(<UpgradeModal choices={snapshot.upgradeChoices} wave={snapshot.wave} onPick={chooseUpgrade} />, document.body) : null;
+
+  const muteButton = (
+    <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={toggleMute} className="shrink-0 w-9 h-9 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center hover:bg-zinc-700 transition-colors" aria-label="음소거 토글">
+      {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+    </button>
+  );
+
+  const hudBar = (
+    <div className="flex-1 flex flex-wrap justify-between items-center gap-4 px-5 sm:px-7 py-3 bg-zinc-950 text-white rounded-[1.75rem] shadow-xl border border-zinc-800">
+      <div className="flex flex-wrap gap-5 sm:gap-7 items-center">
+        <StatusItem label="Wave" value={`${snapshot.wave}`} icon={<Swords size={18} />} tone="text-emerald-400" />
+        <StatusItem label="Gate" value={`${snapshot.gateHealth}/${snapshot.maxGateHealth}`} icon={<Heart size={18} />} tone={gateLow ? "text-red-500 cd-pop" : "text-red-400"} />
+        <StatusItem label="Shield" value={`${snapshot.shieldCount}`} icon={<Shield size={18} />} tone="text-blue-400" />
+        <StatusItem label="Combo" value={`${snapshot.combo}`} icon={<Sparkles size={18} />} tone="text-purple-400" />
+        <StatusItem label="Score" value={snapshot.score.toLocaleString()} icon={<Trophy size={18} />} tone="text-yellow-400" />
+      </div>
+      {muteButton}
+    </div>
+  );
+
+  const rankingAside = (
+    <aside className="w-full h-full bg-white dark:bg-zinc-900 rounded-[1.75rem] border border-zinc-200 dark:border-zinc-800 p-5 shadow-lg flex flex-col min-h-0">
+      <div className="flex items-center gap-2 mb-4 shrink-0">
+        <Trophy className="text-yellow-500" size={18} />
+        <h3 className="text-base font-black">성문방어 랭킹</h3>
+      </div>
+      <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0">
+        {rankingLoading ? (
+          <div className="flex justify-center py-10"><Loader2 className="animate-spin text-zinc-300" /></div>
+        ) : rankings.length > 0 ? (
+          rankings.map((rank, index) => (
+            <div key={`${rank.created_at ?? index}-${index}`} className="flex items-center gap-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${index === 0 ? "bg-yellow-400 text-white" : index === 1 ? "bg-zinc-300 text-zinc-600" : index === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>{index + 1}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-black truncate text-zinc-900 dark:text-zinc-100 leading-tight">{rank.profiles?.nickname || "익명"}</p>
+                <p className="text-[9px] font-bold text-zinc-400">웨이브 {rank.level} · 콤보 {rank.max_combo}</p>
+              </div>
+              <p className="text-xs font-black text-blue-600 shrink-0">{rank.score.toLocaleString()}</p>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-10 text-zinc-400 text-xs font-medium">기록 없음</div>
+        )}
+      </div>
+      {!isLoggedIn && <p className="mt-3 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2 shrink-0">로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.</p>}
+      <div className="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-center shrink-0">
+        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl flex items-center justify-center gap-2">
+          <Keyboard size={14} className="text-blue-600" />
+          <span className="font-black text-xs">{profile?.nickname || "Guest"}</span>
+        </div>
+      </div>
+    </aside>
+  );
+
+  const exitDesktopGame = () => {
+    if (confirm("게임을 그만하고 결과를 볼까요?")) finishGame();
+    else inputRef.current?.focus();
+  };
+
+  // ── 데스크톱/노트북 전체화면 플레이 (헤더·배너·광고 밖으로 나가 항상 한 화면) ──
+  if (gameState === "playing" && !isMobile && mounted) {
+    return createPortal(
+      <div className="fixed inset-0 z-[9985] bg-slate-950 flex flex-col p-3 gap-3">
+        <div className="flex gap-3 items-stretch shrink-0">
+          {hudBar}
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={exitDesktopGame} aria-label="게임 종료" className="shrink-0 w-11 rounded-2xl bg-zinc-800 text-zinc-300 flex items-center justify-center hover:bg-zinc-700 transition-colors">
+            <ArrowRight className="rotate-180" size={20} />
+          </button>
+        </div>
+        <div className="flex-1 flex gap-3 min-h-0">
+          {/* 좌측 광고 레일 (조작부와 떨어진 위치 · 좌우 동시 노출) */}
+          <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
+            <AdSenseUnit label="sidebar-left" width={160} height={600} />
+          </div>
+          <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0">
+            {battlefield}
+            {skillBar}
+            {commandInput}
+          </div>
+          {/* 우측 광고 레일 (조작부와 떨어진 위치 · 미충족 시 하우스배너) */}
+          <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
+            <AdSenseUnit label="sidebar-right" width={160} height={600} />
+          </div>
+        </div>
+        {upgradeModalNode}
+      </div>,
+      document.body,
+    );
+  }
+
+  // ── 모바일 풀스크린 ──
   if (isMobilePlaying && overlay) {
     const exitGame = () => {
       if (confirm("게임을 그만하고 결과를 볼까요?")) finishGame();
@@ -427,96 +620,73 @@ export const TypingDefenseGame: React.FC = () => {
     };
     const mobileHud = (
       <>
-        <span className="flex items-center gap-1 text-sm font-black text-orange-400 tabular-nums"><Timer size={13} />{snapshot.timeLeft}s</span>
-        <span className="flex items-center gap-1 text-sm font-black text-red-400 tabular-nums"><Heart size={13} />{snapshot.gateHealth}/{TYPING_DEFENSE_MAX_GATE_HEALTH}</span>
+        <span className="flex items-center gap-1 text-sm font-black text-emerald-400 tabular-nums"><Swords size={13} />{snapshot.wave}</span>
+        <span className="flex items-center gap-1 text-sm font-black text-red-400 tabular-nums"><Heart size={13} />{snapshot.gateHealth}</span>
         <span className="flex items-center gap-1 text-sm font-black text-blue-400 tabular-nums"><Shield size={13} />{snapshot.shieldCount}</span>
+        <span className="flex items-center gap-1 text-sm font-black text-purple-400 tabular-nums"><Sparkles size={13} />{snapshot.combo}</span>
         <span className="flex items-center gap-1 text-sm font-black text-yellow-400 tabular-nums ml-auto"><Trophy size={13} />{snapshot.score.toLocaleString()}</span>
+        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={toggleMute} className="shrink-0 text-zinc-400" aria-label="음소거">
+          {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+        </button>
       </>
     );
     return (
-      <MobileGameShell overlay={overlay} hud={mobileHud} input={commandInput} paused={paused} onResume={resume} onExit={exitGame}>
-        <div className="w-full h-full flex flex-col p-2 gap-0">
-          {battlefield}
-          {commandPanel}
-        </div>
-      </MobileGameShell>
+      <>
+        <MobileGameShell overlay={overlay} hud={mobileHud} input={commandInput} paused={paused} onResume={resume} onExit={exitGame}>
+          <div className="w-full h-full flex flex-col p-2 gap-1.5">
+            {/* 모바일 인게임 상단 슬림 배너 (조작부와 떨어진 상단 · 미충족 시 비움) */}
+            <div className="shrink-0 flex justify-center empty:hidden">
+              <AdSenseUnit label="content-banner-mobile" width={320} height={50} noFallback tight />
+            </div>
+            {battlefield}
+            {skillBar}
+          </div>
+        </MobileGameShell>
+        {upgradeModalNode}
+      </>
     );
   }
 
+  // ── 데스크톱/노트북 (한 화면에 맞춤) ──
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col gap-4 py-2 animate-in fade-in duration-700 min-h-[720px]">
-      {gameState === "gameover" && mounted && createPortal(resultModal, document.body)}
+    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 py-6 items-stretch animate-in fade-in duration-500">
+      {gameState === "gameover" && mounted && createPortal(<ResultModal snapshot={snapshot} isLoggedIn={isLoggedIn} onRetry={startGame} />, document.body)}
 
-      <div className="w-full flex flex-wrap justify-between items-center gap-4 px-6 sm:px-8 py-4 bg-zinc-950 text-white rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
-        <div className="flex flex-wrap gap-5 sm:gap-8 items-center">
-          <StatusItem label="Time" value={`${snapshot.timeLeft}s`} icon={<Timer size={19} />} tone="text-orange-400" />
-          <StatusItem label="Gate" value={`${snapshot.gateHealth}/${TYPING_DEFENSE_MAX_GATE_HEALTH}`} icon={<Heart size={19} />} tone="text-red-400" />
-          <StatusItem label="Shield" value={`${snapshot.shieldCount}`} icon={<Shield size={19} />} tone="text-blue-400" />
-          <StatusItem label="Combo" value={`${snapshot.combo}`} icon={<Sparkles size={19} />} tone="text-purple-400" />
-          <StatusItem label="Score" value={snapshot.score.toLocaleString()} icon={<Trophy size={19} />} tone="text-yellow-400" />
-        </div>
-        <div className="hidden md:block text-right">
-          <div className="text-[9px] text-zinc-500 font-black uppercase tracking-widest leading-tight">Command Defense</div>
-          <div className="font-black text-zinc-300 text-sm leading-tight">한글 타자 성문방어</div>
+      {/* 인트로 히어로 (플레이는 전체화면으로 열림) */}
+      <div className="lg:flex-1 w-full flex items-center justify-center rounded-[2rem] bg-gradient-to-b from-sky-900 via-slate-900 to-emerald-950 border-4 border-slate-900 shadow-2xl p-4 sm:p-8 min-h-[240px]">
+        <div className="bg-white dark:bg-zinc-900 p-5 sm:p-8 rounded-[2rem] shadow-2xl flex flex-col items-center gap-4 max-w-md w-full border border-zinc-200 dark:border-zinc-800 text-center">
+          <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl">
+            <Castle className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-2 leading-tight">한글 타자 성문방어</h3>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">
+              적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 5웨이브마다 <b>보스</b>가 오고, 클리어할 때마다 <b>강화</b>를 고릅니다.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 w-full">
+            <button onClick={startGame} className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white text-xl font-black rounded-2xl transition-all shadow-xl shadow-blue-200 dark:shadow-none active:scale-95">
+              {gameState === "gameover" ? "다시 도전" : "방어 시작"}
+            </button>
+            {muteButton}
+          </div>
+          <p className="text-[11px] font-bold text-zinc-400">전체화면으로 열립니다 · 언제든 나가기 버튼으로 종료</p>
+          <p className="text-[10px] text-zinc-400/80">아트: Tiny Swords by Pixel Frog · 무료 상업적 이용 가능</p>
         </div>
       </div>
 
-      <div className="w-full flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
-        <div className="flex-1 flex flex-col gap-4 min-w-0">
-          {battlefield}
-          {commandPanel}
-          {commandInput}
-        </div>
-
-        <aside className="w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex flex-col shrink-0">
-          <div className="flex items-center gap-2 mb-6">
-            <Trophy className="text-yellow-500" size={20} />
-            <h3 className="text-lg font-black">성문방어 랭킹</h3>
-          </div>
-          <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-48">
-            {rankingLoading ? (
-              <div className="flex flex-col items-center justify-center py-10">
-                <Loader2 className="animate-spin text-zinc-300" />
-              </div>
-            ) : rankings.length > 0 ? (
-              rankings.map((rank, index) => (
-                <div key={`${rank.created_at ?? index}-${index}`} className="flex items-center gap-3">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${index === 0 ? "bg-yellow-400 text-white" : index === 1 ? "bg-zinc-300 text-zinc-600" : index === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>
-                    {index + 1}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-black truncate text-zinc-900 dark:text-zinc-100 leading-tight">{rank.profiles?.nickname || "익명"}</p>
-                    <p className="text-[9px] font-bold text-zinc-400">Combo {rank.max_combo}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-xs font-black text-blue-600">{rank.score.toLocaleString()}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-10 text-zinc-400 text-xs font-medium">기록 없음</div>
-            )}
-          </div>
-          {!isLoggedIn && <p className="mt-4 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2">로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.</p>}
-          <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 text-center">
-            <div className="bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-xl flex items-center justify-center gap-2">
-              <Keyboard size={14} className="text-blue-600" />
-              <span className="font-black text-xs">{profile?.nickname || "Guest"}</span>
-            </div>
-          </div>
-        </aside>
-      </div>
+      {/* 랭킹: 넓은 화면은 옆에, 좁으면 아래로 흐름 */}
+      <div className="w-full lg:w-64 shrink-0">{rankingAside}</div>
     </div>
   );
 };
 
+// ── 하위 컴포넌트 ──────────────────────────────────────────
 function StatusItem({ label, value, icon, tone }: { label: string; value: string; icon: React.ReactNode; tone: string }) {
   return (
     <div className="flex flex-col">
       <span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">{label}</span>
-      <span className={`text-xl sm:text-2xl font-black flex items-center gap-1.5 ${tone}`}>
-        {icon} {value}
-      </span>
+      <span className={`text-lg sm:text-2xl font-black flex items-center gap-1.5 ${tone}`}>{icon} {value}</span>
     </div>
   );
 }
@@ -530,82 +700,207 @@ function ResultTile({ label, value }: { label: string; value: string }) {
   );
 }
 
-function EnemyView({ enemy, compact = false }: { enemy: TypingDefenseEnemy; compact?: boolean }) {
-  const top = 6 + (1 - enemy.distance) * 68;
-  const isClose = enemy.distance < 0.28;
+function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefenseState; isLoggedIn: boolean; onRetry: () => void }) {
   return (
-    <div
-      className={`absolute rounded-[1.35rem] border text-white shadow-2xl transition-transform duration-300 animate-[bounce_620ms_ease-in-out_infinite] ${compact ? "w-16 px-1.5 py-1" : "w-28 sm:w-32 px-2.5 py-2"} ${
-        isClose
-          ? "border-red-200/80 bg-linear-to-br from-red-600 via-orange-600 to-amber-500 shadow-red-500/30 scale-110"
-          : "border-orange-200/40 bg-linear-to-br from-slate-800 via-red-900 to-orange-700"
-      }`}
-      style={{ left: `calc(${enemy.lane * 33.333 + 16.666}% - ${compact ? "2rem" : "3.5rem"})`, top: `${top}%` }}
-      aria-label={`성문까지 거리 ${Math.round(enemy.distance * 100)}인 적`}
-    >
-      <div className={`relative mx-auto ${compact ? "h-10 w-10" : "h-20 w-20"}`}>
-        <svg viewBox="0 0 96 96" className="h-full w-full drop-shadow-xl" role="img" aria-hidden="true">
-          <defs>
-            <linearGradient id={`armor-${enemy.id}`} x1="18" y1="8" x2="78" y2="88" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#f97316" />
-              <stop offset="0.48" stopColor="#dc2626" />
-              <stop offset="1" stopColor="#7f1d1d" />
-            </linearGradient>
-            <linearGradient id={`metal-${enemy.id}`} x1="18" y1="18" x2="70" y2="74" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#f8fafc" />
-              <stop offset="1" stopColor="#94a3b8" />
-            </linearGradient>
-          </defs>
-          <path d="M48 8 68 20 62 42H34L28 20 48 8Z" fill={`url(#armor-${enemy.id})`} stroke="#fed7aa" strokeWidth="3" />
-          <path d="M35 27h26v11H35z" fill="#111827" opacity=".82" />
-          <circle cx="41" cy="32" r="2.4" fill="#fde68a" />
-          <circle cx="55" cy="32" r="2.4" fill="#fde68a" />
-          <path d="M28 42h40l8 30c-7 7-16 11-28 11S27 79 20 72l8-30Z" fill={`url(#armor-${enemy.id})`} stroke="#fed7aa" strokeWidth="3" />
-          <path d="M39 45h18l4 21c-3 3-7 5-13 5s-10-2-13-5l4-21Z" fill={`url(#metal-${enemy.id})`} opacity=".9" />
-          <path d="M20 48 7 35M76 48l13-13" stroke="#e2e8f0" strokeWidth="7" strokeLinecap="round" />
-          <path d="M12 31 7 18M84 31l5-13" stroke="#fde68a" strokeWidth="4" strokeLinecap="round" />
-          <path d="M32 76 24 91M64 76l8 15" stroke="#1f2937" strokeWidth="8" strokeLinecap="round" />
-          <path d="M34 76 27 89M62 76l7 13" stroke="#f97316" strokeWidth="4" strokeLinecap="round" />
-        </svg>
-        <div className="absolute -right-1 top-1 h-5 w-5 rounded-full bg-amber-300/90 blur-[2px]" />
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
+      <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
+      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
+        {/* 결과 화면 최상단 광고 (슬림 배너 · 미충족 시 비움 · 장비 추천 미노출) */}
+        <div className="mb-5 flex justify-center empty:hidden">
+          <AdSenseUnit label="content-banner-mobile" width={320} height={100} noFallback tight />
+        </div>
+        <div className="inline-flex p-6 bg-blue-50 dark:bg-blue-900/20 rounded-full mb-6">
+          <Castle className="w-16 h-16 text-blue-600" />
+        </div>
+        <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tighter">웨이브 {snapshot.wave}에서 성문이 무너졌어요</h2>
+        <p className="text-zinc-500 dark:text-zinc-400 font-bold mb-8">이번 방어 기록입니다.</p>
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <ResultTile label="Wave" value={snapshot.wave.toLocaleString()} />
+          <ResultTile label="Score" value={snapshot.score.toLocaleString()} />
+          <ResultTile label="Kills" value={snapshot.kills.toLocaleString()} />
+          <ResultTile label="Best Combo" value={snapshot.bestCombo.toLocaleString()} />
+        </div>
+        {!isLoggedIn ? (
+          <div className="mb-6 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] border border-blue-100 dark:border-blue-900/30">
+            <p className="text-sm font-bold text-blue-600 mb-4 flex items-center justify-center gap-2"><Sparkles size={16} fill="currentColor" /> 랭킹에 기록을 남겨보세요.</p>
+            <button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-4 bg-[#FEE500] text-black font-black rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95">카카오로 로그인하고 저장</button>
+          </div>
+        ) : (
+          <div className="mb-6 text-sm font-black text-green-600">랭킹에 기록이 반영되었습니다.</div>
+        )}
+        <div className="flex flex-col gap-4">
+          <button onClick={onRetry} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
+          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ArrowRight size={16} /></Link>
+        </div>
       </div>
-      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-black/30">
-        <div className="h-full rounded-full bg-amber-300" style={{ width: `${Math.max(8, enemy.distance * 100)}%` }} />
-      </div>
-      {!compact && <p className="mt-1 text-center text-[10px] font-black tracking-widest">거리 {Math.round(enemy.distance * 100)}</p>}
     </div>
   );
 }
 
-function BattleEffectView({ effect, compact = false }: { effect: BattleEffect; compact?: boolean }) {
-  if (effect.type === "lightning") {
+function EnemyView({ enemy, input, isTarget, compact }: { enemy: TypingDefenseEnemy; input: string; isTarget: boolean; compact: boolean }) {
+  const { x, y } = posOf(enemy.lane, enemy.distance);
+  const isBoss = enemy.kind === "boss";
+  const isShielded = enemy.kind === "shield" && enemy.hp > 1;
+  const isRunner = enemy.kind === "runner";
+  const size = isBoss ? (compact ? 96 : 128) : isRunner ? (compact ? 40 : 54) : compact ? 46 : 62;
+  const matched = input.length > 0 && enemy.word.startsWith(input) ? input.length : 0;
+  const isClose = enemy.distance < 0.25;
+
+  const labelTone = isBoss
+    ? "bg-gradient-to-r from-purple-700 to-fuchsia-700 ring-2 ring-fuchsia-300 text-base"
+    : isTarget
+      ? "bg-blue-600 ring-2 ring-blue-300 scale-110"
+      : enemy.kind === "splitter"
+        ? "bg-orange-700"
+        : enemy.kind === "runner"
+          ? "bg-emerald-700"
+          : isClose
+            ? "bg-red-700"
+            : "bg-black/70";
+
+  return (
+    <div className="pointer-events-none absolute flex flex-col items-center" style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)", zIndex: isBoss ? 22 : isTarget ? 20 : 10 }}>
+      {/* 단어 라벨 */}
+      <div className={`mb-1 px-2 py-0.5 rounded-lg font-black whitespace-nowrap shadow-lg ${compact ? "text-xs" : "text-sm"} ${labelTone}`}>
+        {isBoss && <span className="mr-1">👑</span>}
+        <span className="text-green-300">{enemy.word.slice(0, matched)}</span>
+        <span className="text-white">{enemy.word.slice(matched)}</span>
+      </div>
+
+      {/* HP 바 (다타수 적: 보스·방패병) */}
+      {enemy.maxHp > 1 && (
+        <div className={`mb-1 h-1.5 overflow-hidden rounded-full bg-black/50 ${isBoss ? "w-24" : "w-12"}`}>
+          <div className={`h-full rounded-full ${isBoss ? "bg-fuchsia-400" : "bg-blue-400"}`} style={{ width: `${(enemy.hp / enemy.maxHp) * 100}%` }} />
+        </div>
+      )}
+
+      {/* 스프라이트 */}
+      <div style={{ position: "relative", width: size, height: size, overflow: "visible" }}>
+        {isBoss && <div className="absolute inset-0 rounded-full animate-pulse" style={{ boxShadow: "0 0 30px 8px rgba(217,70,239,0.5)" }} />}
+        <div style={{ position: "relative", width: size, height: size, overflow: "hidden" }}>
+          <div className={`cd-sprite cd-anim-6 ${isClose ? "cd-hitflash" : ""}`} style={{ position: "absolute", left: 0, top: 0, transformOrigin: "top left", transform: `scale(${size / 192})`, backgroundImage: `url(${ENEMY_SHEET[enemy.variant]})` }} />
+        </div>
+        {isShielded && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-full border-2 border-blue-300/70 bg-blue-400/15">
+            <Shield size={compact ? 14 : 18} className="text-blue-200" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const UPGRADE_ICON: Record<UpgradeId, React.ElementType> = {
+  gate: Heart,
+  combo: Sparkles,
+  cooldown: Zap,
+  pierce: ArrowRight,
+  shield: Shield,
+  autorepair: Wrench,
+};
+
+function UpgradeModal({ choices, wave, onPick }: { choices: UpgradeOption[]; wave: number; onPick: (id: UpgradeId) => void }) {
+  return (
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-zinc-950/85 backdrop-blur-md animate-in fade-in duration-300" />
+      <div className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-300">
+        <div className="text-center mb-6">
+          <p className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1">웨이브 {wave} 클리어</p>
+          <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100">강화 하나를 선택하세요</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {choices.map((choice) => {
+            const Icon = UPGRADE_ICON[choice.id];
+            return (
+              <button
+                key={choice.id}
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => onPick(choice.id)}
+                className="group flex flex-col items-center text-center gap-2 p-5 rounded-2xl border-2 border-zinc-200 dark:border-zinc-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all active:scale-95"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Icon size={24} />
+                </div>
+                <div className="font-black text-zinc-900 dark:text-zinc-100">{choice.title}</div>
+                <div className="text-xs font-medium text-zinc-500 leading-snug">{choice.desc}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EffectView({ effect, compact }: { effect: Effect; compact: boolean }) {
+  if (effect.kind === "arrow") return <ArrowView effect={effect} compact={compact} />;
+
+  if (effect.kind === "lightning") {
+    return (
+      <div className="pointer-events-none absolute top-[2%] bottom-[16%] flex items-center justify-center" style={{ left: `${effect.lane * 33.333 + 2}%`, width: "29.333%" }}>
+        <div className="w-full h-full rounded-2xl border-2 border-yellow-300/80 bg-gradient-to-b from-white/10 via-yellow-300/50 to-blue-300/10 animate-pulse flex items-center justify-center">
+          <Zap className="text-yellow-100 drop-shadow-lg" size={compact ? 34 : 52} />
+        </div>
+      </div>
+    );
+  }
+
+  if (effect.kind === "gateBanner") {
+    return (
+      <div className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[18%] px-4 py-2 rounded-2xl border-2 bg-black/50 font-black cd-float ${effect.color}`}>{effect.label}</div>
+    );
+  }
+
+  if (effect.kind === "float") {
+    return (
+      <div className={`pointer-events-none absolute font-black cd-float drop-shadow ${effect.color} ${compact ? "text-sm" : "text-lg"}`} style={{ left: `${effect.x}%`, top: `${effect.y}%`, transform: "translate(-50%, -50%)" }}>{effect.label}</div>
+    );
+  }
+
+  if (effect.kind === "dust") {
     return (
       <div
-        className={`absolute rounded-[1.5rem] border-2 border-yellow-300/80 bg-linear-to-b from-white/10 via-yellow-300/60 to-blue-300/20 animate-pulse flex items-center justify-center ${compact ? "top-2 bottom-14" : "top-5 bottom-32"}`}
-        style={{ left: `${effect.lane * 33.333 + 2}%`, width: "29.333%" }}
-      >
-        <Zap className="text-yellow-100 drop-shadow-lg" size={compact ? 28 : 46} />
-      </div>
+        className="pointer-events-none absolute cd-dust cd-pixel"
+        style={{ left: `${effect.x}%`, top: `${effect.y}%`, width: compact ? 10 : 14, height: compact ? 10 : 14, backgroundImage: `url(${ASSET}/dust.png)`, backgroundSize: "contain", backgroundRepeat: "no-repeat", ["--dx" as string]: `${effect.dx}px`, ["--dy" as string]: `${effect.dy}px` }}
+      />
     );
   }
 
-  if (effect.type === "shield" || effect.type === "repair") {
-    const colorClass = effect.type === "shield" ? "border-blue-300 text-blue-200 shadow-blue-400/30" : "border-green-300 text-green-200 shadow-green-400/30";
-    return (
-      <div className={`absolute rounded-[1.5rem] border-4 ${colorClass} shadow-[0_0_30px] flex items-center justify-center font-black animate-pulse ${compact ? "inset-x-2 bottom-2 h-10 text-sm" : "inset-x-5 bottom-5 h-20 text-xl"}`}>
-        {effect.type === "shield" ? <Shield className="mr-2" size={compact ? 16 : 24} /> : <Heart className="mr-2" size={compact ? 16 : 24} />} {effect.label}
+  // death
+  const size = compact ? 46 : 62;
+  return (
+    <div className="pointer-events-none absolute" style={{ left: `${effect.x}%`, top: `${effect.y}%`, width: size, height: size, transform: "translate(-50%, -50%)", zIndex: 15 }}>
+      {/* 중간 래퍼가 192→size 축소, 안쪽 cd-die가 pop/페이드 애니메이션 담당 */}
+      <div style={{ transformOrigin: "top left", transform: `scale(${size / 192})`, width: 192, height: 192 }}>
+        <div className="cd-sprite cd-die" style={{ backgroundImage: `url(${ENEMY_SHEET[effect.variant]})` }} />
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  const top = 6 + (1 - effect.distance) * 68;
+function ArrowView({ effect, compact }: { effect: Extract<Effect, { kind: "arrow" }>; compact: boolean }) {
+  const [flying, setFlying] = useState(false);
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setFlying(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  const size = compact ? 20 : 28;
   return (
     <div
-      className={`absolute rounded-full bg-yellow-300/30 flex flex-col items-center justify-center text-yellow-200 font-black animate-ping ${compact ? "w-12 h-12" : "w-20 h-20"}`}
-      style={{ left: `calc(${effect.lane * 33.333 + 16.666}% - ${compact ? "1.5rem" : "2.5rem"})`, top: `${top}%` }}
-    >
-      <Sparkles size={compact ? 18 : 28} />
-      <span className="text-xs">{effect.label}</span>
-    </div>
+      className="pointer-events-none absolute cd-pixel"
+      style={{
+        left: `${flying ? effect.toX : effect.fromX}%`,
+        top: `${flying ? effect.toY : effect.fromY}%`,
+        width: size,
+        height: size,
+        transform: `translate(-50%, -50%) rotate(${effect.angle + 90}deg)`,
+        transition: `left ${ARROW_MS}ms linear, top ${ARROW_MS}ms linear`,
+        backgroundImage: `url(${ASSET}/arrow.png)`,
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        zIndex: 25,
+      }}
+    />
   );
 }

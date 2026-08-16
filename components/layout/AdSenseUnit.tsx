@@ -24,6 +24,10 @@ interface AdSenseUnitProps {
   /** GA4 하우스배너 집계용 지면 이름 (예: "sidebar-left") */
   label: string;
   disabled?: boolean;
+  /** 미충족(unfilled) 시 키보드 추천 하우스배너 대신 아무것도 렌더하지 않음 */
+  noFallback?: boolean;
+  /** 상하 여백(my-4) 제거 — 모바일/좁은 지면용 */
+  tight?: boolean;
 }
 
 /**
@@ -95,7 +99,8 @@ const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }>
   );
 };
 
-export const AdSenseUnit: React.FC<AdSenseUnitProps> = ({ width, height, label, disabled = false }) => {
+export const AdSenseUnit: React.FC<AdSenseUnitProps> = ({ width, height, label, disabled = false, noFallback = false, tight = false }) => {
+  const marginClass = tight ? 'my-0' : 'my-4';
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [failed, setFailed] = useState(false);
@@ -143,15 +148,16 @@ export const AdSenseUnit: React.FC<AdSenseUnitProps> = ({ width, height, label, 
   }
 
   if (failed) {
+    if (noFallback) return null; // 키보드 추천 하우스배너 없이 그냥 비움
     return (
-      <div className="flex items-center justify-center w-full my-4 overflow-hidden" style={{ minHeight: `${height}px` }}>
+      <div className={`flex items-center justify-center w-full ${marginClass} overflow-hidden`} style={{ minHeight: `${height}px` }}>
         <HouseAdFallback width={width} height={height} unit={label} />
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center w-full my-4 overflow-hidden" style={{ minHeight: `${height}px` }}>
+    <div className={`flex items-center justify-center w-full ${marginClass} overflow-hidden`} style={{ minHeight: `${height}px` }}>
       <ins
         ref={insRef}
         className="adsbygoogle"

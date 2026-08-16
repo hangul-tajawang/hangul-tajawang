@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { Castle, ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag, BookOpenText, HelpCircle } from "lucide-react";
+import { ChevronRight, CloudRain, Trophy, Brain, Boxes, Flag, BookOpenText, HelpCircle } from "lucide-react";
 
 const GAME_FAQ = [
   {
@@ -10,7 +10,7 @@ const GAME_FAQ = [
   },
   {
     q: '어떤 게임부터 하면 좋나요?',
-    a: '타자가 익숙하지 않다면 속도 부담이 적은 타자 레이스로 시작하고, 익숙해지면 산성비·블록 팝핑처럼 시간 압박이 있는 게임으로 넘어가세요. 성문방어와 기억력 타자는 명령어·기억까지 더해져 난이도가 높은 편입니다.',
+    a: '타자가 익숙하지 않다면 속도 부담이 적은 타자 레이스로 시작하고, 익숙해지면 산성비·블록 팝핑처럼 시간 압박이 있는 게임으로 넘어가세요. 성문방어와 기억력 타자는 전략·기억까지 더해져 난이도가 높은 편입니다.',
   },
   {
     q: '게임 점수가 랭킹에 반영되나요?',
@@ -41,24 +41,23 @@ export default function GameHubPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <GameCard 
+        {/* 1. 산성비 */}
+        <GameCard
           href="/game/acid-rain"
-          icon={<CloudRain size={40} />}
+          icon={
+            <div className="relative w-16 h-16 flex items-center justify-center">
+              <CloudRain size={44} className="text-blue-500 drop-shadow" />
+              <span className="absolute bottom-0 left-1 text-[11px] font-black text-sky-400 rotate-6">가</span>
+              <span className="absolute bottom-1 right-0 text-xs font-black text-blue-500 -rotate-6">비</span>
+            </div>
+          }
           title="산성비 게임"
           description="하늘에서 떨어지는 단어들을 <br/>바닥에 닿기 전에 입력하세요!"
           difficulty="Medium"
           color="blue"
         />
 
-        <GameCard 
-          href="/game/card-flip"
-          icon={<Brain size={40} className="text-purple-500" />}
-          title="기억력 타자"
-          description="카드의 뒷면을 타자로 뒤집어 <br/>똑같은 짝을 찾아 맞춰보세요!"
-          difficulty="Hard"
-          color="purple"
-        />
-
+        {/* 2. 글자 계단 */}
         <GameCard
           href="/game/stairs"
           icon={
@@ -72,13 +71,27 @@ export default function GameHubPage() {
           color="emerald"
         />
 
+        {/* 3. 성문방어 */}
         <GameCard
           href="/game/castle-defense"
-          icon={<Castle size={40} className="text-emerald-500" />}
+          icon={
+            // 실제 게임 픽셀 성문 스프라이트 (알아보기 쉽게)
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/game/castle-defense/castle.png" alt="픽셀아트 성문" width={64} height={64} draggable={false} className="cd-pixel w-16 h-16 object-contain select-none pointer-events-none drop-shadow-lg" />
+          }
           title="성문방어 타자 게임"
-          description="발사, 방패, 번개, 수리 명령으로 <br/>60초 동안 성문을 지키세요!"
+          description="적의 단어를 타이핑해 화살을 쏘고 <br/>밀려오는 웨이브를 막아내세요!"
           difficulty="Hard"
-          color="emerald"
+          color="slate"
+        />
+
+        <GameCard
+          href="/game/card-flip"
+          icon={<Brain size={40} className="text-purple-500" />}
+          title="기억력 타자"
+          description="카드의 뒷면을 타자로 뒤집어 <br/>똑같은 짝을 찾아 맞춰보세요!"
+          difficulty="Hard"
+          color="purple"
         />
 
         <GameCard
@@ -133,7 +146,7 @@ export default function GameHubPage() {
             {[
               ['산성비 · 블록 팝핑', '시간 안에 단어를 쳐야 하는 압박형. 순간 판단력과 손 속도를 집중적으로 훈련합니다.'],
               ['타자 레이스', 'AI 봇과의 경주형. 내 타수가 200·350·500타와 실시간으로 비교되어 실력이 한눈에 보입니다.'],
-              ['성문방어', '발사·방패·번개 등 명령어를 입력하는 전략형. 정확한 단어 입력과 순발력을 함께 요구합니다.'],
+              ['성문방어', '적의 단어를 타이핑해 화살로 막는 타워 디펜스형. 웨이브가 오를수록 보스까지 등장해 순발력과 정확도를 함께 요구합니다.'],
               ['기억력 타자', '카드를 타자로 뒤집어 짝을 맞추는 두뇌형. 타이핑과 집중력을 동시에 자극합니다.'],
             ].map(([t, d]) => (
               <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
@@ -187,7 +200,7 @@ interface GameCardProps {
   title: string;
   description: string;
   difficulty: string;
-  color: "blue" | "purple" | "emerald" | "rose";
+  color: "blue" | "purple" | "emerald" | "rose" | "slate";
 }
 
 function GameCard({ href, icon, title, description, difficulty, color }: GameCardProps) {
@@ -196,6 +209,7 @@ function GameCard({ href, icon, title, description, difficulty, color }: GameCar
     purple: "bg-purple-50 dark:bg-purple-900/20 text-purple-600",
     emerald: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600",
     rose: "bg-rose-50 dark:bg-rose-900/20 text-rose-600",
+    slate: "bg-slate-100 dark:bg-slate-800 text-slate-600",
   };
 
   return (
