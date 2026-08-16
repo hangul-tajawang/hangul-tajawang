@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     title: "한글 타자 게임 - 성문방어 | 한글타자왕",
     description: "적의 단어를 타이핑해 화살을 쏘고 웨이브를 막아내는 무료 온라인 한글 타자 디펜스 게임.",
     url: "https://www.hangul-tajawang.com/game/castle-defense",
+    images: [{ url: "https://www.hangul-tajawang.com/ogimage-castle-defense.png", width: 1200, height: 630, alt: "한글 타자 성문방어" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "한글 타자 게임 - 성문방어 | 한글타자왕",
+    description: "적의 단어를 타이핑해 화살을 쏘고 웨이브·보스를 막아내는 무료 타자 디펜스 게임.",
+    images: ["https://www.hangul-tajawang.com/ogimage-castle-defense.png"],
   },
 };
 

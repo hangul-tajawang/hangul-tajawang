@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { WordGame } from '@/components/game/WordGame';
+import { GameJsonLd } from '@/components/seo/GameJsonLd';
 import {
   Info,
   Zap,
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
 export default function AcidRainPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
+      <GameJsonLd name="산성비 게임" url="https://www.hangul-tajawang.com/game/acid-rain" description="하늘에서 떨어지는 한글 단어를 바닥에 닿기 전에 입력하는 무료 온라인 타자 게임." genre={["단어 낙하", "타자 연습", "캐주얼"]} />
       <h1 className="sr-only">한글 산성비 타자 게임 - 온라인 랭킹 시스템</h1>
 
       {/* 게임 본체 */}

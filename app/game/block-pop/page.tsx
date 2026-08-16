@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { BlockPopGame } from '@/components/game/BlockPopGame';
+import { GameJsonLd } from '@/components/seo/GameJsonLd';
 import {
   Zap,
   ShieldCheck,
@@ -35,6 +36,7 @@ export const metadata: Metadata = {
 export default function BlockPopPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
+      <GameJsonLd name="블록 팝핑" url="https://www.hangul-tajawang.com/game/block-pop" description="아래에서 차오르는 단어 블록을 천장에 닿기 전에 터뜨리는 무료 온라인 타자 게임." genre={["아케이드", "타자 연습", "캐주얼"]} />
       <h1 className="sr-only">블록 팝핑 한글 타자 게임 - 온라인 랭킹 시스템</h1>
 
       {/* 게임 본체 */}

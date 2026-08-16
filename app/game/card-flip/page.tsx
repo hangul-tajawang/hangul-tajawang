@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { CardFlipGame } from "@/components/game/CardFlipGame";
+import { GameJsonLd } from "@/components/seo/GameJsonLd";
 import { Brain, Zap, Trophy, MousePointer2, HelpCircle } from "lucide-react";
 import { KeyboardAdSidebar } from "@/components/layout/KeyboardAdSidebar";
 
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 export default function CardFlipPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-12 px-4">
+      <GameJsonLd name="기억력 타자" url="https://www.hangul-tajawang.com/game/card-flip" description="카드를 타자로 뒤집어 같은 짝을 맞추는 무료 온라인 두뇌 타자 게임." genre={["기억력", "타자 연습", "퍼즐"]} />
       <h1 className="sr-only">기억력 타자 한글 카드 뒤집기 게임</h1>
       <CardFlipGame />
 

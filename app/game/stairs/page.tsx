@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { StairsGame } from '@/components/game/StairsGame';
+import { GameJsonLd } from '@/components/seo/GameJsonLd';
 import {
   Target,
   Gauge,
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
 export default function StairsPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
+      <GameJsonLd name="글자 계단" url="https://www.hangul-tajawang.com/game/stairs" description="단어를 쳐서 병아리와 함께 끝없이 계단을 오르는 무료 온라인 타자 게임." genre={["러너", "타자 연습", "캐주얼"]} />
       <h1 className="sr-only">글자 계단 - 무한 타자 계단 한글 타자 연습 게임</h1>
 
       {/* 게임 본체 */}

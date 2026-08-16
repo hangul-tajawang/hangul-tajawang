@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { TypingRaceGame } from '@/components/game/TypingRaceGame';
+import { GameJsonLd } from '@/components/seo/GameJsonLd';
 import {
   Flag,
   Gauge,
@@ -35,6 +36,7 @@ export const metadata: Metadata = {
 export default function TypingRacePage() {
   return (
     <div className="w-full max-w-6xl mx-auto py-8 px-4">
+      <GameJsonLd name="타자 레이스" url="https://www.hangul-tajawang.com/game/typing-race" description="AI 봇과 경주하며 단어를 입력해 결승선을 통과하는 무료 온라인 타자 게임." genre={["레이싱", "타자 연습", "캐주얼"]} />
       <h1 className="sr-only">타자 레이스 한글 타자 경주 게임 - 온라인 랭킹 시스템</h1>
 
       {/* 게임 본체 */}
