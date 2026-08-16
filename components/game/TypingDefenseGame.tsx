@@ -403,6 +403,16 @@ export const TypingDefenseGame: React.FC = () => {
   const inTop10 = liveRank !== null && liveRank <= 10;
   const gapToTop10 = rankings.length >= 10 ? Math.max(0, (rankings[9]?.score ?? 0) - snapshot.score + 1) : 0;
 
+  // TOP 10 리더보드 + 현재 점수 기준 내 예상 위치 삽입
+  type BoardRow = { me?: boolean; nickname: string; score: number; created_at?: string };
+  const playBoardRows: BoardRow[] = (() => {
+    const board: BoardRow[] = rankings.slice(0, 10).map((r) => ({ nickname: r.profiles?.nickname || "익명", score: r.score, created_at: r.created_at }));
+    if (gameState === "playing" && liveRank !== null && liveRank <= 10) {
+      board.splice(liveRank - 1, 0, { me: true, nickname: profile?.nickname || "나", score: snapshot.score });
+    }
+    return board.slice(0, 10);
+  })();
+
   const battlefield = (
     <div
       ref={battlefieldRef}
@@ -541,23 +551,31 @@ export const TypingDefenseGame: React.FC = () => {
         <StatusItem label="Combo" value={`${snapshot.combo}`} icon={<Sparkles size={18} />} tone="text-purple-400" />
         <StatusItem label="Score" value={snapshot.score.toLocaleString()} icon={<Trophy size={18} />} tone="text-yellow-400" />
       </div>
-      <div className="flex items-center gap-3">
+      {muteButton}
+    </div>
+  );
+
+  // 전체화면 플레이용 TOP 10 리더보드 (현재 점수 기준 내 예상 위치 삽입·강조)
+  const playLeaderboard = (
+    <div className="hidden lg:flex flex-col w-[212px] shrink-0 bg-zinc-900/85 rounded-2xl border border-zinc-800 p-3 min-h-0">
+      <div className="flex items-center justify-between mb-2 shrink-0">
+        <span className="flex items-center gap-1.5 text-yellow-400 font-black text-xs uppercase tracking-widest"><Trophy size={14} /> Top 10</span>
         {liveRank !== null && (
-          <div className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl border ${inTop10 ? "bg-yellow-400/10 border-yellow-400/30" : "bg-white/[0.05] border-white/10"}`}>
-            <Trophy size={15} className="text-yellow-400 shrink-0" />
-            {inTop10 ? (
-              <>
-                <span className="text-[9px] font-black text-yellow-400 uppercase tracking-[0.15em]">Top 10</span>
-                <span className="text-lg font-black text-yellow-300 tabular-nums leading-none">{liveRank}위</span>
-              </>
-            ) : (
-              <span className="text-[11px] font-black text-zinc-300 whitespace-nowrap">
-                TOP10까지 <span className="text-yellow-300 tabular-nums">{gapToTop10.toLocaleString()}</span>점
-              </span>
-            )}
-          </div>
+          <span className={`text-[10px] font-black ${inTop10 ? "text-yellow-300" : "text-zinc-400"}`}>{inTop10 ? `지금 ${liveRank}위` : `+${gapToTop10.toLocaleString()}점`}</span>
         )}
-        {muteButton}
+      </div>
+      <div className="flex-1 overflow-y-auto space-y-1 pr-0.5 custom-scrollbar min-h-0">
+        {playBoardRows.length === 0 ? (
+          <div className="text-center py-8 text-zinc-500 text-[11px] font-bold">기록 없음</div>
+        ) : (
+          playBoardRows.map((row, i) => (
+            <div key={row.me ? "me" : `${row.created_at ?? i}-${i}`} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg ${row.me ? "bg-yellow-400/15 border border-yellow-400/40" : "bg-white/[0.03]"}`}>
+              <span className={`w-4 text-center text-[10px] font-black tabular-nums shrink-0 ${i === 0 ? "text-yellow-400" : i === 1 ? "text-zinc-300" : i === 2 ? "text-orange-400" : "text-zinc-500"}`}>{i + 1}</span>
+              <span className={`flex-1 min-w-0 truncate text-[11px] font-black ${row.me ? "text-yellow-200" : "text-zinc-200"}`}>{row.me ? "🎯 나" : row.nickname}</span>
+              <span className={`text-[11px] font-black tabular-nums shrink-0 ${row.me ? "text-yellow-300" : "text-blue-400"}`}>{row.score.toLocaleString()}</span>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
@@ -622,11 +640,8 @@ export const TypingDefenseGame: React.FC = () => {
             {skillBar}
             {commandInput}
           </div>
-          {/* 우측 광고 레일 (조작부와 떨어진 위치 · 미충족 시 하우스배너) */}
-          <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
-            <AdSenseUnit label="sidebar-right" width={160} height={600} />
-          </div>
+          {/* 우측: TOP 10 리더보드 (실시간 내 예상 순위 포함) */}
+          {playLeaderboard}
         </div>
         {upgradeModalNode}
       </div>,
