@@ -543,40 +543,35 @@ export const TypingDefenseGame: React.FC = () => {
   );
 
   const hudBar = (
-    <div className="flex-1 flex flex-wrap justify-between items-center gap-4 px-5 sm:px-7 py-3 bg-zinc-950 text-white rounded-[1.75rem] shadow-xl border border-zinc-800">
-      <div className="flex flex-wrap gap-5 sm:gap-7 items-center">
+    <div className="flex-1 flex items-center gap-4 px-4 sm:px-6 py-3 bg-zinc-950 text-white rounded-[1.75rem] shadow-xl border border-zinc-800 min-w-0">
+      <div className="flex gap-4 sm:gap-6 items-center shrink-0">
         <StatusItem label="Wave" value={`${snapshot.wave}`} icon={<Swords size={18} />} tone="text-emerald-400" />
         <StatusItem label="Gate" value={`${snapshot.gateHealth}/${snapshot.maxGateHealth}`} icon={<Heart size={18} />} tone={gateLow ? "text-red-500 cd-pop" : "text-red-400"} />
         <StatusItem label="Shield" value={`${snapshot.shieldCount}`} icon={<Shield size={18} />} tone="text-blue-400" />
         <StatusItem label="Combo" value={`${snapshot.combo}`} icon={<Sparkles size={18} />} tone="text-purple-400" />
         <StatusItem label="Score" value={snapshot.score.toLocaleString()} icon={<Trophy size={18} />} tone="text-yellow-400" />
       </div>
-      {muteButton}
-    </div>
-  );
 
-  // 배틀필드 우상단 오버레이 TOP 10 리더보드 (현재 점수 기준 내 예상 위치 삽입·강조)
-  const playLeaderboard = (
-    <div className="hidden md:flex flex-col absolute top-2.5 right-2.5 z-30 w-[184px] max-h-[74%] bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-zinc-700/50 p-2.5 shadow-2xl">
-      <div className="flex items-center justify-between mb-2 shrink-0">
-        <span className="flex items-center gap-1.5 text-yellow-400 font-black text-xs uppercase tracking-widest"><Trophy size={14} /> Top 10</span>
-        {liveRank !== null && (
-          <span className={`text-[10px] font-black ${inTop10 ? "text-yellow-300" : "text-zinc-400"}`}>{inTop10 ? `지금 ${liveRank}위` : `+${gapToTop10.toLocaleString()}점`}</span>
-        )}
-      </div>
-      <div className="flex-1 overflow-y-auto space-y-1 pr-0.5 custom-scrollbar min-h-0">
-        {playBoardRows.length === 0 ? (
-          <div className="text-center py-8 text-zinc-500 text-[11px] font-bold">기록 없음</div>
-        ) : (
-          playBoardRows.map((row, i) => (
-            <div key={row.me ? "me" : `${row.created_at ?? i}-${i}`} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg ${row.me ? "bg-yellow-400/15 border border-yellow-400/40" : "bg-white/[0.03]"}`}>
-              <span className={`w-4 text-center text-[10px] font-black tabular-nums shrink-0 ${i === 0 ? "text-yellow-400" : i === 1 ? "text-zinc-300" : i === 2 ? "text-orange-400" : "text-zinc-500"}`}>{i + 1}</span>
-              <span className={`flex-1 min-w-0 truncate text-[11px] font-black ${row.me ? "text-yellow-200" : "text-zinc-200"}`}>{row.me ? "🎯 나" : row.nickname}</span>
-              <span className={`text-[11px] font-black tabular-nums shrink-0 ${row.me ? "text-yellow-300" : "text-blue-400"}`}>{row.score.toLocaleString()}</span>
-            </div>
-          ))
-        )}
-      </div>
+      {/* TOP 10 성적 가로 스트립 (상단 바 우측 여백에 · 내 예상 위치 강조) */}
+      {playBoardRows.length > 0 && (
+        <div className="hidden lg:flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto custom-scrollbar">
+          <span className="shrink-0 flex items-center gap-1 text-yellow-400 font-black text-[10px] uppercase tracking-widest pr-0.5">
+            <Trophy size={13} />TOP10{liveRank !== null ? ` · ${inTop10 ? `${liveRank}위` : `+${gapToTop10.toLocaleString()}`}` : ""}
+          </span>
+          {playBoardRows.map((row, i) => (
+            <span
+              key={row.me ? "me" : `${row.created_at ?? i}-${i}`}
+              className={`shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-black tabular-nums ${row.me ? "bg-yellow-400/20 text-yellow-200 border border-yellow-400/40" : "bg-white/[0.05] text-zinc-300"}`}
+            >
+              <span className={`${i === 0 ? "text-yellow-400" : i === 1 ? "text-zinc-300" : i === 2 ? "text-orange-400" : "text-zinc-500"}`}>{i + 1}</span>
+              {row.me && <span>🎯</span>}
+              {row.score.toLocaleString()}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {muteButton}
     </div>
   );
 
@@ -636,11 +631,7 @@ export const TypingDefenseGame: React.FC = () => {
             <AdSenseUnit label="sidebar-left" width={160} height={600} />
           </div>
           <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0">
-            <div className="relative flex-1 min-h-0 flex">
-              {battlefield}
-              {/* 배틀필드 우상단 TOP 10 오버레이 */}
-              {playLeaderboard}
-            </div>
+            {battlefield}
             {skillBar}
             {commandInput}
           </div>
