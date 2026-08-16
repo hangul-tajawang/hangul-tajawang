@@ -555,9 +555,9 @@ export const TypingDefenseGame: React.FC = () => {
     </div>
   );
 
-  // 전체화면 플레이용 TOP 10 리더보드 (현재 점수 기준 내 예상 위치 삽입·강조)
+  // 배틀필드 우상단 오버레이 TOP 10 리더보드 (현재 점수 기준 내 예상 위치 삽입·강조)
   const playLeaderboard = (
-    <div className="hidden lg:flex flex-col w-[212px] shrink-0 bg-zinc-900/85 rounded-2xl border border-zinc-800 p-3 min-h-0">
+    <div className="hidden md:flex flex-col absolute top-2.5 right-2.5 z-30 w-[184px] max-h-[74%] bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-zinc-700/50 p-2.5 shadow-2xl">
       <div className="flex items-center justify-between mb-2 shrink-0">
         <span className="flex items-center gap-1.5 text-yellow-400 font-black text-xs uppercase tracking-widest"><Trophy size={14} /> Top 10</span>
         {liveRank !== null && (
@@ -636,12 +636,19 @@ export const TypingDefenseGame: React.FC = () => {
             <AdSenseUnit label="sidebar-left" width={160} height={600} />
           </div>
           <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0">
-            {battlefield}
+            <div className="relative flex-1 min-h-0 flex">
+              {battlefield}
+              {/* 배틀필드 우상단 TOP 10 오버레이 */}
+              {playLeaderboard}
+            </div>
             {skillBar}
             {commandInput}
           </div>
-          {/* 우측: TOP 10 리더보드 (실시간 내 예상 순위 포함) */}
-          {playLeaderboard}
+          {/* 우측 광고 레일 (조작부와 떨어진 위치 · 좌우 동시 노출) */}
+          <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
+            <AdSenseUnit label="sidebar-right" width={160} height={600} />
+          </div>
         </div>
         {upgradeModalNode}
       </div>,
