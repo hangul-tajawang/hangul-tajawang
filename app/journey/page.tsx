@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 // 허브 진열 순서 — 수도 → 조선 → 국기 → 주기율표 → 삼국
-const COURSE_ORDER = ['world-capitals', 'joseon-kings', 'flag-quiz', 'periodic-table', 'three-kingdoms'];
+const COURSE_ORDER = ['world-capitals', 'joseon-kings', 'flag-quiz', 'map-quiz', 'periodic-table', 'three-kingdoms'];
 const orderIndex = (id: string) => {
   const i = COURSE_ORDER.indexOf(id);
   return i === -1 ? 999 : i;

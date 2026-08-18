@@ -52,6 +52,9 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   const [elapsed, setElapsed] = useState(0);
   const [showAllNames, setShowAllNames] = useState(false);
   const [hintShown, setHintShown] = useState(false);
+  // 하드 모드: 초성 힌트 자체를 가림 (localStorage 영속). 문제별 "초성 보기"로 1단계 해제 가능
+  const [hideChosung, setHideChosung] = useState(false);
+  const [chosungShown, setChosungShown] = useState(false);
   const [finalStats, setFinalStats] = useState<{ kpm: number; accuracy: number; seconds: number } | null>(null);
   const [resumeSnapshot, setResumeSnapshot] = useState<JourneySnapshot | null>(null);
   const [completionCount, setCompletionCount] = useState(0);
@@ -72,7 +75,20 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
     const record = getJourneyRecord(course.id);
     if (record?.progress) setResumeSnapshot(record.progress);
     setCompletionCount(record?.completions.length || 0);
+    try {
+      setHideChosung(window.localStorage.getItem("tajawang_journey_hide_chosung") === "1");
+    } catch { /* ignore */ }
   }, [course.id]);
+
+  const toggleHideChosung = () => {
+    setHideChosung((prev) => {
+      const next = !prev;
+      try { window.localStorage.setItem("tajawang_journey_hide_chosung", next ? "1" : "0"); } catch { /* ignore */ }
+      return next;
+    });
+    setChosungShown(false);
+    inputRef.current?.focus();
+  };
 
   // 일시정지 동안 시간이 흐르지 않도록 재개 시 startTime 보정
   useEffect(() => {
@@ -115,6 +131,10 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   })();
   const target = isQuiz ? station.fact : phase === "traveling" ? station.name : station.fact;
   const normTarget = TypingUtils.normalize(target);
+  // 별칭 정답(예: 미국↔미합중국) — quiz 흐름에서만 허용. 미지정 코스는 기존과 동일하게 단일 정답
+  const normAnswers = isQuiz && station.aliases?.length
+    ? [normTarget, ...station.aliases.map((a) => TypingUtils.normalize(a))]
+    : [normTarget];
 
   const currentSnapshot = useCallback(
     (nextIndex: number, nextPhase: Phase, strokes: number, targets: number, mistakeCount: number): JourneySnapshot => ({
@@ -154,7 +174,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
     setInputValue(value);
     if (gameState !== "playing") return;
 
-    if (TypingUtils.normalize(value) === normTarget) {
+    if (normAnswers.includes(TypingUtils.normalize(value))) {
       const strokes = accStrokes + TypingUtils.getStrokeCount(normTarget);
       const targets = completedTargets + 1;
       setAccStrokes(strokes);
@@ -174,7 +194,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
         const nextIndex = stationIndex + 1;
         setStationIndex(nextIndex);
         setPhase("traveling");
-        setHintShown(false);
+        setHintShown(false); setChosungShown(false);
         saveJourneySnapshot(course.id, currentSnapshot(nextIndex, "traveling", strokes, targets, mistakes));
       }
       return;
@@ -182,7 +202,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
 
     // 오타 판정 — 마지막 글자는 IME 조합 중일 수 있으므로("세종" 입력 중 "셎")
     // 마지막 글자를 뺀 입력이 목표의 접두어가 아닐 때만 틀린 것으로 본다.
-    const isWrong = checkWrong(normTarget, TypingUtils.normalize(value));
+    // 별칭이 있으면 모든 허용 정답에 대해 틀렸을 때만 오타로 센다.
+    const isWrong = normAnswers.every((ans) => checkWrong(ans, TypingUtils.normalize(value)));
     if (isWrong && !wasWrong.current) setMistakes((m) => m + 1);
     wasWrong.current = isWrong;
   };
@@ -208,12 +229,16 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       setElapsed(0);
     }
     setInputValue("");
-    setHintShown(false);
+    setHintShown(false); setChosungShown(false);
     wasWrong.current = false;
     setFinalStats(null);
     setGameState("playing");
     track("journey_start", { course: course.id, resume: resumeRun });
-    setTimeout(() => inputRef.current?.focus(), 50);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      // 지도 코스: 노트북 등 낮은 화면에서 지도+입력창이 함께 보이도록 입력창을 시야로 스크롤
+      if (course.ui === "map") inputRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+    }, 50);
   };
 
   const revealHint = () => {
@@ -268,23 +293,61 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 이 국기의 나라는?
               </p>
             </div>
+          ) : course.ui === "map" ? (
+            <div className={`flex flex-col items-center ${compact ? "gap-0.5 mb-1.5" : "gap-1.5 mb-3"}`}>
+              <p className={`editorial-heading leading-snug ${compact ? "text-base text-white" : "text-xl"}`}>
+                🗺️ 지도에 표시된 나라는?
+              </p>
+              {station.group && (
+                <span className={`px-2.5 py-0.5 rounded-full font-black text-[10px] uppercase tracking-widest ${compact ? "bg-cyan-900/60 text-cyan-200" : "bg-cyan-50 text-cyan-700"}`}>
+                  {course.groups?.find((g) => g.id === station.group)?.label || station.group}
+                </span>
+              )}
+            </div>
           ) : (
             <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white mb-1.5" : "text-2xl mb-3"}`}>
               {station.name}
               {course.questionSuffix || "은(는)?"}
             </p>
           )}
-          <div className="flex items-center justify-center gap-3">
-            <span className={`font-black tracking-[0.2em] ${compact ? "text-xl text-violet-300" : "text-3xl text-primary"}`}>
-              {hintShown || showAllNames ? station.fact : chosungOf(station.fact)}
-            </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+            {(() => {
+              const masked = hideChosung && !chosungShown && !hintShown && !showAllNames;
+              const hintText = hintShown || showAllNames
+                ? station.fact
+                : masked
+                  ? "●".repeat(Array.from(station.fact.replace(/\s/g, "")).length)
+                  : chosungOf(station.fact);
+              // 긴 정답(사우디아라비아·중앙아프리카공화국 등)에서 카드 폭을 넘지 않도록
+              // 글자 수에 따라 크기·자간을 줄이고 줄바꿈을 허용한다.
+              const len = Array.from(station.fact.replace(/\s/g, "")).length;
+              const sizeClass = compact
+                ? len > 8 ? "text-sm" : len > 5 ? "text-base" : "text-xl"
+                : len > 8 ? "text-lg" : len > 5 ? "text-2xl" : "text-3xl";
+              const trackClass = len > 5 ? "tracking-[0.08em]" : "tracking-[0.2em]";
+              return (
+                <span className={`font-black break-keep text-center max-w-full ${sizeClass} ${trackClass} ${compact ? "text-violet-300" : "text-primary"} ${masked ? "opacity-40" : ""}`}>
+                  {hintText}
+                </span>
+              );
+            })()}
+            {hideChosung && !chosungShown && !hintShown && !showAllNames && (
+              <button
+                type="button"
+                onClick={() => { setChosungShown(true); inputRef.current?.focus(); }}
+                onPointerDown={(e) => e.preventDefault()}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black active:scale-95 transition-transform whitespace-nowrap shrink-0"
+              >
+                <Eye size={13} /> 초성 보기
+              </button>
+            )}
             {!hintShown && !showAllNames && (
               <button
                 type="button"
                 onClick={revealHint}
                 // 입력창 포커스를 뺏지 않는다 — blur 시 모바일 셸이 일시정지되는 것 방지
                 onPointerDown={(e) => e.preventDefault()}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform whitespace-nowrap shrink-0"
               >
                 <Lightbulb size={13} /> 정답 보기
               </button>
@@ -292,7 +355,9 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
           </div>
           {!compact && (
             <p className="mt-3 text-xs font-medium text-secondary/70 leading-relaxed">
-              초성 힌트를 보고 정답을 입력하면 다음 문제로 넘어갑니다.
+              {hideChosung && !chosungShown
+                ? "초성 숨김 모드 — 힌트 없이 정답을 입력해보세요."
+                : "초성 힌트를 보고 정답을 입력하면 다음 문제로 넘어갑니다."}
             </p>
           )}
         </>
@@ -543,6 +608,20 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
               {showAllNames ? <Eye size={14} /> : <EyeOff size={14} />}
               {showAllNames ? "이름 전체 보기 중 — 암기 모드로" : "암기 모드 (이름 숨김)"}
             </button>
+            {/* 하드 모드: 초성 힌트까지 가림 (퀴즈 코스 전용, 설정 유지) */}
+            {isQuiz && (
+              <button
+                type="button"
+                onClick={toggleHideChosung}
+                onPointerDown={(e) => e.preventDefault()}
+                className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-black transition-colors ${
+                  hideChosung ? "bg-zinc-900 text-amber-300" : "bg-surface-high text-secondary"
+                }`}
+              >
+                {hideChosung ? <EyeOff size={14} /> : <Eye size={14} />}
+                {hideChosung ? "초성 숨김 모드 켜짐 — 힌트 없이 도전 중" : "초성 숨김 모드 (하드)"}
+              </button>
+            )}
           </div>
 
           {gameState === "playing" && promptCard(false)}

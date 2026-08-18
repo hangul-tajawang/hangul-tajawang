@@ -20,6 +20,8 @@ export interface JourneyStation {
   detail?: string;
   /** 니모닉 그룹 id (JourneyCourse.groups 참조) */
   group?: string;
+  /** 정답으로 인정하는 별칭 (예: 미국↔미합중국). 미지정 시 fact만 정답 */
+  aliases?: string[];
   /** 그리드형 UI(주기율표 등)에서의 배치 좌표 — row=주기, col=족(1~18) */
   row?: number;
   col?: number;
@@ -45,7 +47,7 @@ export interface JourneyCourse {
   category: '역사' | '지리' | '과학' | '상식';
   emoji: string;
   /** 시각화 UI — 미지정 시 지하철 노선도(subway). 코스 컨셉별 전용 UI 선택 */
-  ui?: 'subway' | 'worldmap' | 'periodic' | 'flags';
+  ui?: 'subway' | 'worldmap' | 'periodic' | 'flags' | 'map';
   /** 진행 방식 — 기본은 순서 암기(이름→지식 2단계). 'quiz'는 질문(name)→정답(fact) 1단계 */
   flow?: 'quiz';
   /** quiz 질문 접미사 — name 뒤에 붙는다 (예: '의 수도는?') */
@@ -62,6 +64,97 @@ export interface JourneyCourse {
 
 /** 국기 퀴즈 스테이션 — 나라 이름이 곧 정답(fact) */
 const F = (id: string, name: string, group: string): JourneyStation => ({ id, name, fact: name, group });
+
+/** 국기 퀴즈 스테이션 목록 — 지도 퀴즈(map-quiz)도 이 목록을 필터해 재사용한다 */
+const FLAG_STATIONS: JourneyStation[] = [
+          // 아시아 (51)
+          F('kr', '대한민국', 'asia'), F('kp', '북한', 'asia'), F('jp', '일본', 'asia'), F('cn', '중국', 'asia'),
+          F('tw', '대만', 'asia'), F('hk', '홍콩', 'asia'), F('mo', '마카오', 'asia'), F('mn', '몽골', 'asia'),
+          F('in', '인도', 'asia'), F('pk', '파키스탄', 'asia'), F('bd', '방글라데시', 'asia'), F('lk', '스리랑카', 'asia'),
+          F('np', '네팔', 'asia'), F('bt', '부탄', 'asia'), F('mv', '몰디브', 'asia'), F('af', '아프가니스탄', 'asia'),
+          F('ir', '이란', 'asia'), F('iq', '이라크', 'asia'), F('sa', '사우디아라비아', 'asia'), F('ae', '아랍에미리트', 'asia'),
+          F('qa', '카타르', 'asia'), F('kw', '쿠웨이트', 'asia'), F('bh', '바레인', 'asia'), F('om', '오만', 'asia'),
+          F('ye', '예멘', 'asia'), F('jo', '요르단', 'asia'), F('sy', '시리아', 'asia'), F('lb', '레바논', 'asia'),
+          F('il', '이스라엘', 'asia'), F('ps', '팔레스타인', 'asia'), F('tr', '튀르키예', 'asia'), F('cy', '키프로스', 'asia'),
+          F('ge', '조지아', 'asia'), F('am', '아르메니아', 'asia'), F('az', '아제르바이잔', 'asia'), F('kz', '카자흐스탄', 'asia'),
+          F('uz', '우즈베키스탄', 'asia'), F('tm', '투르크메니스탄', 'asia'), F('kg', '키르기스스탄', 'asia'), F('tj', '타지키스탄', 'asia'),
+          F('th', '태국', 'asia'), F('vn', '베트남', 'asia'), F('la', '라오스', 'asia'), F('kh', '캄보디아', 'asia'),
+          F('mm', '미얀마', 'asia'), F('my', '말레이시아', 'asia'), F('sg', '싱가포르', 'asia'), F('id', '인도네시아', 'asia'),
+          F('bn', '브루나이', 'asia'), F('ph', '필리핀', 'asia'), F('tl', '동티모르', 'asia'),
+          // 유럽 (43)
+          F('gb', '영국', 'europe'), F('ie', '아일랜드', 'europe'), F('fr', '프랑스', 'europe'), F('de', '독일', 'europe'),
+          F('nl', '네덜란드', 'europe'), F('be', '벨기에', 'europe'), F('lu', '룩셈부르크', 'europe'), F('ch', '스위스', 'europe'),
+          F('at', '오스트리아', 'europe'), F('li', '리히텐슈타인', 'europe'), F('es', '스페인', 'europe'), F('pt', '포르투갈', 'europe'),
+          F('ad', '안도라', 'europe'), F('mc', '모나코', 'europe'), F('it', '이탈리아', 'europe'), F('sm', '산마리노', 'europe'),
+          F('va', '바티칸', 'europe'), F('mt', '몰타', 'europe'), F('gr', '그리스', 'europe'), F('al', '알바니아', 'europe'),
+          F('mk', '북마케도니아', 'europe'), F('rs', '세르비아', 'europe'), F('me', '몬테네그로', 'europe'), F('ba', '보스니아헤르체고비나', 'europe'),
+          F('hr', '크로아티아', 'europe'), F('si', '슬로베니아', 'europe'), F('hu', '헝가리', 'europe'), F('sk', '슬로바키아', 'europe'),
+          F('cz', '체코', 'europe'), F('pl', '폴란드', 'europe'), F('dk', '덴마크', 'europe'), F('no', '노르웨이', 'europe'),
+          F('se', '스웨덴', 'europe'), F('fi', '핀란드', 'europe'), F('is', '아이슬란드', 'europe'), F('ee', '에스토니아', 'europe'),
+          F('lv', '라트비아', 'europe'), F('lt', '리투아니아', 'europe'), F('by', '벨라루스', 'europe'), F('ua', '우크라이나', 'europe'),
+          F('md', '몰도바', 'europe'), F('ro', '루마니아', 'europe'), F('bg', '불가리아', 'europe'),
+          // 아메리카 (37)
+          F('us', '미국', 'americas'), F('ca', '캐나다', 'americas'), F('mx', '멕시코', 'americas'), F('gt', '과테말라', 'americas'),
+          F('bz', '벨리즈', 'americas'), F('sv', '엘살바도르', 'americas'), F('hn', '온두라스', 'americas'), F('ni', '니카라과', 'americas'),
+          F('cr', '코스타리카', 'americas'), F('pa', '파나마', 'americas'), F('cu', '쿠바', 'americas'), F('jm', '자메이카', 'americas'),
+          F('ht', '아이티', 'americas'), F('do', '도미니카공화국', 'americas'), F('pr', '푸에르토리코', 'americas'), F('bs', '바하마', 'americas'),
+          F('bb', '바베이도스', 'americas'), F('tt', '트리니다드토바고', 'americas'), F('gd', '그레나다', 'americas'), F('lc', '세인트루시아', 'americas'),
+          F('vc', '세인트빈센트그레나딘', 'americas'), F('ag', '앤티가바부다', 'americas'), F('kn', '세인트키츠네비스', 'americas'), F('dm', '도미니카연방', 'americas'),
+          F('gl', '그린란드', 'americas'), F('co', '콜롬비아', 'americas'), F('ve', '베네수엘라', 'americas'), F('gy', '가이아나', 'americas'),
+          F('sr', '수리남', 'americas'), F('ec', '에콰도르', 'americas'), F('pe', '페루', 'americas'), F('br', '브라질', 'americas'),
+          F('bo', '볼리비아', 'americas'), F('py', '파라과이', 'americas'), F('uy', '우루과이', 'americas'), F('ar', '아르헨티나', 'americas'),
+          F('cl', '칠레', 'americas'),
+          // 아프리카 (54)
+          F('eg', '이집트', 'africa'), F('ly', '리비아', 'africa'), F('tn', '튀니지', 'africa'), F('dz', '알제리', 'africa'),
+          F('ma', '모로코', 'africa'), F('mr', '모리타니', 'africa'), F('ml', '말리', 'africa'), F('ne', '니제르', 'africa'),
+          F('td', '차드', 'africa'), F('sd', '수단', 'africa'), F('ss', '남수단', 'africa'), F('er', '에리트레아', 'africa'),
+          F('dj', '지부티', 'africa'), F('et', '에티오피아', 'africa'), F('so', '소말리아', 'africa'), F('ke', '케냐', 'africa'),
+          F('ug', '우간다', 'africa'), F('rw', '르완다', 'africa'), F('bi', '부룬디', 'africa'), F('tz', '탄자니아', 'africa'),
+          F('mz', '모잠비크', 'africa'), F('mw', '말라위', 'africa'), F('zm', '잠비아', 'africa'), F('zw', '짐바브웨', 'africa'),
+          F('bw', '보츠와나', 'africa'), F('na', '나미비아', 'africa'), F('za', '남아프리카공화국', 'africa'), F('ls', '레소토', 'africa'),
+          F('sz', '에스와티니', 'africa'), F('mg', '마다가스카르', 'africa'), F('mu', '모리셔스', 'africa'), F('sc', '세이셸', 'africa'),
+          F('km', '코모로', 'africa'), F('cv', '카보베르데', 'africa'), F('sn', '세네갈', 'africa'), F('gm', '감비아', 'africa'),
+          F('gw', '기니비사우', 'africa'), F('gn', '기니', 'africa'), F('sl', '시에라리온', 'africa'), F('lr', '라이베리아', 'africa'),
+          F('ci', '코트디부아르', 'africa'), F('gh', '가나', 'africa'), F('tg', '토고', 'africa'), F('bj', '베냉', 'africa'),
+          F('ng', '나이지리아', 'africa'), F('cm', '카메룬', 'africa'), F('cf', '중앙아프리카공화국', 'africa'), F('gq', '적도기니', 'africa'),
+          F('ga', '가봉', 'africa'), F('cg', '콩고공화국', 'africa'), F('cd', '콩고민주공화국', 'africa'), F('ao', '앙골라', 'africa'),
+          F('st', '상투메프린시페', 'africa'), F('bf', '부르키나파소', 'africa'),
+          // 오세아니아 (15)
+          F('au', '오스트레일리아', 'oceania'), F('nz', '뉴질랜드', 'oceania'), F('pg', '파푸아뉴기니', 'oceania'), F('fj', '피지', 'oceania'),
+          F('sb', '솔로몬제도', 'oceania'), F('vu', '바누아투', 'oceania'), F('ws', '사모아', 'oceania'), F('to', '통가', 'oceania'),
+          F('tv', '투발루', 'oceania'), F('ki', '키리바시', 'oceania'), F('nr', '나우루', 'oceania'), F('mh', '마셜제도', 'oceania'),
+          F('fm', '미크로네시아', 'oceania'), F('pw', '팔라우', 'oceania'), F('nc', '뉴칼레도니아', 'oceania'),
+        ];
+
+/**
+ * 세계지도(110m 해상도) 폴리곤이 존재하는 국가 코드 — scripts/build-world-map.mjs 산출 기준.
+ * 지도 퀴즈는 이 목록과 FLAG_STATIONS의 교집합만 출제한다(소국·일부 지역은 국기 퀴즈로 커버).
+ */
+const MAP_CODES = new Set('ae,af,al,am,ao,ar,at,au,az,ba,bd,be,bf,bg,bi,bj,bn,bo,br,bs,bt,bw,by,bz,ca,cd,cf,cg,ch,ci,cl,cm,cn,co,cr,cu,cy,cz,de,dj,dk,do,dz,ec,ee,eg,er,es,et,fi,fj,fr,ga,gb,ge,gh,gl,gm,gn,gq,gr,gt,gw,gy,hn,hr,ht,hu,id,ie,il,in,iq,ir,is,it,jm,jo,jp,ke,kg,kh,kp,kr,kw,kz,la,lb,lk,lr,ls,lt,lu,lv,ly,ma,md,me,mg,mk,ml,mm,mn,mr,mw,mx,my,mz,na,nc,ne,ng,ni,nl,no,np,nz,om,pa,pe,pg,ph,pk,pl,pr,ps,pt,py,qa,ro,rs,ru,rw,sa,sb,sd,se,si,sk,sl,sn,so,sr,ss,sv,sy,sz,td,tf,tg,th,tj,tl,tm,tn,tr,tt,tw,tz,ua,ug,us,uy,uz,ve,vn,vu,ye,za,zm,zw'.split(','));
+
+/** 지도 퀴즈 별칭 정답 — 통용 이름/구칭 허용 */
+const MAP_ALIASES: Record<string, string[]> = {
+  au: ['호주'],
+  us: ['미합중국'],
+  gb: ['그레이트브리튼', '영국연합왕국'],
+  tr: ['터키'],
+  nl: ['화란'],
+  cz: ['체코공화국'],
+  kp: ['조선민주주의인민공화국'],
+  cd: ['민주콩고', '콩고민주'],
+  za: ['남아공'],
+  ae: ['아부다비연합', 'UAE'],
+  do: ['도미니카 공화국'],
+  cf: ['중앙아프리카 공화국'],
+  mm: ['버마'],
+  lk: ['실론'],
+  kh: ['캄푸치아'],
+};
+
+/** 지도 퀴즈 스테이션 — 폴리곤이 있는 국가만, 별칭 병합 */
+const MAP_STATIONS: JourneyStation[] = FLAG_STATIONS
+  .filter((st) => MAP_CODES.has(st.id))
+  .map((st) => (MAP_ALIASES[st.id] ? { ...st, aliases: MAP_ALIASES[st.id] } : st));
 
 export const JOURNEY_COURSES: JourneyCourse[] = [
   {
@@ -527,65 +620,34 @@ export const JOURNEY_COURSES: JourneyCourse[] = [
       {
         id: 'main',
         color: '#E11D48',
-        stations: [
-          // 아시아 (51)
-          F('kr', '대한민국', 'asia'), F('kp', '북한', 'asia'), F('jp', '일본', 'asia'), F('cn', '중국', 'asia'),
-          F('tw', '대만', 'asia'), F('hk', '홍콩', 'asia'), F('mo', '마카오', 'asia'), F('mn', '몽골', 'asia'),
-          F('in', '인도', 'asia'), F('pk', '파키스탄', 'asia'), F('bd', '방글라데시', 'asia'), F('lk', '스리랑카', 'asia'),
-          F('np', '네팔', 'asia'), F('bt', '부탄', 'asia'), F('mv', '몰디브', 'asia'), F('af', '아프가니스탄', 'asia'),
-          F('ir', '이란', 'asia'), F('iq', '이라크', 'asia'), F('sa', '사우디아라비아', 'asia'), F('ae', '아랍에미리트', 'asia'),
-          F('qa', '카타르', 'asia'), F('kw', '쿠웨이트', 'asia'), F('bh', '바레인', 'asia'), F('om', '오만', 'asia'),
-          F('ye', '예멘', 'asia'), F('jo', '요르단', 'asia'), F('sy', '시리아', 'asia'), F('lb', '레바논', 'asia'),
-          F('il', '이스라엘', 'asia'), F('ps', '팔레스타인', 'asia'), F('tr', '튀르키예', 'asia'), F('cy', '키프로스', 'asia'),
-          F('ge', '조지아', 'asia'), F('am', '아르메니아', 'asia'), F('az', '아제르바이잔', 'asia'), F('kz', '카자흐스탄', 'asia'),
-          F('uz', '우즈베키스탄', 'asia'), F('tm', '투르크메니스탄', 'asia'), F('kg', '키르기스스탄', 'asia'), F('tj', '타지키스탄', 'asia'),
-          F('th', '태국', 'asia'), F('vn', '베트남', 'asia'), F('la', '라오스', 'asia'), F('kh', '캄보디아', 'asia'),
-          F('mm', '미얀마', 'asia'), F('my', '말레이시아', 'asia'), F('sg', '싱가포르', 'asia'), F('id', '인도네시아', 'asia'),
-          F('bn', '브루나이', 'asia'), F('ph', '필리핀', 'asia'), F('tl', '동티모르', 'asia'),
-          // 유럽 (43)
-          F('gb', '영국', 'europe'), F('ie', '아일랜드', 'europe'), F('fr', '프랑스', 'europe'), F('de', '독일', 'europe'),
-          F('nl', '네덜란드', 'europe'), F('be', '벨기에', 'europe'), F('lu', '룩셈부르크', 'europe'), F('ch', '스위스', 'europe'),
-          F('at', '오스트리아', 'europe'), F('li', '리히텐슈타인', 'europe'), F('es', '스페인', 'europe'), F('pt', '포르투갈', 'europe'),
-          F('ad', '안도라', 'europe'), F('mc', '모나코', 'europe'), F('it', '이탈리아', 'europe'), F('sm', '산마리노', 'europe'),
-          F('va', '바티칸', 'europe'), F('mt', '몰타', 'europe'), F('gr', '그리스', 'europe'), F('al', '알바니아', 'europe'),
-          F('mk', '북마케도니아', 'europe'), F('rs', '세르비아', 'europe'), F('me', '몬테네그로', 'europe'), F('ba', '보스니아헤르체고비나', 'europe'),
-          F('hr', '크로아티아', 'europe'), F('si', '슬로베니아', 'europe'), F('hu', '헝가리', 'europe'), F('sk', '슬로바키아', 'europe'),
-          F('cz', '체코', 'europe'), F('pl', '폴란드', 'europe'), F('dk', '덴마크', 'europe'), F('no', '노르웨이', 'europe'),
-          F('se', '스웨덴', 'europe'), F('fi', '핀란드', 'europe'), F('is', '아이슬란드', 'europe'), F('ee', '에스토니아', 'europe'),
-          F('lv', '라트비아', 'europe'), F('lt', '리투아니아', 'europe'), F('by', '벨라루스', 'europe'), F('ua', '우크라이나', 'europe'),
-          F('md', '몰도바', 'europe'), F('ro', '루마니아', 'europe'), F('bg', '불가리아', 'europe'),
-          // 아메리카 (37)
-          F('us', '미국', 'americas'), F('ca', '캐나다', 'americas'), F('mx', '멕시코', 'americas'), F('gt', '과테말라', 'americas'),
-          F('bz', '벨리즈', 'americas'), F('sv', '엘살바도르', 'americas'), F('hn', '온두라스', 'americas'), F('ni', '니카라과', 'americas'),
-          F('cr', '코스타리카', 'americas'), F('pa', '파나마', 'americas'), F('cu', '쿠바', 'americas'), F('jm', '자메이카', 'americas'),
-          F('ht', '아이티', 'americas'), F('do', '도미니카공화국', 'americas'), F('pr', '푸에르토리코', 'americas'), F('bs', '바하마', 'americas'),
-          F('bb', '바베이도스', 'americas'), F('tt', '트리니다드토바고', 'americas'), F('gd', '그레나다', 'americas'), F('lc', '세인트루시아', 'americas'),
-          F('vc', '세인트빈센트그레나딘', 'americas'), F('ag', '앤티가바부다', 'americas'), F('kn', '세인트키츠네비스', 'americas'), F('dm', '도미니카연방', 'americas'),
-          F('gl', '그린란드', 'americas'), F('co', '콜롬비아', 'americas'), F('ve', '베네수엘라', 'americas'), F('gy', '가이아나', 'americas'),
-          F('sr', '수리남', 'americas'), F('ec', '에콰도르', 'americas'), F('pe', '페루', 'americas'), F('br', '브라질', 'americas'),
-          F('bo', '볼리비아', 'americas'), F('py', '파라과이', 'americas'), F('uy', '우루과이', 'americas'), F('ar', '아르헨티나', 'americas'),
-          F('cl', '칠레', 'americas'),
-          // 아프리카 (54)
-          F('eg', '이집트', 'africa'), F('ly', '리비아', 'africa'), F('tn', '튀니지', 'africa'), F('dz', '알제리', 'africa'),
-          F('ma', '모로코', 'africa'), F('mr', '모리타니', 'africa'), F('ml', '말리', 'africa'), F('ne', '니제르', 'africa'),
-          F('td', '차드', 'africa'), F('sd', '수단', 'africa'), F('ss', '남수단', 'africa'), F('er', '에리트레아', 'africa'),
-          F('dj', '지부티', 'africa'), F('et', '에티오피아', 'africa'), F('so', '소말리아', 'africa'), F('ke', '케냐', 'africa'),
-          F('ug', '우간다', 'africa'), F('rw', '르완다', 'africa'), F('bi', '부룬디', 'africa'), F('tz', '탄자니아', 'africa'),
-          F('mz', '모잠비크', 'africa'), F('mw', '말라위', 'africa'), F('zm', '잠비아', 'africa'), F('zw', '짐바브웨', 'africa'),
-          F('bw', '보츠와나', 'africa'), F('na', '나미비아', 'africa'), F('za', '남아프리카공화국', 'africa'), F('ls', '레소토', 'africa'),
-          F('sz', '에스와티니', 'africa'), F('mg', '마다가스카르', 'africa'), F('mu', '모리셔스', 'africa'), F('sc', '세이셸', 'africa'),
-          F('km', '코모로', 'africa'), F('cv', '카보베르데', 'africa'), F('sn', '세네갈', 'africa'), F('gm', '감비아', 'africa'),
-          F('gw', '기니비사우', 'africa'), F('gn', '기니', 'africa'), F('sl', '시에라리온', 'africa'), F('lr', '라이베리아', 'africa'),
-          F('ci', '코트디부아르', 'africa'), F('gh', '가나', 'africa'), F('tg', '토고', 'africa'), F('bj', '베냉', 'africa'),
-          F('ng', '나이지리아', 'africa'), F('cm', '카메룬', 'africa'), F('cf', '중앙아프리카공화국', 'africa'), F('gq', '적도기니', 'africa'),
-          F('ga', '가봉', 'africa'), F('cg', '콩고공화국', 'africa'), F('cd', '콩고민주공화국', 'africa'), F('ao', '앙골라', 'africa'),
-          F('st', '상투메프린시페', 'africa'), F('bf', '부르키나파소', 'africa'),
-          // 오세아니아 (15)
-          F('au', '오스트레일리아', 'oceania'), F('nz', '뉴질랜드', 'oceania'), F('pg', '파푸아뉴기니', 'oceania'), F('fj', '피지', 'oceania'),
-          F('sb', '솔로몬제도', 'oceania'), F('vu', '바누아투', 'oceania'), F('ws', '사모아', 'oceania'), F('to', '통가', 'oceania'),
-          F('tv', '투발루', 'oceania'), F('ki', '키리바시', 'oceania'), F('nr', '나우루', 'oceania'), F('mh', '마셜제도', 'oceania'),
-          F('fm', '미크로네시아', 'oceania'), F('pw', '팔라우', 'oceania'), F('nc', '뉴칼레도니아', 'oceania'),
-        ],
+        stations: FLAG_STATIONS,
+      },
+    ],
+  },
+  {
+    id: 'map-quiz',
+    title: '지도 보고 나라 맞히기',
+    subtitle: '세계지도에서 반짝이는 나라, 바로 타자',
+    description:
+      '세계지도 위에 하이라이트된 나라를 보고 이름을 한글 타자로 맞힙니다. 정답을 맞힐 때마다 지도가 초록색으로 채워지며, 대륙별로 세계지리 감각을 손으로 익힙니다.',
+    category: '지리',
+    emoji: '🗺️',
+    ui: 'map',
+    flow: 'quiz',
+    unitLabel: '나라',
+    keywords: ['세계지도 퀴즈', '지도 보고 나라 맞추기', '나라 위치 맞히기', '세계지리 게임', '지도 암기', '한글타자왕'],
+    groups: [
+      { id: 'asia', label: '아시아' },
+      { id: 'europe', label: '유럽' },
+      { id: 'americas', label: '아메리카' },
+      { id: 'africa', label: '아프리카' },
+      { id: 'oceania', label: '오세아니아' },
+    ],
+    lines: [
+      {
+        id: 'main',
+        color: '#0891B2',
+        stations: MAP_STATIONS,
       },
     ],
   },

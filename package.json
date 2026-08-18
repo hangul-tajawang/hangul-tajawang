@@ -16,7 +16,8 @@
     "seo:gsc": "node scripts/submit-gsc-sitemap.mjs",
     "test": "tsx --test tests/*.test.ts",
     "test:mobile": "node tests/mobile-e2e.mjs",
-    "stats": "node scripts/pilsa-stats.mjs"
+    "stats": "node scripts/pilsa-stats.mjs",
+    "map:build": "node scripts/build-world-map.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -36,12 +37,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "d3-geo": "^3.1.1",
     "eslint": "^9",
     "eslint-config-next": "^16.3.0",
+    "iso-3166-1": "^2.1.1",
     "playwright": "^1.61.1",
     "tailwindcss": "^4",
+    "topojson-client": "^3.1.0",
     "tsx": "^4.23.12",
     "typescript": "^5",
+    "world-atlas": "^2.0.2",
     "wrangler": "^4.118.0"
   }
 }

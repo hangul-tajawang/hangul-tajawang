@@ -5,6 +5,7 @@ import type { JourneyCourse, JourneyStation } from "@/lib/journey-data";
 import { JourneyMap } from "./JourneyMap";
 import { JourneyWorldMap } from "./JourneyWorldMap";
 import { JourneyPeriodic } from "./JourneyPeriodic";
+import { JourneyGeoMap } from "./JourneyGeoMap";
 
 /**
  * 코스별 시각화 디스패처.
@@ -44,6 +45,8 @@ export const JourneyViz: React.FC<JourneyVizProps> = (props) => {
       return <JourneyWorldMap {...props} />;
     case "periodic":
       return <JourneyPeriodic {...props} />;
+    case "map": // 지도 퀴즈 — 실제 세계지도에서 국가 하이라이트
+      return <JourneyGeoMap {...props} />;
     default:
       return <JourneyMap {...props} />;
   }
