@@ -69,13 +69,14 @@
   body {
     background-color: var(--surface);
     color: var(--on-surface);
-    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    /* 한글 기본 = Pretendard(자체 호스팅, 필요한 유니코드 조각만 다운로드). 라틴은 Inter 우선. */
+    font-family: var(--font-inter), 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-plus-jakarta), 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, sans-serif;
     letter-spacing: -0.02em;
   }
 }
@@ -83,6 +84,8 @@
 @layer components {
   .editorial-heading {
     @apply font-plus-jakarta font-bold tracking-tight text-on-surface;
+    /* 한글 폴백을 Pretendard로 고정 (font-plus-jakarta 유틸은 라틴 전용) */
+    font-family: var(--font-plus-jakarta), 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, sans-serif;
   }
   
   .glass-card {

@@ -2,9 +2,9 @@
 
 import React, { useState, useMemo } from "react";
 import { CheckCircle2, XCircle, Lightbulb, Trophy } from "lucide-react";
-import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { QuizQuestion } from "@/lib/quiz-data";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AdSenseUnit } from "../layout/AdSenseUnit";
 
 interface Props {
   question: QuizQuestion;
@@ -66,7 +66,9 @@ export const SpellingQuiz: React.FC<Props> = ({ question, nextQuestionId, curren
           <p className="text-lg font-bold text-zinc-800 dark:text-zinc-200 mb-8">
             {percentage >= 80 ? "훌륭해요! 맞춤법 장인이시네요!" : percentage >= 60 ? "잘했어요! 조금만 더 다듬어봐요!" : "맞춤법 공부가 조금 더 필요해요!"}
           </p>
-          <KeyboardRecommendationBanner variant="light" className="!mt-0 mb-8 !p-4" />
+          <div className="mb-6 flex justify-center empty:hidden">
+            <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
+          </div>
           <button 
             onClick={handleRestart}
             className="w-full py-4 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-lg font-bold rounded-xl hover:opacity-90 transition-opacity"

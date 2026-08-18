@@ -16,7 +16,6 @@ import {
   Heart,
   ArrowRight,
   Smartphone,
-  Keyboard,
   TramFront,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -52,7 +51,43 @@ export default function HomeClient({ initialPopular }: Props) {
     <div className="bg-surface overflow-x-hidden">
       <HeroSection />
 
-      {/* Feature Section */}
+      {/* 3대 축 섹션 — 철학이 곧 제품: 필사 · 지식타자 · 게임 */}
+      <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+          <PillarCard
+            href="/transcription"
+            icon={<PenTool size={32} />}
+            eyebrow="생각이 남는 타자"
+            title="필사"
+            description="좋은 문장을 손끝으로 옮기다 보면 문장이 생각으로 남습니다. 디지털 원고지 위에서 문학을 음미하세요."
+            cta="필사 시작하기"
+            accent="text-secondary"
+            accentBg="bg-secondary/10"
+          />
+          <PillarCard
+            href="/journey"
+            icon={<TramFront size={32} />}
+            eyebrow="배움이 남는 타자"
+            title="지식타자"
+            description="태정태세문단세부터 세계 수도까지. 눈으로 외우지 말고 손으로 외우면 지식이 배움으로 남습니다."
+            cta="지식타자 시작하기"
+            accent="text-violet-600"
+            accentBg="bg-violet-600/10"
+          />
+          <PillarCard
+            href="/game"
+            icon={<Gamepad2 size={32} />}
+            eyebrow="실력이 남는 타자"
+            title="게임"
+            description="산성비, 성문방어, 글자 계단. 좋은 게임에 몰입하는 사이 타자 실력이 조용히 쌓입니다."
+            cta="게임 즐기기"
+            accent="text-primary"
+            accentBg="bg-primary/10"
+          />
+        </div>
+      </section>
+
+      {/* Feature Section — 3대 축을 뒷받침하는 도구들 */}
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <FeatureCard
@@ -63,39 +98,18 @@ export default function HomeClient({ initialPopular }: Props) {
             step="01"
           />
           <FeatureCard
-            href="/transcription"
-            icon={<PenTool className="text-secondary" size={28} />}
-            title="심도 있는 필사"
-            description="디지털 원고지 위에서 즐기는 <br/>현대 문학의 리듬감"
-            step="02"
-          />
-          <FeatureCard
             href="/quiz"
             icon={<BookOpenCheck className="text-green-600" size={28} />}
             title="맞춤법 인사이트"
             description="언어의 정확도를 높이는 <br/>지적인 퀴즈 메커니즘"
-            step="03"
-          />
-          <FeatureCard
-            href="/journey"
-            icon={<TramFront className="text-violet-600" size={28} />}
-            title="지식타자"
-            description="태정태세문단세를 한 역씩 <br/>타자로 정복하는 암기 학습"
-            step="04"
+            step="02"
           />
           <FeatureCard
             href="/challenge"
             icon={<Users className="text-purple-600" size={28} />}
             title="오픈 챌린지"
             description="커뮤니티와 함께 호흡하는 <br/>필사 및 랭킹 시스템"
-            step="05"
-          />
-          <FeatureCard
-            href="/recommend"
-            icon={<Keyboard className="text-amber-600" size={28} />}
-            title="장비의 미학"
-            description="당신의 리듬을 완성해줄 <br/>선별된 키보드 추천"
-            step="06"
+            step="03"
           />
         </div>
       </section>
@@ -223,11 +237,12 @@ export default function HomeClient({ initialPopular }: Props) {
               빠름보다 바름을, <br className="hidden md:block" />
               소음보다 리듬을.
             </h2>
-            <p className="text-zinc-500 font-medium text-lg md:text-xl leading-relaxed mb-12 tracking-[-0.01em]">
-              한글타자왕은 단순히 글자를 빠르게 치는 연습을 넘어, 한글이 가진
-              고유의 조형미와 타이핑의 즐거움을 되찾기 위해 시작되었습니다. 바쁜
-              일상 속에서 잠시 멈춰 문장을 음미하고, 손끝으로 전해지는 리듬에
-              집중하는 시간을 제공하고자 합니다.
+            <p className="text-zinc-500 font-medium text-lg md:text-xl leading-relaxed mb-12 tracking-[-0.01em] break-keep">
+              한글타자왕은 <strong className="text-on-surface">타자를 치는 행위 자체를 가치 있게</strong> 만듭니다.
+              좋은 문장을 쳐서 생각이 남는 필사, 좋은 지식을 쳐서 배움이 남는
+              지식타자, 좋은 게임을 즐기며 실력이 남는 타자. 단순한 입력으로
+              끝내지 않고, 타자를 치는 당신의 시간을 더 가치 있게 만드는 것 —
+              그것이 우리가 이 서비스를 만드는 이유입니다.
             </p>
 
             <div className="flex flex-col gap-6">
@@ -296,12 +311,13 @@ function HeroSection() {
       <div className="relative z-10 flex flex-col items-center w-full">
         <h1 className="display-lg text-on-surface mb-8 md:mb-10 leading-tight">
           한글 타자 연습, <br />
-          <span className="text-primary italic">감성</span>을 더하다.
+          타자 치는 <span className="text-primary italic">시간</span>을 가치 있게.
         </h1>
 
         <p className="text-lg md:text-xl text-zinc-500 max-w-2xl mb-12 md:mb-16 font-medium leading-relaxed px-4">
-          노력하는 당신을 존경합니다. <br className="hidden sm:block" />
-          낱말연습부터 감성 필사까지 당신만의 타자 시간을 즐겨보세요.
+          좋은 문장을 치면 생각이 남고, 좋은 지식을 치면 배움이 남고,{' '}
+          <br className="hidden sm:block" />
+          좋은 게임을 즐기면 실력이 남습니다.
         </p>
 
         <div className="flex flex-col items-center gap-8 w-full">
@@ -329,6 +345,51 @@ function HeroSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// 3대 축(필사·지식타자·게임) 대형 카드 — 철학 문구를 앞세운 대표 진입점
+function PillarCard({
+  href,
+  icon,
+  eyebrow,
+  title,
+  description,
+  cta,
+  accent,
+  accentBg,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  eyebrow: string;
+  title: string;
+  description: string;
+  cta: string;
+  accent: string;
+  accentBg: string;
+}) {
+  return (
+    <Link
+      prefetch={false}
+      href={href}
+      className="group bg-surface-lowest p-10 md:p-12 rounded-[2.5rem] md:rounded-[3rem] text-left transition-all duration-500 shadow-sm hover:shadow-[0_24px_48px_rgba(21,28,39,0.08)] hover:-translate-y-2 relative overflow-hidden"
+    >
+      <div className={`w-16 h-16 md:w-20 md:h-20 ${accentBg} ${accent} rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform`}>
+        {icon}
+      </div>
+      <span className={`block text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accent}`}>
+        {eyebrow}
+      </span>
+      <h2 className="display-lg !text-3xl md:!text-4xl mb-4 group-hover:text-primary transition-colors">
+        {title}
+      </h2>
+      <p className="text-zinc-500 font-medium text-sm md:text-base leading-relaxed mb-8 break-keep">
+        {description}
+      </p>
+      <span className="inline-flex items-center gap-2 font-black text-sm text-on-surface group-hover:text-primary transition-colors">
+        {cta} <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+      </span>
+    </Link>
   );
 }
 

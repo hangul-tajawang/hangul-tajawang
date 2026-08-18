@@ -127,6 +127,7 @@ export default async function Home() {
             { href: '/transcription', label: '긴 글 원고지 필사' },
             { href: '/challenge', label: '유저 창작 필사 챌린지' },
             { href: '/game/acid-rain', label: '산성비 타자 게임' },
+            { href: '/journey', label: '지식타자 (손으로 외우는 암기)' },
             { href: '/quiz', label: '한글 맞춤법 퀴즈' },
             { href: '/blog', label: '타자 연습 가이드 블로그' },
           ].map((item) => (

@@ -20,6 +20,17 @@ const nextConfig: NextConfig = {
         destination: '/practice/short/proverb',
         permanent: true,
       },
+      {
+        // 키보드 추천(쿠팡 제휴) 섹션 폐지 — 잔여 검색 유입·외부 링크를 홈으로 영구 이동
+        source: '/recommend/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/recommend',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
   turbopack: {

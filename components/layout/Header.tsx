@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Keyboard, Newspaper, Timer, Store, TramFront } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Newspaper, Timer, Store, TramFront } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
@@ -125,11 +125,10 @@ export const Header: React.FC = () => {
                 <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="긴 글 연습" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/books" icon={<Store size={20} />} label="책방" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} highlight />
                 <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/recommend" icon={<Keyboard size={20} />} label="키보드 추천" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} highlight />
                 <MobileNavItem href="/blog" icon={<Newspaper size={20} />} label="블로그" onClick={() => setIsMobileMenuOpen(false)} />
             </div>
 
@@ -173,11 +172,10 @@ export const Header: React.FC = () => {
                 <NavButton label="타자 연습장" href="/practice" />
                 <NavButton label="긴 글 연습" href="/transcription" />
                 <NavButton label="책방" href="/books" />
-                <NavButton label="한글 게임" href="/game" />
-                <NavButton label="지식타자" href="/journey" />
+                <NavButton label="한글 게임" href="/game" highlight />
+                <NavButton label="지식타자" href="/journey" highlight />
                 <NavButton label="맞춤법 퀴즈" href="/quiz" className="hidden min-[1152px]:flex" />
-                <NavButton label="필사 챌린지" href="/challenge" />
-                <NavButton label="키보드 추천" href="/recommend" className="hidden min-[1152px]:flex" />
+                <NavButton label="필사 챌린지" href="/challenge" highlight />
                 <NavButton label="블로그" href="/blog" className="hidden min-[1152px]:flex" />
             </nav>
 
@@ -219,22 +217,40 @@ export const Header: React.FC = () => {
   );
 };
 
-function NavButton({ label, href, className = "flex" }: { label: string; href: string; className?: string }) {
+function NavButton({ label, href, className = "flex", highlight = false }: { label: string; href: string; className?: string; highlight?: boolean }) {
   return (
-    <Link href={href} prefetch={false} className={`${className} items-center px-2.5 py-2 text-sm whitespace-nowrap text-zinc-600 hover:text-primary hover:bg-surface-low rounded-lg font-medium transition-all`}>
+    <Link
+      href={href}
+      prefetch={false}
+      className={`${className} items-center gap-1.5 px-2.5 py-2 text-sm whitespace-nowrap rounded-lg transition-all ${
+        highlight
+          ? "text-on-surface font-black hover:text-primary hover:bg-primary/5"
+          : "text-zinc-600 font-medium hover:text-primary hover:bg-surface-low"
+      }`}
+    >
+      {highlight && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />}
       <span>{label}</span>
     </Link>
   );
 }
 
-function MobileNavItem({ href, icon, label, onClick }: { href: string; icon: React.ReactNode; label: string; onClick: () => void }) {
+function MobileNavItem({ href, icon, label, onClick, highlight = false }: { href: string; icon: React.ReactNode; label: string; onClick: () => void; highlight?: boolean }) {
     return (
-        <Link href={href} prefetch={false} onClick={onClick} className="flex items-center justify-between p-4 bg-surface-lowest hover:bg-surface-low rounded-2xl transition-all">
-            <div className="flex items-center gap-4 text-zinc-600">
+        <Link
+          href={href}
+          prefetch={false}
+          onClick={onClick}
+          className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
+            highlight
+              ? "bg-primary/5 border border-primary/20 hover:bg-primary/10"
+              : "bg-surface-lowest hover:bg-surface-low"
+          }`}
+        >
+            <div className={`flex items-center gap-4 ${highlight ? "text-primary" : "text-zinc-600"}`}>
                 {icon}
-                <span className="editorial-heading text-lg">{label}</span>
+                <span className={`editorial-heading text-lg ${highlight ? "text-on-surface" : ""}`}>{label}</span>
             </div>
-            <ChevronRight size={18} className="text-zinc-300" />
+            <ChevronRight size={18} className={highlight ? "text-primary/50" : "text-zinc-300"} />
         </Link>
     );
 }

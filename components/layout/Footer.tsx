@@ -18,11 +18,6 @@ export const Footer: React.FC = () => {
           <Link href="/contact" prefetch={false} className="hover:text-primary transition-colors font-medium">문의하기</Link>
         </div>
       </div>
-      <div className="container mx-auto max-w-7xl px-8 mt-8 pt-8 border-t border-outline-variant/40">
-        <p className="text-xs text-zinc-400/80 leading-relaxed break-keep text-center md:text-left">
-          이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
-        </p>
-      </div>
     </footer>
   );
 };

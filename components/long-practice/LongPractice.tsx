@@ -6,13 +6,13 @@ import { TypingUtils, TypingReport } from "@/lib/typing-speed";
 import { Clock, Target, Zap, RotateCcw, BookOpen, ScrollText, Keyboard, Award, Sparkles, User, Send, MessageSquare, Trash2, Users, Heart, ArrowRight, Type, Star, Flame, ChevronRight, Feather } from "lucide-react";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { track } from "@/lib/analytics";
-import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { KeyboardAdBanner } from "../layout/KeyboardAdBanner";
 import Link from "next/link";
 import Image from "next/image";
 import { scrollIntoViewOnFocus } from "@/hooks/useVirtualKeyboard";
 import { recordCompletion, saveProgress, clearProgress, getRecord, PilsaSourceMeta, PilsaProgress } from "@/lib/pilsa-library";
 import { ShareButton } from "@/components/books/ShareButton";
+import { AdSenseUnit } from "../layout/AdSenseUnit";
 
 interface Props {
   externalContent?: any;
@@ -495,15 +495,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                       <ResultItem label="Accuracy" value={report.accuracy} unit="%" />
                       <ResultItem label="Time" value={report.elapsedSeconds} unit="s" />
                   </div>
-                  <div className="relative z-10">
-                      <KeyboardRecommendationBanner
-                        variant="light"
-                        className="!mt-0 !rounded-[2.5rem] border border-zinc-100"
-                        title={report.kpm > 300 ? "놀라운 타자 실력입니다!" : "장비가 실력을 만든다"}
-                        description={report.kpm > 300
-                          ? "이 속도를 온전히 받아낼 '명검'이 필요하지 않으신가요?"
-                          : "오타를 줄이고 속도를 높여줄 전문가 추천 키보드를 만나보세요."}
-                      />
+                  <div className="mb-4 flex justify-center empty:hidden">
+                    <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
                   </div>
               </div>
           </div>

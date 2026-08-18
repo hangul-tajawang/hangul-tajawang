@@ -6,6 +6,7 @@ import {
   Plus_Jakarta_Sans, Inter
 } from "next/font/google";
 import Script from "next/script";
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";

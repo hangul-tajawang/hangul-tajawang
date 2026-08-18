@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Trophy, RotateCcw, Play, Loader2, User, Star, Flame, ChevronRight, TrendingUp, Gauge as GaugeIcon, Volume2, VolumeX } from "lucide-react";
-import { KeyboardRecommendationBanner } from "../layout/KeyboardRecommendationBanner";
 import { SupabaseService } from "@/lib/supabase";
 import { getStairWord } from "@/lib/stairs-words";
 import { TypingUtils } from "@/lib/typing-speed";
@@ -12,6 +11,7 @@ import { MobileGameShell } from "./MobileGameShell";
 import { sound } from "@/lib/sound-manager";
 import Image from "next/image";
 import Link from "next/link";
+import { AdSenseUnit } from "../layout/AdSenseUnit";
 
 // 계단 한 칸의 데이터. type은 나중에 갈림길("branch")·보너스("bonus")를
 // 추가할 수 있도록 열어둔다(지금은 normal/milestone만 사용).
@@ -537,8 +537,10 @@ export const StairsGame: React.FC = () => {
         ) : (
           <div className="mb-10 p-6 bg-green-50 dark:bg-green-900/20 rounded-[2rem] border border-green-100 dark:border-green-900/30 flex items-center justify-center gap-3 animate-pulse"><Star size={20} className="text-green-600" fill="currentColor" /><p className="text-sm font-black text-green-600">방금 세운 기록이 랭킹에 성공적으로 반영되었습니다!</p></div>
         )}
+        <div className="mb-6 flex justify-center empty:hidden">
+          <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
+        </div>
         <div className="flex flex-col gap-4">
-          <KeyboardRecommendationBanner variant="light" className="!mt-0 mb-4 !rounded-3xl" />
           <button onClick={startGame} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
           <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16} /></Link>
         </div>

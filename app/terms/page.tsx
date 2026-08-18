@@ -121,14 +121,10 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제7조 (광고 및 제휴 마케팅)
+              제7조 (광고)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
               <li>서비스는 운영을 위하여 Google 애드센스(AdSense) 등을 통한 광고를 게재할 수 있습니다.</li>
-              <li>
-                서비스 내 일부 상품 추천 페이지는 쿠팡 파트너스 활동의 일환으로 운영되며,
-                <strong> 이에 따른 일정액의 수수료를 제공받을 수 있습니다.</strong> 이는 이용자의 구매 가격에 영향을 주지 않습니다.
-              </li>
             </ul>
           </section>
 

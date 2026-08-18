@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Keyboard, Sparkles, ArrowRight } from 'lucide-react';
+import { BookOpenText, Brain, Gamepad2, Sparkles, ArrowRight } from 'lucide-react';
 
 const AD_CLIENT = 'ca-pub-6359187702715364'; // 블루커뮤니케이션즈
 
@@ -24,16 +24,45 @@ interface AdSenseUnitProps {
   /** GA4 하우스배너 집계용 지면 이름 (예: "sidebar-left") */
   label: string;
   disabled?: boolean;
-  /** 미충족(unfilled) 시 키보드 추천 하우스배너 대신 아무것도 렌더하지 않음 */
+  /** 미충족(unfilled) 시 하우스배너 대신 아무것도 렌더하지 않음 */
   noFallback?: boolean;
   /** 상하 여백(my-4) 제거 — 모바일/좁은 지면용 */
   tight?: boolean;
 }
 
+// 미충족 슬롯을 자사 3대 축(필사·지식타자·게임) 홍보로 회수하기 위한 배너 정의.
+// "타자를 치는 행위 자체를 가치 있게" 철학에 맞춰 장비가 아닌 콘텐츠로 연결한다.
+const PILLAR_PROMOS = [
+  {
+    href: '/transcription',
+    icon: BookOpenText,
+    tall: ['생각이 남는', '필사'],
+    thin: '좋은 문장을 치면 생각이 남습니다 — 온라인 필사',
+    square: ['좋은 문장을 치면', '생각이 남습니다'],
+    cta: '필사 시작',
+  },
+  {
+    href: '/journey',
+    icon: Brain,
+    tall: ['배움이 남는', '지식타자'],
+    thin: '좋은 지식을 치면 배움이 남습니다 — 지식타자',
+    square: ['좋은 지식을 치면', '배움이 남습니다'],
+    cta: '지식타자 시작',
+  },
+  {
+    href: '/game',
+    icon: Gamepad2,
+    tall: ['실력이 남는', '타자 게임'],
+    thin: '좋은 게임을 즐기면 실력이 남습니다 — 한글 게임',
+    square: ['좋은 게임을 즐기면', '실력이 남습니다'],
+    cta: '게임 즐기기',
+  },
+] as const;
+
 /**
  * 애드센스 미충족(unfilled) 폴백 하우스 배너.
- * 광고가 채워지지 않은 슬롯을 버리지 않고 쿠팡 파트너스 키보드 추천 페이지로
- * 연결되는 자체 배너로 회수한다. (애드핏 시절 폴백 구조 승계)
+ * 광고가 채워지지 않은 슬롯을 버리지 않고 자사 3대 축(필사·지식타자·게임)
+ * 홍보 배너로 회수한다. 지면(unit)별로 축을 순환시켜 고르게 노출한다.
  */
 const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }> = ({ width, height, unit }) => {
   useEffect(() => {
@@ -44,23 +73,27 @@ const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }>
     (window as any).dataLayer?.push({ event: 'house_ad_click', ad_unit: unit, ad_size: `${width}x${height}` });
   };
 
+  // 지면 이름 해시로 축 선택 — 같은 지면은 항상 같은 축(하이드레이션 안정), 지면끼리는 분산
+  const promo = PILLAR_PROMOS[Math.abs([...unit].reduce((a, c) => a + c.charCodeAt(0), 0)) % PILLAR_PROMOS.length];
+  const Icon = promo.icon;
+
   const isVertical = height > width * 1.5;   // 160x600 스카이스크래퍼
   const isThin = height <= 120;              // 320x100, 728x90 띠배너
 
   if (isVertical) {
     return (
-      <Link prefetch={false} href="/recommend" onClick={handleClick}
+      <Link prefetch={false} href={promo.href} onClick={handleClick}
         className="group flex flex-col items-center justify-between bg-gradient-to-b from-blue-600 to-indigo-700 text-white rounded-2xl p-5 text-center overflow-hidden relative hover:scale-[1.02] transition-transform"
         style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
       >
-        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-200">Sponsor</span>
+        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-200">한글타자왕</span>
         <div className="flex flex-col items-center gap-4">
-          <Keyboard size={48} className="opacity-90 group-hover:-rotate-6 transition-transform" />
-          <p className="font-black text-lg leading-snug break-keep">타자 실력,<br />장비가<br />완성합니다</p>
-          <p className="text-[11px] text-blue-200 font-medium leading-relaxed break-keep">타건감 좋은<br />가성비 키보드<br />엄선 추천</p>
+          <Icon size={48} className="opacity-90 group-hover:-rotate-6 transition-transform" />
+          <p className="font-black text-lg leading-snug break-keep">{promo.tall[0]}<br />{promo.tall[1]}</p>
+          <p className="text-[11px] text-blue-200 font-medium leading-relaxed break-keep">타자를 치는 시간을<br />가치 있게</p>
         </div>
         <span className="px-4 py-2 bg-white text-blue-700 rounded-full text-[11px] font-black flex items-center gap-1">
-          추천 보기 <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          {promo.cta} <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
         </span>
       </Link>
     );
@@ -68,13 +101,13 @@ const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }>
 
   if (isThin) {
     return (
-      <Link prefetch={false} href="/recommend" onClick={handleClick}
+      <Link prefetch={false} href={promo.href} onClick={handleClick}
         className="group flex items-center justify-between bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl px-5 overflow-hidden relative hover:scale-[1.01] transition-transform"
         style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <Keyboard size={28} className="shrink-0 opacity-90" />
-          <p className="font-black text-sm leading-tight break-keep truncate">타자 연습엔 좋은 키보드 — 엄선 추천 컬렉션</p>
+          <Icon size={28} className="shrink-0 opacity-90" />
+          <p className="font-black text-sm leading-tight break-keep truncate">{promo.thin}</p>
         </div>
         <span className="shrink-0 px-3 py-1.5 bg-white text-blue-700 rounded-full text-[10px] font-black flex items-center gap-1">
           보기 <ArrowRight size={11} />
@@ -85,15 +118,15 @@ const HouseAdFallback: React.FC<{ width: number; height: number; unit: string }>
 
   // 사각형 (300x250 등)
   return (
-    <Link prefetch={false} href="/recommend" onClick={handleClick}
+    <Link prefetch={false} href={promo.href} onClick={handleClick}
       className="group flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl p-6 text-center overflow-hidden relative hover:scale-[1.02] transition-transform"
       style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }}
     >
-      <span className="absolute top-3 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.3em] text-blue-200 flex items-center gap-1"><Sparkles size={10} /> Sponsor</span>
-      <Keyboard size={40} className="opacity-90 group-hover:-rotate-6 transition-transform" />
-      <p className="font-black text-lg leading-snug break-keep">내 타수를 올려줄<br />키보드는 따로 있다</p>
+      <span className="absolute top-3 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.3em] text-blue-200 flex items-center gap-1"><Sparkles size={10} /> 한글타자왕</span>
+      <Icon size={40} className="opacity-90 group-hover:-rotate-6 transition-transform" />
+      <p className="font-black text-lg leading-snug break-keep">{promo.square[0]}<br />{promo.square[1]}</p>
       <span className="px-4 py-2 bg-white text-blue-700 rounded-full text-[11px] font-black flex items-center gap-1">
-        추천 키보드 보기 <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+        {promo.cta} <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
       </span>
     </Link>
   );
