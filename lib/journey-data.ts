@@ -81,7 +81,8 @@ const FLAG_STATIONS: JourneyStation[] = [
           F('th', '태국', 'asia'), F('vn', '베트남', 'asia'), F('la', '라오스', 'asia'), F('kh', '캄보디아', 'asia'),
           F('mm', '미얀마', 'asia'), F('my', '말레이시아', 'asia'), F('sg', '싱가포르', 'asia'), F('id', '인도네시아', 'asia'),
           F('bn', '브루나이', 'asia'), F('ph', '필리핀', 'asia'), F('tl', '동티모르', 'asia'),
-          // 유럽 (43)
+          // 유럽 (44)
+          F('ru', '러시아', 'europe'),
           F('gb', '영국', 'europe'), F('ie', '아일랜드', 'europe'), F('fr', '프랑스', 'europe'), F('de', '독일', 'europe'),
           F('nl', '네덜란드', 'europe'), F('be', '벨기에', 'europe'), F('lu', '룩셈부르크', 'europe'), F('ch', '스위스', 'europe'),
           F('at', '오스트리아', 'europe'), F('li', '리히텐슈타인', 'europe'), F('es', '스페인', 'europe'), F('pt', '포르투갈', 'europe'),
@@ -134,6 +135,7 @@ const MAP_CODES = new Set('ae,af,al,am,ao,ar,at,au,az,ba,bd,be,bf,bg,bi,bj,bn,bo
 
 /** 지도 퀴즈 별칭 정답 — 통용 이름/구칭 허용 */
 const MAP_ALIASES: Record<string, string[]> = {
+  ru: ['러시아연방'],
   au: ['호주'],
   us: ['미합중국'],
   gb: ['그레이트브리튼', '영국연합왕국'],
@@ -600,9 +602,9 @@ export const JOURNEY_COURSES: JourneyCourse[] = [
   {
     id: 'flag-quiz',
     title: '국기 보고 나라 맞히기',
-    subtitle: '전 세계 국기 200개, 보고 바로 타자',
+    subtitle: '전 세계 국기 200여 개, 보고 바로 타자',
     description:
-      '국기를 보고 어느 나라인지 초성 힌트와 함께 타자로 맞힙니다. 아시아부터 오세아니아까지 전 세계 200개 나라·지역의 국기를 정복해보세요.',
+      '국기를 보고 어느 나라인지 초성 힌트와 함께 타자로 맞힙니다. 아시아부터 오세아니아까지 전 세계 200여 개 나라·지역의 국기를 정복해보세요.',
     category: '지리',
     emoji: '🚩',
     ui: 'flags',

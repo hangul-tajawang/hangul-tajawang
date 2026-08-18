@@ -46,7 +46,7 @@ test("map-quiz stations have no duplicate ids or names", () => {
 test("flag-quiz course is unchanged by the refactor", () => {
   const course = JOURNEY_COURSES.find((c) => c.id === "flag-quiz")!;
   const stations = getCourseStations(course);
-  assert.equal(stations.length, 200);
+  assert.equal(stations.length, 201);
   assert.equal(stations[0].id, "kr");
   assert.equal(stations[0].name, "대한민국");
 });
