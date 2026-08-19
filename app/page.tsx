@@ -90,10 +90,10 @@ export default async function Home() {
         ════════════════════════════════════════════════════════════════════
       */}
       <section className="container mx-auto max-w-5xl px-4 md:px-6 lg:px-8 py-16 md:py-24 text-on-surface">
-        <h2 className="text-3xl md:text-4xl font-black mb-6 tracking-tight">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
           한글타자왕, 이렇게 활용해보세요
         </h2>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed mb-10 max-w-3xl">
+        <p className="text-lg text-zinc-600 leading-relaxed mb-10 max-w-3xl">
           한글타자왕은 무료 한글 타자 연습 사이트입니다. 처음이라면 <strong>자리 연습</strong>으로
           손가락 위치를 익히고, <strong>낱말 연습</strong>과 <strong>짧은 글 연습</strong>으로
           속도를 끌어올려 보세요. 실력이 붙으면 <strong>긴 글 원고지 필사</strong>로 지구력을,
@@ -105,19 +105,19 @@ export default async function Home() {
         <Link
           prefetch={false}
           href={`/transcription/${dailyPilsa.id}`}
-          className="group block mb-16 p-8 md:p-10 rounded-[2.5rem] border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,74,198,0.12)]"
+          className="group block mb-16 p-8 md:p-10 rounded-2xl border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,74,198,0.12)]"
         >
-          <p className="text-primary font-black text-sm mb-3">✍️ 오늘의 필사 · {dailyDate}</p>
-          <p className="text-2xl md:text-3xl font-black mb-2 group-hover:text-primary transition-colors">
+          <p className="text-primary font-bold text-sm mb-3">✍️ 오늘의 필사 · {dailyDate}</p>
+          <p className="text-2xl md:text-3xl font-bold mb-2 group-hover:text-primary transition-colors">
             {dailyPilsa.title}
           </p>
           <p className="text-sm font-bold text-zinc-500 mb-5">
             {dailyPilsa.author} · {dailyPilsa.wordCount}자
           </p>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-loose line-clamp-2">
+          <p className="text-lg text-zinc-600 leading-loose line-clamp-2">
             {getPilsaExcerpt(dailyPilsa)}
           </p>
-          <span className="mt-5 inline-block font-black text-primary">지금 필사하기 →</span>
+          <span className="mt-5 inline-block font-bold text-primary">지금 필사하기 →</span>
         </Link>
 
         <nav aria-label="주요 메뉴" className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-16">
@@ -145,7 +145,7 @@ export default async function Home() {
         {/* 인기 챌린지 내부 링크 */}
         {popularContents.length > 0 && (
           <div className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-black mb-6 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 tracking-tight">
               지금 인기있는 필사 챌린지
             </h2>
             <ul className="space-y-3">
@@ -168,15 +168,15 @@ export default async function Home() {
         )}
 
         {/* 자주 묻는 질문 */}
-        <h2 className="text-2xl md:text-3xl font-black mb-8 tracking-tight">자주 묻는 질문</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 tracking-tight">자주 묻는 질문</h2>
         <dl className="space-y-6">
           {HOME_FAQ.map((item) => (
             <div
               key={item.q}
-              className="bg-surface-low p-6 md:p-8 rounded-3xl border border-surface-high"
+              className="bg-surface-low p-6 md:p-8 rounded-2xl border border-surface-high"
             >
-              <dt className="text-lg md:text-xl font-black mb-3">{item.q}</dt>
-              <dd className="text-zinc-600 dark:text-zinc-400 leading-relaxed">{item.a}</dd>
+              <dt className="text-lg md:text-xl font-bold mb-3">{item.q}</dt>
+              <dd className="text-zinc-600 leading-relaxed">{item.a}</dd>
             </div>
           ))}
         </dl>

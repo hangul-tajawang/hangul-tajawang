@@ -61,7 +61,7 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
           loading="lazy"
           className={`rounded-[3px] shadow-sm ${revealed || isCurrent ? "" : "opacity-30 grayscale"}`}
         />
-        <span className={`mt-1 font-black ${compact ? "text-[11px]" : "text-xs"} leading-tight ${revealed ? "" : isCurrent ? "" : "text-secondary/30"}`}>
+        <span className={`mt-1 font-bold ${compact ? "text-[11px]" : "text-xs"} leading-tight ${revealed ? "" : isCurrent ? "" : "text-secondary/30"}`}>
           {revealed ? station.name : isCurrent ? "???" : "?"}
         </span>
         {state === "name" && !isCurrent && station.fact !== station.name && (
@@ -80,7 +80,7 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
       <div className="w-full">
         <div className="flex items-center gap-2 mb-2 px-1">
           <span className="text-2xl">{course.emoji}</span>
-          <span className="text-xs font-black text-zinc-300 uppercase tracking-widest">
+          <span className="text-xs font-bold text-zinc-300 uppercase tracking-widest">
             {currentGroup?.label || "세계 수도"}
           </span>
         </div>
@@ -103,7 +103,7 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
           <span className="text-3xl">{course.emoji}</span>
           <h3 className="editorial-heading text-xl">{course.title}</h3>
         </div>
-        <span className="text-xs font-black text-secondary/70">
+        <span className="text-xs font-bold text-secondary/70">
           {solvedCount}/{stations.length}개국 정복
         </span>
       </div>
@@ -111,7 +111,7 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
       {/* 문제로 나온 나라 — 큰 국기 히어로 */}
       {!finished && current && (
         <div
-          className="mb-5 flex items-center justify-center gap-4 p-5 rounded-[1.5rem] border"
+          className="mb-5 flex items-center justify-center gap-4 p-5 rounded-2xl border"
           style={{ borderColor: color, backgroundColor: `${color}14` }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -123,7 +123,7 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
             className="rounded-lg shadow-lg"
           />
           <div>
-            <p className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color }}>
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color }}>
               {isFlagQuiz ? "이 국기의 나라는?" : "지금 이 나라!"}
             </p>
             <p className="editorial-heading text-2xl">{isFlagQuiz ? "???" : current.name}</p>
@@ -137,10 +137,10 @@ export const JourneyWorldMap: React.FC<JourneyVizProps> = ({
           const items = indexed.filter(({ station }) => station.group === g.id);
           if (items.length === 0) return null;
           return (
-            <section key={g.id} className="rounded-[1.5rem] bg-surface-low border border-outline-variant/40 p-4">
+            <section key={g.id} className="rounded-2xl bg-surface-low border border-outline-variant/40 p-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
-                <h4 className="text-sm font-black text-on-surface">{g.label}</h4>
+                <h4 className="text-sm font-bold text-on-surface">{g.label}</h4>
                 <span className="text-[10px] font-bold text-secondary/60">{items.length}개국</span>
               </div>
               <div className="flex flex-wrap gap-2">

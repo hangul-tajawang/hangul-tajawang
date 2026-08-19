@@ -21,10 +21,10 @@ export default function PrivacyPolicy() {
   // 영업양도 시행일(2026-09-01) 이후 여부 — 운영 주체·문의처·시행일자가 바뀐다
   const transferred = new Date() >= TRANSFER_DATE;
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans py-12 px-4">
-      <div className="container mx-auto max-w-3xl bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+    <div className="min-h-screen bg-[#f8f9fa] text-zinc-900 font-sans py-12 px-4">
+      <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden">
         {/* Header */}
-        <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 flex flex-col items-center text-center">
+        <div className="p-8 border-b border-zinc-100 bg-zinc-50/50 flex flex-col items-center text-center">
           <Link
             prefetch={false}
             href="/"
@@ -33,23 +33,23 @@ export default function PrivacyPolicy() {
             <ChevronLeft size={16} /> 홈으로 돌아가기
           </Link>
           <ShieldCheck size={48} className="text-blue-600 mb-4" />
-          <h1 className="text-3xl font-black mb-2">개인정보 처리방침</h1>
+          <h1 className="text-3xl font-bold mb-2">개인정보 처리방침</h1>
           <p className="text-zinc-500 text-sm font-medium">
             시행일자: {transferred ? '2026. 09. 01' : '2026. 07. 29'}
           </p>
         </div>
 
         {/* Content */}
-        <div className="p-8 md:p-12 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed break-keep">
+        <div className="p-8 md:p-12 space-y-12 text-zinc-700 leading-relaxed break-keep">
           {!transferred && (
-            <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-2xl p-5 text-sm text-blue-900 dark:text-blue-200">
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-sm text-blue-900">
               <strong>[개정 예고]</strong> 2026년 9월 1일자로 서비스 운영 주체가
               블루커뮤니케이션즈 주식회사로 변경(영업 양도)됨에 따라 본 방침의
               운영 주체·문의처가 개정될 예정입니다. 자세한 내용은{' '}
               <Link
                 prefetch={false}
                 href="/notice/transfer"
-                className="underline font-bold hover:text-blue-600 dark:hover:text-blue-300"
+                className="underline font-bold hover:text-blue-600"
               >
                 개인정보 이전 안내
               </Link>
@@ -80,7 +80,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제1조 (수집하는 개인정보 항목 및 방법)
             </h2>
@@ -113,8 +113,8 @@ export default function PrivacyPolicy() {
                 수 있습니다. (제5조 참고)
               </li>
             </ul>
-            <div className="mt-6 bg-zinc-50 dark:bg-zinc-800/50 p-5 rounded-2xl border border-zinc-100 dark:border-zinc-700 text-sm">
-              <strong className="block mb-1 text-zinc-900 dark:text-zinc-100">
+            <div className="mt-6 bg-zinc-50 p-5 rounded-2xl border border-zinc-100 text-sm">
+              <strong className="block mb-1 text-zinc-900">
                 기기 내 저장(localStorage) 안내
               </strong>
               비로그인 상태의 필사 서재·이어하기 진행 상황, 게임 최고점수,
@@ -125,7 +125,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제2조 (개인정보의 이용 목적)
             </h2>
@@ -158,7 +158,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제3조 (개인정보의 보유 및 이용 기간)
             </h2>
@@ -186,7 +186,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제4조 (개인정보의 제3자 제공 및 처리위탁)
             </h2>
@@ -197,64 +197,64 @@ export default function PrivacyPolicy() {
               위탁하고 있으며, 위탁 계약 시 개인정보가 안전하게 관리되도록
               필요한 사항을 규정하고 있습니다.
             </p>
-            <div className="overflow-x-auto rounded-2xl border border-zinc-100 dark:border-zinc-700">
+            <div className="overflow-x-auto rounded-2xl border border-zinc-100">
               <table className="w-full text-sm text-left border-collapse">
                 <thead>
-                  <tr className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100">
-                    <th className="p-4 font-bold border-b border-zinc-100 dark:border-zinc-700">
+                  <tr className="bg-zinc-50 text-zinc-900">
+                    <th className="p-4 font-bold border-b border-zinc-100">
                       수탁 업체
                     </th>
-                    <th className="p-4 font-bold border-b border-zinc-100 dark:border-zinc-700">
+                    <th className="p-4 font-bold border-b border-zinc-100">
                       위탁 업무 내용
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Supabase
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       회원 인증(OAuth) 및 데이터베이스 저장·관리
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Google (GTM / GA4)
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       방문 통계 수집 및 이용 행태 분석
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Microsoft (Clarity)
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       세션 리플레이·히트맵 기반 사용성 분석
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Kakao (AdFit)
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       맞춤형 광고 게재 (웹)
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Google (AdSense)
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       맞춤형 광고 게재 (웹)
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium border-b border-zinc-100 dark:border-zinc-800 align-top">
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
                       Google (Firebase Analytics·Crashlytics)
                     </td>
-                    <td className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <td className="p-4 border-b border-zinc-100">
                       모바일 앱 사용 통계 수집 및 오류(비정상 종료) 분석
                     </td>
                   </tr>
@@ -275,7 +275,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제5조 (쿠키·분석 도구·광고 및 거부 방법)
             </h2>
@@ -331,7 +331,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제6조 (원고 투고 관련 개인정보 처리)
             </h2>
@@ -355,7 +355,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제7조 (만 14세 미만 아동의 개인정보)
             </h2>
@@ -367,7 +367,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제8조 (이용자의 권리와 행사 방법)
             </h2>
@@ -389,7 +389,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제9조 (개인정보의 파기 절차 및 방법)
             </h2>
@@ -406,7 +406,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제10조 (개인정보 보호책임자 및 문의처)
             </h2>
@@ -414,12 +414,12 @@ export default function PrivacyPolicy() {
               개인정보 처리에 관한 문의, 불만 처리, 피해 구제 등은 아래 개인정보
               보호책임자에게 연락해 주시기 바랍니다.
             </p>
-            <div className="bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-700">
+            <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
               <p className="text-sm mb-4 font-medium">
                 개인정보 보호책임자
                 {transferred && ' (블루커뮤니케이션즈 주식회사)'}
               </p>
-              <div className="flex items-center gap-3 text-zinc-900 dark:text-zinc-100 font-bold">
+              <div className="flex items-center gap-3 text-zinc-900 font-bold">
                 <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center">
                   <Mail size={20} />
                 </div>
@@ -431,7 +431,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제11조 (고지의 의무)
             </h2>
@@ -460,7 +460,7 @@ export default function PrivacyPolicy() {
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 text-center">
+        <div className="p-8 border-t border-zinc-100 bg-zinc-50/30 text-center">
           <p className="text-xs text-zinc-400 font-medium">
             © 2026 {transferred ? '블루커뮤니케이션즈 주식회사' : '한글타자왕'}.
             All rights reserved.

@@ -42,7 +42,7 @@ export default function ShortPracticeListPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-16 px-4">
         <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
-        <h1 className="text-5xl font-black mb-6">테마별 짧은 글 타자 연습</h1>
+        <h1 className="text-5xl font-bold mb-6">테마별 짧은 글 타자 연습</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
           오늘 나의 기분과 감성에 맞는 주제를 선택해 문장 타자 연습을 시작해보세요. <br className="hidden md:block" />
           짧은 시간을 투자하여 빠르고 정확하게 타이핑하는 습관을 기를 수 있습니다.
@@ -54,7 +54,7 @@ export default function ShortPracticeListPage() {
           <Link prefetch={false} 
             key={item.id} 
             href={`/practice/short/${item.id}`}
-            className="group flex flex-col bg-surface-low p-10 rounded-[2.5rem] border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
+            className="group flex flex-col bg-surface-low p-10 rounded-2xl border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:rotate-12 group-hover:scale-110">
@@ -62,11 +62,11 @@ export default function ShortPracticeListPage() {
             </div>
             
             <div className="flex justify-between items-start mb-6 relative z-10">
-              <span className="flex items-center gap-2 text-sm font-black px-4 py-1.5 bg-primary/10 text-primary rounded-full"><Sparkles size={14} /> {item.category}</span>
+              <span className="flex items-center gap-2 text-sm font-bold px-4 py-1.5 bg-primary/10 text-primary rounded-full"><Sparkles size={14} /> {item.category}</span>
               <span className="text-xs font-bold text-zinc-500 bg-surface-lowest px-4 py-2 rounded-full">총 {item.sentences.length}문장</span>
             </div>
             
-            <h2 className="text-3xl font-black text-on-surface mb-6 group-hover:text-primary transition-colors relative z-10">{item.category} 타자 연습 시작하기</h2>
+            <h2 className="text-3xl font-bold text-on-surface mb-6 group-hover:text-primary transition-colors relative z-10">{item.category} 타자 연습 시작하기</h2>
             
             <div className="mt-auto px-6 py-5 bg-surface-lowest rounded-2xl border border-surface-high text-sm font-medium text-zinc-400 text-center relative z-10">
               "{item.sentences[0]}" 등...
@@ -76,14 +76,14 @@ export default function ShortPracticeListPage() {
       </div>
 
       {/* SEO 및 정보 섹션 — 짧은 글 타자 연습 가이드 */}
-      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-4 space-y-16 text-left">
+      <div className="mt-24 border-t border-zinc-200 pt-16 pb-4 space-y-16 text-left">
         {/* 1. 소개 */}
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-primary">
             <BookOpenText size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">짧은 글 타자 연습이란</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">짧은 글 타자 연습이란</h2>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+          <p className="text-zinc-600 leading-loose font-medium break-keep">
             <strong className="text-on-surface">짧은 글 타자 연습</strong>은 한 문장 단위로 구성된 텍스트를 따라 치며
             한글 타자 감각을 기르는 연습입니다. 명언, 힐링 문장, 동기부여 글귀, 우리말 속담 등 테마별로 정리된 문장을
             골라 원하는 분위기에서 연습할 수 있습니다. 긴 지문을 통째로 마주할 때의 부담 없이, 짧은 호흡으로
@@ -95,7 +95,7 @@ export default function ShortPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-amber-500">
             <Lightbulb size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">이렇게 연습하면 좋아요</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">이렇게 연습하면 좋아요</h2>
           </div>
           <ul className="space-y-4">
             {[
@@ -106,7 +106,7 @@ export default function ShortPracticeListPage() {
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-3">
                 <span className="text-amber-500 mt-1 shrink-0">✔</span>
-                <span className="text-zinc-600 dark:text-zinc-400 leading-relaxed break-keep">
+                <span className="text-zinc-600 leading-relaxed break-keep">
                   <strong className="text-on-surface">{t}:</strong> {d}
                 </span>
               </li>
@@ -118,7 +118,7 @@ export default function ShortPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-emerald-600">
             <HeartPulse size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">짧은 글 연습의 효과</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">짧은 글 연습의 효과</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
@@ -127,7 +127,7 @@ export default function ShortPracticeListPage() {
               ['정서 환기', '좋은 문장을 눈으로 읽고 손으로 옮기는 과정 자체가 필사처럼 마음을 가라앉혀 줍니다.'],
             ].map(([t, d]) => (
               <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
-                <h3 className="font-black mb-2 text-on-surface">{t}</h3>
+                <h3 className="font-bold mb-2 text-on-surface">{t}</h3>
                 <p className="text-sm text-zinc-500 leading-relaxed break-keep">{d}</p>
               </div>
             ))}
@@ -138,16 +138,16 @@ export default function ShortPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-blue-500">
             <HelpCircle size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">자주 묻는 질문</h2>
           </div>
           <div className="space-y-4">
             {SHORT_FAQ.map((f) => (
               <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
-                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                <summary className="cursor-pointer list-none font-bold text-on-surface flex items-center justify-between gap-4">
                   {f.q}
                   <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
                 </summary>
-                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+                <p className="mt-4 text-sm text-zinc-600 leading-loose break-keep">{f.a}</p>
               </details>
             ))}
           </div>

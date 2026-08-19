@@ -417,7 +417,7 @@ export const TypingDefenseGame: React.FC = () => {
     <div
       ref={battlefieldRef}
       className={`relative overflow-hidden bg-gradient-to-b from-sky-900 via-slate-900 to-emerald-950 ${
-        isMobilePlaying ? "flex-1 min-h-0 rounded-xl" : "flex-1 min-h-[220px] rounded-[2rem] border-4 border-slate-900 shadow-2xl"
+        isMobilePlaying ? "flex-1 min-h-0 rounded-xl" : "flex-1 min-h-[220px] rounded-2xl border-4 border-slate-900 shadow-2xl"
       }`}
     >
       {/* 지면 그리드 */}
@@ -454,7 +454,7 @@ export const TypingDefenseGame: React.FC = () => {
       {/* 웨이브 배너 */}
       {waveBanner && gameState === "playing" && (
         <div key={waveBanner} className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="cd-banner px-8 py-4 rounded-3xl bg-black/60 backdrop-blur-sm border-2 border-yellow-400/60 text-yellow-200 font-black text-3xl sm:text-4xl tracking-tight shadow-2xl" onAnimationEnd={() => setWaveBanner(null)}>
+          <div className="cd-banner px-8 py-4 rounded-2xl bg-black/60 backdrop-blur-sm border-2 border-yellow-400/60 text-yellow-200 font-bold text-3xl sm:text-4xl tracking-tight shadow-2xl" onAnimationEnd={() => setWaveBanner(null)}>
             {waveBanner}
           </div>
         </div>
@@ -463,17 +463,17 @@ export const TypingDefenseGame: React.FC = () => {
       {/* 시작 오버레이 */}
       {gameState === "ready" && (
         <div className="absolute inset-0 z-30 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 p-5 sm:p-7 rounded-[2rem] shadow-2xl flex flex-col items-center gap-3 sm:gap-4 max-w-md w-full max-h-full overflow-auto border border-zinc-200 dark:border-zinc-800 text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl shrink-0">
+          <div className="bg-white p-5 sm:p-7 rounded-2xl shadow-2xl flex flex-col items-center gap-3 sm:gap-4 max-w-md w-full max-h-full overflow-auto border border-zinc-200 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl shrink-0">
               <Castle className="w-7 h-7 sm:w-9 sm:h-9" />
             </div>
             <div>
-              <h3 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1.5 leading-tight">한글 타자 성문방어</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm font-medium leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mb-1.5 leading-tight">한글 타자 성문방어</h3>
+              <p className="text-zinc-500 text-xs sm:text-sm font-medium leading-relaxed">
                 적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 위급하면 <b>번개·방패·수리</b> 스킬을 입력하세요.
               </p>
             </div>
-            <button onClick={startGame} className="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg sm:text-xl font-black rounded-2xl transition-all shadow-xl shadow-blue-200 dark:shadow-none active:scale-95 shrink-0">
+            <button onClick={startGame} className="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg sm:text-xl font-bold rounded-2xl transition-all shadow-xl shadow-blue-200 active:scale-95 shrink-0">
               방어 시작
             </button>
           </div>
@@ -496,10 +496,10 @@ export const TypingDefenseGame: React.FC = () => {
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => handleInput(skill)}
             disabled={disabled}
-            className={`relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] transition-all ${isMobilePlaying ? "p-1.5 rounded-xl" : "p-3"}`}
+            className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-white disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] transition-all ${isMobilePlaying ? "p-1.5 rounded-xl" : "p-3"}`}
           >
-            {cd > 0 && <div className="absolute inset-0 bg-zinc-900/60 flex items-center justify-center text-white font-black text-lg tabular-nums">{(cd / 1000).toFixed(1)}</div>}
-            <div className={`flex items-center justify-center gap-1.5 font-black ${meta.color} ${isMobilePlaying ? "text-xs" : "text-base"}`}>
+            {cd > 0 && <div className="absolute inset-0 bg-zinc-900/60 flex items-center justify-center text-white font-bold text-lg tabular-nums">{(cd / 1000).toFixed(1)}</div>}
+            <div className={`flex items-center justify-center gap-1.5 font-bold ${meta.color} ${isMobilePlaying ? "text-xs" : "text-base"}`}>
               <Icon size={isMobilePlaying ? 14 : 18} /> {skill}
             </div>
             {!isMobilePlaying && <div className="mt-1 text-[10px] font-bold text-zinc-400">{meta.desc}</div>}
@@ -517,10 +517,10 @@ export const TypingDefenseGame: React.FC = () => {
         value={inputValue}
         onChange={handleChange}
         disabled={gameState !== "playing"}
-        className={`w-full text-center font-black outline-hidden transition-all ${
+        className={`w-full text-center font-bold outline-hidden transition-all ${
           isMobilePlaying
             ? "h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 border-blue-500 placeholder:text-zinc-500"
-            : "h-14 px-5 text-2xl sm:text-3xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] shadow-xl border-blue-500 focus:ring-4 ring-blue-100 disabled:opacity-60"
+            : "h-14 px-5 text-2xl sm:text-3xl bg-white border-4 rounded-2xl shadow-xl border-blue-500 focus:ring-4 ring-blue-100 disabled:opacity-60"
         }`}
         placeholder={gameState === "playing" ? "적 단어를 입력하세요" : "시작 후 입력 가능"}
         autoFocus
@@ -543,7 +543,7 @@ export const TypingDefenseGame: React.FC = () => {
   );
 
   const hudBar = (
-    <div className="flex-1 flex items-center gap-4 px-4 sm:px-6 py-3 bg-zinc-950 text-white rounded-[1.75rem] shadow-xl border border-zinc-800 min-w-0">
+    <div className="flex-1 flex items-center gap-4 px-4 sm:px-6 py-3 bg-zinc-950 text-white rounded-2xl shadow-xl border border-zinc-800 min-w-0">
       <div className="flex gap-4 sm:gap-6 items-center shrink-0">
         <StatusItem label="Wave" value={`${snapshot.wave}`} icon={<Swords size={18} />} tone="text-emerald-400" />
         <StatusItem label="Gate" value={`${snapshot.gateHealth}/${snapshot.maxGateHealth}`} icon={<Heart size={18} />} tone={gateLow ? "text-red-500 cd-pop" : "text-red-400"} />
@@ -555,13 +555,13 @@ export const TypingDefenseGame: React.FC = () => {
       {/* TOP 10 성적 가로 스트립 (상단 바 우측 여백에 · 내 예상 위치 강조) */}
       {playBoardRows.length > 0 && (
         <div className="hidden lg:flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto custom-scrollbar">
-          <span className="shrink-0 flex items-center gap-1 text-yellow-400 font-black text-[10px] uppercase tracking-widest pr-0.5">
+          <span className="shrink-0 flex items-center gap-1 text-yellow-400 font-bold text-[10px] uppercase tracking-widest pr-0.5">
             <Trophy size={13} />TOP10{liveRank !== null ? ` · ${inTop10 ? `${liveRank}위` : `+${gapToTop10.toLocaleString()}`}` : ""}
           </span>
           {playBoardRows.map((row, i) => (
             <span
               key={row.me ? "me" : `${row.created_at ?? i}-${i}`}
-              className={`shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-black tabular-nums ${row.me ? "bg-yellow-400/20 text-yellow-200 border border-yellow-400/40" : "bg-white/[0.05] text-zinc-300"}`}
+              className={`shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold tabular-nums ${row.me ? "bg-yellow-400/20 text-yellow-200 border border-yellow-400/40" : "bg-white/[0.05] text-zinc-300"}`}
             >
               <span className={`${i === 0 ? "text-yellow-400" : i === 1 ? "text-zinc-300" : i === 2 ? "text-orange-400" : "text-zinc-500"}`}>{i + 1}</span>
               {row.me && <span>🎯</span>}
@@ -576,10 +576,10 @@ export const TypingDefenseGame: React.FC = () => {
   );
 
   const rankingAside = (
-    <aside className="w-full h-full bg-white dark:bg-zinc-900 rounded-[1.75rem] border border-zinc-200 dark:border-zinc-800 p-5 shadow-lg flex flex-col min-h-0">
+    <aside className="w-full h-full bg-white rounded-2xl border border-zinc-200 p-5 shadow-lg flex flex-col min-h-0">
       <div className="flex items-center gap-2 mb-4 shrink-0">
         <Trophy className="text-yellow-500" size={18} />
-        <h3 className="text-base font-black">성문방어 랭킹</h3>
+        <h3 className="text-base font-bold">성문방어 랭킹</h3>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0">
         {rankingLoading ? (
@@ -587,12 +587,12 @@ export const TypingDefenseGame: React.FC = () => {
         ) : rankings.length > 0 ? (
           rankings.map((rank, index) => (
             <div key={`${rank.created_at ?? index}-${index}`} className="flex items-center gap-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${index === 0 ? "bg-yellow-400 text-white" : index === 1 ? "bg-zinc-300 text-zinc-600" : index === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>{index + 1}</div>
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${index === 0 ? "bg-yellow-400 text-white" : index === 1 ? "bg-zinc-300 text-zinc-600" : index === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 text-zinc-400"}`}>{index + 1}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black truncate text-zinc-900 dark:text-zinc-100 leading-tight">{rank.profiles?.nickname || "익명"}</p>
+                <p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || "익명"}</p>
                 <p className="text-[9px] font-bold text-zinc-400">웨이브 {rank.level} · 콤보 {rank.max_combo}</p>
               </div>
-              <p className="text-xs font-black text-blue-600 shrink-0">{rank.score.toLocaleString()}</p>
+              <p className="text-xs font-bold text-blue-600 shrink-0">{rank.score.toLocaleString()}</p>
             </div>
           ))
         ) : (
@@ -600,10 +600,10 @@ export const TypingDefenseGame: React.FC = () => {
         )}
       </div>
       {!isLoggedIn && <p className="mt-3 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2 shrink-0">로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.</p>}
-      <div className="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-center shrink-0">
-        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl flex items-center justify-center gap-2">
+      <div className="mt-3 pt-3 border-t border-zinc-100 text-center shrink-0">
+        <div className="bg-zinc-50 p-2.5 rounded-xl flex items-center justify-center gap-2">
           <Keyboard size={14} className="text-blue-600" />
-          <span className="font-black text-xs">{profile?.nickname || "Guest"}</span>
+          <span className="font-bold text-xs">{profile?.nickname || "Guest"}</span>
         </div>
       </div>
     </aside>
@@ -627,7 +627,7 @@ export const TypingDefenseGame: React.FC = () => {
         <div className="flex-1 flex gap-3 min-h-0">
           {/* 좌측 광고 레일 (조작부와 떨어진 위치 · 좌우 동시 노출) */}
           <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
+            <span className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
             <AdSenseUnit label="sidebar-left" width={160} height={600} />
           </div>
           <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0">
@@ -637,7 +637,7 @@ export const TypingDefenseGame: React.FC = () => {
           </div>
           {/* 우측 광고 레일 (조작부와 떨어진 위치 · 좌우 동시 노출) */}
           <div className="hidden md:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-white/[0.03] p-1">
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
+            <span className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-500 py-1">Sponsor</span>
             <AdSenseUnit label="sidebar-right" width={160} height={600} />
           </div>
         </div>
@@ -655,11 +655,11 @@ export const TypingDefenseGame: React.FC = () => {
     };
     const mobileHud = (
       <>
-        <span className="flex items-center gap-1 text-sm font-black text-emerald-400 tabular-nums"><Swords size={13} />{snapshot.wave}</span>
-        <span className="flex items-center gap-1 text-sm font-black text-red-400 tabular-nums"><Heart size={13} />{snapshot.gateHealth}</span>
-        <span className="flex items-center gap-1 text-sm font-black text-blue-400 tabular-nums"><Shield size={13} />{snapshot.shieldCount}</span>
-        <span className="flex items-center gap-1 text-sm font-black text-purple-400 tabular-nums"><Sparkles size={13} />{snapshot.combo}</span>
-        <span className="flex items-center gap-1 text-sm font-black text-yellow-400 tabular-nums ml-auto"><Trophy size={13} />{snapshot.score.toLocaleString()}</span>
+        <span className="flex items-center gap-1 text-sm font-bold text-emerald-400 tabular-nums"><Swords size={13} />{snapshot.wave}</span>
+        <span className="flex items-center gap-1 text-sm font-bold text-red-400 tabular-nums"><Heart size={13} />{snapshot.gateHealth}</span>
+        <span className="flex items-center gap-1 text-sm font-bold text-blue-400 tabular-nums"><Shield size={13} />{snapshot.shieldCount}</span>
+        <span className="flex items-center gap-1 text-sm font-bold text-purple-400 tabular-nums"><Sparkles size={13} />{snapshot.combo}</span>
+        <span className="flex items-center gap-1 text-sm font-bold text-yellow-400 tabular-nums ml-auto"><Trophy size={13} />{snapshot.score.toLocaleString()}</span>
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={toggleMute} className="shrink-0 text-zinc-400" aria-label="음소거">
           {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
@@ -688,19 +688,19 @@ export const TypingDefenseGame: React.FC = () => {
       {gameState === "gameover" && mounted && createPortal(<ResultModal snapshot={snapshot} isLoggedIn={isLoggedIn} onRetry={startGame} />, document.body)}
 
       {/* 인트로 히어로 (플레이는 전체화면으로 열림) */}
-      <div className="lg:flex-1 w-full flex items-center justify-center rounded-[2rem] bg-gradient-to-b from-sky-900 via-slate-900 to-emerald-950 border-4 border-slate-900 shadow-2xl p-4 sm:p-8 min-h-[240px]">
-        <div className="bg-white dark:bg-zinc-900 p-5 sm:p-8 rounded-[2rem] shadow-2xl flex flex-col items-center gap-4 max-w-md w-full border border-zinc-200 dark:border-zinc-800 text-center">
-          <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl">
+      <div className="lg:flex-1 w-full flex items-center justify-center rounded-2xl bg-gradient-to-b from-sky-900 via-slate-900 to-emerald-950 border-4 border-slate-900 shadow-2xl p-4 sm:p-8 min-h-[240px]">
+        <div className="bg-white p-5 sm:p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 max-w-md w-full border border-zinc-200 text-center">
+          <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-xl">
             <Castle className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100 mb-2 leading-tight">한글 타자 성문방어</h3>
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">
+            <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-2 leading-tight">한글 타자 성문방어</h3>
+            <p className="text-zinc-500 text-sm font-medium leading-relaxed">
               적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 5웨이브마다 <b>보스</b>가 오고, 클리어할 때마다 <b>강화</b>를 고릅니다.
             </p>
           </div>
           <div className="flex items-center gap-2 w-full">
-            <button onClick={startGame} className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white text-xl font-black rounded-2xl transition-all shadow-xl shadow-blue-200 dark:shadow-none active:scale-95">
+            <button onClick={startGame} className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold rounded-2xl transition-all shadow-xl shadow-blue-200 active:scale-95">
               {gameState === "gameover" ? "다시 도전" : "방어 시작"}
             </button>
             {muteButton}
@@ -720,17 +720,17 @@ export const TypingDefenseGame: React.FC = () => {
 function StatusItem({ label, value, icon, tone }: { label: string; value: string; icon: React.ReactNode; tone: string }) {
   return (
     <div className="flex flex-col">
-      <span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">{label}</span>
-      <span className={`text-lg sm:text-2xl font-black flex items-center gap-1.5 ${tone}`}>{icon} {value}</span>
+      <span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">{label}</span>
+      <span className={`text-lg sm:text-2xl font-bold flex items-center gap-1.5 ${tone}`}>{icon} {value}</span>
     </div>
   );
 }
 
 function ResultTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-zinc-50 dark:bg-zinc-800 p-5 rounded-3xl border border-zinc-100 dark:border-zinc-800">
-      <p className="text-[10px] font-black text-zinc-400 uppercase mb-1 tracking-widest">{label}</p>
-      <p className="text-3xl font-black text-zinc-900 dark:text-zinc-100">{value}</p>
+    <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100">
+      <p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">{label}</p>
+      <p className="text-3xl font-bold text-zinc-900">{value}</p>
     </div>
   );
 }
@@ -739,16 +739,16 @@ function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefens
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
-      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
+      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto bg-white rounded-2xl p-8 shadow-2xl text-center border border-zinc-200 animate-in zoom-in duration-500">
         {/* 결과 화면 최상단 광고 (슬림 배너 · 미충족 시 비움 · 장비 추천 미노출) */}
         <div className="mb-5 flex justify-center empty:hidden">
           <AdSenseUnit label="content-banner-mobile" width={320} height={100} noFallback tight />
         </div>
-        <div className="inline-flex p-6 bg-blue-50 dark:bg-blue-900/20 rounded-full mb-6">
+        <div className="inline-flex p-6 bg-blue-50 rounded-full mb-6">
           <Castle className="w-16 h-16 text-blue-600" />
         </div>
-        <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tighter">웨이브 {snapshot.wave}에서 성문이 무너졌어요</h2>
-        <p className="text-zinc-500 dark:text-zinc-400 font-bold mb-8">이번 방어 기록입니다.</p>
+        <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 tracking-tighter">웨이브 {snapshot.wave}에서 성문이 무너졌어요</h2>
+        <p className="text-zinc-500 font-bold mb-8">이번 방어 기록입니다.</p>
         <div className="grid grid-cols-2 gap-4 mb-8">
           <ResultTile label="Wave" value={snapshot.wave.toLocaleString()} />
           <ResultTile label="Score" value={snapshot.score.toLocaleString()} />
@@ -756,16 +756,16 @@ function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefens
           <ResultTile label="Best Combo" value={snapshot.bestCombo.toLocaleString()} />
         </div>
         {!isLoggedIn ? (
-          <div className="mb-6 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] border border-blue-100 dark:border-blue-900/30">
+          <div className="mb-6 p-6 bg-blue-50 rounded-2xl border border-blue-100">
             <p className="text-sm font-bold text-blue-600 mb-4 flex items-center justify-center gap-2"><Sparkles size={16} fill="currentColor" /> 랭킹에 기록을 남겨보세요.</p>
-            <button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-4 bg-[#FEE500] text-black font-black rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95">카카오로 로그인하고 저장</button>
+            <button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95">카카오로 로그인하고 저장</button>
           </div>
         ) : (
-          <div className="mb-6 text-sm font-black text-green-600">랭킹에 기록이 반영되었습니다.</div>
+          <div className="mb-6 text-sm font-bold text-green-600">랭킹에 기록이 반영되었습니다.</div>
         )}
         <div className="flex flex-col gap-4">
-          <button onClick={onRetry} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
-          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ArrowRight size={16} /></Link>
+          <button onClick={onRetry} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
+          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ArrowRight size={16} /></Link>
         </div>
       </div>
     </div>
@@ -796,7 +796,7 @@ function EnemyView({ enemy, input, isTarget, compact }: { enemy: TypingDefenseEn
   return (
     <div className="pointer-events-none absolute flex flex-col items-center" style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)", zIndex: isBoss ? 22 : isTarget ? 20 : 10 }}>
       {/* 단어 라벨 */}
-      <div className={`mb-1 px-2 py-0.5 rounded-lg font-black whitespace-nowrap shadow-lg ${compact ? "text-xs" : "text-sm"} ${labelTone}`}>
+      <div className={`mb-1 px-2 py-0.5 rounded-lg font-bold whitespace-nowrap shadow-lg ${compact ? "text-xs" : "text-sm"} ${labelTone}`}>
         {isBoss && <span className="mr-1">👑</span>}
         <span className="text-green-300">{enemy.word.slice(0, matched)}</span>
         <span className="text-white">{enemy.word.slice(matched)}</span>
@@ -838,10 +838,10 @@ function UpgradeModal({ choices, wave, onPick }: { choices: UpgradeOption[]; wav
   return (
     <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-zinc-950/85 backdrop-blur-md animate-in fade-in duration-300" />
-      <div className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-300">
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-zinc-200 animate-in zoom-in duration-300">
         <div className="text-center mb-6">
-          <p className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1">웨이브 {wave} 클리어</p>
-          <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100">강화 하나를 선택하세요</h2>
+          <p className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-1">웨이브 {wave} 클리어</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900">강화 하나를 선택하세요</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {choices.map((choice) => {
@@ -852,12 +852,12 @@ function UpgradeModal({ choices, wave, onPick }: { choices: UpgradeOption[]; wav
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => onPick(choice.id)}
-                className="group flex flex-col items-center text-center gap-2 p-5 rounded-2xl border-2 border-zinc-200 dark:border-zinc-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all active:scale-95"
+                className="group flex flex-col items-center text-center gap-2 p-5 rounded-2xl border-2 border-zinc-200 hover:border-blue-500 hover:bg-blue-50 transition-all active:scale-95"
               >
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon size={24} />
                 </div>
-                <div className="font-black text-zinc-900 dark:text-zinc-100">{choice.title}</div>
+                <div className="font-bold text-zinc-900">{choice.title}</div>
                 <div className="text-xs font-medium text-zinc-500 leading-snug">{choice.desc}</div>
               </button>
             );
@@ -883,13 +883,13 @@ function EffectView({ effect, compact }: { effect: Effect; compact: boolean }) {
 
   if (effect.kind === "gateBanner") {
     return (
-      <div className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[18%] px-4 py-2 rounded-2xl border-2 bg-black/50 font-black cd-float ${effect.color}`}>{effect.label}</div>
+      <div className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[18%] px-4 py-2 rounded-2xl border-2 bg-black/50 font-bold cd-float ${effect.color}`}>{effect.label}</div>
     );
   }
 
   if (effect.kind === "float") {
     return (
-      <div className={`pointer-events-none absolute font-black cd-float drop-shadow ${effect.color} ${compact ? "text-sm" : "text-lg"}`} style={{ left: `${effect.x}%`, top: `${effect.y}%`, transform: "translate(-50%, -50%)" }}>{effect.label}</div>
+      <div className={`pointer-events-none absolute font-bold cd-float drop-shadow ${effect.color} ${compact ? "text-sm" : "text-lg"}`} style={{ left: `${effect.x}%`, top: `${effect.y}%`, transform: "translate(-50%, -50%)" }}>{effect.label}</div>
     );
   }
 

@@ -14,20 +14,20 @@ export const metadata: Metadata = {
 // 개인정보 보호법 제27조에 따른 법정 고지 페이지 — 이전일(2026-08-29) 이후에도 30일 이상 게재 유지
 export default function TransferNoticePage() {
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans py-12 px-4">
-      <div className="container mx-auto max-w-3xl bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-        <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 flex flex-col items-center text-center">
+    <div className="min-h-screen bg-[#f8f9fa] text-zinc-900 font-sans py-12 px-4">
+      <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden">
+        <div className="p-8 border-b border-zinc-100 bg-zinc-50/50 flex flex-col items-center text-center">
           <Link prefetch={false} href="/" className="mb-6 self-start flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
             <ChevronLeft size={16} /> 홈으로 돌아가기
           </Link>
           <Building2 size={48} className="text-blue-600 mb-4" />
-          <h1 className="text-2xl md:text-3xl font-black mb-2 break-keep">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 break-keep">
             서비스 운영 주체 변경(영업 양도)에 따른<br />개인정보 이전 안내
           </h1>
           <p className="text-zinc-500 text-sm font-medium">게시일: 2026. 07. 29 · 이전일: 2026. 08. 29</p>
         </div>
 
-        <div className="p-8 md:p-12 space-y-10 text-zinc-700 dark:text-zinc-300 leading-relaxed break-keep">
+        <div className="p-8 md:p-12 space-y-10 text-zinc-700 leading-relaxed break-keep">
           <section>
             <p>
               안녕하세요, 한글타자왕입니다. 그동안 개인 개발자가 운영해 온 한글타자왕 웹사이트 및 모바일 앱(한글타자왕) 서비스가
@@ -39,7 +39,7 @@ export default function TransferNoticePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               1. 개인정보가 이전된다는 사실
             </h2>
@@ -51,7 +51,7 @@ export default function TransferNoticePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               2. 개인정보를 이전받는 자
             </h2>
@@ -64,7 +64,7 @@ export default function TransferNoticePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               3. 이전을 원하지 않으시는 경우
             </h2>
@@ -79,7 +79,7 @@ export default function TransferNoticePage() {
             </ul>
           </section>
 
-          <section className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
+          <section className="pt-2 border-t border-zinc-100">
             <p className="text-sm text-zinc-500">
               운영 주체 변경 이후 개인정보 처리방침과 이용약관은 변경 시행일에 맞추어 개정·공지됩니다.
               본 안내와 관련하여 궁금하신 점은 위 이메일로 문의해 주시기 바랍니다. 그동안 한글타자왕을

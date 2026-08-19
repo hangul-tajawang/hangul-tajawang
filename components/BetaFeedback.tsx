@@ -25,7 +25,7 @@ export const BetaFeedback: React.FC = () => {
         </div>
 
         <div className="relative z-10 flex flex-col items-center">
-          <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Feedback & Suggestions</span>
+          <span className="text-primary font-bold text-[10px] uppercase tracking-[0.5em] mb-6 block">Feedback & Suggestions</span>
           <h3 className="display-lg !text-4xl md:!text-5xl mb-8 text-on-surface tracking-[-0.02em]">
             한글타자왕에게 제안하기
           </h3>
@@ -34,18 +34,18 @@ export const BetaFeedback: React.FC = () => {
             추가되었으면 하는 기능이나 불편한 점을 자유롭게 들려주세요!
           </p>
 
-          <div className="w-full max-w-2xl bg-surface-low rounded-[3rem] p-6 md:p-10 transition-all">
-            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-8">Contact Channels</p>
+          <div className="w-full max-w-2xl bg-surface-low rounded-2xl p-6 md:p-10 transition-all">
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.3em] mb-8">Contact Channels</p>
             
             <div className="flex flex-col gap-4">
                 {/* Email Address Display */}
-                <div className="bg-surface-lowest p-4 md:py-5 md:px-8 rounded-[2rem] flex flex-col sm:flex-row items-center justify-between group/email gap-4">
-                    <span className="text-lg md:text-xl font-black text-on-surface tracking-tight break-all">
+                <div className="bg-surface-lowest p-4 md:py-5 md:px-8 rounded-2xl flex flex-col sm:flex-row items-center justify-between group/email gap-4">
+                    <span className="text-lg md:text-xl font-bold text-on-surface tracking-tight break-all">
                         {email}
                     </span>
                     <button 
                         onClick={handleCopy}
-                        className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-full font-black text-xs transition-all ${
+                        className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-xs transition-all ${
                             copied 
                             ? "bg-green-100 text-green-600" 
                             : "bg-surface-low text-zinc-400 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/20"
@@ -59,7 +59,7 @@ export const BetaFeedback: React.FC = () => {
                 {/* Direct Action Button */}
                 <a 
                     href={`mailto:${email}?subject=[한글타자왕 웹] 기능 제안 및 피드백`}
-                    className="flex items-center justify-center gap-3 px-10 py-5 primary-gradient text-white rounded-full font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl hover:shadow-primary/30"
+                    className="flex items-center justify-center gap-3 px-10 py-5 primary-gradient text-white rounded-full font-bold text-lg transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl hover:shadow-primary/30"
                 >
                     <Mail size={22} />
                     메일 보내기
@@ -67,7 +67,7 @@ export const BetaFeedback: React.FC = () => {
             </div>
           </div>
 
-          <p className="mt-10 text-xs text-zinc-400 font-black uppercase tracking-widest flex items-center gap-2 opacity-60">
+          <p className="mt-10 text-xs text-zinc-400 font-bold uppercase tracking-widest flex items-center gap-2 opacity-60">
             <ExternalLink size={14} /> 메일 앱이 열리지 않는다면 주소를 복사해서 사용해 주세요.
           </p>
         </div>

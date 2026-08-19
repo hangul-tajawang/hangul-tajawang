@@ -24,7 +24,7 @@ export const JourneyHubProgress: React.FC<{ courseId: string; totalStations: num
 
   if (!label) return null;
   return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-black">
+    <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold">
       {label}
     </span>
   );

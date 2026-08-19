@@ -157,7 +157,7 @@ export function BookCoverArt({
       >
         {badge && (
           <span
-            className="mb-3 rounded-full px-2 py-0.5 text-[8px] font-black tracking-widest backdrop-blur-sm"
+            className="mb-3 rounded-full px-2 py-0.5 text-[8px] font-bold tracking-widest backdrop-blur-sm"
             style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
           >
             {badge}
@@ -167,7 +167,7 @@ export function BookCoverArt({
           className="mb-3 h-1 w-8 rounded-full opacity-80"
           style={{ backgroundColor: p.accent }}
         />
-        <h3 className="font-serif text-base font-black leading-snug break-keep text-balance line-clamp-3 sm:text-lg drop-shadow">
+        <h3 className="font-serif text-base font-bold leading-snug break-keep text-balance line-clamp-3 sm:text-lg drop-shadow">
           {title}
         </h3>
         <p className="mt-2 text-[11px] font-bold text-white/70">

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { SpeedTest } from '@/components/test/SpeedTest';
 import Link from 'next/link';
-import { Gauge, Share2, TrendingUp } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '타자 속도 테스트 - 1분 타자 측정 및 티어 확인 (무료)',
@@ -69,8 +68,9 @@ export default function SpeedTestPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="text-center mb-6 md:mb-10 px-4">
-        <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">⏱️ 1분 타자 속도 테스트</h1>
-        <p className="text-zinc-500 font-medium text-base md:text-xl leading-relaxed break-keep">
+        <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase mb-3">Speed Test · 60s</p>
+        <h1 className="serif-display text-3xl md:text-5xl font-bold mb-4">1분 타자 속도 테스트</h1>
+        <p className="text-zinc-600 text-base md:text-xl leading-relaxed break-keep">
           내 분당 타수는 몇 타일까? 60초 만에 측정하고 <strong className="text-on-surface">타자 티어</strong>를 확인하세요.
         </p>
       </div>
@@ -80,15 +80,15 @@ export default function SpeedTestPage() {
       {/* SEO 콘텐츠 */}
       <div className="max-w-4xl mx-auto mt-16 md:mt-24 px-6 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-surface-high pt-12 md:pt-16">
         <section>
-          <div className="flex items-center gap-2 text-primary mb-4"><Gauge size={22} /><h2 className="text-lg font-black">정확한 자소 단위 측정</h2></div>
+          <h2 className="text-lg font-bold mb-4 pb-2 border-b-2 border-primary inline-block">정확한 자소 단위 측정</h2>
           <p className="text-sm text-zinc-500 leading-relaxed">한컴타자와 동일한 자소 단위 방식으로 분당 타수를 계산합니다. &lsquo;한&rsquo; = ㅎ+ㅏ+ㄴ = 3타. 오타는 정확도에 반영되어 뻥튀기 없는 진짜 실력이 측정됩니다.</p>
         </section>
         <section>
-          <div className="flex items-center gap-2 text-orange-500 mb-4"><Share2 size={22} /><h2 className="text-lg font-black">티어 결과 카드 공유</h2></div>
+          <h2 className="text-lg font-bold mb-4 pb-2 border-b-2 border-tertiary inline-block">티어 결과 카드 공유</h2>
           <p className="text-sm text-zinc-500 leading-relaxed">테스트가 끝나면 SSS급(신)부터 D급까지 티어가 담긴 결과 카드를 이미지로 저장하거나 친구에게 바로 공유할 수 있습니다. 친구와 티어 대결을 해보세요.</p>
         </section>
         <section>
-          <div className="flex items-center gap-2 text-green-600 mb-4"><TrendingUp size={22} /><h2 className="text-lg font-black">측정 다음은 성장</h2></div>
+          <h2 className="text-lg font-bold mb-4 pb-2 border-b-2 border-success inline-block">측정 다음은 성장</h2>
           <p className="text-sm text-zinc-500 leading-relaxed">
             내 타수가 평균(300~400타)보다 낮다면 <Link prefetch={false} href="/blog/four-week-typing-plan" className="text-primary font-bold underline underline-offset-2">4주 연습 플랜</Link>을,
             수준별 기준이 궁금하다면 <Link prefetch={false} href="/blog/average-typing-speed" className="text-primary font-bold underline underline-offset-2">평균 타수 가이드</Link>를 확인해 보세요.
@@ -98,12 +98,12 @@ export default function SpeedTestPage() {
 
       {/* FAQ */}
       <div className="max-w-4xl mx-auto mt-12 md:mt-16 px-6">
-        <h2 className="text-2xl font-black mb-6">자주 묻는 질문</h2>
-        <dl className="space-y-4">
+        <h2 className="text-2xl font-bold mb-6">자주 묻는 질문</h2>
+        <dl className="divide-y divide-outline-variant border-y border-outline-variant">
           {FAQ.map((f) => (
-            <div key={f.q} className="bg-surface-low p-6 rounded-3xl border border-surface-high">
-              <dt className="font-black mb-2">{f.q}</dt>
-              <dd className="text-sm text-zinc-500 leading-relaxed">{f.a}</dd>
+            <div key={f.q} className="py-5 px-1">
+              <dt className="font-bold mb-2">{f.q}</dt>
+              <dd className="text-sm text-zinc-600 leading-relaxed">{f.a}</dd>
             </div>
           ))}
         </dl>

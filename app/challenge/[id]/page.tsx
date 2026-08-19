@@ -80,20 +80,20 @@ export default async function ChallengeDetailPage({ params }: Props) {
 
         {/* SEO HTML Content */}
         <article className="mt-20 w-full max-w-5xl px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h1 className="text-3xl font-black mb-8 border-b border-surface-high pb-4 text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-3xl font-bold mb-8 border-b border-surface-high pb-4 text-zinc-900">
                {content.title} - 유저 참여형 타자 필사 연습
             </h1>
             
-            <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
+            <div className="prose prose-lg text-zinc-700 max-w-none">
                 <p className="leading-relaxed mb-8">
                     지금 보고 계신 페이지는 한글타자왕의 유저 참여형 서비스인 <strong>필사 챌린지</strong> 공간입니다. 
                     이 글은 <strong>{content.profiles?.nickname || '익명'}</strong> 님이 직접 창작하거나 공유해주신 소중한 작품 <strong>'{content.title}'</strong> 입니다. 
                     다른 유저분들이 남긴 감성적이고 깊이 있는 문장들을 직접 원고지에 타이핑(필사)해보며, 타자 속도 증진뿐만 아니라 힐링과 사색의 시간을 가져보세요.
                 </p>
 
-                <div className="bg-surface-low p-10 rounded-[2.5rem] whitespace-pre-wrap leading-loose font-medium text-lg border border-surface-high shadow-inner">
+                <div className="bg-surface-low p-10 rounded-2xl whitespace-pre-wrap leading-loose font-medium text-lg border border-surface-high shadow-inner">
                     <h2 className="text-2xl font-bold mb-6 text-primary">{content.title} 전문</h2>
-                    <div className="text-zinc-800 dark:text-zinc-200 font-bold">
+                    <div className="text-zinc-800 font-bold">
                       {content.content}
                     </div>
                 </div>

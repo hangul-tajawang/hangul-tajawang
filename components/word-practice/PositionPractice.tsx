@@ -218,7 +218,7 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
     return (
       <div className="w-full max-w-5xl mx-auto py-20 px-4 animate-in fade-in duration-1000">
         <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-surface-low text-primary rounded-full text-[10px] font-black mb-6 tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-surface-low text-primary rounded-full text-[10px] font-bold mb-6 tracking-widest uppercase">
                 <KbdIcon size={14} /> NO INPUT BOX, JUST TYPE!
             </div>
             <h2 className="display-lg mb-6">기초 연습 구간 선택</h2>
@@ -226,12 +226,12 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BASIC_PRACTICE_STEPS.map((step, idx) => (
-                <button key={step.id} onClick={() => startStep(step)} className="group bg-surface-lowest p-10 rounded-[2.5rem] text-left hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] transition-all hover:-translate-y-2 relative overflow-hidden">
+                <button key={step.id} onClick={() => startStep(step)} className="group bg-surface-lowest p-10 rounded-2xl text-left hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] transition-all hover:-translate-y-2 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><KbdIcon size={80} /></div>
-                    <span className="inline-block px-3 py-1 bg-surface-high text-primary text-[10px] font-black rounded-lg uppercase mb-6 tracking-widest">Step {idx + 1}</span>
+                    <span className="inline-block px-3 py-1 bg-surface-high text-primary text-[10px] font-bold rounded-lg uppercase mb-6 tracking-widest">Step {idx + 1}</span>
                     <h3 className="headline-md mb-3 group-hover:text-primary transition-colors">{step.title}</h3>
                     <p className="text-zinc-400 text-sm font-medium mb-8 leading-relaxed">{step.description}</p>
-                    <div className="flex items-center gap-2 text-primary font-black text-sm">연습 시작 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></div>
+                    <div className="flex items-center gap-2 text-primary font-bold text-sm">연습 시작 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></div>
                 </button>
             ))}
         </div>
@@ -259,17 +259,17 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
         spellCheck={false}
       />
 
-      <div className="w-full flex flex-wrap justify-between items-center gap-2 mb-4 md:mb-16 bg-surface-lowest p-4 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_40px_rgba(21,28,39,0.04)]">
+      <div className="w-full flex flex-wrap justify-between items-center gap-2 mb-4 md:mb-16 bg-surface-lowest p-4 md:p-6 rounded-2xl md:rounded-2xl shadow-[0_20px_40px_rgba(21,28,39,0.04)]">
         <div className="flex flex-col">
-            <span className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">{phase === "keys" ? "1단계: 자판 익히기" : "2단계: 낱말 연습"}</span>
+            <span className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">{phase === "keys" ? "1단계: 자판 익히기" : "2단계: 낱말 연습"}</span>
             <h2 className="headline-md !text-base md:!text-xl">{selectedStep!.title}</h2>
         </div>
         <div className="flex items-center gap-2 md:gap-8">
             <div className="flex items-center gap-2 md:gap-3 px-3 py-2 md:px-5 md:py-2.5 bg-surface-low rounded-2xl text-primary shadow-sm">
                 <Target size={18} />
-                <span className="text-sm font-black">{currentIndex + 1} / {phase === "keys" ? shuffledKeys.length : shuffledWords.length}</span>
+                <span className="text-sm font-bold">{currentIndex + 1} / {phase === "keys" ? shuffledKeys.length : shuffledWords.length}</span>
             </div>
-            {combo > 2 && <div className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-orange-50 rounded-2xl animate-bounce text-orange-600 font-black text-sm"><Flame size={18} /> {combo} COMBO</div>}
+            {combo > 2 && <div className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-orange-50 rounded-2xl animate-bounce text-orange-600 font-bold text-sm"><Flame size={18} /> {combo} COMBO</div>}
             <button onClick={() => setPhase("select")} className="p-3 hover:bg-surface-low rounded-2xl transition-colors text-zinc-300 hover:text-primary"><RotateCcw size={22} /></button>
         </div>
       </div>
@@ -280,7 +280,7 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
                 <CheckCircle2 className="w-24 h-24 text-green-500 mx-auto mb-8" />
                 <h2 className="headline-md mb-4">자판 마스터!</h2>
                 <p className="text-zinc-500 mb-12 font-medium leading-relaxed">자판 위치를 익혔습니다. <br/>이제 이 글자들로 이루어진 낱말을 쳐보세요!</p>
-                <button onClick={() => { setPhase("words"); resetProgress(); setInputValue(""); setTimeout(() => hiddenInputRef.current?.focus(), 100); }} className="w-full py-6 primary-gradient text-white font-black rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/20">2단계: 낱말 연습 시작 <ArrowRight size={20} /></button>
+                <button onClick={() => { setPhase("words"); resetProgress(); setInputValue(""); setTimeout(() => hiddenInputRef.current?.focus(), 100); }} className="w-full py-6 primary-gradient text-white font-bold rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/20">2단계: 낱말 연습 시작 <ArrowRight size={20} /></button>
             </div>
         </div>
       ) : phase === "result" ? (
@@ -290,25 +290,25 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
                 <h2 className="display-lg !text-3xl md:!text-5xl mb-4">과정 완료!</h2>
                 <p className="text-zinc-400 font-bold mb-12">{selectedStep!.title} 연습을 모두 마쳤습니다.</p>
                 <div className="grid grid-cols-2 gap-6 mb-12">
-                    <div className="bg-surface-low p-8 rounded-[2.5rem]"><p className="text-[10px] font-black text-zinc-400 uppercase mb-3 tracking-widest">정확도</p><p className="text-4xl font-black text-primary">{report?.accuracy}%</p></div>
-                    <div className="bg-surface-low p-8 rounded-[2.5rem]"><p className="text-[10px] font-black text-zinc-400 uppercase mb-3 tracking-widest">평균 타수</p><p className="text-4xl font-black text-green-600">{report?.kpm}타</p></div>
+                    <div className="bg-surface-low p-8 rounded-2xl"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-3 tracking-widest">정확도</p><p className="text-4xl font-bold text-primary">{report?.accuracy}%</p></div>
+                    <div className="bg-surface-low p-8 rounded-2xl"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-3 tracking-widest">평균 타수</p><p className="text-4xl font-bold text-green-600">{report?.kpm}타</p></div>
                 </div>
-                <button onClick={() => setPhase("select")} className="w-full py-6 bg-on-surface text-white font-black rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-on-surface/10">단계 선택으로 돌아가기</button>
+                <button onClick={() => setPhase("select")} className="w-full py-6 bg-on-surface text-white font-bold rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-on-surface/10">단계 선택으로 돌아가기</button>
             </div>
         </div>
       ) : (
         <>
-          <div className={`w-full max-w-4xl bg-surface-lowest rounded-[2rem] md:rounded-[4rem] shadow-[0_40px_80px_rgba(21,28,39,0.08)] p-8 pt-12 md:p-20 mb-4 md:mb-16 text-center transition-all duration-500 relative overflow-hidden ${wrongKey ? 'animate-shake' : ''}`}>
+          <div className={`w-full max-w-4xl bg-surface-lowest rounded-2xl md:rounded-2xl shadow-[0_40px_80px_rgba(21,28,39,0.08)] p-8 pt-12 md:p-20 mb-4 md:mb-16 text-center transition-all duration-500 relative overflow-hidden ${wrongKey ? 'animate-shake' : ''}`}>
               {/* Background Accent */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -ml-32 -mb-32" />
 
-              <div className="absolute top-4 md:top-10 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.4em] whitespace-nowrap">
+              <div className="absolute top-4 md:top-10 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[10px] font-bold text-zinc-300 uppercase tracking-[0.4em] whitespace-nowrap">
                   <Sparkles size={14} /> {phase === "keys" ? "Target Key" : "Target Word"} <Sparkles size={14} />
               </div>
 
               <div className="flex flex-col items-center relative z-10">
-                  <h2 className={`font-plus-jakarta font-black leading-none transition-all duration-300 ${wrongKey ? 'text-red-500 scale-95' : 'text-on-surface scale-100'} ${phase === "keys" ? 'text-8xl md:text-[12rem]' : 'text-5xl sm:text-7xl md:text-9xl'}`}>
+                  <h2 className={`font-plus-jakarta font-bold leading-none transition-all duration-300 ${wrongKey ? 'text-red-500 scale-95' : 'text-on-surface scale-100'} ${phase === "keys" ? 'text-8xl md:text-[12rem]' : 'text-5xl sm:text-7xl md:text-9xl'}`}>
                       {targetDisplay}
                   </h2>
 
@@ -328,7 +328,7 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
               </div>
           </div>
 
-          <div className="w-full max-w-5xl p-3 md:p-12 bg-surface-high/50 rounded-[1.5rem] md:rounded-[3.5rem] backdrop-blur-sm">
+          <div className="w-full max-w-5xl p-3 md:p-12 bg-surface-high/50 rounded-2xl md:rounded-2xl backdrop-blur-sm">
               <div className="flex flex-col gap-1.5 md:gap-4">
                   {KBD_ROWS.map((row, rIdx) => (
                       <div key={rIdx} className={`flex justify-center gap-1 md:gap-3 ${rIdx === 1 ? 'ml-3 md:ml-10' : rIdx === 2 ? 'ml-6 md:ml-20' : ''}`}>
@@ -344,7 +344,7 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
                               if (isActive && !isTarget) keyStyle = "bg-on-surface text-white scale-95 opacity-100 shadow-md";
 
                               return (
-                                  <div key={key} className={`w-7 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-md sm:rounded-[1.25rem] flex items-center justify-center text-sm sm:text-xl md:text-3xl font-plus-jakarta font-black transition-all duration-200 ${keyStyle}`}>{key}</div>
+                                  <div key={key} className={`w-7 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-md sm:rounded-2xl flex items-center justify-center text-sm sm:text-xl md:text-3xl font-plus-jakarta font-bold transition-all duration-200 ${keyStyle}`}>{key}</div>
                               );
                           })}
                       </div>

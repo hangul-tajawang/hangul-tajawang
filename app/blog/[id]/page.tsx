@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
               </span>
             </div>
             
-            <h1 className="text-3xl sm:text-5xl font-black text-on-surface leading-tight break-keep mb-6">
+            <h1 className="text-3xl sm:text-5xl font-bold text-on-surface leading-tight break-keep mb-6">
               {post.title}
             </h1>
             
@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
           </header>
 
           {/* 마크다운 콘텐츠 렌더링 영역 */}
-          <main className="animate-in fade-in slide-in-from-bottom-8 duration-700 bg-surface-lowest p-6 sm:p-10 rounded-3xl shadow-sm border border-outline-variant">
+          <main className="animate-in fade-in slide-in-from-bottom-8 duration-700 bg-surface-lowest p-6 sm:p-10 rounded-2xl shadow-sm border border-outline-variant">
             <MarkdownRenderer content={post.content} />
           </main>
 

@@ -26,14 +26,14 @@ export default function CardFlipPage() {
       <CardFlipGame />
 
       {/* SEO 정보 섹션 */}
-      <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-20">
+      <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-zinc-200 pt-16 pb-20">
         <section className="space-y-6">
             <div className="flex items-center gap-3 text-purple-600">
                 <Brain size={28} />
-                <h2 className="text-2xl font-black">기억력 타자 게임 소개</h2>
+                <h2 className="text-2xl font-bold">기억력 타자 게임 소개</h2>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-                마우스 클릭 대신 <strong className="text-zinc-900 dark:text-zinc-100">타자 입력</strong>으로 카드를 뒤집는 새로운 방식의 기억력 게임입니다. 
+            <p className="text-zinc-600 leading-relaxed font-medium">
+                마우스 클릭 대신 <strong className="text-zinc-900">타자 입력</strong>으로 카드를 뒤집는 새로운 방식의 기억력 게임입니다. 
                 카드 뒷면에 적힌 단어를 정확하게 입력하면 카드가 뒤집히며 숨겨진 아이콘이 나타납니다. 
                 똑같은 아이콘을 가진 카드 짝을 연속으로 뒤집어 모든 카드를 제거해 보세요!
             </p>
@@ -42,7 +42,7 @@ export default function CardFlipPage() {
         <section className="space-y-6">
             <div className="flex items-center gap-3 text-yellow-500">
                 <Trophy size={28} />
-                <h2 className="text-2xl font-black">게임 규칙 및 점수</h2>
+                <h2 className="text-2xl font-bold">게임 규칙 및 점수</h2>
             </div>
             <ul className="space-y-3 text-sm text-zinc-500 font-medium">
                 <li className="flex items-start gap-2"><span>✅</span> <strong>타자 입력:</strong> 화면 하단 입력창에 카드 뒷면의 단어를 치고 엔터 또는 스페이스를 누르세요.</li>

@@ -37,8 +37,9 @@ export default function QuizListPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-16 px-4">
       <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
-        <h1 className="text-5xl font-black mb-6">📝 한글 맞춤법 집중 공략</h1>
-        <p className="text-zinc-600 dark:text-zinc-400 font-medium text-xl leading-relaxed">
+        <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase mb-3">Spelling Quiz</p>
+        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-6">한글 맞춤법 집중 공략</h1>
+        <p className="text-zinc-600 font-medium text-xl leading-relaxed">
           어른들도 자주 헷갈리는 필수 맞춤법과 띄어쓰기 논란을 모았습니다. <br className="hidden md:block" />
           가장 취약한 문제를 골라 퀴즈를 풀고 완벽한 해설을 확인해보세요.
         </p>
@@ -50,7 +51,7 @@ export default function QuizListPage() {
             key={item.id} 
             href={`/quiz/${item.id}`}
             
-            className="group flex flex-col bg-surface-low p-8 rounded-[2.5rem] border border-surface-high hover:border-blue-500/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] relative overflow-hidden"
+            className="group flex flex-col bg-surface-low p-8 rounded-2xl border border-surface-high hover:border-blue-500/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] relative overflow-hidden"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:-rotate-6 group-hover:scale-110">
@@ -58,13 +59,13 @@ export default function QuizListPage() {
             </div>
             
             <div className="flex items-center gap-2 mb-6 relative z-10">
-              <span className="text-xs font-black px-4 py-1.5 bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400 rounded-full">맞춤법 난제 #{i + 1}</span>
+              <span className="text-xs font-bold px-4 py-1.5 bg-blue-100 text-blue-600 rounded-full">맞춤법 난제 #{i + 1}</span>
             </div>
             
-            <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors relative z-10 line-clamp-1">{item.aeoQuestion}</h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-8 relative z-10 line-clamp-2">{item.question.replace("___", "[ ? ]")}</p>
+            <h2 className="text-2xl font-bold text-zinc-900 mb-4 group-hover:text-blue-600 transition-colors relative z-10 line-clamp-1">{item.aeoQuestion}</h2>
+            <p className="text-sm text-zinc-600 mb-8 relative z-10 line-clamp-2">{item.question.replace("___", "[ ? ]")}</p>
             
-            <div className="mt-auto flex items-center justify-between text-sm font-bold text-blue-600 dark:text-blue-400 relative z-10">
+            <div className="mt-auto flex items-center justify-between text-sm font-bold text-blue-600 relative z-10">
               <span className="flex items-center gap-2"><BookOpen size={16} />퀴즈 풀고 해설 보기</span>
               <span className="group-hover:translate-x-2 transition-transform">→</span>
             </div>
@@ -73,13 +74,13 @@ export default function QuizListPage() {
       </div>
 
       {/* SEO 및 정보 섹션 — 한글 맞춤법 가이드 */}
-      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-4 space-y-16 text-left">
+      <div className="mt-24 border-t border-zinc-200 pt-16 pb-4 space-y-16 text-left">
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-blue-600">
             <BookOpenText size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">헷갈리는 한글 맞춤법, 퀴즈로 정복하기</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">헷갈리는 한글 맞춤법, 퀴즈로 정복하기</h2>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+          <p className="text-zinc-600 leading-loose font-medium break-keep">
             한글 맞춤법은 규칙이 촘촘해 성인도 자주 실수합니다. <strong className="text-on-surface">한글타자왕 맞춤법 퀴즈</strong>는
             <strong className="text-on-surface"> 되/돼, 낫다/낳다/낮다, 바람/바램, 든지/던지</strong>처럼 일상에서 가장 많이 틀리는 표현을 모아,
             직접 골라 풀고 해설로 원리를 이해하도록 구성했습니다. 무작정 암기하는 대신 "왜 이게 맞는지"를 익혀
@@ -90,7 +91,7 @@ export default function QuizListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-amber-500">
             <Lightbulb size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">이렇게 활용해보세요</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">이렇게 활용해보세요</h2>
           </div>
           <ul className="space-y-4">
             {[
@@ -100,7 +101,7 @@ export default function QuizListPage() {
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-3">
                 <span className="text-amber-500 mt-1 shrink-0">✔</span>
-                <span className="text-zinc-600 dark:text-zinc-400 leading-relaxed break-keep">
+                <span className="text-zinc-600 leading-relaxed break-keep">
                   <strong className="text-on-surface">{t}:</strong> {d}
                 </span>
               </li>
@@ -111,16 +112,16 @@ export default function QuizListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-blue-500">
             <HelpCircle size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">자주 묻는 질문</h2>
           </div>
           <div className="space-y-4">
             {QUIZ_FAQ.map((f) => (
               <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
-                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                <summary className="cursor-pointer list-none font-bold text-on-surface flex items-center justify-between gap-4">
                   {f.q}
                   <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
                 </summary>
-                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+                <p className="mt-4 text-sm text-zinc-600 leading-loose break-keep">{f.a}</p>
               </details>
             ))}
           </div>

@@ -114,7 +114,7 @@ export const Header: React.FC = () => {
         <div className="relative w-80 h-full bg-surface shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
             <div className="p-6 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-black text-lg">한</div>
+                    <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-bold text-lg">한</div>
                     <span className="editorial-heading">메뉴</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-zinc-400 hover:text-on-surface transition-colors"><X size={24} /></button>
@@ -142,12 +142,12 @@ export const Header: React.FC = () => {
                                 <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">My Page</p>
                             </div>
                         </Link>
-                        <button onClick={handleLogout} className="flex items-center justify-center gap-2 w-full py-3 bg-surface-lowest border border-outline-variant text-zinc-500 rounded-xl text-xs font-black">
+                        <button onClick={handleLogout} className="flex items-center justify-center gap-2 w-full py-3 bg-surface-lowest border border-outline-variant text-zinc-500 rounded-xl text-xs font-bold">
                             <LogOut size={14} /> 로그아웃
                         </button>
                     </div>
                 ) : (
-                    <button onClick={handleLogin} className="w-full py-4 bg-[#FEE500] text-black font-black rounded-xl flex items-center justify-center gap-2 shadow-lg">
+                    <button onClick={handleLogin} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg">
                         <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>
                         3초 만에 시작하기
                     </button>
@@ -159,10 +159,10 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      <div className="w-full bg-surface/80 backdrop-blur-md">
+      <div className="w-full bg-surface/90 backdrop-blur-md border-b border-outline-variant">
         <div className="container mx-auto max-w-7xl h-16 flex items-center justify-between px-4 lg:px-8">
             <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group shrink-0">
-                <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:scale-110 transition-transform">한</div>
+                <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">한</div>
                 <span className="editorial-heading text-xl whitespace-nowrap">한글타자왕</span>
             </Link>
 
@@ -224,7 +224,7 @@ function NavButton({ label, href, className = "flex", highlight = false }: { lab
       prefetch={false}
       className={`${className} items-center gap-1.5 px-2.5 py-2 text-sm whitespace-nowrap rounded-lg transition-all ${
         highlight
-          ? "text-on-surface font-black hover:text-primary hover:bg-primary/5"
+          ? "text-on-surface font-bold hover:text-primary hover:bg-primary/5"
           : "text-zinc-600 font-medium hover:text-primary hover:bg-surface-low"
       }`}
     >

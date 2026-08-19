@@ -3,20 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { BetaFeedback } from '@/components/BetaFeedback';
 import {
-  Layout,
-  PenTool,
-  Gamepad2,
-  Users,
   ChevronRight,
-  BookOpenCheck,
   Sparkles,
   Zap,
-  Star,
-  Trophy,
   Heart,
   ArrowRight,
   Smartphone,
-  TramFront,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -53,64 +45,56 @@ export default function HomeClient({ initialPopular }: Props) {
 
       {/* 3대 축 섹션 — 철학이 곧 제품: 필사 · 지식타자 · 게임 */}
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-outline-variant border border-outline-variant rounded-2xl overflow-hidden">
           <PillarCard
             href="/transcription"
-            icon={<PenTool size={32} />}
+            keycap="필"
             eyebrow="생각이 남는 타자"
             title="필사"
             description="좋은 문장을 손끝으로 옮기다 보면 문장이 생각으로 남습니다. 디지털 원고지 위에서 문학을 음미하세요."
             cta="필사 시작하기"
-            accent="text-secondary"
-            accentBg="bg-secondary/10"
           />
           <PillarCard
             href="/journey"
-            icon={<TramFront size={32} />}
+            keycap="지"
             eyebrow="배움이 남는 타자"
             title="지식타자"
             description="태정태세문단세부터 세계 수도까지. 눈으로 외우지 말고 손으로 외우면 지식이 배움으로 남습니다."
             cta="지식타자 시작하기"
-            accent="text-violet-600"
-            accentBg="bg-violet-600/10"
           />
           <PillarCard
             href="/game"
-            icon={<Gamepad2 size={32} />}
+            keycap="놀"
             eyebrow="실력이 남는 타자"
             title="게임"
             description="산성비, 성문방어, 글자 계단. 좋은 게임에 몰입하는 사이 타자 실력이 조용히 쌓입니다."
             cta="게임 즐기기"
-            accent="text-primary"
-            accentBg="bg-primary/10"
           />
         </div>
       </section>
 
-      {/* Feature Section — 3대 축을 뒷받침하는 도구들 */}
+      {/* Feature Section — 3대 축을 뒷받침하는 도구들: 카드 대신 괘선 리스트 */}
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          <FeatureCard
-            href="/practice"
-            icon={<Layout className="text-primary" size={28} />}
-            title="정교한 연습장"
-            description="타이포그래피 미학을 담은 <br/>몰입형 낱말 연습 환경"
-            step="01"
-          />
-          <FeatureCard
-            href="/quiz"
-            icon={<BookOpenCheck className="text-green-600" size={28} />}
-            title="맞춤법 인사이트"
-            description="언어의 정확도를 높이는 <br/>지적인 퀴즈 메커니즘"
-            step="02"
-          />
-          <FeatureCard
-            href="/challenge"
-            icon={<Users className="text-purple-600" size={28} />}
-            title="오픈 챌린지"
-            description="커뮤니티와 함께 호흡하는 <br/>필사 및 랭킹 시스템"
-            step="03"
-          />
+        <div className="divide-y divide-outline-variant border-y border-outline-variant">
+          {[
+            { href: '/practice', key: '연', title: '정교한 연습장', description: '자리·낱말·짧은 글 — 타이포그래피 미학을 담은 몰입형 연습 환경' },
+            { href: '/quiz', key: '맞', title: '맞춤법 인사이트', description: '어른도 헷갈리는 맞춤법을 퀴즈로 풀고 완벽한 해설로 다지기' },
+            { href: '/challenge', key: '함', title: '오픈 챌린지', description: '내가 만든 글로 함께 필사하는 커뮤니티와 실시간 랭킹' },
+          ].map((f) => (
+            <Link
+              key={f.href}
+              prefetch={false}
+              href={f.href}
+              className="group flex items-center gap-6 py-6 px-2 hover:bg-surface-low transition-colors"
+            >
+              <span className="keycap w-12 h-12 text-xl shrink-0 group-hover:border-primary group-hover:text-primary transition-colors">{f.key}</span>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{f.title}</h3>
+                <p className="mt-0.5 text-sm text-zinc-600 leading-relaxed break-keep">{f.description}</p>
+              </div>
+              <ChevronRight size={18} className="text-zinc-400 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -119,7 +103,7 @@ export default function HomeClient({ initialPopular }: Props) {
         <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-20 gap-8">
             <div className="max-w-xl">
-              <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">
+              <span className="text-primary font-bold text-[10px] uppercase tracking-[0.5em] mb-6 block">
                 Trending Now
               </span>
               <h2 className="display-lg !text-4xl md:!text-5xl text-on-surface mb-8 leading-tight tracking-[-0.02em]">
@@ -134,7 +118,7 @@ export default function HomeClient({ initialPopular }: Props) {
             <Link prefetch={false}
               href="/challenge"
               
-              className="group flex items-center gap-3 text-on-surface font-black text-sm uppercase tracking-widest hover:text-primary transition-colors bg-surface-lowest px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all"
+              className="group flex items-center gap-3 text-on-surface font-bold text-sm uppercase tracking-widest hover:text-primary transition-colors bg-surface-lowest px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all"
             >
               전체 보기{' '}
               <ArrowRight
@@ -151,7 +135,7 @@ export default function HomeClient({ initialPopular }: Props) {
                 .map((_, i) => (
                   <div
                     key={i}
-                    className="bg-surface-lowest rounded-[2.5rem] md:rounded-[3.5rem] h-64 md:h-80 animate-pulse"
+                    className="bg-surface-lowest rounded-2xl md:rounded-2xl h-64 md:h-80 animate-pulse"
                   />
                 ))
             ) : popularContents.length > 0 ? (
@@ -160,12 +144,12 @@ export default function HomeClient({ initialPopular }: Props) {
                   key={content.id}
                   href={`/challenge/${content.id}`}
                   
-                  className="group relative overflow-hidden bg-surface-lowest rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2"
+                  className="group relative overflow-hidden bg-surface-lowest rounded-2xl md:rounded-2xl shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2"
                 >
                   <div className="p-8 md:p-10 h-full flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start mb-6">
-                        <span className="px-3 md:px-4 py-1.5 bg-surface-low text-primary text-[10px] font-black rounded-full uppercase tracking-widest">
+                        <span className="px-3 md:px-4 py-1.5 bg-surface-low text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">
                           {content.category}
                         </span>
                         <div className="flex items-center gap-1.5 text-zinc-300 group-hover:text-red-500 transition-colors">
@@ -175,7 +159,7 @@ export default function HomeClient({ initialPopular }: Props) {
                               content.like_count > 0 ? 'fill-current' : ''
                             }
                           />
-                          <span className="text-xs font-black">
+                          <span className="text-xs font-bold">
                             {content.like_count}
                           </span>
                         </div>
@@ -195,7 +179,7 @@ export default function HomeClient({ initialPopular }: Props) {
                             className="w-8 h-8 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-8 h-8 bg-surface-low rounded-full flex items-center justify-center text-primary font-black text-[10px]">
+                          <div className="w-8 h-8 bg-surface-low rounded-full flex items-center justify-center text-primary font-bold text-[10px]">
                             U
                           </div>
                         )}
@@ -203,7 +187,7 @@ export default function HomeClient({ initialPopular }: Props) {
                           {content.profiles?.nickname || '익명'}
                         </span>
                       </div>
-                      <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
+                      <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
                         <Zap size={12} className="text-primary fill-current" />{' '}
                         {content.complete_count}회 완료
                       </div>
@@ -214,7 +198,7 @@ export default function HomeClient({ initialPopular }: Props) {
               ))
             ) : (
               <div className="col-span-full py-24 text-center glass-card">
-                <p className="text-zinc-400 font-black text-xl uppercase tracking-widest opacity-30">
+                <p className="text-zinc-400 font-bold text-xl uppercase tracking-widest opacity-30">
                   No Challenges Found
                 </p>
               </div>
@@ -230,7 +214,7 @@ export default function HomeClient({ initialPopular }: Props) {
             <Sparkles size={240} />
           </div>
           <div className="flex-1 relative z-10 text-center lg:text-left">
-            <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">
+            <span className="text-primary font-bold text-[10px] uppercase tracking-[0.5em] mb-6 block">
               The Story of Hangul Tajawang
             </span>
             <h2 className="display-lg !text-4xl md:!text-5xl mb-10 leading-tight tracking-[-0.02em]">
@@ -246,7 +230,7 @@ export default function HomeClient({ initialPopular }: Props) {
             </p>
 
             <div className="flex flex-col gap-6">
-              <p className="text-on-surface font-black text-[10px] md:text-xs uppercase tracking-[0.2em] flex items-center justify-center lg:justify-start gap-2">
+              <p className="text-on-surface font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] flex items-center justify-center lg:justify-start gap-2">
                 <Smartphone size={16} className="text-primary" /> 모바일에서도
                 그 감동을 이어가세요
               </p>
@@ -255,7 +239,7 @@ export default function HomeClient({ initialPopular }: Props) {
                   href="https://play.google.com/store/apps/details?id=com.moneytaker.korean_typing&hl=ko"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 md:px-8 py-3.5 md:py-4 bg-zinc-900 text-white rounded-2xl font-black text-sm flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-zinc-900/20"
+                  className="px-6 md:px-8 py-3.5 md:py-4 bg-zinc-900 text-white rounded-2xl font-bold text-sm flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-zinc-900/20"
                 >
                   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                     <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.1-.124l-.012-.016a.997.997 0 01-.168-.558V2.512c0-.216.06-.432.168-.558l.012-.016a.997.997 0 01.1-.124zm11.29 11.29l2.515-2.515a.997.997 0 011.41 0l3.013 3.013a.997.997 0 010 1.41l-3.013 3.013a.997.997 0 01-1.41 0l-2.515-2.515a.997.997 0 010-1.41zm-1.096-1.096L12 10.186 5.432 3.618a1.002 1.002 0 01.076-.086l.016-.012c.126-.108.342-.168.558-.168h11.916c.216 0 .432.06.558.168l.016.012c.036.026.06.056.086.086L13.803 12.008zm0 1.096l4.805 8.374c-.026.03-.056.06-.086.086l-.016.012a.997.997 0 01-.558.168H6.082c-.216 0-.432-.06-.558-.168l-.016-.012a1.002 1.002 0 01-.076-.086L12 13.814l1.803-1.806z" />
@@ -266,7 +250,7 @@ export default function HomeClient({ initialPopular }: Props) {
                   href="https://apps.apple.com/kr/app/%ED%95%9C%EA%B8%80%ED%83%80%EC%9E%90%EC%99%95/id6702021365"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 md:px-8 py-3.5 md:py-4 bg-zinc-100 text-zinc-900 rounded-2xl font-black text-sm flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-zinc-100/20"
+                  className="px-6 md:px-8 py-3.5 md:py-4 bg-zinc-100 text-zinc-900 rounded-2xl font-bold text-sm flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-zinc-100/20"
                 >
                   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                     <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.11.78.9.04 2.1-.83 3.6-.63 1.5.11 2.6.61 3.3 1.59-3.05 1.76-2.5 5.95.45 7.15-.65 1.63-1.55 3.25-2.46 4.08zM12.03 7.25c-.08-2.61 2.1-4.8 4.54-4.89.26 2.85-2.29 5.09-4.54 4.89z" />
@@ -276,8 +260,8 @@ export default function HomeClient({ initialPopular }: Props) {
               </div>
             </div>
           </div>
-          <div className="flex-1 w-full max-w-sm md:max-w-md bg-surface-low rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-8 shadow-inner relative group transition-transform hover:scale-[1.05]">
-            <div className="aspect-square bg-surface-lowest rounded-[2rem] md:rounded-[3rem] shadow-2xl flex items-center justify-center overflow-hidden p-8 md:p-12">
+          <div className="flex-1 w-full max-w-sm md:max-w-md bg-surface-low rounded-2xl md:rounded-2xl p-6 md:p-8 shadow-inner relative group transition-transform hover:scale-[1.05]">
+            <div className="aspect-square bg-surface-lowest rounded-2xl md:rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden p-8 md:p-12">
               <Image
                 src="/thumbnail.png"
                 alt="thumbnail"
@@ -302,45 +286,38 @@ export default function HomeClient({ initialPopular }: Props) {
 
 function HeroSection() {
   return (
-    <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-20 md:py-32 flex flex-col items-center text-center relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse delay-700" />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center w-full">
-        <h1 className="display-lg text-on-surface mb-8 md:mb-10 leading-tight">
+    <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24 flex flex-col items-center text-center">
+      <div className="flex flex-col items-center w-full">
+        {/* 커서 블링크 모티프 — 타자 제품의 정체성 */}
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-on-surface mb-6 md:mb-8 leading-[1.25] tracking-tight break-keep">
           한글 타자 연습, <br />
-          타자 치는 <span className="text-primary italic">시간</span>을 가치 있게.
+          타자 치는 <span className="text-primary underline decoration-[3px] decoration-primary/30 underline-offset-8">시간</span>을 가치 있게
+          <span className="inline-block w-[3px] h-[0.9em] bg-primary align-[-0.12em] ml-1.5 animate-pulse" aria-hidden />
         </h1>
 
-        <p className="text-lg md:text-xl text-zinc-500 max-w-2xl mb-12 md:mb-16 font-medium leading-relaxed px-4">
+        <p className="text-lg md:text-xl text-zinc-600 max-w-2xl mb-10 md:mb-14 leading-relaxed px-4 break-keep">
           좋은 문장을 치면 생각이 남고, 좋은 지식을 치면 배움이 남고,{' '}
           <br className="hidden sm:block" />
           좋은 게임을 즐기면 실력이 남습니다.
         </p>
 
-        <div className="flex flex-col items-center gap-8 w-full">
-          <div className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full sm:w-auto px-4">
+        <div className="flex flex-col items-center gap-6 w-full">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4">
             <Link prefetch={false}
               href="/practice"
-              
-              className="px-10 md:px-12 py-5 md:py-6 primary-gradient text-white text-lg md:text-xl font-black rounded-full shadow-2xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center gap-3"
+              className="px-9 md:px-11 py-4 md:py-5 bg-primary text-white text-lg font-semibold rounded-xl transition-all hover:bg-blue-700 active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              지금 시작하기 <ChevronRight size={24} />
+              지금 시작하기 <ChevronRight size={20} />
             </Link>
             <Link prefetch={false}
               href="/game"
-              
-              className="px-10 md:px-12 py-5 md:py-6 bg-surface-lowest text-on-surface text-lg md:text-xl font-black rounded-full shadow-sm transition-all hover:bg-surface-low flex items-center justify-center gap-3"
+              className="px-9 md:px-11 py-4 md:py-5 bg-surface-lowest text-on-surface text-lg font-semibold rounded-xl border border-outline-variant transition-all hover:border-zinc-400 active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              <Gamepad2 size={24} className="text-secondary" /> 게임 즐기기
+              게임 즐기기
             </Link>
           </div>
-          <p className="text-[10px] md:text-xs text-zinc-400 font-black uppercase tracking-widest flex items-center gap-2">
-            <Trophy size={14} className="text-tertiary" /> 실시간{' '}
-            <span className="text-primary font-black">나의 성장</span>을
-            시각화합니다.
+          <p className="text-xs text-zinc-500 tracking-wide">
+            실시간으로 <span className="text-primary font-semibold">나의 성장</span>을 시각화합니다
           </p>
         </div>
       </div>
@@ -351,42 +328,47 @@ function HeroSection() {
 // 3대 축(필사·지식타자·게임) 대형 카드 — 철학 문구를 앞세운 대표 진입점
 function PillarCard({
   href,
-  icon,
+  keycap,
+  keycapImage,
   eyebrow,
   title,
   description,
   cta,
-  accent,
-  accentBg,
 }: {
   href: string;
-  icon: React.ReactNode;
+  /** 아이콘 대신 키캡에 새길 한 글자 (타자 제품 고유 모티프) */
+  keycap: string;
+  /** 키캡 위에 올릴 이미지 (있으면 글자 대신 표시 — 예: 게임 픽셀 성) */
+  keycapImage?: string;
   eyebrow: string;
   title: string;
   description: string;
   cta: string;
-  accent: string;
-  accentBg: string;
 }) {
   return (
     <Link
       prefetch={false}
       href={href}
-      className="group bg-surface-lowest p-10 md:p-12 rounded-[2.5rem] md:rounded-[3rem] text-left transition-all duration-500 shadow-sm hover:shadow-[0_24px_48px_rgba(21,28,39,0.08)] hover:-translate-y-2 relative overflow-hidden"
+      className="group bg-surface-lowest p-10 md:p-12 text-left transition-colors hover:bg-surface-low"
     >
-      <div className={`w-16 h-16 md:w-20 md:h-20 ${accentBg} ${accent} rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform`}>
-        {icon}
-      </div>
-      <span className={`block text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accent}`}>
+      <span className="keycap w-14 h-14 text-2xl mb-8 group-hover:border-primary group-hover:text-primary transition-colors">
+        {keycapImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={keycapImage} alt={keycap} className="cd-pixel" />
+        ) : (
+          keycap
+        )}
+      </span>
+      <span className="block text-[11px] font-semibold tracking-[0.25em] mb-3 text-primary">
         {eyebrow}
       </span>
-      <h2 className="display-lg !text-3xl md:!text-4xl mb-4 group-hover:text-primary transition-colors">
+      <h2 className="serif-display text-3xl md:text-4xl font-bold mb-4 group-hover:text-primary transition-colors">
         {title}
       </h2>
-      <p className="text-zinc-500 font-medium text-sm md:text-base leading-relaxed mb-8 break-keep">
+      <p className="text-zinc-600 text-sm md:text-base leading-relaxed mb-8 break-keep">
         {description}
       </p>
-      <span className="inline-flex items-center gap-2 font-black text-sm text-on-surface group-hover:text-primary transition-colors">
+      <span className="inline-flex items-center gap-2 font-bold text-sm text-on-surface group-hover:text-primary transition-colors">
         {cta} <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
       </span>
     </Link>
@@ -410,9 +392,9 @@ function FeatureCard({
     <Link prefetch={false}
       href={href}
       
-      className="bg-surface-lowest p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] text-left transition-all duration-500 hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] hover:-translate-y-2 relative group overflow-hidden"
+      className="bg-surface-lowest p-8 md:p-10 rounded-2xl md:rounded-2xl text-left transition-all duration-500 hover:shadow-[0_20px_40px_rgba(21,28,39,0.06)] hover:-translate-y-2 relative group overflow-hidden"
     >
-      <div className="absolute -top-4 -right-4 text-6xl md:text-8xl font-black text-on-surface opacity-[0.02] group-hover:opacity-[0.05] transition-opacity select-none">
+      <div className="absolute -top-4 -right-4 text-6xl md:text-8xl font-bold text-on-surface opacity-[0.02] group-hover:opacity-[0.05] transition-opacity select-none">
         {step}
       </div>
       <div className="w-14 h-14 md:w-16 md:h-16 bg-surface-low rounded-2xl flex items-center justify-center mb-8 md:mb-10 transition-colors group-hover:bg-primary/10">
@@ -425,7 +407,7 @@ function FeatureCard({
         className="text-zinc-500 font-medium text-sm md:text-base leading-relaxed mb-6 md:mb-8"
         dangerouslySetInnerHTML={{ __html: description }}
       ></p>
-      <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0">
+      <div className="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0">
         바로가기 <ChevronRight size={14} />
       </div>
     </Link>

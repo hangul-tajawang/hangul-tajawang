@@ -41,8 +41,7 @@ export function revealState(
 
 export const JourneyViz: React.FC<JourneyVizProps> = (props) => {
   switch (props.course.ui) {
-    case "worldmap":
-      return <JourneyWorldMap {...props} />;
+    case "worldmap": // 세계 수도 — 문제 국가의 국기를 크게 + 아래 수집 그리드 (국기 퀴즈와 동일 스테이지)
     case "flags": // 국기 퀴즈 — 스테이지 중앙에 현재 국기 크게 + 아래에 수집 그리드
       return (
         <div className="flex flex-col gap-3">

@@ -148,17 +148,17 @@ function BookCover({ record, onClick }: { record: PilsaRecord; onClick: () => vo
       {/* 표지 텍스트 */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4 pl-6 text-center">
         <span className={`w-8 h-1 ${style.band} rounded-full mb-4 opacity-80`} />
-        <h3 className="font-serif font-black text-white text-base sm:text-lg leading-snug break-keep line-clamp-3">{record.title}</h3>
+        <h3 className="font-serif font-bold text-white text-base sm:text-lg leading-snug break-keep line-clamp-3">{record.title}</h3>
         <p className="mt-2 text-[11px] font-bold text-white/60">{record.author}</p>
         <span className={`w-8 h-1 ${style.band} rounded-full mt-4 opacity-80`} />
       </div>
       {/* 상태 배지 */}
       {done && editions > 1 && (
-        <span className="absolute top-2 right-2 px-2 py-0.5 bg-black/40 text-yellow-300 text-[10px] font-black rounded-full">{editions}쇄</span>
+        <span className="absolute top-2 right-2 px-2 py-0.5 bg-black/40 text-yellow-300 text-[10px] font-bold rounded-full">{editions}쇄</span>
       )}
       {!done && record.progress && (
         <div className="absolute inset-x-0 bottom-0 bg-black/50 px-3 py-2">
-          <div className="flex justify-between items-center text-[10px] font-black text-white/90 mb-1">
+          <div className="flex justify-between items-center text-[10px] font-bold text-white/90 mb-1">
             <span>필사 중</span><span>{Math.round(record.progress.percent)}%</span>
           </div>
           <div className="h-1 bg-white/20 rounded-full overflow-hidden">
@@ -236,27 +236,27 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
 
   return (
     <div className="fixed inset-0 z-[9000] flex items-start justify-center overflow-y-auto bg-zinc-950/80 backdrop-blur-md p-4 py-8 md:py-16">
-      <div className="relative w-full max-w-2xl bg-[#faf6ec] dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[#faf6ec] rounded-2xl md:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
         {/* 표지 헤더 */}
         <div className={`relative bg-gradient-to-br ${style.bg} px-6 md:px-10 py-8 md:py-12 text-center`}>
           <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 text-white/80 flex items-center justify-center hover:bg-black/50 transition-colors" aria-label="닫기"><X size={18} /></button>
-          <h2 className="font-serif font-black text-white text-2xl md:text-3xl break-keep">{record.title}</h2>
+          <h2 className="font-serif font-bold text-white text-2xl md:text-3xl break-keep">{record.title}</h2>
           <p className="mt-2 text-sm font-bold text-white/60">{record.author} · {record.category}</p>
         </div>
 
         {/* 판권 간지 — 나의 기록 */}
-        <div className="px-6 md:px-10 py-6 border-b border-[#e5dcc8] dark:border-zinc-800 text-center">
+        <div className="px-6 md:px-10 py-6 border-b border-[#e5dcc8] text-center">
           {done ? (
-            <p className="text-sm font-medium text-[#6b5d4f] dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm font-medium text-[#6b5d4f] leading-relaxed">
               {first && <>초판 · {fmtDate(first.date)} 새김<br /></>}
               {record.completions.length > 1 && <>총 {record.completions.length}쇄 · </>}
               최고 {bestKpm}타 · 정확도 {Math.max(...record.completions.map((c) => c.accuracy))}%
             </p>
           ) : (
-            <p className="text-sm font-medium text-[#6b5d4f] dark:text-zinc-400">아직 새기는 중인 책입니다 ({Math.round(record.progress?.percent || 0)}%)</p>
+            <p className="text-sm font-medium text-[#6b5d4f]">아직 새기는 중인 책입니다 ({Math.round(record.progress?.percent || 0)}%)</p>
           )}
           <div className="mt-4 flex justify-center gap-3">
-            <Link prefetch={false} href={practiceHref(record)} className="px-5 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-black rounded-full hover:scale-105 transition-transform flex items-center gap-1.5">
+            <Link prefetch={false} href={practiceHref(record)} className="px-5 py-2.5 bg-zinc-900 text-white text-sm font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-1.5">
               <Feather size={14} /> {done ? "다시 새기기" : "이어서 새기기"}
             </Link>
           </div>
@@ -264,8 +264,8 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
 
         {/* 본문 — 문장을 탭하면 카드로 만들 수 있음 */}
         <div className="px-6 md:px-10 py-8">
-          <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 본문 · 문장을 여러 개 골라 카드로 간직할 수 있어요</p>
-          <div className="font-serif text-[17px] leading-loose text-[#2f2a24] dark:text-zinc-200">
+          <p className="text-[11px] font-bold text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 본문 · 문장을 여러 개 골라 카드로 간직할 수 있어요</p>
+          <div className="font-serif text-[17px] leading-loose text-[#2f2a24]">
             {lines.map((l, i) =>
               l.trim() ? (
                 <p key={i} onClick={() => toggleLine(i)}
@@ -279,19 +279,19 @@ function BookDetail({ record, onClose }: { record: PilsaRecord; onClose: () => v
 
         {/* 문장 카드 저장 바 */}
         {selectedSentences.length > 0 && (
-          <div className="sticky bottom-0 bg-[#faf6ec]/95 dark:bg-zinc-900/95 backdrop-blur border-t border-[#e5dcc8] dark:border-zinc-800 px-6 py-4 flex items-center gap-3 animate-in slide-in-from-bottom duration-300">
+          <div className="sticky bottom-0 bg-[#faf6ec]/95 backdrop-blur border-t border-[#e5dcc8] px-6 py-4 flex items-center gap-3 animate-in slide-in-from-bottom duration-300">
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-[#2f2a24] dark:text-zinc-200 truncate">&quot;{selectedSentences[0]}&quot;</p>
+              <p className="text-sm font-bold text-[#2f2a24] truncate">&quot;{selectedSentences[0]}&quot;</p>
               <p className={`text-[11px] font-bold ${limitHit ? "text-red-500" : "text-[#a89a8a]"}`}>
                 {limitHit
                   ? `카드에 담기엔 너무 길어요 (최대 ${SENTENCE_CARD_MAX_CHARS}자)`
                   : `${selectedSentences.length}개 문장 · ${selectedChars}자`}
               </p>
             </div>
-            <button onClick={() => { setSelectedIdx(new Set()); setLimitHit(false); }} className="shrink-0 px-3 py-2.5 text-xs font-black text-[#a89a8a] hover:text-[#a05252] transition-colors">
+            <button onClick={() => { setSelectedIdx(new Set()); setLimitHit(false); }} className="shrink-0 px-3 py-2.5 text-xs font-bold text-[#a89a8a] hover:text-[#a05252] transition-colors">
               비우기
             </button>
-            <button onClick={downloadCard} className="shrink-0 px-5 py-2.5 bg-[#a05252] text-white text-sm font-black rounded-full flex items-center gap-1.5 hover:scale-105 transition-transform">
+            <button onClick={downloadCard} className="shrink-0 px-5 py-2.5 bg-[#a05252] text-white text-sm font-bold rounded-full flex items-center gap-1.5 hover:scale-105 transition-transform">
               <Download size={14} /> 문장 카드 저장
             </button>
           </div>
@@ -338,12 +338,12 @@ export const MyLibrary: React.FC = () => {
   if (records.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 px-6 text-center">
-        <div className="w-20 h-20 bg-surface-low rounded-[2rem] flex items-center justify-center text-primary mb-8"><LibraryIcon size={36} /></div>
-        <h2 className="text-2xl font-black mb-3">아직 서재가 비어 있어요</h2>
+        <div className="w-20 h-20 bg-surface-low rounded-2xl flex items-center justify-center text-primary mb-8"><LibraryIcon size={36} /></div>
+        <h2 className="text-2xl font-bold mb-3">아직 서재가 비어 있어요</h2>
         <p className="text-zinc-500 font-medium leading-relaxed mb-10 max-w-sm break-keep">
           필사를 완주하면 그 작품이 한 권의 책이 되어 이곳에 꽂힙니다. 키보드로 새긴 당신만의 서재를 채워보세요.
         </p>
-        <Link prefetch={false} href="/transcription" className="px-8 py-4 primary-gradient text-white font-black rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
+        <Link prefetch={false} href="/transcription" className="px-8 py-4 primary-gradient text-white font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
           첫 필사 시작하기 →
         </Link>
       </div>
@@ -357,15 +357,15 @@ export const MyLibrary: React.FC = () => {
 
       {/* 서재 현황 */}
       <div className="flex flex-wrap items-center gap-3 md:gap-6 mb-10 md:mb-14">
-        <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-black text-primary">{bookCount}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">권의 책</span></div>
-        <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-black text-on-surface">{stats.totalCompletions}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">번의 완주</span></div>
-        {stats.bestKpm > 0 && <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-black text-green-600">{stats.bestKpm}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">최고 타수</span></div>}
+        <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-bold text-primary">{bookCount}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">권의 책</span></div>
+        <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-bold text-on-surface">{stats.totalCompletions}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">번의 완주</span></div>
+        {stats.bestKpm > 0 && <div className="bg-surface-lowest px-5 py-3 rounded-2xl shadow-sm"><span className="text-2xl font-bold text-green-600">{stats.bestKpm}</span><span className="text-xs font-bold text-zinc-400 ml-1.5">최고 타수</span></div>}
       </div>
 
       {/* 새기는 중 (이어하기) */}
       {(inProgress.length > 0 || seriesInProgress.length > 0) && (
         <section className="mb-12">
-          <h2 className="text-lg font-black mb-5 flex items-center gap-2"><Feather size={18} className="text-primary" /> 새기는 중</h2>
+          <h2 className="text-lg font-bold mb-5 flex items-center gap-2"><Feather size={18} className="text-primary" /> 새기는 중</h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 md:gap-5">
             {seriesInProgress.map((g) => <SeriesCover key={g.series.id} group={g} onClick={() => setSelectedSeries(g)} />)}
             {inProgress.map((r) => <BookCover key={`${r.sourceType}:${r.sourceId}`} record={r} onClick={() => setSelected(r)} />)}
@@ -376,8 +376,8 @@ export const MyLibrary: React.FC = () => {
       {/* 완주한 책장 */}
       {(done.length > 0 || seriesDone.length > 0) && (
         <section>
-          <h2 className="text-lg font-black mb-5 flex items-center gap-2"><LibraryIcon size={18} className="text-primary" /> 내가 새긴 책들</h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 md:gap-5 p-4 md:p-6 bg-surface-low rounded-[2rem] border-b-8 border-[#c9a97a]/40">
+          <h2 className="text-lg font-bold mb-5 flex items-center gap-2"><LibraryIcon size={18} className="text-primary" /> 내가 새긴 책들</h2>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 md:gap-5 p-4 md:p-6 bg-surface-low rounded-2xl border-b-8 border-[#c9a97a]/40">
             {seriesDone.map((g) => <SeriesCover key={g.series.id} group={g} onClick={() => setSelectedSeries(g)} />)}
             {done.map((r) => <BookCover key={`${r.sourceType}:${r.sourceId}`} record={r} onClick={() => setSelected(r)} />)}
           </div>
@@ -385,7 +385,7 @@ export const MyLibrary: React.FC = () => {
       )}
 
       <div className="mt-12 text-center">
-        <Link prefetch={false} href="/transcription" className="inline-flex items-center gap-2 text-sm font-black text-primary hover:underline underline-offset-4">
+        <Link prefetch={false} href="/transcription" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline underline-offset-4">
           <ChevronLeft size={16} /> 새로운 작품 필사하러 가기
         </Link>
       </div>
@@ -410,10 +410,10 @@ const SeriesCover: React.FC<{ group: SeriesGroup; onClick: () => void }> = ({ gr
     >
       <BookCoverArt seriesId={series.id} title={series.title} author={series.author} cover={series.cover} />
       {complete ? (
-        <span className="absolute top-2 right-2 px-2 py-0.5 bg-yellow-400 text-yellow-950 text-[10px] font-black rounded-full">완간</span>
+        <span className="absolute top-2 right-2 px-2 py-0.5 bg-yellow-400 text-yellow-950 text-[10px] font-bold rounded-full">완간</span>
       ) : (
         <div className="absolute inset-x-0 bottom-0 rounded-b-xl bg-black/75 px-3 py-2 backdrop-blur-sm">
-          <div className="flex justify-between items-center text-[10px] font-black text-white/90 mb-1">
+          <div className="flex justify-between items-center text-[10px] font-bold text-white/90 mb-1">
             <span>{activeEpisode ? `${activeEpisode}화 새기는 중` : "다음 화 기다리는 중"}</span>
             <span>{activeRecord?.progress ? `${Math.round(activeRecord.progress.percent)}%` : `${doneCount}/${series.totalEpisodes}화`}</span>
           </div>
@@ -437,17 +437,17 @@ const SeriesBookDetail: React.FC<{ group: SeriesGroup; onClose: () => void }> = 
 
   return (
     <div className="fixed inset-0 z-[9000] flex items-start justify-center overflow-y-auto bg-zinc-950/80 backdrop-blur-md p-4 py-8 md:py-16">
-      <div className="relative w-full max-w-2xl bg-[#faf6ec] dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[#faf6ec] rounded-2xl md:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
         <div className="relative bg-gradient-to-br from-rose-700 to-rose-950 px-6 md:px-10 py-8 md:py-12 text-center">
           <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 text-white/80 flex items-center justify-center hover:bg-black/50 transition-colors" aria-label="닫기"><X size={18} /></button>
-          <span className="inline-block px-3 py-1 bg-white/15 text-white/90 text-[10px] font-black rounded-full mb-4 tracking-widest">한글타자왕 오리지널 연재</span>
-          <h2 className="font-serif font-black text-white text-2xl md:text-3xl break-keep">{series.title}</h2>
+          <span className="inline-block px-3 py-1 bg-white/15 text-white/90 text-[10px] font-bold rounded-full mb-4 tracking-widest">한글타자왕 오리지널 연재</span>
+          <h2 className="font-serif font-bold text-white text-2xl md:text-3xl break-keep">{series.title}</h2>
           <p className="mt-2 text-sm font-bold text-white/60">{series.author} 지음 · 전 {series.totalEpisodes}화</p>
         </div>
 
         {/* 판권 간지 */}
-        <div className="px-6 md:px-10 py-6 border-b border-[#e5dcc8] dark:border-zinc-800 text-center">
-          <p className="text-sm font-medium text-[#6b5d4f] dark:text-zinc-400 leading-relaxed">
+        <div className="px-6 md:px-10 py-6 border-b border-[#e5dcc8] text-center">
+          <p className="text-sm font-medium text-[#6b5d4f] leading-relaxed">
             {complete ? "완간" : `${doneCount}/${series.totalEpisodes}화 새김`}
             {firstDate && <> · {fmtDate(firstDate)}부터</>}
             {bestKpm > 0 && <> · 최고 {bestKpm}타</>}
@@ -456,7 +456,7 @@ const SeriesBookDetail: React.FC<{ group: SeriesGroup; onClose: () => void }> = 
 
         {/* 화별 목차 */}
         <div className="px-6 md:px-10 py-8">
-          <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 목차</p>
+          <p className="text-[11px] font-bold text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5"><BookOpen size={13} /> 목차</p>
           <ol className="space-y-1.5">
             {episodes.map((ep) => {
               const rec = records.find((r) => r.sourceId === ep.id);
@@ -466,14 +466,14 @@ const SeriesBookDetail: React.FC<{ group: SeriesGroup; onClose: () => void }> = 
                 <li key={ep.id}>
                   <Link prefetch={false} href={`/transcription/${ep.id}`}
                     className="group flex items-center gap-3 px-3 py-2.5 -mx-3 rounded-xl hover:bg-[#a05252]/5 transition-colors">
-                    <span className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[10px] font-black ${epDone ? "bg-green-100 text-green-600" : "bg-[#e5dcc8] dark:bg-zinc-800 text-zinc-400"}`}>{ep.episode}</span>
-                    <span className={`flex-1 font-serif font-bold text-[15px] break-keep group-hover:text-[#a05252] transition-colors ${epDone ? "text-[#6b5d4f] dark:text-zinc-400" : "text-[#2f2a24] dark:text-zinc-200"}`}>{ep.title}</span>
+                    <span className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold ${epDone ? "bg-green-100 text-green-600" : "bg-[#e5dcc8] text-zinc-400"}`}>{ep.episode}</span>
+                    <span className={`flex-1 font-serif font-bold text-[15px] break-keep group-hover:text-[#a05252] transition-colors ${epDone ? "text-[#6b5d4f]" : "text-[#2f2a24]"}`}>{ep.title}</span>
                     {epDone ? (
-                      <span className="text-[10px] font-black text-green-600">새김 ✓</span>
+                      <span className="text-[10px] font-bold text-green-600">새김 ✓</span>
                     ) : epProgress ? (
-                      <span className="text-[10px] font-black text-[#a05252]">{Math.round(epProgress.percent)}% · 이어 쓰기 →</span>
+                      <span className="text-[10px] font-bold text-[#a05252]">{Math.round(epProgress.percent)}% · 이어 쓰기 →</span>
                     ) : (
-                      <span className="text-[10px] font-black text-[#a05252]">새기러 가기 →</span>
+                      <span className="text-[10px] font-bold text-[#a05252]">새기러 가기 →</span>
                     )}
                   </Link>
                 </li>
@@ -481,7 +481,7 @@ const SeriesBookDetail: React.FC<{ group: SeriesGroup; onClose: () => void }> = 
             })}
           </ol>
           <div className="mt-6 text-center">
-            <Link prefetch={false} href={`/transcription/series/${series.id}`} className="text-xs font-black text-[#a05252] underline underline-offset-4">시리즈 소개 페이지 보기</Link>
+            <Link prefetch={false} href={`/transcription/series/${series.id}`} className="text-xs font-bold text-[#a05252] underline underline-offset-4">시리즈 소개 페이지 보기</Link>
           </div>
         </div>
       </div>

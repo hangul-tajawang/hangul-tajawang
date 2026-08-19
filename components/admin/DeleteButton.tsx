@@ -35,7 +35,7 @@ export function DeleteButton({
         onClick={onClick}
         disabled={pending}
         aria-label="삭제"
-        className="p-2 rounded-full text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-40"
+        className="p-2 rounded-full text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40"
       >
         <Trash2 size={15} />
       </button>

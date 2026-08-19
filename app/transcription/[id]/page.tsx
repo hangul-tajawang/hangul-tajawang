@@ -121,7 +121,7 @@ export default async function TranscriptionDetailPage({ params }: Props) {
           <Link
             prefetch={false}
             href={`/transcription/series/${db.book.id}`}
-            className="mb-2 inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-900/40 rounded-full text-sm font-black text-rose-700 dark:text-rose-300 hover:scale-105 transition-transform"
+            className="mb-2 inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 border border-rose-200 rounded-full text-sm font-bold text-rose-700 hover:scale-105 transition-transform"
           >
             📖 {db.book.title} · {text.episode}화 / {db.book.totalEpisodes}화 — 목차 보기 →
           </Link>
@@ -130,19 +130,19 @@ export default async function TranscriptionDetailPage({ params }: Props) {
 
         {/* SEO HTML Content */}
         <article className="mt-20 w-full max-w-5xl px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h2 className="text-3xl font-black mb-8 border-b border-surface-high pb-4 break-keep text-balance">
+            <h2 className="text-3xl font-bold mb-8 border-b border-surface-high pb-4 break-keep text-balance">
               {text.title} <span className="whitespace-nowrap">한글 타자 연습</span>
             </h2>
-            <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
+            <div className="prose prose-lg text-zinc-700 max-w-none">
                 <p className="leading-relaxed mb-8">
                     이 페이지는 <strong>{text.author}</strong>의 <strong>&apos;{text.title}&apos;</strong> 전문을 제공하며, 이를 활용하여 한글 타자 연습을 하실 수 있도록 구성되어 있습니다.
                     상단의 감성적인 원고지 화면에서 제시된 글을 따라 입력하며 연습을 진행해보세요.
                     이 한글 타자 연습 서비스는 연습 중인 사용자의 <strong>타자 속도(타수)</strong>와 <strong>정확도</strong>를 실시간으로 매우 정확하게 측정해 드립니다.
                     지속적인 연습을 통해 타자 실력을 향상시키고 자신만의 기록을 세워보세요!
                 </p>
-                <div className="bg-surface-low p-10 rounded-[2.5rem] whitespace-pre-wrap leading-loose font-medium text-lg border border-surface-high shadow-inner">
+                <div className="bg-surface-low p-10 rounded-2xl whitespace-pre-wrap leading-loose font-medium text-lg border border-surface-high shadow-inner">
                     <h3 className="text-2xl font-bold mb-6 text-primary">{text.title} 전문</h3>
-                    <div className="text-zinc-800 dark:text-zinc-200 font-bold">
+                    <div className="text-zinc-800 font-bold">
                       {text.content}
                     </div>
                 </div>
@@ -152,7 +152,7 @@ export default async function TranscriptionDetailPage({ params }: Props) {
                     {prevText ? (
                         <Link prefetch={false} href={`/transcription/${prevText.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">{db ? '이전 화' : '이전 작품'}</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevText.title}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevText.title}</span>
                             <span className="text-sm font-medium text-zinc-500">{prevText.author}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
@@ -160,7 +160,7 @@ export default async function TranscriptionDetailPage({ params }: Props) {
                     {nextText ? (
                         <Link prefetch={false} href={`/transcription/${nextText.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">{db ? '다음 화' : '다음 작품'}</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextText.title}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextText.title}</span>
                             <span className="text-sm font-medium text-zinc-500">{nextText.author}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}

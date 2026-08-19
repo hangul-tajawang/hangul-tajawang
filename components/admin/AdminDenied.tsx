@@ -4,10 +4,10 @@ import { ShieldAlert } from 'lucide-react';
 export function AdminDenied({ email }: { email: string | null }) {
   return (
     <div className="w-full max-w-md mx-auto py-24 px-6 text-center text-on-surface">
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-900/20 text-red-500 mb-6">
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-50 text-red-500 mb-6">
         <ShieldAlert size={30} />
       </div>
-      <h1 className="text-2xl font-black mb-3">관리자 전용 페이지입니다</h1>
+      <h1 className="text-2xl font-bold mb-3">관리자 전용 페이지입니다</h1>
       {email ? (
         <p className="text-sm text-zinc-500 font-medium leading-relaxed break-keep">
           현재 <strong className="text-on-surface">{email}</strong> 계정으로

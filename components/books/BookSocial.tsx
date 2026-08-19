@@ -137,7 +137,7 @@ export function BookSocial({ bookId }: { bookId: string }) {
         <button
           onClick={toggleLike}
           aria-pressed={liked}
-          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-black transition-all active:scale-95 ${
+          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-all active:scale-95 ${
             liked
               ? "bg-rose-500/15 text-rose-500"
               : "bg-surface-lowest text-zinc-500 border border-surface-high hover:text-rose-500"
@@ -148,7 +148,7 @@ export function BookSocial({ bookId }: { bookId: string }) {
       </div>
 
       {/* 댓글 */}
-      <h3 className="flex items-center gap-2 text-lg font-black mb-5">
+      <h3 className="flex items-center gap-2 text-lg font-bold mb-5">
         <MessageSquare size={18} className="text-primary" /> 댓글
         <span className="text-primary/40">{comments.length}</span>
       </h3>
@@ -167,7 +167,7 @@ export function BookSocial({ bookId }: { bookId: string }) {
           onClick={addComment}
           disabled={!user || !text.trim() || submitting}
           aria-label="댓글 등록"
-          className="absolute right-2 top-2 bottom-2 px-4 rounded-xl bg-primary text-white font-black flex items-center justify-center hover:scale-105 disabled:opacity-40 transition-all"
+          className="absolute right-2 top-2 bottom-2 px-4 rounded-xl bg-primary text-white font-bold flex items-center justify-center hover:scale-105 disabled:opacity-40 transition-all"
         >
           {submitting ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
         </button>
@@ -177,7 +177,7 @@ export function BookSocial({ bookId }: { bookId: string }) {
         {comments.length > 0 ? (
           comments.map((c) => (
             <div key={c.id} className="flex gap-4 group/comment">
-              <div className="w-11 h-11 shrink-0 rounded-2xl bg-surface-high flex items-center justify-center overflow-hidden font-black text-primary/40">
+              <div className="w-11 h-11 shrink-0 rounded-2xl bg-surface-high flex items-center justify-center overflow-hidden font-bold text-primary/40">
                 {c.profiles?.avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={c.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -187,7 +187,7 @@ export function BookSocial({ bookId }: { bookId: string }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-3 mb-1">
-                  <span className="font-black text-on-surface break-keep">
+                  <span className="font-bold text-on-surface break-keep">
                     {c.profiles?.nickname || "익명"}
                   </span>
                   <div className="flex items-center gap-3 shrink-0">

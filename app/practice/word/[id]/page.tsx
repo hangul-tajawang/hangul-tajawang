@@ -75,13 +75,13 @@ export default async function WordCategoryPage({ params }: Props) {
 
         {/* SEO HTML Content */}
         <article className="mt-12 w-full max-w-5xl px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h1 className="text-3xl font-black mb-8 border-b border-surface-high pb-4">{data.title} 기반 낱말 타자 연습</h1>
-            <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
+            <h1 className="text-3xl font-bold mb-8 border-b border-surface-high pb-4">{data.title} 기반 낱말 타자 연습</h1>
+            <div className="prose prose-lg text-zinc-700 max-w-none">
                 <p className="leading-relaxed mb-8">
                     이곳은 <strong>{data.title} ({data.description})</strong> 영역의 한글 자모음들로 구성된 자주 쓰이는 낱말들을 집중적으로 타이핑해 볼 수 있는 연습장입니다.
                     키보드 위치를 숙지한 후 단어로 응용하면서 "독수리 타법"을 완전히 교정하고 타수를 급격히 올리는 핵심적인 훈련 과정입니다.
                 </p>
-                <div className="bg-surface-low p-10 rounded-[2.5rem] leading-loose font-medium text-lg border border-surface-high shadow-inner">
+                <div className="bg-surface-low p-10 rounded-2xl leading-loose font-medium text-lg border border-surface-high shadow-inner">
                     <h2 className="text-2xl font-bold mb-6 text-primary">제공되는 {data.title} 관련 낱말 목록</h2>
                     <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-on-surface">
                       {data.words.map((word, idx) => (
@@ -95,14 +95,14 @@ export default async function WordCategoryPage({ params }: Props) {
                     {prevData ? (
                         <Link prefetch={false} href={`/practice/word/${prevData.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">이전 단계</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevData.title}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevData.title}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
 
                     {nextData ? (
                         <Link prefetch={false} href={`/practice/word/${nextData.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">다음 단계</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextData.title}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextData.title}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
                 </nav>

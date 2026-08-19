@@ -11,7 +11,7 @@ export default function ClientTabWrapper() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-wrap justify-center gap-2 mb-16 bg-white dark:bg-zinc-900 p-1.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 w-fit mx-auto shadow-sm z-10">
+      <div className="flex flex-wrap justify-center gap-2 mb-16 bg-white p-1.5 rounded-2xl border border-zinc-200 w-fit mx-auto shadow-sm z-10">
         <TabButton active={mode === "position"} icon={<Keyboard size={16}/>} label="기초 연습 (자리/낱말)" onClick={() => setMode("position")} />
         <TabButton active={mode === "short"} icon={<PenTool size={16}/>} label="짧은 글 연습" onClick={() => setMode("short")} />
       </div>
@@ -32,7 +32,7 @@ function TabButton({ active, label, icon, onClick }: { active: boolean; label: s
       className={`px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 ${
         active 
           ? "bg-blue-600 text-white shadow-lg shadow-blue-200" 
-          : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+          : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50"
       }`}
     >
       {icon}

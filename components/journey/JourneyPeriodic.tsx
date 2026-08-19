@@ -45,7 +45,7 @@ export const JourneyPeriodic: React.FC<JourneyVizProps> = ({
         </span>
         {/* 원소기호 — 배경과의 대비가 무너지지 않게 항상 라인 색으로 명시 */}
         <span
-          className={`${compact ? "text-sm" : "text-base"} font-black leading-none -mt-1`}
+          className={`${compact ? "text-sm" : "text-base"} font-bold leading-none -mt-1`}
           style={!isCurrent ? { color } : undefined}
         >
           {station.reading}
@@ -63,7 +63,7 @@ export const JourneyPeriodic: React.FC<JourneyVizProps> = ({
       <div className="w-full">
         <div className="flex items-center gap-2 mb-2 px-1">
           <span className="text-2xl">{course.emoji}</span>
-          <span className="text-xs font-black text-zinc-300 uppercase tracking-widest">{course.title}</span>
+          <span className="text-xs font-bold text-zinc-300 uppercase tracking-widest">{course.title}</span>
         </div>
         <div className="flex gap-1.5 overflow-x-auto pb-2 -mx-1 px-1 snap-x">
           {stations.map((station, idx) => (
