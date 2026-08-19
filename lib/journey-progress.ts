@@ -21,6 +21,8 @@ export interface JourneySnapshot {
   mistakes: number;
   elapsedSeconds: number;
   updatedAt: string;
+  /** shuffle 코스의 출제 순서(스테이션 id) — 이어가기 시 같은 순서 복원 */
+  order?: string[];
 }
 
 export interface JourneyRecord {

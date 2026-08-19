@@ -52,6 +52,8 @@ export interface JourneyCourse {
   flow?: 'quiz';
   /** quiz 질문 접미사 — name 뒤에 붙는다 (예: '의 수도는?') */
   questionSuffix?: string;
+  /** true면 플레이마다 출제 순서를 무작위로 섞는다 (이어가기 시 순서 보존) */
+  shuffle?: boolean;
   /** 항목 단위 표기 (역/나라/원소) — 안내 문구에 사용 */
   unitLabel?: string;
   /** 코스별 SEO 키워드 */
@@ -609,6 +611,7 @@ export const JOURNEY_COURSES: JourneyCourse[] = [
     emoji: '🚩',
     ui: 'flags',
     flow: 'quiz',
+    shuffle: true,
     unitLabel: '나라',
     keywords: ['국기 퀴즈', '세계 국기 맞추기', '나라 맞히기', '국기 이름', '세계지리 암기', '한글타자왕'],
     groups: [

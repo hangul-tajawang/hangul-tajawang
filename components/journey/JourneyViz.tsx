@@ -6,6 +6,7 @@ import { JourneyMap } from "./JourneyMap";
 import { JourneyWorldMap } from "./JourneyWorldMap";
 import { JourneyPeriodic } from "./JourneyPeriodic";
 import { JourneyGeoMap } from "./JourneyGeoMap";
+import { JourneyFlagStage } from "./JourneyFlagStage";
 
 /**
  * 코스별 시각화 디스패처.
@@ -41,8 +42,15 @@ export function revealState(
 export const JourneyViz: React.FC<JourneyVizProps> = (props) => {
   switch (props.course.ui) {
     case "worldmap":
-    case "flags": // 국기 퀴즈도 국기 칩 시각화 재사용 (내부에서 course.ui로 분기)
       return <JourneyWorldMap {...props} />;
+    case "flags": // 국기 퀴즈 — 스테이지 중앙에 현재 국기 크게 + 아래에 수집 그리드
+      return (
+        <div className="flex flex-col gap-3">
+          <JourneyFlagStage {...props} />
+          {/* 정복한 국기가 모이는 컬렉션 그리드 (모바일 스트립에서는 공간상 스테이지만) */}
+          {props.variant === "full" && <JourneyWorldMap {...props} />}
+        </div>
+      );
     case "periodic":
       return <JourneyPeriodic {...props} />;
     case "map": // 지도 퀴즈 — 실제 세계지도에서 국가 하이라이트

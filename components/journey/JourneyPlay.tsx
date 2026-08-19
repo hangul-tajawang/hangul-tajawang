@@ -40,7 +40,18 @@ function checkWrong(normTarget: string, normInput: string): boolean {
 }
 
 export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => {
-  const stations = getCourseStations(course);
+  const baseStations = getCourseStations(course);
+
+  // shuffle 코스: 플레이마다 출제 순서를 섞는다 (id 배열로 유지, 이어가기 스냅샷에 보존)
+  const [order, setOrder] = useState<string[] | null>(null);
+  const stations = React.useMemo(() => {
+    if (!course.shuffle || !order) return baseStations;
+    const byId = new Map(baseStations.map((s) => [s.id, s]));
+    const ordered = order.map((id) => byId.get(id)).filter((s): s is (typeof baseStations)[number] => Boolean(s));
+    // 데이터 변경으로 스냅샷 순서가 어긋나면 원본 순서로 폴백
+    return ordered.length === baseStations.length ? ordered : baseStations;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [course.shuffle, order, course.id]);
 
   const [gameState, setGameState] = useState<"ready" | "playing" | "finished">("ready");
   const [stationIndex, setStationIndex] = useState(0);
@@ -145,8 +156,9 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       mistakes: mistakeCount,
       elapsedSeconds: (performance.now() - startTime.current) / 1000,
       updatedAt: new Date().toISOString(),
+      ...(course.shuffle && order ? { order } : {}),
     }),
-    []
+    [course.shuffle, order]
   );
 
   const finish = useCallback(
@@ -217,6 +229,12 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       setMistakes(resumeSnapshot.mistakes);
       startTime.current = performance.now() - resumeSnapshot.elapsedSeconds * 1000;
       setElapsed(resumeSnapshot.elapsedSeconds);
+      // shuffle 코스: 저장된 출제 순서 복원 (없으면 새로 섞음 — 구버전 스냅샷 호환)
+      if (course.shuffle) {
+        setOrder(resumeSnapshot.order && resumeSnapshot.order.length === baseStations.length
+          ? resumeSnapshot.order
+          : [...baseStations.map((s) => s.id)].sort(() => Math.random() - 0.5));
+      }
     } else {
       clearJourneySnapshot(course.id);
       setResumeSnapshot(null);
@@ -227,6 +245,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       setMistakes(0);
       startTime.current = performance.now();
       setElapsed(0);
+      // shuffle 코스: 새 판마다 새 순서
+      if (course.shuffle) setOrder([...baseStations.map((s) => s.id)].sort(() => Math.random() - 0.5));
     }
     setInputValue("");
     setHintShown(false); setChosungShown(false);
@@ -280,19 +300,10 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       {isQuiz ? (
         <>
           {course.ui === "flags" ? (
-            <div className={`flex flex-col items-center ${compact ? "gap-1 mb-1.5" : "gap-2 mb-3"}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://flagcdn.com/w160/${station.id}.png`}
-                alt="어느 나라의 국기일까요?"
-                width={compact ? 60 : 84}
-                height={compact ? 40 : 56}
-                className="rounded-md shadow-md"
-              />
-              <p className={`editorial-heading leading-snug ${compact ? "text-base text-white" : "text-xl"}`}>
-                이 국기의 나라는?
-              </p>
-            </div>
+            /* 국기는 스테이지(JourneyFlagStage) 중앙에 크게 표시 — 프롬프트는 질문만 */
+            <p className={`editorial-heading leading-snug ${compact ? "text-base text-white mb-1.5" : "text-xl mb-3"}`}>
+              🚩 이 국기의 나라는?
+            </p>
           ) : course.ui === "map" ? (
             <div className={`flex flex-col items-center ${compact ? "gap-0.5 mb-1.5" : "gap-1.5 mb-3"}`}>
               <p className={`editorial-heading leading-snug ${compact ? "text-base text-white" : "text-xl"}`}>
