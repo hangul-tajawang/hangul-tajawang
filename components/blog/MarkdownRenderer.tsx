@@ -19,10 +19,11 @@ export function MarkdownRenderer({ content }: Props) {
       rehypePlugins={[rehypeRaw]}
       components={{
         // ── Headings ────────────────────────────────────────────────────────
+        // 페이지 헤더가 이미 h1(글 제목)을 렌더하므로, 본문 마크다운의 #은 h2로 강등 (h1 중복 방지 — Bing 스캔 지적)
         h1: ({ children }) => (
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 mt-14 mb-6 leading-tight break-keep border-b border-zinc-100 pb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 mt-14 mb-6 leading-tight break-keep border-b border-zinc-100 pb-4">
             {children}
-          </h1>
+          </h2>
         ),
         h2: ({ children }) => (
           <h2 className="text-2xl sm:text-3xl font-bold text-zinc-800 mt-12 mb-5 leading-snug break-keep">
