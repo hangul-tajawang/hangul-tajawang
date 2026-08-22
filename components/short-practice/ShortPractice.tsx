@@ -173,7 +173,12 @@ export const ShortPractice: React.FC<{ initialCategory?: string }> = ({ initialC
         </div>
       </div>
 
-      <div className="mt-32 pt-16 border-t border-outline-variant/60 w-full">
+      {/* 코어 출구 — 문장 다음은 지식: 지식타자로 순환 */}
+      <a href="/journey" className="mt-28 group flex items-center gap-2 text-sm font-bold text-zinc-500 hover:text-primary transition-colors">
+        문장은 충분히 쳤다면, 이제 지식을 타자로 — 지식타자 <span className="group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+
+      <div className="mt-10 pt-16 border-t border-outline-variant/60 w-full">
         <KeyboardAdBanner />
       </div>
     </div>

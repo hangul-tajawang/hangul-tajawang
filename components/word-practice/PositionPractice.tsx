@@ -294,6 +294,10 @@ export const PositionPractice: React.FC<{ initialPhase?: "keys" | "words", initi
                     <div className="bg-surface-low p-8 rounded-2xl"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-3 tracking-widest">평균 타수</p><p className="text-4xl font-bold text-green-600">{report?.kpm}타</p></div>
                 </div>
                 <button onClick={() => setPhase("select")} className="w-full py-6 bg-on-surface text-white font-bold rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-on-surface/10">단계 선택으로 돌아가기</button>
+                {/* 코어 출구 — 자리를 뗐으면 지식을 손으로 */}
+                <a href="/journey" className="mt-5 block text-sm font-bold text-zinc-500 hover:text-primary transition-colors">
+                  자리는 익혔으니, 이제 외우면서 쳐볼까요? — 지식타자 →
+                </a>
             </div>
         </div>
       ) : (

@@ -29,8 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/practice/word',
     '/practice/short',
     '/transcription',
-    '/books',
-    '/books/submit',
     '/challenge',
     '/game',
     '/game/acid-rain',

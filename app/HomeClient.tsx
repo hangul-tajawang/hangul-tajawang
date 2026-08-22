@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { BetaFeedback } from '@/components/BetaFeedback';
 import {
   ChevronRight,
   Sparkles,
@@ -47,14 +46,6 @@ export default function HomeClient({ initialPopular }: Props) {
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-outline-variant border border-outline-variant rounded-2xl overflow-hidden">
           <PillarCard
-            href="/transcription"
-            keycap="✍️"
-            eyebrow="생각이 남는 타자"
-            title="필사"
-            description="좋은 문장을 손끝으로 옮기다 보면 문장이 생각으로 남습니다. 디지털 원고지 위에서 문학을 음미하세요."
-            cta="필사 시작하기"
-          />
-          <PillarCard
             href="/journey"
             keycap="🌏"
             eyebrow="배움이 남는 타자"
@@ -63,38 +54,21 @@ export default function HomeClient({ initialPopular }: Props) {
             cta="지식타자 시작하기"
           />
           <PillarCard
+            href="/challenge"
+            keycap="✍️"
+            eyebrow="생각이 남는 타자"
+            title="필사 챌린지"
+            description="좋은 문장을 함께 필사하고 실시간 랭킹을 겨룹니다. 내가 고른 글로 나만의 챌린지를 만들 수도 있어요."
+            cta="필사 챌린지 시작하기"
+          />
+          <PillarCard
             href="/game"
             keycap="🎮"
             eyebrow="실력이 남는 타자"
-            title="게임"
+            title="한글 게임"
             description="산성비, 성문방어, 글자 계단. 좋은 게임에 몰입하는 사이 타자 실력이 조용히 쌓입니다."
             cta="게임 즐기기"
           />
-        </div>
-      </section>
-
-      {/* Feature Section — 3대 축을 뒷받침하는 도구들: 카드 대신 괘선 리스트 */}
-      <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24">
-        <div className="divide-y divide-outline-variant border-y border-outline-variant">
-          {[
-            { href: '/practice', key: '연', title: '정교한 연습장', description: '자리·낱말·짧은 글 — 타이포그래피 미학을 담은 몰입형 연습 환경' },
-            { href: '/quiz', key: '맞', title: '맞춤법 인사이트', description: '어른도 헷갈리는 맞춤법을 퀴즈로 풀고 완벽한 해설로 다지기' },
-            { href: '/challenge', key: '함', title: '오픈 챌린지', description: '내가 만든 글로 함께 필사하는 커뮤니티와 실시간 랭킹' },
-          ].map((f) => (
-            <Link
-              key={f.href}
-              prefetch={false}
-              href={f.href}
-              className="group flex items-center gap-6 py-6 px-2 hover:bg-surface-low transition-colors"
-            >
-              <span className="keycap w-12 h-12 text-xl shrink-0 group-hover:border-primary group-hover:text-primary transition-colors">{f.key}</span>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{f.title}</h3>
-                <p className="mt-0.5 text-sm text-zinc-600 leading-relaxed break-keep">{f.description}</p>
-              </div>
-              <ChevronRight size={18} className="text-zinc-400 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
-            </Link>
-          ))}
         </div>
       </section>
 
@@ -207,6 +181,33 @@ export default function HomeClient({ initialPopular }: Props) {
         </div>
       </section>
 
+      {/* 도구 스트립 — 코어를 받치는 도구들 (검색 유입 82%의 유통망, 삭제 금지) */}
+      <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24">
+        <p className="text-zinc-400 font-bold text-[10px] uppercase tracking-[0.4em] mb-4">Tools · 도구</p>
+        <div className="divide-y divide-outline-variant border-y border-outline-variant">
+          {[
+            { href: '/practice', key: '연', title: '타자 연습장', description: '자리·낱말·짧은 글 — 기본기를 다지는 몰입형 연습 환경' },
+            { href: '/test', key: '초', title: '1분 타자 테스트', description: '지금 내 타수를 1분 만에 측정하고 등급 확인' },
+            { href: '/transcription', key: '필', title: '원고지 필사', description: '디지털 원고지 위에 긴 글을 또박또박 옮겨 쓰기' },
+            { href: '/quiz', key: '맞', title: '맞춤법 퀴즈', description: '어른도 헷갈리는 맞춤법을 퀴즈로 풀고 해설로 다지기' },
+          ].map((f) => (
+            <Link
+              key={f.href}
+              prefetch={false}
+              href={f.href}
+              className="group flex items-center gap-6 py-6 px-2 hover:bg-surface-low transition-colors"
+            >
+              <span className="keycap w-12 h-12 text-xl shrink-0 group-hover:border-primary group-hover:text-primary transition-colors">{f.key}</span>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{f.title}</h3>
+                <p className="mt-0.5 text-sm text-zinc-600 leading-relaxed break-keep">{f.description}</p>
+              </div>
+              <ChevronRight size={18} className="text-zinc-400 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Brand Story Section */}
       <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-24 md:py-32">
         <div className="glass-card p-8 md:p-16 lg:p-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 relative overflow-hidden">
@@ -279,7 +280,6 @@ export default function HomeClient({ initialPopular }: Props) {
         <KeyboardAdBanner />
       </div>
 
-      <BetaFeedback />
     </div>
   );
 }
@@ -304,10 +304,10 @@ function HeroSection() {
         <div className="flex flex-col items-center gap-6 w-full">
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4">
             <Link prefetch={false}
-              href="/practice"
+              href="/journey"
               className="px-9 md:px-11 py-4 md:py-5 bg-primary text-white text-lg font-semibold rounded-xl transition-all hover:bg-blue-700 active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              지금 시작하기 <ChevronRight size={20} />
+              지식타자 시작하기 <ChevronRight size={20} />
             </Link>
             <Link prefetch={false}
               href="/game"
@@ -317,7 +317,10 @@ function HeroSection() {
             </Link>
           </div>
           <p className="text-xs text-zinc-500 tracking-wide">
-            실시간으로 <span className="text-primary font-semibold">나의 성장</span>을 시각화합니다
+            좋은 문장을 함께 쓰고 싶다면{' '}
+            <Link prefetch={false} href="/challenge" className="text-primary font-semibold underline underline-offset-4 decoration-primary/30 hover:decoration-primary">
+              필사 챌린지 →
+            </Link>
           </p>
         </div>
       </div>

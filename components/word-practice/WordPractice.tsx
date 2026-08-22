@@ -133,6 +133,10 @@ export const WordPractice: React.FC = () => {
             <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
           </div>
           <button onClick={reset} className="w-full py-5 bg-zinc-900 text-white font-bold rounded-2xl transition-all hover:scale-105 flex items-center justify-center gap-2"><RotateCcw size={20} /> 다시 선택하기</button>
+          {/* 코어 출구 — 낱말을 넘어 지식을 외우는 다음 단계 */}
+          <a href="/journey" className="mt-4 block text-sm font-bold text-zinc-500 hover:text-primary transition-colors">
+            낱말은 뗐다면, 이제 지식을 타자로 — 지식타자 →
+          </a>
         </div>
       </div>
     );

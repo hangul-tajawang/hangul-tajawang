@@ -66,7 +66,6 @@ export default function TermsOfService() {
               <li><strong>게임:</strong> 타자 실력을 겨루는 게임 및 점수 기록</li>
               <li><strong>필사·서재:</strong> 글을 따라 쓰는 필사 기능과 개인 서재(필사 기록) 보관</li>
               <li><strong>챌린지:</strong> 이용자가 직접 글·댓글·좋아요 등을 등록하는 참여형 콘텐츠</li>
-              <li><strong>책방·오리지널 콘텐츠:</strong> 운영자가 제공하거나 투고를 통해 게재되는 읽기·필사용 콘텐츠</li>
             </ul>
           </section>
 
@@ -99,21 +98,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제5조 (오리지널 콘텐츠 및 원고 투고)
-            </h2>
-            <ul className="list-disc ml-6 space-y-2">
-              <li>이용자(작가)는 이메일을 통해 서비스에 원고를 투고할 수 있으며, <strong>투고작의 저작권은 작가에게 귀속</strong>됩니다.</li>
-              <li>서비스는 작가의 게재 허락에 기반하여 선정된 원고를 서비스 내에 게재합니다.</li>
-              <li>선정 시 필명이 함께 게재되며, 작가가 동의한 경우에 한하여 SNS·블로그 링크가 함께 표기될 수 있습니다.</li>
-              <li>작가의 요청이 있을 경우 서비스는 해당 콘텐츠의 게재를 중단합니다.</li>
-              <li>미선정 원고는 외부에 공개하거나 별도의 용도로 이용하지 않습니다.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
-              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제6조 (서비스의 지적재산권)
+              제5조 (서비스의 지적재산권)
             </h2>
             <p>서비스가 제공하는 디자인, UI/UX, 소프트웨어, 상표 및 운영자가 제작한 콘텐츠 등에 대한 지적재산권은 운영자에게 귀속됩니다. 이용자는 서비스를 이용함으로써 얻은 정보를 운영자 또는 권리자의 사전 승낙 없이 복제·송신·출판·배포할 수 없습니다.</p>
           </section>
@@ -121,7 +106,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제7조 (광고)
+              제6조 (광고)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
               <li>서비스는 운영을 위하여 Google 애드센스(AdSense) 등을 통한 광고를 게재할 수 있습니다.</li>
@@ -131,7 +116,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제8조 (면책조항)
+              제7조 (면책조항)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
               <li>서비스는 무료로 제공되며, "있는 그대로(AS-IS)" 제공됩니다.</li>
@@ -143,7 +128,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제9조 (약관의 변경)
+              제8조 (약관의 변경)
             </h2>
             <p>운영자는 관련 법령을 위반하지 않는 범위에서 본 약관을 변경할 수 있으며, 약관을 변경할 경우 변경 사항의 시행 7일 전부터 서비스 내 공지를 통하여 고지합니다. 이용자에게 불리한 중요한 변경의 경우에는 최소 30일 전에 고지합니다.</p>
           </section>
@@ -151,7 +136,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제10조 (준거법 및 관할)
+              제9조 (준거법 및 관할)
             </h2>
             <p>본 약관은 대한민국 법령에 따라 규율되고 해석됩니다. 서비스 이용과 관련하여 분쟁이 발생할 경우, 운영자와 이용자는 상호 협의하여 해결하며, 협의가 이루어지지 않을 경우 관계 법령 및 상관례에 따릅니다.</p>
           </section>

@@ -37,7 +37,7 @@ export default function GameHubPage() {
     <div className="w-full max-w-4xl mx-auto py-12 px-4">
       <div className="text-center mb-16">
         <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase mb-3">Games</p>
-        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-4">한글 게임 센터</h1>
+        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-4">한글 타자 게임 센터</h1>
         <p className="text-zinc-500 font-medium text-lg">타자 연습을 게임처럼 신나게 즐겨보세요!</p>
       </div>
 

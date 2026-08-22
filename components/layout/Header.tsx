@@ -5,7 +5,8 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, Zap, Newspaper, Timer, Store, TramFront } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, ChevronDown, Zap, Newspaper, Timer, TramFront, Wrench } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
 
@@ -121,14 +122,14 @@ export const Header: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-                <MobileNavItem href="/test" icon={<Timer size={20} />} label="타자 속도 테스트" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="긴 글 연습" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/books" icon={<Store size={20} />} label="책방" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} highlight />
                 <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} highlight />
-                <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                <p className="pt-4 pb-1 px-2 text-[11px] font-bold uppercase tracking-widest text-zinc-400">도구</p>
+                <MobileNavItem href="/test" icon={<Timer size={20} />} label="1분 타자 테스트" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="원고지 필사" onClick={() => setIsMobileMenuOpen(false)} />
+                <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
                 <MobileNavItem href="/blog" icon={<Newspaper size={20} />} label="블로그" onClick={() => setIsMobileMenuOpen(false)} />
             </div>
 
@@ -166,17 +167,12 @@ export const Header: React.FC = () => {
                 <span className="serif-display text-xl whitespace-nowrap">한글타자왕</span>
             </Link>
 
-            {/* 데스크톱 내비(텍스트 전용): 1024px 미만은 햄버거, 1024~1151px은 핵심 7개, 1152px~ 전체 10개 */}
-            <nav className="hidden lg:flex items-center gap-0.5 min-w-0">
-                <NavButton label="타자 테스트" href="/test" />
-                <NavButton label="타자 연습장" href="/practice" />
-                <NavButton label="긴 글 연습" href="/transcription" />
-                <NavButton label="책방" href="/books" />
-                <NavButton label="한글 게임" href="/game" highlight />
+            {/* 데스크톱 내비: 코어 3 + 도구 드롭다운 (URL은 전부 기존 그대로) */}
+            <nav className="hidden lg:flex items-center gap-1 min-w-0">
                 <NavButton label="지식타자" href="/journey" highlight />
-                <NavButton label="맞춤법 퀴즈" href="/quiz" className="hidden min-[1152px]:flex" />
                 <NavButton label="필사 챌린지" href="/challenge" highlight />
-                <NavButton label="블로그" href="/blog" className="hidden min-[1152px]:flex" />
+                <NavButton label="한글 게임" href="/game" highlight />
+                <ToolsDropdown />
             </nav>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -213,9 +209,109 @@ export const Header: React.FC = () => {
         </div>
       </div>
       {mounted && isMobileMenuOpen && createPortal(mobileMenuContent, document.body)}
+      {mounted && <BottomTabBar />}
     </header>
   );
 };
+
+/* 도구 링크 — 코어(챌린지·게임·지식타자)를 받치는 유통망. 삭제 금지, 강등만. */
+const TOOL_LINKS = [
+  { href: "/test", label: "1분 타자 테스트" },
+  { href: "/practice", label: "타자 연습장" },
+  { href: "/transcription", label: "원고지 필사" },
+  { href: "/quiz", label: "맞춤법 퀴즈" },
+  { href: "/blog", label: "블로그" },
+];
+
+function ToolsDropdown() {
+  return (
+    <div className="relative group">
+      <button
+        aria-haspopup="true"
+        className="serif-display flex items-center gap-1 px-2.5 py-2 text-sm whitespace-nowrap rounded-lg text-zinc-600 hover:text-primary hover:bg-surface-low transition-all"
+      >
+        도구 <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+      </button>
+      {/* hover/포커스로 열리는 패널 — pt-2로 버튼과 패널 사이 hover 끊김 방지 */}
+      <div className="absolute right-0 top-full pt-2 hidden group-hover:block group-focus-within:block z-50">
+        <div className="w-52 paper-card p-2 flex flex-col">
+          {TOOL_LINKS.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              prefetch={false}
+              className="px-3 py-2.5 rounded-xl text-sm font-bold text-zinc-700 hover:text-primary hover:bg-surface-low transition-colors"
+            >
+              {t.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* 모바일 하단 고정 탭 — 코어 3 + 도구 시트. 허브 화면에서만 노출(플레이 화면 가림 방지). */
+const BOTTOM_TAB_PATHS = new Set(["/", "/challenge", "/game", "/journey", "/test", "/practice", "/transcription", "/quiz", "/blog", "/mypage"]);
+
+function BottomTabBar() {
+  const pathname = usePathname();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const visible = BOTTOM_TAB_PATHS.has(pathname);
+
+  useEffect(() => {
+    if (!visible) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const apply = () => { document.body.style.paddingBottom = mq.matches ? "" : "76px"; };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => { mq.removeEventListener("change", apply); document.body.style.paddingBottom = ""; };
+  }, [visible]);
+
+  useEffect(() => { setSheetOpen(false); }, [pathname]);
+
+  if (!visible) return null;
+
+  const tabs = [
+    { href: "/journey", label: "지식타자", icon: <TramFront size={20} /> },
+    { href: "/challenge", label: "챌린지", icon: <Users size={20} /> },
+    { href: "/game", label: "게임", icon: <Gamepad2 size={20} /> },
+  ];
+
+  return (
+    <>
+      {sheetOpen && (
+        <div className="fixed inset-0 z-[9998] lg:hidden" onClick={() => setSheetOpen(false)}>
+          <div className="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" />
+          <div className="absolute bottom-[72px] left-3 right-3 paper-card p-3 grid grid-cols-2 gap-1 animate-in slide-in-from-bottom-4 duration-200" onClick={(e) => e.stopPropagation()}>
+            {TOOL_LINKS.map((t) => (
+              <Link key={t.href} href={t.href} prefetch={false} onClick={() => setSheetOpen(false)} className="px-4 py-3.5 rounded-xl text-sm font-bold text-zinc-700 hover:text-primary hover:bg-surface-low transition-colors">
+                {t.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      <nav className="fixed bottom-0 left-0 right-0 z-[9999] lg:hidden bg-surface-lowest/95 backdrop-blur-md border-t border-outline-variant pb-[env(safe-area-inset-bottom)]" aria-label="주요 메뉴">
+        <div className="grid grid-cols-4 h-[68px]">
+          {tabs.map((t) => {
+            const active = pathname === t.href;
+            return (
+              <Link key={t.href} href={t.href} prefetch={false} className={`flex flex-col items-center justify-center gap-1 text-[11px] font-bold transition-colors ${active ? "text-primary" : "text-zinc-500"}`}>
+                {t.icon}
+                {t.label}
+              </Link>
+            );
+          })}
+          <button onClick={() => setSheetOpen((v) => !v)} className={`flex flex-col items-center justify-center gap-1 text-[11px] font-bold transition-colors ${sheetOpen ? "text-primary" : "text-zinc-500"}`}>
+            <Wrench size={20} />
+            도구
+          </button>
+        </div>
+      </nav>
+    </>
+  );
+}
 
 function NavButton({ label, href, className = "flex", highlight = false }: { label: string; href: string; className?: string; highlight?: boolean }) {
   return (

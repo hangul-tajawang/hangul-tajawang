@@ -259,6 +259,22 @@ export const SpeedTest: React.FC = () => {
 
         <div className="mt-6 flex flex-col gap-3">
           <button onClick={startTest} className="w-full py-5 bg-zinc-900 text-white text-lg font-bold rounded-2xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"><RotateCcw size={20} /> 다시 측정하기</button>
+
+          {/* 측정 이후의 동선 — 코어 3개로 연결 */}
+          <Link prefetch={false} href="/journey" className="group paper-card p-5 flex items-center justify-between hover:border-primary/50 transition-colors">
+            <div>
+              <p className="font-bold text-on-surface group-hover:text-primary transition-colors">측정은 끝. 이제 손으로 외워볼까?</p>
+              <p className="text-sm text-zinc-500 mt-0.5">조선 왕조·세계 수도를 타자로 정복하는 지식타자</p>
+            </div>
+            <ChevronRight size={18} className="text-zinc-400 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+          </Link>
+          <Link prefetch={false} href="/challenge" className="group paper-card p-5 flex items-center justify-between hover:border-primary/50 transition-colors">
+            <div>
+              <p className="font-bold text-on-surface group-hover:text-primary transition-colors">이 속도로 필사 챌린지 랭킹에 도전</p>
+              <p className="text-sm text-zinc-500 mt-0.5">{result.kpm}타면 충분해요 — 좋은 문장으로 실전처럼</p>
+            </div>
+            <ChevronRight size={18} className="text-zinc-400 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
+          </Link>
           <div className="grid grid-cols-2 gap-3">
             <Link prefetch={false} href="/practice" className="py-4 bg-surface-low rounded-2xl font-bold text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Trophy size={16} /> 타수 올리는 연습 <ChevronRight size={14} /></Link>
             <Link prefetch={false} href="/game/typing-race" className="py-4 bg-surface-low rounded-2xl font-bold text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Gamepad2 size={16} /> 타자 레이스 도전 <ChevronRight size={14} /></Link>

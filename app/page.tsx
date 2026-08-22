@@ -52,7 +52,7 @@ const HOME_FAQ = [
   },
   {
     q: '어떤 연습 모드가 있나요?',
-    a: '자리 연습(키보드 위치 익히기), 낱말 연습(플래시카드 방식), 짧은 글 연습(명언·속담·힐링 문장), 긴 글 원고지 필사(윤동주·김소월 등 한국 문학), 산성비·디펜스 등 타자 게임, 한글 맞춤법 퀴즈, 그리고 다른 사용자가 만든 글로 연습하는 오픈 챌린지가 있습니다.',
+    a: '자리 연습(키보드 위치 익히기), 낱말 연습(플래시카드 방식), 짧은 글 연습(명언·속담·힐링 문장), 긴 글 원고지 필사(윤동주·김소월 등 한국 문학), 산성비·디펜스 등 타자 게임, 한글 맞춤법 퀴즈, 그리고 다른 사용자가 만든 글로 함께 연습하는 필사 챌린지가 있습니다.',
   },
 ];
 
@@ -122,12 +122,12 @@ export default async function Home() {
 
         <nav aria-label="주요 메뉴" className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-16">
           {[
+            { href: '/journey', label: '지식타자 (손으로 외우는 암기)' },
+            { href: '/challenge', label: '필사 챌린지 (함께 쓰고 랭킹)' },
+            { href: '/game/acid-rain', label: '산성비 타자 게임' },
             { href: '/test', label: '1분 타자 속도 테스트' },
             { href: '/practice', label: '타자 연습 (자리/낱말/짧은글)' },
             { href: '/transcription', label: '긴 글 원고지 필사' },
-            { href: '/challenge', label: '유저 창작 필사 챌린지' },
-            { href: '/game/acid-rain', label: '산성비 타자 게임' },
-            { href: '/journey', label: '지식타자 (손으로 외우는 암기)' },
             { href: '/quiz', label: '한글 맞춤법 퀴즈' },
             { href: '/blog', label: '타자 연습 가이드 블로그' },
           ].map((item) => (

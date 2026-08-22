@@ -103,11 +103,6 @@ export default function PrivacyPolicy() {
                 데이터를 이용자 계정과 연동하여 저장합니다.
               </li>
               <li>
-                <strong>원고 투고 정보 (선택적):</strong> 오리지널 콘텐츠 투고
-                시 이메일을 통해 접수되는 이메일 주소, 필명, 원고 내용을
-                수집합니다. (제6조 참고)
-              </li>
-              <li>
                 <strong>자동 수집 항목:</strong> 서비스 이용 과정에서 쿠키, 방문
                 일시, 기기·브라우저 정보, 광고 식별자 등이 자동으로 생성·수집될
                 수 있습니다. (제5조 참고)
@@ -150,10 +145,6 @@ export default function PrivacyPolicy() {
                 <strong>맞춤형 광고 제공:</strong> 광고 게재 및 서비스 운영에
                 필요한 범위 내 광고 제공
               </li>
-              <li>
-                <strong>원고 투고 처리:</strong> 게재 검토, 투고자 연락,
-                보상(기프티콘 등) 발송
-              </li>
             </ul>
           </section>
 
@@ -171,11 +162,6 @@ export default function PrivacyPolicy() {
               <li>
                 <strong>회원 정보 및 이용 기록:</strong> 회원 탈퇴 시까지
                 보유하며, 탈퇴 시 지체 없이 파기합니다.
-              </li>
-              <li>
-                <strong>원고 투고 정보:</strong> 게재 검토 및 보상 발송 목적이
-                달성된 후 파기합니다. 미선정 원고는 외부에 공개·이용하지
-                않습니다.
               </li>
               <li>
                 <strong>관련 법령에 따른 보존:</strong> 단, 관계 법령에서 일정
@@ -333,31 +319,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제6조 (원고 투고 관련 개인정보 처리)
-            </h2>
-            <ul className="list-disc ml-6 space-y-2">
-              <li>
-                오리지널 콘텐츠 투고는 이메일(withanalog@gmail.com) 접수로
-                진행되며, 이메일 주소·필명·원고를 수집합니다.
-              </li>
-              <li>
-                수집한 정보는 게재 검토, 투고자 연락, 보상(기프티콘 등) 발송의
-                목적으로만 이용합니다.
-              </li>
-              <li>
-                게재가 선정된 경우 필명과, 작가가 동의한 경우에 한하여
-                SNS·블로그 링크를 함께 게재할 수 있습니다.
-              </li>
-              <li>
-                미선정 원고는 외부에 공개하거나 별도의 용도로 이용하지 않습니다.
-              </li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
-              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제7조 (만 14세 미만 아동의 개인정보)
+              제6조 (만 14세 미만 아동의 개인정보)
             </h2>
             <p>
               서비스는 만 14세 미만 아동의 개인정보를 수집할 의도가 없습니다. 만
@@ -369,7 +331,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제8조 (이용자의 권리와 행사 방법)
+              제7조 (이용자의 권리와 행사 방법)
             </h2>
             <p className="mb-4">
               이용자는 언제든지 자신의 개인정보에 대해 다음의 권리를 행사할 수
@@ -391,7 +353,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제9조 (개인정보의 파기 절차 및 방법)
+              제8조 (개인정보의 파기 절차 및 방법)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
               <li>
@@ -408,7 +370,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제10조 (개인정보 보호책임자 및 문의처)
+              제9조 (개인정보 보호책임자 및 문의처)
             </h2>
             <p className="mb-4">
               개인정보 처리에 관한 문의, 불만 처리, 피해 구제 등은 아래 개인정보
@@ -433,7 +395,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제11조 (고지의 의무)
+              제10조 (고지의 의무)
             </h2>
             <p>
               본 개인정보 처리방침의 내용 추가, 삭제 및 수정이 있을 경우, 변경

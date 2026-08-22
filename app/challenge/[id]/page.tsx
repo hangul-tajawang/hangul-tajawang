@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
     if (!content) return { title: "글을 찾을 수 없습니다." };
 
     return {
-      title: `${content.title} 타자 필사 연습 | 유저 창작글`,
+      title: `${content.title} 타자 필사 연습 | 한글타자왕`,
       description: `${content.profiles?.nickname || '익명'} 작가의 글 "${content.title}"을(를) 필사하며 타자 실력을 키워보세요. 현재 ${content.complete_count}명이 함께 도전 중입니다!`,
       keywords: [
         content.title,

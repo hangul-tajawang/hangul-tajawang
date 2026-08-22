@@ -134,7 +134,7 @@ export default async function AuthorPage({ params }: Props) {
       )}
 
       <div className="mt-14 text-center">
-        <Link prefetch={false} href="/books" className="text-sm font-bold text-zinc-400 hover:text-primary transition-colors">← 책방으로 돌아가기</Link>
+        <Link prefetch={false} href="/transcription" className="text-sm font-bold text-zinc-400 hover:text-primary transition-colors">← 원고지 필사로 돌아가기</Link>
       </div>
     </div>
   );

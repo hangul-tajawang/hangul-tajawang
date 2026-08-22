@@ -55,6 +55,13 @@ const MODES = [
     description: "시구, 명언, 가사 등 짧은 문장을 연습합니다.",
     level: "실전",
   },
+  {
+    href: "/journey",
+    key: "지",
+    title: "지식으로 연습하기",
+    description: "조선 왕조·세계 수도·주기율표 — 타자 연습하며 지식까지 외웁니다.",
+    level: "지식타자",
+  },
 ];
 
 export default function PracticePage() {
@@ -91,18 +98,18 @@ export default function PracticePage() {
         ))}
       </div>
 
-      {/* 긴 글 연습 안내 — 잉크 배너 */}
+      {/* 원고지 필사 안내 — 잉크 배너 */}
       <div className="mt-16 p-8 md:p-10 bg-on-surface rounded-2xl text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <h2 className="serif-display text-2xl font-bold mb-2">긴 글 연습도 해볼까요?</h2>
-          <p className="text-zinc-400">원고지에 써내려가는 감성 필사, 긴 글 연습 페이지로 이동합니다.</p>
+          <h2 className="serif-display text-2xl font-bold mb-2">원고지 필사도 해볼까요?</h2>
+          <p className="text-zinc-400">원고지에 써내려가는 감성 필사, 원고지 필사 페이지로 이동합니다.</p>
         </div>
         <Link
           prefetch={false}
           href="/transcription"
           className="px-8 py-4 bg-white text-on-surface font-semibold rounded-xl hover:bg-zinc-100 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0"
         >
-          긴 글 연습 바로가기 <ChevronRight size={20} />
+          원고지 필사 바로가기 <ChevronRight size={20} />
         </Link>
       </div>
 

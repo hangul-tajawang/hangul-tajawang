@@ -75,6 +75,10 @@ export const SpellingQuiz: React.FC<Props> = ({ question, nextQuestionId, curren
           >
             퀴즈 메인으로 돌아가기
           </button>
+          {/* 코어 출구 — 퀴즈 다음은 손 암기 */}
+          <a href="/journey" className="mt-4 block text-sm font-bold text-zinc-500 hover:text-primary transition-colors">
+            암기는 손이 제일 오래 기억해요 — 지식타자로 이어가기 →
+          </a>
         </div>
       </div>
     );
@@ -146,12 +150,16 @@ export const SpellingQuiz: React.FC<Props> = ({ question, nextQuestionId, curren
               <p className="text-zinc-700 text-sm leading-relaxed mb-2 font-medium">{question.explanation}</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={handleNext}
             className="w-full py-4 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-md text-lg"
           >
             {nextQuestionId ? "다음 퀴즈로 이동" : "최종 결과 보기"}
           </button>
+          {/* 코어 출구 — 맞춤법 다음은 지식 암기: 지식타자 동선 */}
+          <a href="/journey" className="text-center text-sm font-bold text-blue-700/80 hover:text-blue-700 hover:underline underline-offset-4 transition-colors">
+            맞춤법처럼 헷갈리는 건 손으로 외우는 게 답 — 지식타자로 굳히기 →
+          </a>
         </div>
       </div>
     </div>

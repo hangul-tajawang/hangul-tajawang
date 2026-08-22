@@ -537,6 +537,13 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
           <Link prefetch={false} href="/library" className="mt-8 block text-center text-white font-bold text-sm md:text-base hover:underline underline-offset-4">
             <BookOpen size={18} className="inline-block mr-1.5" /> 방금 새긴 책이 서재에 꽂혔습니다 · 내 서재 보기 →
           </Link>
+          {/* 코어 출구 — 원고지 필사를 챌린지 생산 도구로 */}
+          <Link prefetch={false} href="/challenge" className="mt-4 block w-full py-5 bg-white/10 text-white text-center font-bold rounded-2xl hover:bg-white/20 transition-all">
+            내가 고른 글로 필사 챌린지 만들기 → 다른 사람들과 함께 쓰기
+          </Link>
+          <Link prefetch={false} href="/journey" className="mt-3 block text-center text-white/80 font-bold text-sm hover:text-white hover:underline underline-offset-4">
+            문장 다음은 지식 — 조선 왕조·세계 수도를 타자로 외우는 지식타자 →
+          </Link>
           <div className="mt-6 flex gap-6">
               <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all">연습 종료</button>
               <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-bold rounded-2xl shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>

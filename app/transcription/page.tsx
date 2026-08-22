@@ -106,25 +106,21 @@ export default function TranscriptionPage() {
         </span>
       </Link>
 
-      {/* 책방으로 유도하는 가벼운 배너 */}
+
+      {/* 코어 유도 — 필사 오는 사람에게 지식타자 소개 */}
       <Link
         prefetch={false}
-        href="/books"
+        href="/journey"
         className="group flex items-center gap-4 mb-10 px-6 py-5 rounded-2xl bg-surface-low border border-surface-high hover:border-primary/50 transition-all"
       >
-        <div className="shrink-0 w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-          <Store size={22} />
-        </div>
+        <div className="shrink-0 w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl" aria-hidden>🌏</div>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-on-surface break-keep">책방에서 책을 골라볼까요?</p>
+          <p className="font-bold text-on-surface break-keep">외우면서 치는 타자도 있어요 — 지식타자</p>
           <p className="text-sm font-medium text-zinc-500 break-keep">
-            표지를 눌러 미리 읽어보고, 마음에 드는 책을 골라 새겨보세요.
+            조선 왕조·세계 수도·주기율표를 타자로 정복하며 외웁니다.
           </p>
         </div>
-        <ArrowRight
-          size={18}
-          className="shrink-0 text-primary group-hover:translate-x-1 transition-transform"
-        />
+        <ArrowRight size={18} className="shrink-0 text-primary group-hover:translate-x-1 transition-transform" />
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

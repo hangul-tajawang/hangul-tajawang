@@ -187,7 +187,9 @@ export const blogPosts: BlogPost[] = [
 
 평균에 연연할 필요는 없지만, 기준점이 있으면 연습의 방향이 잡힙니다. 지금 바로 내 타수를 측정해보고, +100타 목표를 세워보세요.
 
-> **[⏱️ 지금 내 타자 속도 측정하러 가기](/practice)**
+> **[⏱️ 1분 타자 테스트로 지금 내 속도 측정하기](/test)**
+
+연습이 지루해질 때쯤엔 [지식타자](/journey)를 추천합니다. 조선 왕조·세계 수도를 타자로 외우는 방식이라, 같은 시간을 쳐도 타수와 지식이 함께 남습니다.
 `
   },
   {
@@ -307,6 +309,8 @@ export const blogPosts: BlogPost[] = [
 # 산성비 게임의 추억: 타자 게임이 진짜 타자 실력에 도움이 될까?
 
 컴퓨터 교실에서 몰래 하던 산성비 게임을 기억하시나요? 하늘에서 떨어지는 단어를 바닥에 닿기 전에 쳐내던 그 게임 말입니다. 재미로 하던 게임이었지만, 사실 산성비는 훈련 이론 관점에서 꽤 정교하게 설계된 연습 도구였습니다.
+
+> 🎮 **바로 플레이하고 싶다면** — 한글타자왕에서 [산성비 게임을 무료로 즐길 수 있습니다 →](/game/acid-rain) 설치 없이 브라우저에서 바로 시작됩니다.
 
 <div style="display:flex;justify-content:center;margin:2rem 0;">
   <svg width="480" height="300" viewBox="0 0 480 300" style="max-width:100%;height:auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="산성비 게임의 원리를 나타낸 그림">

@@ -121,6 +121,20 @@ export default async function BlogPostPage({ params }: Props) {
             <MarkdownRenderer content={post.content} />
           </main>
 
+          {/* 코어 유도 — 모든 글 하단에서 지식타자로 */}
+          <Link
+            prefetch={false}
+            href="/journey"
+            className="group mt-12 flex items-center gap-5 p-6 sm:p-8 rounded-2xl bg-surface-lowest border border-outline-variant hover:border-primary/50 transition-all"
+          >
+            <span className="shrink-0 text-4xl" aria-hidden>🌏</span>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-lg text-on-surface break-keep group-hover:text-primary transition-colors">읽는 것만으론 안 남습니다 — 지식타자</p>
+              <p className="text-sm text-zinc-600 break-keep mt-1">조선 왕조·세계 수도·주기율표를 타자로 치면서 외우는 무료 암기 타자. 눈 말고 손으로 외워보세요.</p>
+            </div>
+            <span className="shrink-0 text-primary font-bold text-sm group-hover:translate-x-1 transition-transform">시작 →</span>
+          </Link>
+
           <div className="mt-16 pt-16 border-t border-outline-variant/60">
             <KeyboardAdBanner />
           </div>

@@ -15,6 +15,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // 책방 폐지 — 잔여 검색 유입·북마크를 원고지 필사로 영구 이동 (연재는 /transcription/series에 유지)
+        source: '/books/:path*',
+        destination: '/transcription',
+        permanent: true,
+      },
+      {
+        source: '/books',
+        destination: '/transcription',
+        permanent: true,
+      },
+      {
         // 저작권 이슈로 삭제된 K-POP 카테고리 → 속담/격언으로 영구 이동
         source: '/practice/short/kpop',
         destination: '/practice/short/proverb',
