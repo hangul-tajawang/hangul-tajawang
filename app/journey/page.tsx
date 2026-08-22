@@ -59,7 +59,7 @@ export default function JourneyHubPage() {
       </div>
 
       {/* 코스 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+      <div className="hub-panel grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
         {orderedCourses.map((course) => {
           const stations = getCourseStations(course);
           return (

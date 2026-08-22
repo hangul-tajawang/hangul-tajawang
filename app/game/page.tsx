@@ -41,7 +41,7 @@ export default function GameHubPage() {
         <p className="text-zinc-500 font-medium text-lg">타자 연습을 게임처럼 신나게 즐겨보세요!</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="hub-panel grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* 1. 산성비 */}
         <GameCard
           href="/game/acid-rain"

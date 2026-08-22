@@ -145,12 +145,17 @@
     word-break: keep-all;
   }
 
-  /* 팝 카드 — 흰 카드 + 페리윙클 하드섀도(blur 없는 오프셋) */
+  /* 팝 카드 — 흰 카드 + 헤어라인 + 페리윙클 하드섀도(blur 없는 오프셋) */
   .glass-card {
-    @apply bg-surface-lowest rounded-[24px] border-0 shadow-[6px_6px_0_var(--pop-shadow)];
+    @apply bg-surface-lowest rounded-[24px] border border-outline-variant shadow-[6px_6px_0_var(--pop-shadow)];
   }
   .paper-card {
-    @apply bg-surface-lowest rounded-[24px] border-0 shadow-[6px_6px_0_var(--pop-shadow)];
+    @apply bg-surface-lowest rounded-[24px] border border-outline-variant shadow-[6px_6px_0_var(--pop-shadow)];
+  }
+
+  /* 허브 패널 — 거의 흰 배경 위에서 카드 구역을 받쳐주는 연파랑 판 */
+  .hub-panel {
+    @apply bg-surface-low rounded-[36px] p-6 md:p-10;
   }
 
   /* 과거 그라데이션 → 브랜드 블루 솔리드 (클래스명 유지로 30개 사용처 무수정 전환) */
@@ -186,6 +191,7 @@
   /* 키캡 카드 — 카드 자체가 거대한 키(흰 카드 + 하드섀도, 호버 시 눌리며 백라이트) */
   .keycap-card {
     @apply relative rounded-[28px] select-none bg-surface-lowest;
+    border: 1px solid var(--outline-variant);
     box-shadow:
       0 10px 0 var(--pop-shadow),
       0 16px 16px rgba(36, 71, 245, 0.12);
