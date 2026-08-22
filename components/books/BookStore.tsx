@@ -63,12 +63,12 @@ function SeriesShelfCover({
         />
         {/* 내 진행 리본 (마운트 후 로컬 서재 기록 기준) */}
         {progress?.allDone && (
-          <span className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-green-600/90 px-2 py-1 text-[10px] font-black text-white shadow-lg backdrop-blur-sm">
+          <span className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-green-600/90 px-2 py-1 text-[10px] font-bold text-white shadow-lg backdrop-blur-sm">
             <CheckCircle2 size={11} /> 완필
           </span>
         )}
         {reading && (
-          <span className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-primary/90 px-2 py-1 text-[10px] font-black text-white shadow-lg backdrop-blur-sm">
+          <span className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-primary/90 px-2 py-1 text-[10px] font-bold text-white shadow-lg backdrop-blur-sm">
             <Feather size={11} />
             {progress.inProgressPercent > 0
               ? `${progress.nextEpisodeNumber}화 · ${progress.inProgressPercent}%`
@@ -109,7 +109,7 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
 
   return (
     <div className="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center overflow-y-auto bg-zinc-950/80 backdrop-blur-md sm:p-4">
-      <div className="relative w-full sm:max-w-lg bg-[#faf6ec] dark:bg-zinc-900 rounded-t-[1.5rem] sm:rounded-[2rem] shadow-2xl animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 overflow-hidden max-h-[92vh] flex flex-col">
+      <div className="relative w-full sm:max-w-lg bg-[#faf6ec] rounded-t-[1.5rem] sm:rounded-2xl shadow-2xl animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 overflow-hidden max-h-[92vh] flex flex-col">
         <div className="relative bg-gradient-to-br from-rose-700 to-rose-950 px-6 md:px-10 py-8 md:py-10 text-center shrink-0">
           <button
             onClick={onClose}
@@ -118,10 +118,10 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
           >
             <X size={18} />
           </button>
-          <span className="inline-block px-3 py-1 bg-white/15 text-white/90 text-[10px] font-black rounded-full mb-4 tracking-widest">
+          <span className="inline-block px-3 py-1 bg-white/15 text-white/90 text-[10px] font-bold rounded-full mb-4 tracking-widest">
             한글타자왕 오리지널 연재
           </span>
-          <h2 className="font-serif font-black text-white text-2xl md:text-3xl break-keep">
+          <h2 className="font-serif font-bold text-white text-2xl md:text-3xl break-keep">
             {series.title}
           </h2>
           <p className="mt-2 text-sm font-bold text-white/60">
@@ -135,21 +135,21 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
         </div>
 
         <div className="px-6 md:px-10 py-8 overflow-y-auto">
-          <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5">
+          <p className="text-[11px] font-bold text-[#a05252] uppercase tracking-widest mb-4 flex items-center gap-1.5">
             <BookOpen size={13} /> 이런 이야기예요
           </p>
-          <p className="font-serif text-[16px] leading-loose text-[#2f2a24] dark:text-zinc-200 break-keep [overflow-wrap:anywhere] mb-6">
+          <p className="font-serif text-[16px] leading-loose text-[#2f2a24] break-keep [overflow-wrap:anywhere] mb-6">
             {series.logline}
           </p>
-          <p className="text-sm font-medium text-[#6b5d4f] dark:text-zinc-400 leading-relaxed break-keep">
+          <p className="text-sm font-medium text-[#6b5d4f] leading-relaxed break-keep">
             {series.description}
           </p>
           {firstEp && series.previewExcerpt && (
-            <div className="relative mt-6 pt-6 border-t border-[#e5dcc8] dark:border-zinc-800">
-              <p className="text-[11px] font-black text-[#a05252] uppercase tracking-widest mb-3">
+            <div className="relative mt-6 pt-6 border-t border-[#e5dcc8]">
+              <p className="text-[11px] font-bold text-[#a05252] uppercase tracking-widest mb-3">
                 1화 · {firstEp.title.replace(/^1화\.\s*/, "")}
               </p>
-              <p className="font-serif text-[15px] leading-loose text-[#2f2a24] dark:text-zinc-200 whitespace-pre-wrap break-keep [overflow-wrap:anywhere] line-clamp-4">
+              <p className="font-serif text-[15px] leading-loose text-[#2f2a24] whitespace-pre-wrap break-keep [overflow-wrap:anywhere] line-clamp-4">
                 {series.previewExcerpt.slice(0, 200)}
                 <span className="text-[#a05252]/60">…</span>
               </p>
@@ -157,12 +157,12 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
           )}
         </div>
 
-        <div className="sticky bottom-0 bg-[#faf6ec]/95 dark:bg-zinc-900/95 backdrop-blur border-t border-[#e5dcc8] dark:border-zinc-800 px-6 py-4 shrink-0">
+        <div className="sticky bottom-0 bg-[#faf6ec]/95 backdrop-blur border-t border-[#e5dcc8] px-6 py-4 shrink-0">
           {reading ? (
             <Link
               prefetch={false}
               href={`/transcription/${progress!.nextEpisodeId}`}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#a05252] text-white text-base font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#a05252] text-white text-base font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
             >
               <Feather size={18} /> {progress!.nextEpisodeNumber}화{progress!.inProgressPercent > 0 ? ` ${progress!.inProgressPercent}%부터` : "부터"} 이어 새기기 →
             </Link>
@@ -170,7 +170,7 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
             <Link
               prefetch={false}
               href={`/transcription/series/${series.id}`}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-green-700 text-white text-base font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-green-700 text-white text-base font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
             >
               <CheckCircle2 size={18} /> 완필한 책 · 목차 다시 보기 →
             </Link>
@@ -178,7 +178,7 @@ function SeriesPreview({ series, metrics, progress, onClose }: { series: ShelfBo
             <Link
               prefetch={false}
               href={`/transcription/series/${series.id}`}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#a05252] text-white text-base font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#a05252] text-white text-base font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform"
             >
               <Feather size={18} /> 1화부터 새기기 →
             </Link>
@@ -222,7 +222,7 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
 
       {/* 장편 진열대 */}
       <section>
-        <h2 className="text-lg font-black mb-1 flex items-center gap-2">
+        <h2 className="text-lg font-bold mb-1 flex items-center gap-2">
           <Sparkles size={18} className="text-primary" /> 한글타자왕 오리지널 장편
         </h2>
         <p className="text-sm text-zinc-500 font-medium mb-6 break-keep">
@@ -235,13 +235,13 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
               type="button"
               aria-pressed={sortKey === option.key}
               onClick={() => { setSortKey(option.key); setPage(1); }}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-black transition-colors ${sortKey === option.key ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition-colors ${sortKey === option.key ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
             >
               {option.label}
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-7 p-4 md:p-7 bg-surface-low rounded-[2rem] border-b-8 border-[#c9a97a]/40">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-7 p-4 md:p-7 bg-surface-low rounded-2xl border-b-8 border-[#c9a97a]/40">
           {pagedSeries.map((s) => (
             <SeriesShelfCover key={s.id} series={s} metrics={metrics[s.id]} progress={progressById[s.id]} onPreview={() => setPreviewSeries(s)} />
           ))}
@@ -254,7 +254,7 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
               type="button"
               onClick={() => setPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="px-4 py-2 rounded-full bg-surface-high text-sm font-black text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
+              className="px-4 py-2 rounded-full bg-surface-high text-sm font-bold text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
             >
               ← 이전
             </button>
@@ -264,7 +264,7 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
                 type="button"
                 aria-current={n === currentPage ? "page" : undefined}
                 onClick={() => setPage(n)}
-                className={`w-9 h-9 rounded-full text-sm font-black transition-colors ${n === currentPage ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
+                className={`w-9 h-9 rounded-full text-sm font-bold transition-colors ${n === currentPage ? "primary-gradient text-white" : "bg-surface-high text-zinc-500 hover:text-primary"}`}
               >
                 {n}
               </button>
@@ -273,7 +273,7 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
               type="button"
               onClick={() => setPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="px-4 py-2 rounded-full bg-surface-high text-sm font-black text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
+              className="px-4 py-2 rounded-full bg-surface-high text-sm font-bold text-zinc-500 hover:text-primary disabled:opacity-40 transition-colors"
             >
               다음 →
             </button>
@@ -286,13 +286,13 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
         <Link
           prefetch={false}
           href="/transcription"
-          className="group flex items-center gap-4 p-5 md:p-6 rounded-[1.75rem] border border-surface-high bg-surface-lowest hover:border-primary/40 transition-all"
+          className="group flex items-center gap-4 p-5 md:p-6 rounded-2xl border border-surface-high bg-surface-lowest hover:border-primary/40 transition-all"
         >
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 text-primary shrink-0">
             <ScrollText size={22} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-black break-keep">단편·시·수필은 긴 글 연습에서</p>
+            <p className="font-bold break-keep">단편·시·수필은 긴 글 연습에서</p>
             <p className="text-sm text-zinc-500 font-medium break-keep">
               윤동주·김소월 등 명작 단편과 짧은 글은 ‘긴 글 연습’에서 <span className="whitespace-nowrap">한 편씩 필사할 수 있어요.</span>
             </p>
@@ -309,19 +309,19 @@ export const BookStore: React.FC<{ books: ShelfBook[] }> = ({ books }) => {
         <Link
           prefetch={false}
           href="/books/submit"
-          className="group block p-8 md:p-10 rounded-[2.5rem] border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 text-center"
+          className="group block p-8 md:p-10 rounded-2xl border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 text-center"
         >
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary mb-5">
             <PenLine size={26} />
           </div>
-          <h2 className="text-2xl md:text-3xl font-black mb-3 break-keep">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 break-keep">
             당신의 글이 다음 장편이 <span className="whitespace-nowrap">될 수 있어요</span>
           </h2>
           <p className="text-zinc-500 font-medium leading-relaxed max-w-lg mx-auto break-keep">
             내가 쓴 이야기를 책방에 올리고 싶다면, 원고를 투고해 주세요. 선정되면 한글타자왕
             오리지널 연재로 게재되어 누군가 당신의 문장을 한 자 한 자 새기게 됩니다.
           </p>
-          <span className="mt-6 inline-flex items-center gap-2 font-black text-primary">
+          <span className="mt-6 inline-flex items-center gap-2 font-bold text-primary">
             원고 투고하기{" "}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </span>

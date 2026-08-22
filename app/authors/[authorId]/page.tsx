@@ -80,17 +80,17 @@ export default async function AuthorPage({ params }: Props) {
           </div>
         )}
         <div className="text-center sm:text-left">
-          <p className="text-[11px] font-black text-primary uppercase tracking-[0.3em] mb-2">한글타자왕 작가</p>
-          <h1 className="text-3xl md:text-4xl font-black mb-2">{author.name}</h1>
+          <p className="text-[11px] font-bold text-primary uppercase tracking-[0.3em] mb-2">한글타자왕 작가</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">{author.name}</h1>
           {author.bio && <p className="text-zinc-500 font-medium leading-relaxed break-keep">{author.bio}</p>}
           <div className="mt-4 flex justify-center sm:justify-start gap-2">
             {author.snsUrl && (
-              <a href={author.snsUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-surface-high text-xs font-black text-zinc-600 dark:text-zinc-300 hover:text-primary transition-colors">
+              <a href={author.snsUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-surface-high text-xs font-bold text-zinc-600 hover:text-primary transition-colors">
                 SNS
               </a>
             )}
             {author.blogUrl && (
-              <a href={author.blogUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-surface-high text-xs font-black text-zinc-600 dark:text-zinc-300 hover:text-primary transition-colors">
+              <a href={author.blogUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-surface-high text-xs font-bold text-zinc-600 hover:text-primary transition-colors">
                 블로그
               </a>
             )}
@@ -99,11 +99,11 @@ export default async function AuthorPage({ params }: Props) {
       </header>
 
       {/* 작품 목록 */}
-      <h2 className="text-xl font-black mb-6 flex items-center gap-2">
+      <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
         <BookOpen size={20} className="text-primary" /> 작품 {books.length}편
       </h2>
       {books.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-7 p-4 md:p-7 bg-surface-low rounded-[2rem] border-b-8 border-[#c9a97a]/40">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-7 p-4 md:p-7 bg-surface-low rounded-2xl border-b-8 border-[#c9a97a]/40">
           {books.map((book) => (
             <Link
               key={book.id}
@@ -134,7 +134,7 @@ export default async function AuthorPage({ params }: Props) {
       )}
 
       <div className="mt-14 text-center">
-        <Link prefetch={false} href="/books" className="text-sm font-black text-zinc-400 hover:text-primary transition-colors">← 책방으로 돌아가기</Link>
+        <Link prefetch={false} href="/books" className="text-sm font-bold text-zinc-400 hover:text-primary transition-colors">← 책방으로 돌아가기</Link>
       </div>
     </div>
   );

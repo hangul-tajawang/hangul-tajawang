@@ -37,7 +37,7 @@ export default function WordPracticeListPage() {
   return (
     <div className="w-full max-w-4xl mx-auto py-16 px-4">
         <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
-        <h1 className="text-5xl font-black mb-6">단계별 낱말 타자 연습</h1>
+        <h1 className="text-5xl font-bold mb-6">단계별 낱말 타자 연습</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
           키보드의 각 위치(중간 줄, 윗 줄, 아랫 줄) 영역별로 구성된 낱말을 연습합니다. <br className="hidden md:block" />
           손가락의 위치를 자연스럽게 익히고 타수를 폭발적으로 올릴 수 있는 가장 중요한 훈련 과정입니다.
@@ -49,7 +49,7 @@ export default function WordPracticeListPage() {
           <Link prefetch={false} 
             key={step.id} 
             href={`/practice/word/${step.id}`}
-            className="group flex flex-col bg-surface-low p-8 rounded-[2rem] border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
+            className="group flex flex-col bg-surface-low p-8 rounded-2xl border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:rotate-12 group-hover:scale-110">
@@ -57,10 +57,10 @@ export default function WordPracticeListPage() {
             </div>
             
             <div className="mb-4 relative z-10">
-              <span className="text-[10px] font-black uppercase text-primary tracking-widest bg-primary/10 px-3 py-1 rounded-full">Step {i + 1}</span>
+              <span className="text-[10px] font-bold uppercase text-primary tracking-widest bg-primary/10 px-3 py-1 rounded-full">Step {i + 1}</span>
             </div>
             
-            <h2 className="text-2xl font-black text-on-surface mb-2 group-hover:text-primary transition-colors relative z-10">{step.title}</h2>
+            <h2 className="text-2xl font-bold text-on-surface mb-2 group-hover:text-primary transition-colors relative z-10">{step.title}</h2>
             <p className="text-sm font-medium text-zinc-400 mb-6 relative z-10">{step.description}</p>
             
             <div className="mt-auto flex items-center justify-between relative z-10 p-4 bg-surface-lowest rounded-xl border border-surface-high">
@@ -72,13 +72,13 @@ export default function WordPracticeListPage() {
       </div>
 
       {/* SEO 및 정보 섹션 — 낱말 타자 연습 가이드 */}
-      <div className="mt-24 border-t border-zinc-200 dark:border-zinc-800 pt-16 pb-4 space-y-16 text-left">
+      <div className="mt-24 border-t border-zinc-200 pt-16 pb-4 space-y-16 text-left">
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-primary">
             <BookOpenText size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">단계별 낱말 연습이란</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">단계별 낱말 연습이란</h2>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-400 leading-loose font-medium break-keep">
+          <p className="text-zinc-600 leading-loose font-medium break-keep">
             <strong className="text-on-surface">낱말 타자 연습</strong>은 키보드 자판을 영역별(중간 줄·윗 줄·아랫 줄)로 나누어,
             해당 위치의 글자로 이루어진 단어를 반복해서 치며 손가락에 자판을 각인시키는 훈련입니다.
             낱개의 자음·모음 위치를 익히는 자리 연습에서 한 걸음 나아가, 실제 <strong className="text-on-surface">단어 단위의 손놀림</strong>을
@@ -89,7 +89,7 @@ export default function WordPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-amber-500">
             <Lightbulb size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">효과적인 낱말 연습법</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">효과적인 낱말 연습법</h2>
           </div>
           <ul className="space-y-4">
             {[
@@ -100,7 +100,7 @@ export default function WordPracticeListPage() {
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-3">
                 <span className="text-amber-500 mt-1 shrink-0">✔</span>
-                <span className="text-zinc-600 dark:text-zinc-400 leading-relaxed break-keep">
+                <span className="text-zinc-600 leading-relaxed break-keep">
                   <strong className="text-on-surface">{t}:</strong> {d}
                 </span>
               </li>
@@ -111,7 +111,7 @@ export default function WordPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-emerald-600">
             <HeartPulse size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">낱말 연습의 효과</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">낱말 연습의 효과</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
@@ -120,7 +120,7 @@ export default function WordPracticeListPage() {
               ['타법 교정', '독수리 타법을 근본적으로 교정해, 자판을 보지 않고 치는 터치 타이핑의 토대를 만듭니다.'],
             ].map(([t, d]) => (
               <div key={t} className="p-6 bg-surface-low rounded-2xl border border-surface-high">
-                <h3 className="font-black mb-2 text-on-surface">{t}</h3>
+                <h3 className="font-bold mb-2 text-on-surface">{t}</h3>
                 <p className="text-sm text-zinc-500 leading-relaxed break-keep">{d}</p>
               </div>
             ))}
@@ -130,16 +130,16 @@ export default function WordPracticeListPage() {
         <section className="space-y-5">
           <div className="flex items-center gap-3 text-blue-500">
             <HelpCircle size={28} />
-            <h2 className="text-2xl md:text-3xl font-black">자주 묻는 질문</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">자주 묻는 질문</h2>
           </div>
           <div className="space-y-4">
             {WORD_FAQ.map((f) => (
               <details key={f.q} className="group bg-surface-low rounded-2xl border border-surface-high p-6 open:pb-6">
-                <summary className="cursor-pointer list-none font-black text-on-surface flex items-center justify-between gap-4">
+                <summary className="cursor-pointer list-none font-bold text-on-surface flex items-center justify-between gap-4">
                   {f.q}
                   <span className="text-primary transition-transform group-open:rotate-45 text-xl leading-none shrink-0">+</span>
                 </summary>
-                <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-loose break-keep">{f.a}</p>
+                <p className="mt-4 text-sm text-zinc-600 leading-loose break-keep">{f.a}</p>
               </details>
             ))}
           </div>

@@ -348,7 +348,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
     <div className="w-full max-w-3xl mx-auto mb-3 flex items-center justify-between gap-3 px-4 md:px-5 py-3 bg-primary/10 border border-primary/30 rounded-2xl animate-in fade-in duration-500">
       <p className="text-xs md:text-sm font-bold text-on-surface break-keep">저장된 {Math.round(resume.percent)}% 지점부터 이어 쓰는 중이에요</p>
       <div className="flex gap-1.5 shrink-0 items-center">
-        <button onClick={dismissResume} className="px-4 py-2 bg-surface-lowest text-xs font-black text-zinc-500 rounded-full hover:text-primary transition-colors">처음부터</button>
+        <button onClick={dismissResume} className="px-4 py-2 bg-surface-lowest text-xs font-bold text-zinc-500 rounded-full hover:text-primary transition-colors">처음부터</button>
       </div>
     </div>
   ) : null;
@@ -375,7 +375,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
       let color = "text-zinc-400"; let bg = ""; let deco = "";
       const isCurrent = i === inputValue.length;
       if (isCurrent) {
-          color = "text-primary font-black";
+          color = "text-primary font-bold";
           bg = "bg-primary/10 ring-4 ring-primary/5 rounded-sm";
       }
       else if (i < inputValue.length) {
@@ -454,7 +454,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
       let bg = "";
       const isCurrent = i === lineInput.length;
       if (isCurrent) {
-        color = "text-primary font-black";
+        color = "text-primary font-bold";
         bg = "bg-primary/10 ring-4 ring-primary/5 rounded-sm";
       } else if (i < lineInput.length) {
         const tChar = typedNorm.charAt(i);
@@ -484,12 +484,12 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
     report && (
       <div className="fixed inset-0 bg-on-surface/80 backdrop-blur-xl z-[100] flex items-center justify-center p-6 overflow-y-auto">
         <div className="relative max-w-2xl w-full my-auto animate-in zoom-in duration-500">
-          <div className={`relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] shadow-2xl ${paperAssets[paperType].bg} p-8 md:p-16 text-center`}>
+          <div className={`relative overflow-hidden rounded-2xl md:rounded-2xl shadow-2xl ${paperAssets[paperType].bg} p-8 md:p-16 text-center`}>
               <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
               <div className="relative z-10 text-on-surface">
                   <div className="flex justify-center mb-8"><div className="primary-gradient text-white p-6 rounded-full shadow-2xl"><Award size={60} /></div></div>
                   <h2 className={`display-lg !text-3xl md:!text-5xl mb-4 ${fontFamily}`}>{currentText.title}</h2>
-                  <p className="text-zinc-500 text-xs font-black mb-8 md:mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
+                  <p className="text-zinc-500 text-xs font-bold mb-8 md:mb-16 tracking-[0.3em] uppercase">By {currentText.author} / {currentText.source || '한글타자왕'}</p>
                   <div className="grid grid-cols-3 gap-3 md:gap-8 mb-8 md:mb-16">
                       <ResultItem label="Keystrokes" value={report.kpm} unit="타" />
                       <ResultItem label="Accuracy" value={report.accuracy} unit="%" />
@@ -509,11 +509,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                   (t) => t.seriesId === currentText.seriesId && t.episode === (currentText.episode || 0) + 1
                 );
             return nextEp ? (
-              <Link prefetch={false} href={`/transcription/${nextEp.id}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-black rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform">
+              <Link prefetch={false} href={`/transcription/${nextEp.id}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-bold rounded-2xl shadow-2xl hover:scale-[1.02] transition-transform">
                 다음 화 새기기 → {nextEp.title}
               </Link>
             ) : (
-              <Link prefetch={false} href={`/transcription/series/${currentText.seriesId}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-black rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform">
+              <Link prefetch={false} href={`/transcription/series/${currentText.seriesId}`} className="mt-8 block w-full py-5 bg-white text-on-surface text-center text-lg font-bold rounded-2xl shadow-2xl hover:scale-[1.02] transition-transform">
                 <Award size={18} /> 완간을 새기셨습니다! 시리즈 페이지 보기 →
               </Link>
             );
@@ -530,16 +530,16 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                 title={series ? `${series.title} — 한글타자왕 오리지널 연재` : `${currentText.title} — 한글타자왕 필사`}
                 text={series ? series.logline : `'${currentText.title}'을 키보드로 한 자 한 자 새겨보세요.`}
                 label={currentText.seriesId ? "이 책 공유하기" : "이 글 공유하기"}
-                className="mt-6 w-full py-4 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                className="mt-6 w-full py-4 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               />
             );
           })()}
-          <Link prefetch={false} href="/library" className="mt-8 block text-center text-white font-black text-sm md:text-base hover:underline underline-offset-4">
+          <Link prefetch={false} href="/library" className="mt-8 block text-center text-white font-bold text-sm md:text-base hover:underline underline-offset-4">
             <BookOpen size={18} className="inline-block mr-1.5" /> 방금 새긴 책이 서재에 꽂혔습니다 · 내 서재 보기 →
           </Link>
           <div className="mt-6 flex gap-6">
-              <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-black rounded-[2rem] hover:bg-white/20 transition-all">연습 종료</button>
-              <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-black rounded-[2rem] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>
+              <button onClick={resetState} className="flex-1 py-6 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all">연습 종료</button>
+              <button onClick={() => window.location.reload()} className="flex-[2] py-6 primary-gradient text-white font-bold rounded-2xl shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all">다시 연습하기</button>
           </div>
         </div>
       </div>
@@ -570,8 +570,8 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
       <div className="flex flex-col gap-4">
         {/* 컴팩트 헤더 */}
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-base font-black text-on-surface truncate flex-1">{displayTitle}</h1>
-          <span className="shrink-0 px-3 py-1 primary-gradient text-white text-[11px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
+          <h1 className="text-base font-bold text-on-surface truncate flex-1">{displayTitle}</h1>
+          <span className="shrink-0 px-3 py-1 primary-gradient text-white text-[11px] font-bold rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
             문단 {lineIndex + 1}/{lines.length}
           </span>
         </div>
@@ -613,7 +613,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
           <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${mobileProgress}%` }} />
           <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${mobileProgress}%`, transform: "translateX(-50%)", bottom: "4px" }}>
             <Feather size={22} className="text-primary drop-shadow-lg" />
-            <div className="text-[10px] font-black text-primary">{Math.round(mobileProgress)}%</div>
+            <div className="text-[10px] font-bold text-primary">{Math.round(mobileProgress)}%</div>
           </div>
         </div>
       </div>
@@ -648,16 +648,16 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-            <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-2 block">{externalContent ? "Challenge Transcription" : "Editorial Practice"}</span>
+            <span className="text-primary font-bold text-[10px] uppercase tracking-[0.5em] mb-2 block">{externalContent ? "Challenge Transcription" : "Editorial Practice"}</span>
             <h1 className="display-lg !text-2xl md:!text-5xl text-on-surface flex items-center gap-4 break-keep text-balance">
                 {displayTitle} {!externalContent && <span className="text-2xl text-zinc-500 hidden lg:inline-block ml-2 opacity-60 whitespace-nowrap"> 한글 타자 연습</span>}
             </h1>
-            <p className="text-sm text-zinc-400 font-black flex items-center gap-2 mt-2 md:mt-4"><BookOpen size={14} className="text-primary" /> {currentText.author} · {currentText.source}</p>
+            <p className="text-sm text-zinc-400 font-bold flex items-center gap-2 mt-2 md:mt-4"><BookOpen size={14} className="text-primary" /> {currentText.author} · {currentText.source}</p>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 bg-surface-lowest p-3 rounded-[1.5rem] md:rounded-[2rem] shadow-sm w-full md:w-auto">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 bg-surface-lowest p-3 rounded-2xl md:rounded-2xl shadow-sm w-full md:w-auto">
           <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 md:border-r border-surface-high">
             <Type size={18} className="text-primary" />
-            <select value={fontFamily} onChange={(e) => setFontFamily(e.target.value as FontType)} className="bg-transparent text-sm font-black outline-hidden cursor-pointer appearance-none hover:text-primary transition-colors">
+            <select value={fontFamily} onChange={(e) => setFontFamily(e.target.value as FontType)} className="bg-transparent text-sm font-bold outline-hidden cursor-pointer appearance-none hover:text-primary transition-colors">
                 <option value="font-noto">본고딕</option><option value="font-myeongjo">나눔명조</option><option value="font-batang">고운바탕</option><option value="font-dodum">고운돋움</option><option value="font-pen">나눔펜</option><option value="font-brush">나눔브러쉬</option><option value="font-gaegu">개구체</option><option value="font-poor">푸어스토리</option><option value="font-dokdo">독도체</option><option value="font-gamja">감자꽃</option><option value="font-single">싱글데이</option><option value="font-yeon">연성체</option><option value="font-stylish">스타일리시</option><option value="font-jua">배민 주아</option>
             </select>
             <input type="range" min="16" max="40" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-24 accent-primary" />
@@ -670,7 +670,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
         </div>
       </div>
 
-      <div className={`w-full h-[78dvh] md:h-[75vh] min-h-[420px] shadow-[0_40px_80px_rgba(21,28,39,0.1)] rounded-[2rem] md:rounded-[4rem] overflow-hidden flex flex-col md:flex-row transition-all duration-700 relative`}>
+      <div className={`w-full h-[78dvh] md:h-[75vh] min-h-[420px] shadow-[0_40px_80px_rgba(21,28,39,0.1)] rounded-2xl md:rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-700 relative`}>
         <div className={`absolute inset-0 pointer-events-none z-0 ${paperAssets[paperType].overlay}`} style={{ backgroundImage: `url(${paperAssets[paperType].img})`, backgroundSize: paperType === 'hanji' ? 'auto' : 'cover' }} />
 
         {/* 원문: 모바일에선 상단 42% 고정 + 현재 위치 자동 스크롤, 데스크톱에선 좌측 절반 */}
@@ -680,7 +680,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
 
         <div className={`flex-1 min-h-0 p-5 sm:p-8 md:p-20 relative flex flex-col bg-on-surface/5 backdrop-blur-sm z-10 ${fontFamily}`}>
           <div className="flex justify-end items-center mb-3 md:mb-10">
-            <div className="flex gap-4 md:gap-8 text-sm font-black text-zinc-400">
+            <div className="flex gap-4 md:gap-8 text-sm font-bold text-zinc-400">
                 <span className="flex items-center gap-2"><Keyboard size={16}/> {TypingUtils.getStrokeCount(inputValue)}</span>
                 <span className="flex items-center gap-2"><Clock size={16}/> {Math.floor(elapsedSeconds/60)}:{String(Math.floor(elapsedSeconds)%60).padStart(2,'0')}</span>
             </div>
@@ -692,7 +692,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
               <div className="absolute h-2 bg-primary rounded-full transition-all duration-300 mb-2 shadow-[0_0_20px_rgba(0,74,198,0.4)]" style={{ width: `${progressValue}%` }} />
               <div className="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style={{ left: `${progressValue}%`, transform: 'translateX(-50%)', bottom: '8px' }}>
                   <Feather size={28} className="text-primary drop-shadow-lg" />
-                  <div className="text-[10px] font-black text-primary mt-2">{Math.round(progressValue)}%</div>
+                  <div className="text-[10px] font-bold text-primary mt-2">{Math.round(progressValue)}%</div>
               </div>
           </div>
         </div>
@@ -707,34 +707,34 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
 
       {externalContent && (
         <div className="mt-16 md:mt-32 space-y-16 md:space-y-32 z-10">
-            <section className="bg-surface-lowest p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-[0_20px_60px_rgba(21,28,39,0.06)] flex flex-col md:flex-row items-center gap-8 md:gap-16">
+            <section className="bg-surface-lowest p-6 md:p-16 rounded-2xl md:rounded-2xl shadow-[0_20px_60px_rgba(21,28,39,0.06)] flex flex-col md:flex-row items-center gap-8 md:gap-16">
                 {externalContent.profiles?.avatar_url ? (
-                    <Image src={externalContent.profiles.avatar_url} alt="작가" width={180} height={180} className="w-40 h-40 md:w-56 md:h-56 rounded-[4rem] object-cover shadow-2xl" />
+                    <Image src={externalContent.profiles.avatar_url} alt="작가" width={180} height={180} className="w-40 h-40 md:w-56 md:h-56 rounded-2xl object-cover shadow-2xl" />
                 ) : (
-                    <div className="w-40 h-40 md:w-56 md:h-56 bg-surface-low rounded-[4rem] flex items-center justify-center text-primary/30 shadow-2xl"><User size={80} /></div>
+                    <div className="w-40 h-40 md:w-56 md:h-56 bg-surface-low rounded-2xl flex items-center justify-center text-primary/30 shadow-2xl"><User size={80} /></div>
                 )}
                 <div className="flex-1 text-center md:text-left">
-                    <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-4 block underline decoration-4 decoration-primary/20 underline-offset-8">Original Author</span>
+                    <span className="text-primary font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block underline decoration-4 decoration-primary/20 underline-offset-8">Original Author</span>
                     <h3 className="display-lg !text-3xl md:!text-5xl mb-4 md:mb-8">{externalContent.profiles?.nickname || '익명 작가'}</h3>
                     <div className="flex flex-wrap justify-center md:justify-start gap-8 md:gap-16">
                         <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2">Likes</span>
-                            <span className={`text-4xl font-black flex items-center gap-4 transition-all ${isLiked ? 'text-red-500 scale-110' : 'text-on-surface'}`}>
+                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Likes</span>
+                            <span className={`text-4xl font-bold flex items-center gap-4 transition-all ${isLiked ? 'text-red-500 scale-110' : 'text-on-surface'}`}>
                                 <Heart size={32} className={isLiked ? "fill-red-500 text-red-500" : ""} onClick={handleToggleLike} /> {likeCount}
                             </span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2">Participants</span>
-                            <span className="text-4xl font-black text-primary flex items-center gap-4">
+                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Participants</span>
+                            <span className="text-4xl font-bold text-primary flex items-center gap-4">
                                 <Users size={32} /> {externalContent.complete_count || 0}
                             </span>
                         </div>
                     </div>
                 </div>
-                <Link prefetch={false} href={`/challenge?authorId=${externalContent.author_id}`} className="px-12 py-6 bg-on-surface text-white font-black rounded-3xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center gap-3">작가의 글 더보기 <ChevronRight size={20}/></Link>
+                <Link prefetch={false} href={`/challenge?authorId=${externalContent.author_id}`} className="px-12 py-6 bg-on-surface text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center gap-3">작가의 글 더보기 <ChevronRight size={20}/></Link>
             </section>
 
-            <section className="bg-surface-lowest p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-xl">
+            <section className="bg-surface-lowest p-6 md:p-16 rounded-2xl md:rounded-2xl shadow-xl">
                 <div className="flex items-center gap-4 mb-8 md:mb-16">
                     <MessageSquare className="text-primary" size={32} />
                     <h3 className="headline-md">Comments <span className="text-primary opacity-30">/ {comments.length}</span></h3>
@@ -748,12 +748,12 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                         onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
                         placeholder={user ? "작가님께 따뜻한 응원의 한마디를 남겨주세요" : "로그인 후 댓글을 남길 수 있습니다"}
                         disabled={!user || commentLoading}
-                        className="w-full p-5 md:p-8 bg-surface-low border-none rounded-[1.5rem] md:rounded-[2.5rem] outline-hidden focus:shadow-xl transition-all text-base md:text-xl font-medium pr-20 md:pr-28"
+                        className="w-full p-5 md:p-8 bg-surface-low border-none rounded-2xl md:rounded-2xl outline-hidden focus:shadow-xl transition-all text-base md:text-xl font-medium pr-20 md:pr-28"
                     />
                     <button 
                         onClick={handleAddComment}
                         disabled={!user || !newComment.trim() || commentLoading}
-                        className="absolute right-4 top-4 bottom-4 px-8 primary-gradient text-white rounded-2xl font-black hover:scale-105 disabled:opacity-50 transition-all flex items-center justify-center shadow-xl shadow-primary/20"
+                        className="absolute right-4 top-4 bottom-4 px-8 primary-gradient text-white rounded-2xl font-bold hover:scale-105 disabled:opacity-50 transition-all flex items-center justify-center shadow-xl shadow-primary/20"
                     >
                         {commentLoading ? <RotateCcw className="animate-spin" size={24} /> : <Send size={24} />}
                     </button>
@@ -763,15 +763,15 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                     {comments.length > 0 ? comments.map((c) => (
                         <div key={c.id} className="flex gap-8 group/comment animate-in slide-in-from-bottom duration-500">
                             {c.profiles?.avatar_url ? (
-                                <Image src={c.profiles.avatar_url} alt="avatar" width={64} height={64} className="w-16 h-16 rounded-[1.5rem] object-cover shadow-md" />
+                                <Image src={c.profiles.avatar_url} alt="avatar" width={64} height={64} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
                             ) : (
-                                <div className="w-16 h-16 bg-surface-high rounded-[1.5rem] flex items-center justify-center font-black text-primary/30 text-2xl">{c.profiles?.nickname?.[0] || '?'}</div>
+                                <div className="w-16 h-16 bg-surface-high rounded-2xl flex items-center justify-center font-bold text-primary/30 text-2xl">{c.profiles?.nickname?.[0] || '?'}</div>
                             )}
                             <div className="flex-1">
                                 <div className="flex justify-between items-center mb-3">
-                                    <span className="font-black text-xl text-on-surface">{c.profiles?.nickname || '익명'}</span>
+                                    <span className="font-bold text-xl text-on-surface">{c.profiles?.nickname || '익명'}</span>
                                     <div className="flex items-center gap-6">
-                                        <span className="text-xs font-black text-zinc-300 uppercase tracking-widest">{new Date(c.created_at).toLocaleDateString()}</span>
+                                        <span className="text-xs font-bold text-zinc-300 uppercase tracking-widest">{new Date(c.created_at).toLocaleDateString()}</span>
                                         {user?.id === c.user_id && (
                                             <button onClick={() => handleDeleteComment(c.id)} className="text-red-400 opacity-0 group-hover/comment:opacity-100 transition-all hover:scale-125"><Trash2 size={18}/></button>
                                         )}
@@ -781,7 +781,7 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
                             </div>
                         </div>
                     )) : (
-                        <div className="text-center py-24 text-zinc-300 font-black text-2xl uppercase tracking-[0.2em] opacity-30">아직 댓글이 없습니다</div>
+                        <div className="text-center py-24 text-zinc-300 font-bold text-2xl uppercase tracking-[0.2em] opacity-30">아직 댓글이 없습니다</div>
                     )}
                 </div>
             </section>
@@ -789,18 +789,18 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
       )}
 
       {!externalContent && (
-        <div className="mt-16 md:mt-32 w-full p-8 md:p-16 bg-on-surface rounded-[2rem] md:rounded-[4rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 relative overflow-hidden shadow-[0_40px_80px_rgba(21,28,39,0.2)]">
+        <div className="mt-16 md:mt-32 w-full p-8 md:p-16 bg-on-surface rounded-2xl md:rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 relative overflow-hidden shadow-[0_40px_80px_rgba(21,28,39,0.2)]">
             <div className="absolute top-0 right-0 p-20 opacity-5 pointer-events-none scale-150">
                 <ScrollText size={300} />
             </div>
             <div className="relative z-10 text-center md:text-left flex-1">
-                <div className="inline-flex px-5 py-1.5 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest mb-8 shadow-lg shadow-primary/20">커뮤니티와 함께</div>
+                <div className="inline-flex px-5 py-1.5 bg-primary rounded-full text-[10px] font-bold uppercase tracking-widest mb-8 shadow-lg shadow-primary/20">커뮤니티와 함께</div>
                 <h2 className="display-lg !text-3xl md:!text-5xl mb-6 break-keep text-balance">유저들이 만든 글은 <span className="whitespace-nowrap">어때요?</span></h2>
                 <p className="text-zinc-400 font-medium text-xl leading-relaxed max-w-xl break-keep text-balance">매일 새로운 감성 명문이 올라오는 필사 챌린지에서 다른 유저들과 소통하며 연습해 보세요.</p>
             </div>
             <Link prefetch={false} 
                 href="/challenge" 
-                className="px-12 py-7 bg-white text-on-surface font-black rounded-[2rem] hover:scale-[1.05] transition-all flex items-center gap-4 whitespace-nowrap shadow-2xl group relative z-10"
+                className="px-12 py-7 bg-white text-on-surface font-bold rounded-2xl hover:scale-[1.05] transition-all flex items-center gap-4 whitespace-nowrap shadow-2xl group relative z-10"
             >
                 필사 챌린지 참여하기 <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform text-primary" />
             </Link>
@@ -812,11 +812,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
 
 function MetricItem({ icon, label, value, unit, color }: { icon: any, label: string, value: number, unit?: string, color: string }) {
     return (
-        <div className="flex items-center gap-2 md:gap-3 bg-surface-lowest px-3 py-2 md:px-6 md:py-3 rounded-[1rem] md:rounded-[1.5rem] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+        <div className="flex items-center gap-2 md:gap-3 bg-surface-lowest px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className={color}>{icon}</div>
             <div className="flex flex-col">
-                <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-0.5">{label}</span>
-                <span className={`text-base md:text-xl font-black ${color}`}>{value}<span className="text-xs ml-0.5 opacity-50">{unit}</span></span>
+                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-0.5">{label}</span>
+                <span className={`text-base md:text-xl font-bold ${color}`}>{value}<span className="text-xs ml-0.5 opacity-50">{unit}</span></span>
             </div>
         </div>
     );
@@ -824,16 +824,16 @@ function MetricItem({ icon, label, value, unit, color }: { icon: any, label: str
 
 function ResultItem({ label, value, unit }: { label: string, value: number, unit: string }) {
     return (
-        <div className="bg-on-surface/5 backdrop-blur-sm p-4 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] text-on-surface">
-            <p className="text-zinc-400 text-[10px] font-black uppercase mb-2 tracking-widest">{label}</p>
-            <p className="text-2xl md:text-4xl font-black text-primary">{value}<span className="text-xs ml-1 font-bold opacity-50">{unit}</span></p>
+        <div className="bg-on-surface/5 backdrop-blur-sm p-4 md:p-8 rounded-2xl md:rounded-2xl text-on-surface">
+            <p className="text-zinc-400 text-[10px] font-bold uppercase mb-2 tracking-widest">{label}</p>
+            <p className="text-2xl md:text-4xl font-bold text-primary">{value}<span className="text-xs ml-1 font-bold opacity-50">{unit}</span></p>
         </div>
     );
 }
 
 function PaperBtn({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
     return (
-        <button onClick={onClick} className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all ${active ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-zinc-400 hover:bg-surface-high'}`}>
+        <button onClick={onClick} className={`px-4 py-2 rounded-xl text-[10px] font-bold transition-all ${active ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-zinc-400 hover:bg-surface-high'}`}>
             {label}
         </button>
     );

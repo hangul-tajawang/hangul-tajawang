@@ -45,7 +45,7 @@ export const JourneyComplete: React.FC<JourneyCompleteProps> = ({
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-on-surface/40 backdrop-blur-xl animate-in fade-in duration-500" />
-      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar glass-card !bg-surface-lowest/90 !rounded-[2.5rem] p-8 text-center animate-in zoom-in duration-500">
+      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar glass-card !bg-surface-lowest/90 !rounded-2xl p-8 text-center animate-in zoom-in duration-500">
         <div className="inline-flex p-6 bg-secondary-container/60 rounded-full mb-6">
           <Trophy className="w-16 h-16 text-tertiary" />
         </div>
@@ -57,38 +57,38 @@ export const JourneyComplete: React.FC<JourneyCompleteProps> = ({
           {completionCount > 1 && ` 벌써 ${completionCount}번째 완주예요.`}
         </p>
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="bg-surface-low p-5 rounded-3xl">
-            <p className="text-[10px] font-black text-secondary/70 uppercase mb-1 tracking-widest">타수</p>
-            <p className="text-2xl font-black text-primary">{kpm}</p>
+          <div className="bg-surface-low p-5 rounded-2xl">
+            <p className="text-[10px] font-bold text-secondary/70 uppercase mb-1 tracking-widest">타수</p>
+            <p className="text-2xl font-bold text-primary">{kpm}</p>
           </div>
-          <div className="bg-surface-low p-5 rounded-3xl">
-            <p className="text-[10px] font-black text-secondary/70 uppercase mb-1 tracking-widest">정확도</p>
-            <p className="text-2xl font-black text-on-surface">{accuracy}%</p>
+          <div className="bg-surface-low p-5 rounded-2xl">
+            <p className="text-[10px] font-bold text-secondary/70 uppercase mb-1 tracking-widest">정확도</p>
+            <p className="text-2xl font-bold text-on-surface">{accuracy}%</p>
           </div>
-          <div className="bg-surface-low p-5 rounded-3xl">
-            <p className="text-[10px] font-black text-secondary/70 uppercase mb-1 tracking-widest">시간</p>
-            <p className="text-2xl font-black text-on-surface">{mins > 0 ? `${mins}분 ${secs}초` : `${secs}초`}</p>
+          <div className="bg-surface-low p-5 rounded-2xl">
+            <p className="text-[10px] font-bold text-secondary/70 uppercase mb-1 tracking-widest">시간</p>
+            <p className="text-2xl font-bold text-on-surface">{mins > 0 ? `${mins}분 ${secs}초` : `${secs}초`}</p>
           </div>
         </div>
         <p className="text-sm font-bold text-secondary mb-8">{TypingUtils.getGrade(kpm, accuracy)}</p>
         <div className="flex flex-col gap-3">
           <button
             onClick={share}
-            className="w-full py-4 primary-gradient text-white font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-4 primary-gradient text-white font-bold rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
           >
             {copied ? <Check size={20} /> : <Share2 size={20} />}
             {copied ? "복사 완료! 친구에게 자랑하세요" : "기록 공유하기"}
           </button>
           <button
             onClick={onRestart}
-            className="w-full py-4 bg-on-surface text-surface-lowest font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2"
+            className="w-full py-4 bg-on-surface text-surface-lowest font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2"
           >
             <RotateCcw size={20} /> 처음부터 다시 외우기
           </button>
           <Link
             prefetch={false}
             href="/journey"
-            className="flex items-center justify-center gap-2 text-secondary/80 font-black text-sm hover:text-on-surface transition-colors py-2"
+            className="flex items-center justify-center gap-2 text-secondary/80 font-bold text-sm hover:text-on-surface transition-colors py-2"
           >
             다른 여정 보러 가기 <ChevronRight size={16} />
           </Link>

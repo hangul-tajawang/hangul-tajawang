@@ -20,29 +20,29 @@ export function MarkdownRenderer({ content }: Props) {
       components={{
         // ── Headings ────────────────────────────────────────────────────────
         h1: ({ children }) => (
-          <h1 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-100 mt-14 mb-6 leading-tight break-keep border-b border-zinc-100 dark:border-zinc-800 pb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 mt-14 mb-6 leading-tight break-keep border-b border-zinc-100 pb-4">
             {children}
           </h1>
         ),
         h2: ({ children }) => (
-          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-800 dark:text-zinc-200 mt-12 mb-5 leading-snug break-keep">
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-800 mt-12 mb-5 leading-snug break-keep">
             {children}
           </h2>
         ),
         h3: ({ children }) => (
-          <h3 className="text-xl sm:text-2xl font-bold text-zinc-700 dark:text-zinc-300 mt-10 mb-4 break-keep">
+          <h3 className="text-xl sm:text-2xl font-bold text-zinc-700 mt-10 mb-4 break-keep">
             {children}
           </h3>
         ),
         h4: ({ children }) => (
-          <h4 className="text-lg font-bold text-zinc-700 dark:text-zinc-300 mt-8 mb-3">
+          <h4 className="text-lg font-bold text-zinc-700 mt-8 mb-3">
             {children}
           </h4>
         ),
 
         // ── Paragraph ───────────────────────────────────────────────────────
         p: ({ children }) => (
-          <p className="mb-6 text-zinc-600 dark:text-zinc-400 leading-loose text-lg font-medium break-keep">
+          <p className="mb-6 text-zinc-600 leading-loose text-lg font-medium break-keep">
             {children}
           </p>
         ),
@@ -65,7 +65,7 @@ export function MarkdownRenderer({ content }: Props) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 font-semibold underline underline-offset-2 hover:text-blue-800 transition-colors"
+              className="text-blue-600 font-semibold underline underline-offset-2 hover:text-blue-800 transition-colors"
             >
               {children}
             </a>
@@ -80,19 +80,19 @@ export function MarkdownRenderer({ content }: Props) {
           <ol className="list-decimal pl-6 mb-6 space-y-2">{children}</ol>
         ),
         li: ({ children }) => (
-          <li className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg">
+          <li className="text-zinc-600 leading-relaxed text-lg">
             {children}
           </li>
         ),
 
         // ── Emphasis ─────────────────────────────────────────────────────────
         strong: ({ children }) => (
-          <strong className="font-extrabold text-zinc-900 dark:text-zinc-100">
+          <strong className="font-extrabold text-zinc-900">
             {children}
           </strong>
         ),
         em: ({ children }) => (
-          <em className="italic text-zinc-700 dark:text-zinc-300">{children}</em>
+          <em className="italic text-zinc-700">{children}</em>
         ),
 
         // ── Code ─────────────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ export function MarkdownRenderer({ content }: Props) {
             );
           }
           return (
-            <code className="bg-zinc-100 dark:bg-zinc-800 text-red-500 px-1.5 py-0.5 rounded text-sm font-mono">
+            <code className="bg-zinc-100 text-red-500 px-1.5 py-0.5 rounded text-sm font-mono">
               {children}
             </code>
           );
@@ -117,14 +117,14 @@ export function MarkdownRenderer({ content }: Props) {
 
         // ── Blockquote ────────────────────────────────────────────────────────
         blockquote: ({ children }) => (
-          <blockquote className="border-l-4 border-blue-500 pl-5 py-1 my-6 bg-blue-50 dark:bg-blue-900/20 rounded-r-xl">
+          <blockquote className="border-l-4 border-blue-500 pl-5 py-1 my-6 bg-blue-50 rounded-r-xl">
             {children}
           </blockquote>
         ),
 
         // ── Divider ──────────────────────────────────────────────────────────
         hr: () => (
-          <hr className="my-10 border-zinc-200 dark:border-zinc-700" />
+          <hr className="my-10 border-zinc-200" />
         ),
 
         // ── Images ───────────────────────────────────────────────────────────

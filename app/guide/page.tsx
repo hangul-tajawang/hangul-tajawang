@@ -15,7 +15,7 @@ export default function GuidePage() {
   return (
     <div className="w-full max-w-5xl mx-auto py-16 px-4">
       <header className="text-center mb-20">
-        <h1 className="text-4xl md:text-5xl font-black mb-6">한글타자왕 <span className="text-blue-600">활용 가이드</span></h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">한글타자왕 <span className="text-blue-600">활용 가이드</span></h1>
         <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed">
           초보자부터 전문가까지, 단계별로 실력을 키울 수 있는 <br className="hidden md:block" />
           다양한 타자 연습 모드를 확인해보세요.
@@ -67,12 +67,12 @@ export default function GuidePage() {
         />
       </div>
 
-      <div className="mt-24 p-10 bg-blue-600 rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue-200">
+      <div className="mt-24 p-10 bg-blue-600 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue-200">
         <div>
-          <h2 className="text-3xl font-black mb-2">지금 바로 시작해보세요!</h2>
+          <h2 className="text-3xl font-bold mb-2">지금 바로 시작해보세요!</h2>
           <p className="opacity-90 font-medium text-lg">한글타자왕은 별도의 설치 없이 웹에서 바로 이용 가능합니다.</p>
         </div>
-        <Link prefetch={false} href="/practice" className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-xl flex items-center gap-2 hover:scale-105 transition-all">
+        <Link prefetch={false} href="/practice" className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-bold text-xl flex items-center gap-2 hover:scale-105 transition-all">
           연습장 가기 <ChevronRight />
         </Link>
       </div>
@@ -82,9 +82,9 @@ export default function GuidePage() {
 
 function GuideSection({ icon, title, desc, href }: { icon: any, title: string, desc: string, href: string }) {
   return (
-    <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all group">
-      <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">{icon}</div>
-      <h3 className="text-2xl font-black mb-4">{title}</h3>
+    <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-sm hover:shadow-xl transition-all group">
+      <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">{icon}</div>
+      <h3 className="text-2xl font-bold mb-4">{title}</h3>
       <p className="text-zinc-500 leading-relaxed mb-8">{desc}</p>
       <Link prefetch={false} href={href} className="text-blue-600 font-bold flex items-center gap-1 hover:underline">
         직접 체험하기 <ChevronRight size={16} />

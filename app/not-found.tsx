@@ -12,7 +12,7 @@ export default function NotFound() {
       </div>
 
       <div className="relative mb-12">
-        <div className="w-32 h-32 md:w-40 md:h-40 bg-surface-low rounded-[3rem] flex items-center justify-center text-primary/20 shadow-2xl animate-bounce">
+        <div className="w-32 h-32 md:w-40 md:h-40 bg-surface-low rounded-2xl flex items-center justify-center text-primary/20 shadow-2xl animate-bounce">
           <SearchX size={80} strokeWidth={1} />
         </div>
         <div className="absolute -top-4 -right-4 w-12 h-12 primary-gradient rounded-2xl flex items-center justify-center text-white shadow-xl animate-pulse">
@@ -20,7 +20,7 @@ export default function NotFound() {
         </div>
       </div>
 
-      <span className="text-primary font-black text-xs uppercase tracking-[0.5em] mb-4 block underline decoration-4 decoration-primary/20 underline-offset-8">
+      <span className="text-primary font-bold text-xs uppercase tracking-[0.5em] mb-4 block underline decoration-4 decoration-primary/20 underline-offset-8">
         404 ERROR / 길을 잃은 문장
       </span>
       
@@ -36,20 +36,20 @@ export default function NotFound() {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg">
         <Link prefetch={false} 
           href="/" 
-          className="w-full sm:w-auto px-10 py-5 bg-on-surface text-white font-black rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center justify-center gap-3"
+          className="w-full sm:w-auto px-10 py-5 bg-on-surface text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-on-surface/20 flex items-center justify-center gap-3"
         >
           <MoveLeft size={20} /> 홈으로 돌아가기
         </Link>
         
         <Link prefetch={false} 
           href="/practice" 
-          className="w-full sm:w-auto px-10 py-5 bg-white border-2 border-zinc-100 text-on-surface font-black rounded-2xl hover:bg-zinc-50 transition-all flex items-center justify-center gap-3"
+          className="w-full sm:w-auto px-10 py-5 bg-white border-2 border-zinc-100 text-on-surface font-bold rounded-2xl hover:bg-zinc-50 transition-all flex items-center justify-center gap-3"
         >
           <Layout size={20} className="text-primary" /> 타자 연습하러 가기
         </Link>
       </div>
 
-      <div className="mt-24 p-8 bg-surface-low rounded-[2.5rem] border border-zinc-100 max-w-md w-full relative group hover:shadow-xl transition-all">
+      <div className="mt-24 p-8 bg-surface-low rounded-2xl border border-zinc-100 max-w-md w-full relative group hover:shadow-xl transition-all">
         <div className="absolute -top-6 left-10 p-4 bg-white rounded-2xl shadow-lg text-primary">
           <PenTool size={24} />
         </div>

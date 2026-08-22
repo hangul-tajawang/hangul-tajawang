@@ -27,7 +27,7 @@ export interface BookFormInitial {
 }
 
 const field = "w-full px-4 py-3 rounded-xl border border-surface-high bg-surface-lowest font-medium text-sm focus:outline-none focus:border-primary/60";
-const label = "block text-xs font-black text-zinc-500 mb-1.5 mt-5";
+const label = "block text-xs font-bold text-zinc-500 mb-1.5 mt-5";
 
 // 표지를 업로드 전 클라이언트에서 폭 800px WebP(품질 0.82)로 축소·재인코딩한다.
 // 저장 파일이 ~50–100KB로 작아지고, 웹은 unoptimized로 원본을 그대로 서빙하므로
@@ -90,10 +90,10 @@ export function BookForm({
 
   return (
     <div className="w-full max-w-3xl mx-auto py-10 px-4 md:px-6 text-on-surface">
-      <Link href="/adminsangwon" className="inline-flex items-center gap-1.5 text-xs font-black text-zinc-400 hover:text-primary mb-6">
+      <Link href="/adminsangwon" className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-primary mb-6">
         <ArrowLeft size={14} /> 책방 관리로
       </Link>
-      <h1 className="text-2xl font-black mb-8 flex items-center gap-2">
+      <h1 className="text-2xl font-bold mb-8 flex items-center gap-2">
         <BookOpen className="text-primary" /> {editing ? `책 수정 — ${initial!.title}` : "새 책 게재"}
       </h1>
 
@@ -186,13 +186,13 @@ export function BookForm({
 
         {/* 화 분할 미리보기 */}
         <div className="mt-4 p-4 rounded-xl bg-surface-low border border-surface-high">
-          <p className="text-xs font-black text-zinc-500 mb-2">
+          <p className="text-xs font-bold text-zinc-500 mb-2">
             화 분할 미리보기 — {parsed.length}화 · 총 {totalChars.toLocaleString()}자(공백 제외)
           </p>
           {parsed.length > 0 ? (
             <ol className="space-y-1 max-h-40 overflow-y-auto">
               {parsed.map((ep) => (
-                <li key={ep.episode} className="text-xs font-bold text-zinc-600 dark:text-zinc-300">
+                <li key={ep.episode} className="text-xs font-bold text-zinc-600">
                   {ep.episode}화. {ep.title} <span className="text-zinc-400">· {ep.wordCount.toLocaleString()}자</span>
                 </li>
               ))}
@@ -203,7 +203,7 @@ export function BookForm({
         </div>
 
         {result && (
-          <div className={`mt-5 px-4 py-3 rounded-xl text-sm font-black ${result.ok ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400" : "bg-red-50 dark:bg-red-900/20 text-red-600"}`}>
+          <div className={`mt-5 px-4 py-3 rounded-xl text-sm font-bold ${result.ok ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
             {result.ok && <CheckCircle2 size={15} className="inline mr-1.5 -mt-0.5" />}
             {result.message}
             {result.ok && (
@@ -215,7 +215,7 @@ export function BookForm({
         <button
           type="submit"
           disabled={pending || parsed.length === 0}
-          className="mt-6 w-full py-4 primary-gradient text-white font-black rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
+          className="mt-6 w-full py-4 primary-gradient text-white font-bold rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
         >
           {pending && <Loader2 size={16} className="animate-spin" />}
           {pending ? "게재 중..." : editing ? "수정 사항 게재 (웹·앱 즉시 반영)" : "게재하기 (웹·앱 즉시 반영)"}

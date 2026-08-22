@@ -40,16 +40,16 @@ const orderIndex = (id: string) => {
 export default function JourneyHubPage() {
   const orderedCourses = [...JOURNEY_COURSES].sort((a, b) => orderIndex(a.id) - orderIndex(b.id));
   return (
-    <div className="w-full max-w-6xl mx-auto py-10 px-4">
+    <div className="w-full max-w-4xl mx-auto py-10 px-4">
       <h1 className="sr-only">지식타자 - 지식을 쌓으며 타자 실력을 높이는 암기 타자, 조선 왕조·세계 수도·주기율표</h1>
 
       {/* 헤더 */}
       <div className="text-center mb-12">
-        <span className="text-primary font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">
+        <span className="text-primary font-semibold text-xs uppercase tracking-[0.25em] mb-3 block">
           Knowledge Typing
         </span>
-        <h2 className="display-lg !text-4xl md:!text-5xl text-on-surface mb-4">
-          ⌨️ 지식타자
+        <h2 className="serif-display text-4xl md:text-5xl font-bold text-on-surface mb-4">
+          지식타자
         </h2>
         <p className="text-secondary font-medium max-w-xl mx-auto leading-relaxed">
           순서가 있는 지식을 한 항목씩 타자로 정복하세요. 다음 항목을 직접 입력해
@@ -59,7 +59,7 @@ export default function JourneyHubPage() {
       </div>
 
       {/* 코스 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+      <div className="hub-panel grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
         {orderedCourses.map((course) => {
           const stations = getCourseStations(course);
           return (
@@ -67,21 +67,21 @@ export default function JourneyHubPage() {
               key={course.id}
               prefetch={false}
               href={`/journey/${course.id}`}
-              className="group relative p-8 bg-surface-lowest rounded-[2rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] hover:shadow-[0_28px_56px_rgba(21,28,39,0.12)] hover:-translate-y-1 transition-all"
+              className="group keycap-card p-8"
             >
-              <div className="flex items-start justify-between mb-5">
-                <div className="text-5xl">{course.emoji}</div>
+              <div className="flex items-start justify-between mb-6">
+                <span className="text-5xl" aria-hidden>{course.emoji}</span>
                 <div className="flex flex-col items-end gap-2">
-                  <span className="px-3 py-1 rounded-full bg-surface-low text-secondary text-[11px] font-black">
+                  <span className="px-3 py-1 rounded-full bg-surface-low text-secondary text-[11px] font-bold">
                     {course.category} · {stations.length}개
                   </span>
                   <JourneyHubProgress courseId={course.id} totalStations={stations.length} />
                 </div>
               </div>
-              <h3 className="editorial-heading text-2xl mb-1">{course.title}</h3>
+              <h3 className="serif-display text-2xl font-bold mb-1">{course.title}</h3>
               <p className="text-sm font-bold text-primary mb-3">{course.subtitle}</p>
               <p className="text-sm text-secondary leading-relaxed mb-6">{course.description}</p>
-              <span className="inline-flex items-center gap-2 text-sm font-black text-on-surface group-hover:gap-3 transition-all">
+              <span className="inline-flex items-center gap-2 text-sm font-bold text-on-surface group-hover:gap-3 transition-all">
                 코스 시작하기 <ArrowRight size={16} />
               </span>
             </Link>
@@ -89,9 +89,9 @@ export default function JourneyHubPage() {
         })}
 
         {/* 다음 코스 예고 */}
-        <div className="p-8 bg-surface-low rounded-[2rem] flex flex-col items-center justify-center text-center gap-3">
+        <div className="p-8 bg-surface-low rounded-2xl flex flex-col items-center justify-center text-center gap-3">
           <div className="text-4xl opacity-60">🚧</div>
-          <p className="font-black text-secondary/70">새 코스 준비 중</p>
+          <p className="font-bold text-secondary/70">새 코스 준비 중</p>
           <p className="text-xs text-secondary/70 font-medium leading-relaxed">
             한국사 연표 등 새 코스가
             <br />
@@ -105,7 +105,7 @@ export default function JourneyHubPage() {
         <section className="space-y-4">
           <div className="flex items-center gap-3 text-primary">
             <Brain size={24} />
-            <h2 className="text-xl font-black">손으로 외우는 지식</h2>
+            <h2 className="text-xl font-bold">손으로 외우는 지식</h2>
           </div>
           <p className="text-sm text-secondary leading-relaxed font-medium">
             태정태세문단세처럼 순서가 생명인 지식은 눈으로 읽는 것보다 손으로 직접
@@ -116,7 +116,7 @@ export default function JourneyHubPage() {
         <section className="space-y-4">
           <div className="flex items-center gap-3 text-amber-500">
             <Lightbulb size={24} />
-            <h2 className="text-xl font-black">초성 힌트 시스템</h2>
+            <h2 className="text-xl font-bold">초성 힌트 시스템</h2>
           </div>
           <p className="text-sm text-secondary leading-relaxed font-medium">
             다음 항목의 이름은 초성만 보입니다. &ldquo;ㅅㅈ&rdquo;을 보고 세종을
@@ -128,7 +128,7 @@ export default function JourneyHubPage() {
         <section className="space-y-4">
           <div className="flex items-center gap-3 text-green-600">
             <Repeat size={24} />
-            <h2 className="text-xl font-black">이어가기와 재완주</h2>
+            <h2 className="text-xl font-bold">이어가기와 재완주</h2>
           </div>
           <p className="text-sm text-secondary leading-relaxed font-medium">
             중간에 멈춰도 진행한 곳까지 자동 저장되어 언제든 이어갈 수 있습니다.

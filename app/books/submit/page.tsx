@@ -27,7 +27,7 @@ export default function ManuscriptSubmitPage() {
   return (
     <div className="w-full py-6 md:py-10 text-on-surface">
       <div className="text-center mb-2 px-4">
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight break-keep">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight break-keep">
           ✍️ 원고 투고
         </h1>
         <p className="mt-3 text-zinc-500 font-medium break-keep">

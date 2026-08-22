@@ -21,12 +21,12 @@ export function TransferNoticeBanner() {
   if (!visible) return null;
 
   return (
-    <div className="w-full bg-blue-50 dark:bg-blue-950/40 border-b border-blue-200 dark:border-blue-900">
+    <div className="w-full bg-blue-50 border-b border-blue-200">
       <div className="container mx-auto px-4 py-2.5 flex items-center gap-3 text-sm">
-        <Megaphone size={16} className="shrink-0 text-blue-600 dark:text-blue-400" />
-        <p className="flex-1 min-w-0 text-blue-900 dark:text-blue-200 break-keep">
+        <Megaphone size={16} className="shrink-0 text-blue-600" />
+        <p className="flex-1 min-w-0 text-blue-900 break-keep">
           <strong>[안내]</strong> 2026년 8월 29일(예정)부터 한글타자왕의 운영 주체가 <strong>블루커뮤니케이션즈 주식회사</strong>로 변경됩니다.{" "}
-          <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600 dark:hover:text-blue-300">
+          <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600">
             자세히 보기
           </Link>
         </p>
@@ -37,7 +37,7 @@ export function TransferNoticeBanner() {
             sessionStorage.setItem(DISMISS_KEY, "1");
             setVisible(false);
           }}
-          className="shrink-0 p-1 rounded text-blue-400 hover:text-blue-600 dark:hover:text-blue-300"
+          className="shrink-0 p-1 rounded text-blue-400 hover:text-blue-600"
         >
           <X size={16} />
         </button>

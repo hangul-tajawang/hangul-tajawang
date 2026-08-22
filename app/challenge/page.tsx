@@ -56,7 +56,7 @@ export default async function ChallengePage() {
           <details className="group bg-surface-low rounded-2xl border border-surface-high overflow-hidden">
             <summary className="flex items-center justify-between p-5 cursor-pointer list-none select-none">
               <div className="flex items-center gap-3">
-                <span className="text-sm font-black text-on-surface">
+                <span className="text-sm font-bold text-on-surface">
                   전체 챌린지 목록 ({challenges.length}개)
                 </span>
               </div>
@@ -75,7 +75,7 @@ export default async function ChallengePage() {
                       href={`/challenge/${item.id}`}
                       className="flex items-center gap-2 p-3 rounded-xl hover:bg-surface-high transition-colors group/link"
                     >
-                      <span className="text-[9px] font-black uppercase bg-blue-50 dark:bg-blue-900/20 text-blue-500 px-2 py-0.5 rounded-md shrink-0">
+                      <span className="text-[9px] font-bold uppercase bg-blue-50 text-blue-500 px-2 py-0.5 rounded-md shrink-0">
                         {item.category || 'UGC'}
                       </span>
                       <span className="text-sm font-bold text-on-surface group-hover/link:text-primary transition-colors line-clamp-1">

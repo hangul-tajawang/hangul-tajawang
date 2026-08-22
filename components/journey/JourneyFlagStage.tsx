@@ -8,6 +8,7 @@ import type { JourneyVizProps } from "./JourneyViz";
  * (기존 국기 칩 그리드 대신 문제 자체를 주인공으로. 애드센스가 있는 일반 레이아웃 유지)
  */
 export const JourneyFlagStage: React.FC<JourneyVizProps> = ({
+  course,
   stations,
   currentIndex,
   finished,
@@ -47,16 +48,18 @@ export const JourneyFlagStage: React.FC<JourneyVizProps> = ({
             />
           </div>
           {!isStrip && (
-            <p className="text-slate-300 text-xs font-black tracking-widest uppercase">이 국기의 나라는?</p>
+            <p className="text-slate-300 text-xs font-bold tracking-widest uppercase">
+              {course.ui === "flags" ? "이 국기의 나라는?" : current.name}
+            </p>
           )}
         </div>
       )}
       {finished && (
-        <p className="relative z-10 text-3xl font-black text-yellow-300">🏁 전부 정복!</p>
+        <p className="relative z-10 text-3xl font-bold text-yellow-300">🏁 전부 정복!</p>
       )}
 
       {/* 진행 배지 */}
-      <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full bg-black/55 text-white text-[10px] font-black tabular-nums backdrop-blur-sm">
+      <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full bg-black/55 text-white text-[10px] font-bold tabular-nums backdrop-blur-sm">
         {finished ? `완주! ${stations.length}개국` : `${done} / ${stations.length}개국`}
       </div>
     </div>

@@ -73,7 +73,8 @@ export default function TranscriptionPage() {
       />
 
       <div className="text-center mb-12 animate-in slide-in-from-bottom duration-700">
-        <h1 className="text-5xl font-black mb-6">온라인 필사</h1>
+        <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase mb-3">Transcription</p>
+        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-6">온라인 필사</h1>
         <p className="text-zinc-400 font-medium text-xl leading-relaxed">
           한국 문학 명작을 전문 그대로, 원고지 감성으로 필사하세요.{" "}
           <br className="hidden md:block" />
@@ -85,13 +86,13 @@ export default function TranscriptionPage() {
       <Link
         prefetch={false}
         href={`/transcription/${daily.id}`}
-        className="group block mb-14 p-8 md:p-10 rounded-[2.5rem] border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,74,198,0.12)] relative overflow-hidden"
+        className="group block mb-14 p-8 md:p-10 rounded-2xl border border-primary/30 bg-surface-low hover:border-primary/60 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,74,198,0.12)] relative overflow-hidden"
       >
-        <div className="flex items-center gap-2 text-primary font-black text-sm mb-4">
+        <div className="flex items-center gap-2 text-primary font-bold text-sm mb-4">
           <CalendarDays size={16} />
           <span>오늘의 필사 · {dailyDate}</span>
         </div>
-        <h2 className="text-3xl font-black text-on-surface mb-2 group-hover:text-primary transition-colors">
+        <h2 className="text-3xl font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">
           {daily.title}
         </h2>
         <p className="text-sm font-bold text-zinc-400 flex items-center gap-2 mb-6">
@@ -100,7 +101,7 @@ export default function TranscriptionPage() {
         <p className="text-lg font-medium text-zinc-500 leading-loose line-clamp-2">
           {getPilsaExcerpt(daily)}
         </p>
-        <span className="mt-6 inline-flex items-center gap-2 font-black text-primary">
+        <span className="mt-6 inline-flex items-center gap-2 font-bold text-primary">
           지금 필사하기 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </span>
       </Link>
@@ -109,13 +110,13 @@ export default function TranscriptionPage() {
       <Link
         prefetch={false}
         href="/books"
-        className="group flex items-center gap-4 mb-10 px-6 py-5 rounded-3xl bg-surface-low border border-surface-high hover:border-primary/50 transition-all"
+        className="group flex items-center gap-4 mb-10 px-6 py-5 rounded-2xl bg-surface-low border border-surface-high hover:border-primary/50 transition-all"
       >
         <div className="shrink-0 w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
           <Store size={22} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-black text-on-surface break-keep">📚 책방에서 책을 골라볼까요?</p>
+          <p className="font-bold text-on-surface break-keep">책방에서 책을 골라볼까요?</p>
           <p className="text-sm font-medium text-zinc-500 break-keep">
             표지를 눌러 미리 읽어보고, 마음에 드는 책을 골라 새겨보세요.
           </p>
@@ -132,7 +133,7 @@ export default function TranscriptionPage() {
           <Link prefetch={false}
             key={text.id}
             href={`/transcription/${text.id}`}
-            className="group flex flex-col bg-surface-low p-8 rounded-[2.5rem] border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
+            className="group flex flex-col bg-surface-low p-8 rounded-2xl border border-surface-high hover:border-primary/50 transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,74,198,0.1)] relative overflow-hidden"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:rotate-12 group-hover:scale-110">
@@ -140,11 +141,11 @@ export default function TranscriptionPage() {
             </div>
 
             <div className="flex justify-between items-start mb-6 relative z-10">
-              <span className="text-[11px] font-black px-4 py-1.5 bg-surface-high text-zinc-300 rounded-full">{text.category}</span>
+              <span className="text-[11px] font-bold px-4 py-1.5 bg-surface-high text-zinc-300 rounded-full">{text.category}</span>
               <span className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 bg-surface-lowest px-3 py-1.5 rounded-full"><Keyboard size={12}/> {text.wordCount}자</span>
             </div>
 
-            <h2 className="text-2xl font-black text-on-surface mb-3 group-hover:text-primary transition-colors relative z-10">{text.title}</h2>
+            <h2 className="text-2xl font-bold text-on-surface mb-3 group-hover:text-primary transition-colors relative z-10">{text.title}</h2>
             <p className="text-sm font-bold text-zinc-400 flex items-center gap-2 mb-8 relative z-10"><BookOpen size={14}/> {text.author}</p>
 
             <div className="mt-auto pt-6 border-t border-surface-high text-sm font-medium text-zinc-500 line-clamp-3 leading-loose relative z-10">
@@ -156,10 +157,10 @@ export default function TranscriptionPage() {
 
       {/* 필사 안내 + FAQ (서버 렌더링, 크롤러와 사용자 모두에게 노출) */}
       <section className="mt-24 text-on-surface">
-        <h2 className="text-3xl font-black mb-6 tracking-tight">
+        <h2 className="text-3xl font-bold mb-6 tracking-tight">
           기록이 남는 필사, 한글타자왕
         </h2>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed mb-12 max-w-3xl">
+        <p className="text-lg text-zinc-600 leading-relaxed mb-12 max-w-3xl">
           한글타자왕의 온라인 필사는 한국 문학 명작을 <strong>발췌가 아닌 전문(全文)</strong>으로
           제공합니다. 원고지·한지 배경과 명조체 글꼴로 아날로그 감성을 살렸고, 필사하는 동안
           <strong> 타수와 정확도</strong>가 실시간으로 측정되어 나의 필사 기록이 차곡차곡 쌓입니다.
@@ -168,15 +169,15 @@ export default function TranscriptionPage() {
           참여할 수 있습니다.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-black mb-8 tracking-tight">필사 자주 묻는 질문</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 tracking-tight">필사 자주 묻는 질문</h2>
         <dl className="space-y-6">
           {PILSA_FAQ.map((item) => (
             <div
               key={item.q}
-              className="bg-surface-low p-6 md:p-8 rounded-3xl border border-surface-high"
+              className="bg-surface-low p-6 md:p-8 rounded-2xl border border-surface-high"
             >
-              <dt className="text-lg md:text-xl font-black mb-3">{item.q}</dt>
-              <dd className="text-zinc-600 dark:text-zinc-400 leading-relaxed">{item.a}</dd>
+              <dt className="text-lg md:text-xl font-bold mb-3">{item.q}</dt>
+              <dd className="text-zinc-600 leading-relaxed">{item.a}</dd>
             </div>
           ))}
         </dl>

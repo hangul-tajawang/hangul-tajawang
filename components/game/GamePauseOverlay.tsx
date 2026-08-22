@@ -17,7 +17,7 @@ export const GamePauseOverlay: React.FC<{ onResume: () => void }> = ({ onResume 
     <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white">
       <Play size={30} fill="currentColor" className="ml-1" />
     </div>
-    <span className="text-white font-black text-lg">탭해서 계속</span>
+    <span className="text-white font-bold text-lg">탭해서 계속</span>
     <span className="text-white/50 font-bold text-xs">화면을 누르면 이어서 진행됩니다</span>
   </button>
 );

@@ -360,7 +360,7 @@ export const StairsGame: React.FC = () => {
   const inDanger = gameState === "playing" && gauge < 30; // 위험 경고(펄스·비네트) 기준
 
   const stage = (
-    <div className={`relative overflow-hidden ${isMobilePlaying ? "w-full h-full" : `flex-1 min-h-[240px] rounded-[2rem] md:rounded-[2.5rem] border-4 border-zinc-900 ${gameState === "ready" ? "min-h-[430px]" : ""}`}`}>
+    <div className={`relative overflow-hidden ${isMobilePlaying ? "w-full h-full" : `flex-1 min-h-[240px] rounded-2xl md:rounded-2xl border-4 border-zinc-900 ${gameState === "ready" ? "min-h-[430px]" : ""}`}`}>
       {/* 이펙트 키프레임 (DOM/CSS 전용, 캔버스 미사용) */}
       <style>{`
         @keyframes stairs-dust { 0% { opacity: 0; transform: translate(-50%, 0) scale(.5); } 25% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--dx, 0px)), -8px) scale(1.5); } }
@@ -380,10 +380,10 @@ export const StairsGame: React.FC = () => {
 
       {gameState === "ready" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm z-20 p-4">
-          <div className="bg-white dark:bg-zinc-900 p-8 rounded-[3rem] shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200 dark:border-zinc-800">
-            <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/20 rounded-[1.5rem] flex items-center justify-center text-emerald-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
-            <div className="text-center"><h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-1">글자 계단</h3><p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium">다음 계단의 단어를 정확히 입력해 한 칸씩 올라가세요! 처음 10층은 자음·모음 워밍업, 게이지가 바닥나기 전에 최대한 높이 오르세요.</p></div>
-            <button onClick={startGame} className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-black rounded-xl transition-all shadow-xl">게임 시작</button>
+          <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200">
+            <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
+            <div className="text-center"><h3 className="text-2xl font-bold text-zinc-900 mb-1">글자 계단</h3><p className="text-zinc-500 text-xs font-medium">다음 계단의 단어를 정확히 입력해 한 칸씩 올라가세요! 처음 10층은 자음·모음 워밍업, 게이지가 바닥나기 전에 최대한 높이 오르세요.</p></div>
+            <button onClick={startGame} className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold rounded-xl transition-all shadow-xl">게임 시작</button>
           </div>
         </div>
       )}
@@ -400,7 +400,7 @@ export const StairsGame: React.FC = () => {
               {/* 단어 배지 (다음 목표는 강조, 위쪽 층은 흐리게 미리보기) */}
               {s.floor >= 1 && s.floor >= floor && (
                 <div
-                  className={`absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 rounded-lg text-xs md:text-sm font-black transition-all ${
+                  className={`absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 rounded-lg text-xs md:text-sm font-bold transition-all ${
                     isTarget
                       ? "bg-emerald-500 text-white ring-2 ring-emerald-200 shadow-lg shadow-emerald-500/50 scale-110"
                       : "bg-white/85 text-zinc-800 border border-zinc-300"
@@ -412,7 +412,7 @@ export const StairsGame: React.FC = () => {
               )}
               {/* 마일스톤 깃발 */}
               {isMilestone && (
-                <div className="absolute bottom-full mb-9 left-1/2 -translate-x-1/2 flex flex-col items-center text-[10px] font-black text-amber-100">
+                <div className="absolute bottom-full mb-9 left-1/2 -translate-x-1/2 flex flex-col items-center text-[10px] font-bold text-amber-100">
                   <span className="text-lg leading-none">🚩</span>
                   <span className="px-1.5 py-0.5 rounded bg-amber-500/90 text-white">{s.floor}층</span>
                 </div>
@@ -458,13 +458,13 @@ export const StairsGame: React.FC = () => {
             ))}
             {/* "+1층" 플로팅 (콤보 5 이상이면 콤보 수 포함 + 색상 강조) */}
             {fx.kind === "float" && (
-              <span className={`absolute whitespace-nowrap font-black drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${fx.strong ? "text-amber-300 text-base md:text-lg" : "text-white text-sm md:text-base"}`} style={{ left: 0, top: -(CHICK + 16), animation: "stairs-float 0.9s ease-out both" }}>
+              <span className={`absolute whitespace-nowrap font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${fx.strong ? "text-amber-300 text-base md:text-lg" : "text-white text-sm md:text-base"}`} style={{ left: 0, top: -(CHICK + 16), animation: "stairs-float 0.9s ease-out both" }}>
                 {fx.label}
               </span>
             )}
             {/* 게이지 회복량 플로팅 (실제 회복 수치, 초록색) */}
             {fx.kind === "recover" && (
-              <span className="absolute whitespace-nowrap font-black text-emerald-300 text-xs md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" style={{ left: 36, top: -(CHICK + 2), animation: "stairs-float 0.9s ease-out 0.08s both" }}>
+              <span className="absolute whitespace-nowrap font-bold text-emerald-300 text-xs md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" style={{ left: 36, top: -(CHICK + 2), animation: "stairs-float 0.9s ease-out 0.08s both" }}>
                 {fx.label}
               </span>
             )}
@@ -491,7 +491,7 @@ export const StairsGame: React.FC = () => {
       {/* 마일스톤 돌파 배너 (0.8초) */}
       {banner && (
         <div className="absolute inset-x-0 top-1/3 z-20 flex justify-center pointer-events-none">
-          <div className="px-6 py-3 rounded-2xl bg-amber-500/95 text-white text-xl md:text-2xl font-black shadow-2xl" style={{ animation: "stairs-banner 0.8s ease-out both" }}>
+          <div className="px-6 py-3 rounded-2xl bg-amber-500/95 text-white text-xl md:text-2xl font-bold shadow-2xl" style={{ animation: "stairs-banner 0.8s ease-out both" }}>
             🚩 {banner}
           </div>
         </div>
@@ -499,7 +499,7 @@ export const StairsGame: React.FC = () => {
 
       {/* 현재 층 표시(게이지 바 아래 좌측) */}
       {gameState !== "ready" && (
-        <div className="absolute top-8 left-3 z-10 px-3 py-1.5 rounded-xl bg-black/40 backdrop-blur-sm text-white font-black text-sm md:text-base flex items-center gap-1.5">
+        <div className="absolute top-8 left-3 z-10 px-3 py-1.5 rounded-xl bg-black/40 backdrop-blur-sm text-white font-bold text-sm md:text-base flex items-center gap-1.5">
           <TrendingUp size={16} /> {floor}층
         </div>
       )}
@@ -513,36 +513,36 @@ export const StairsGame: React.FC = () => {
   );
 
   const gameInput = (
-    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} disabled={gameState !== "playing"} className={`w-full text-center font-black outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-emerald-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white dark:bg-zinc-900 border-4 rounded-[1.25rem] md:rounded-[2rem] shadow-xl ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 dark:border-zinc-100 focus:border-emerald-500") : "border-zinc-100 dark:border-zinc-800 opacity-50"}`}`} placeholder={gameState === "playing" ? "다음 계단의 단어를 입력!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) { e.preventDefault(); setInputValue(""); } }} disabled={gameState !== "playing"} className={`w-full text-center font-bold outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-emerald-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white border-4 rounded-2xl md:rounded-2xl shadow-xl ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 focus:border-emerald-500") : "border-zinc-100 opacity-50"}`}`} placeholder={gameState === "playing" ? "다음 계단의 단어를 입력!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
   );
 
   // 게임오버 팝업 (Portal)
   const gameOverModal = gameState === "gameover" && (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
-      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl text-center border border-zinc-200 dark:border-zinc-800 animate-in zoom-in duration-500">
-        <div className="inline-flex p-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-full mb-8"><Trophy className="w-20 h-20 text-yellow-500" /></div>
-        <p className="text-zinc-400 font-black uppercase tracking-widest text-xs mb-1">도달 층수</p>
-        <h2 className="text-6xl font-black text-zinc-900 dark:text-zinc-100 mb-2 tracking-tighter">{floor}층</h2>
-        <p className="text-zinc-500 dark:text-zinc-400 font-bold mb-10">
+      <div className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar bg-white rounded-2xl p-8 shadow-2xl text-center border border-zinc-200 animate-in zoom-in duration-500">
+        <div className="inline-flex p-6 bg-emerald-50 rounded-full mb-8"><Trophy className="w-20 h-20 text-yellow-500" /></div>
+        <p className="text-zinc-400 font-bold uppercase tracking-widest text-xs mb-1">도달 층수</p>
+        <h2 className="text-6xl font-bold text-zinc-900 mb-2 tracking-tighter">{floor}층</h2>
+        <p className="text-zinc-500 font-bold mb-10">
           {floor >= 100 ? "구름 위까지! 대단한 등반이었어요." : floor >= 50 ? "절반의 고지를 넘었어요. 한 번 더!" : "발끝이 근질근질하죠? 다시 올라볼까요?"}
         </p>
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-zinc-50 dark:bg-zinc-800 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800"><p className="text-[10px] font-black text-zinc-400 uppercase mb-1 tracking-widest">Max Combo</p><p className="text-3xl font-black text-zinc-900 dark:text-zinc-100">{maxCombo}</p></div>
-          <div className="bg-zinc-50 dark:bg-zinc-800 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800"><p className="text-[10px] font-black text-zinc-400 uppercase mb-1 tracking-widest">분당 타수</p><p className="text-3xl font-black text-emerald-600">{finalKpm}</p></div>
+          <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">Max Combo</p><p className="text-3xl font-bold text-zinc-900">{maxCombo}</p></div>
+          <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">분당 타수</p><p className="text-3xl font-bold text-emerald-600">{finalKpm}</p></div>
         </div>
         <p className="text-sm font-bold text-zinc-400 mb-8">{TypingUtils.getGrade(finalKpm, accuracy)}</p>
         {!user ? (
-          <div className="mb-10 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-[2.5rem] border border-blue-100 dark:border-blue-900/30"><p className="text-sm font-bold text-blue-600 mb-6 flex items-center justify-center gap-2"><Star size={16} fill="currentColor" /> 랭킹에 이름을 남기고 싶으신가요?</p><button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-5 bg-[#FEE500] text-black font-black rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95"><svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>3초 만에 로그인하고 기록 저장</button></div>
+          <div className="mb-10 p-8 bg-blue-50 rounded-2xl border border-blue-100"><p className="text-sm font-bold text-blue-600 mb-6 flex items-center justify-center gap-2"><Star size={16} fill="currentColor" /> 랭킹에 이름을 남기고 싶으신가요?</p><button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-5 bg-[#FEE500] text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95"><svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>3초 만에 로그인하고 기록 저장</button></div>
         ) : (
-          <div className="mb-10 p-6 bg-green-50 dark:bg-green-900/20 rounded-[2rem] border border-green-100 dark:border-green-900/30 flex items-center justify-center gap-3 animate-pulse"><Star size={20} className="text-green-600" fill="currentColor" /><p className="text-sm font-black text-green-600">방금 세운 기록이 랭킹에 성공적으로 반영되었습니다!</p></div>
+          <div className="mb-10 p-6 bg-green-50 rounded-2xl border border-green-100 flex items-center justify-center gap-3 animate-pulse"><Star size={20} className="text-green-600" fill="currentColor" /><p className="text-sm font-bold text-green-600">방금 세운 기록이 랭킹에 성공적으로 반영되었습니다!</p></div>
         )}
         <div className="mb-6 flex justify-center empty:hidden">
           <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
         </div>
         <div className="flex flex-col gap-4">
-          <button onClick={startGame} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xl font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
-          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-black text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16} /></Link>
+          <button onClick={startGame} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
+          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16} /></Link>
         </div>
       </div>
     </div>
@@ -556,9 +556,9 @@ export const StairsGame: React.FC = () => {
     };
     const mobileHud = (
       <>
-        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-black uppercase">층</span><span className="text-sm font-black text-emerald-400 tabular-nums">{floor}</span></span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-bold uppercase">층</span><span className="text-sm font-bold text-emerald-400 tabular-nums">{floor}</span></span>
         <span className="flex-1 min-w-[60px] max-w-[140px] flex items-center gap-1"><GaugeIcon size={12} className={gaugeText} />{gaugeBar(true)}</span>
-        {combo > 1 && <span className="text-orange-500 font-black text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
+        {combo > 1 && <span className="text-orange-500 font-bold text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => setMuted(sound.toggleMuted())} aria-label="음소거" className={`shrink-0 text-zinc-400 ${combo > 1 ? "" : "ml-auto"}`}>
           {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
@@ -576,20 +576,20 @@ export const StairsGame: React.FC = () => {
       {gameState === "gameover" && mounted && createPortal(gameOverModal, document.body)}
 
       {/* Game Dashboard (데스크톱 ≥lg) — 게이지 바를 크게 배치 */}
-      <div className="hidden lg:flex w-full items-center gap-6 px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-[1.5rem] md:rounded-[2rem] shadow-xl border border-zinc-800 shrink-0">
-        <div className="flex flex-col shrink-0"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Floor</span><span className="text-2xl font-black text-emerald-400 flex items-center gap-1"><TrendingUp size={20} />{floor}층</span></div>
-        <div className="flex flex-col shrink-0"><span className="text-[9px] text-zinc-500 uppercase font-black mb-0.5">Level</span><span className="text-2xl font-black text-blue-400">{level}</span></div>
+      <div className="hidden lg:flex w-full items-center gap-6 px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-2xl md:rounded-2xl shadow-xl border border-zinc-800 shrink-0">
+        <div className="flex flex-col shrink-0"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">Floor</span><span className="text-2xl font-bold text-emerald-400 flex items-center gap-1"><TrendingUp size={20} />{floor}층</span></div>
+        <div className="flex flex-col shrink-0"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">Level</span><span className="text-2xl font-bold text-blue-400">{level}</span></div>
         <div className="flex-1 flex flex-col gap-1 min-w-0">
-          <span className={`text-[9px] uppercase font-black flex items-center gap-1 ${gaugeText}`}><GaugeIcon size={12} /> 남은 게이지 {Math.round(gauge)}%</span>
+          <span className={`text-[9px] uppercase font-bold flex items-center gap-1 ${gaugeText}`}><GaugeIcon size={12} /> 남은 게이지 {Math.round(gauge)}%</span>
           {gaugeBar()}
         </div>
         <div className="flex items-center gap-4 shrink-0">
-          {combo > 1 && <div className="animate-bounce"><span className="text-orange-500 font-black text-lg italic flex items-center gap-1"><Flame size={16} fill="currentColor" /> {combo}</span></div>}
+          {combo > 1 && <div className="animate-bounce"><span className="text-orange-500 font-bold text-lg italic flex items-center gap-1"><Flame size={16} fill="currentColor" /> {combo}</span></div>}
           <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => setMuted(sound.toggleMuted())} aria-label="음소거 토글" className="w-9 h-9 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center hover:bg-zinc-700 transition-colors shrink-0">
             {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
           </button>
           <div className="h-8 w-px bg-zinc-800 hidden sm:block"></div>
-          <div className="text-right hidden sm:block"><div className="text-[9px] text-zinc-500 font-black uppercase tracking-widest leading-tight">Climbing Mode</div><div className="font-black text-zinc-300 text-sm leading-tight">글자 계단</div></div>
+          <div className="text-right hidden sm:block"><div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-tight">Climbing Mode</div><div className="font-bold text-zinc-300 text-sm leading-tight">글자 계단</div></div>
         </div>
       </div>
 
@@ -601,18 +601,18 @@ export const StairsGame: React.FC = () => {
         </div>
 
         {/* Rankings Sidebar (모바일에서는 숨김) */}
-        <div className="hidden lg:flex w-full lg:w-72 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg flex-col shrink-0">
-          <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-black">최고 층수 랭킹</h3></div>
+        <div className="hidden lg:flex w-full lg:w-72 bg-white rounded-2xl border border-zinc-200 p-6 shadow-lg flex-col shrink-0">
+          <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-bold">최고 층수 랭킹</h3></div>
           <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
             {rankingLoading ? (<div className="flex flex-col items-center justify-center py-10 gap-2"><Loader2 className="animate-spin text-zinc-300" size={20} /></div>) :
               rankings.length > 0 ? rankings.map((rank, i) => (
                 <div key={i} className="flex items-center gap-3 group">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${i === 0 ? "bg-yellow-400 text-white" : i === 1 ? "bg-zinc-300 text-zinc-600" : i === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>{i + 1}</div>
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${i === 0 ? "bg-yellow-400 text-white" : i === 1 ? "bg-zinc-300 text-zinc-600" : i === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 text-zinc-400"}`}>{i + 1}</div>
                   <div className="flex-1 flex items-center gap-2 min-w-0">
-                    {rank.profiles?.avatar_url ? <Image src={rank.profiles.avatar_url} alt="p" width={24} height={32} className="w-6 h-6 rounded-lg object-cover aspect-square" /> : <div className="w-6 h-6 bg-zinc-50 dark:bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400"><User size={12} /></div>}
-                    <div className="min-w-0"><p className="text-sm font-black truncate text-zinc-900 dark:text-zinc-100 leading-tight">{rank.profiles?.nickname || "익명"}</p><p className="text-[9px] font-bold text-zinc-400">Lv.{rank.level}</p></div>
+                    {rank.profiles?.avatar_url ? <Image src={rank.profiles.avatar_url} alt="p" width={24} height={32} className="w-6 h-6 rounded-lg object-cover aspect-square" /> : <div className="w-6 h-6 bg-zinc-50 rounded-lg flex items-center justify-center text-zinc-400"><User size={12} /></div>}
+                    <div className="min-w-0"><p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || "익명"}</p><p className="text-[9px] font-bold text-zinc-400">Lv.{rank.level}</p></div>
                   </div>
-                  <div className="text-right shrink-0"><p className="text-sm font-black text-emerald-600">{rank.score.toLocaleString()}층</p></div>
+                  <div className="text-right shrink-0"><p className="text-sm font-bold text-emerald-600">{rank.score.toLocaleString()}층</p></div>
                 </div>
               )) : <div className="text-center py-10 text-zinc-400 text-xs font-medium">기록 없음</div>}
           </div>
@@ -621,7 +621,7 @@ export const StairsGame: React.FC = () => {
               로그인을 하시면 나만의 소중한 기록을 <br />실시간 랭킹에 남길 수 있습니다.
             </p>
           )}
-          <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 text-center"><div className="bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-xl flex items-center justify-center gap-2"><Star size={14} className="text-emerald-600" fill="currentColor" /><span className="font-black text-xs">{profile?.nickname || "Guest"}</span></div></div>
+          <div className="mt-4 pt-4 border-t border-zinc-100 text-center"><div className="bg-zinc-50 p-3 rounded-xl flex items-center justify-center gap-2"><Star size={14} className="text-emerald-600" fill="currentColor" /><span className="font-bold text-xs">{profile?.nickname || "Guest"}</span></div></div>
         </div>
       </div>
     </div>

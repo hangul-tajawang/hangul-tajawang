@@ -82,7 +82,7 @@ export const JourneyGeoMap: React.FC<JourneyVizProps> = ({
 
   if (!data) {
     return (
-      <div className={`w-full flex items-center justify-center bg-slate-100 dark:bg-slate-800/40 rounded-2xl ${isStrip ? "h-28" : "h-48 md:h-64"}`}>
+      <div className={`w-full flex items-center justify-center bg-slate-100 rounded-2xl ${isStrip ? "h-28" : "h-48 md:h-64"}`}>
         <span className="text-xs font-bold text-zinc-400 animate-pulse">세계지도 불러오는 중…</span>
       </div>
     );
@@ -91,7 +91,7 @@ export const JourneyGeoMap: React.FC<JourneyVizProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full overflow-hidden rounded-2xl bg-sky-50 dark:bg-slate-900 border border-sky-100 dark:border-slate-700 ${isStrip ? "" : "shadow-inner"}`}
+      className={`relative w-full overflow-hidden rounded-2xl bg-sky-50 border border-sky-100 ${isStrip ? "" : "shadow-inner"}`}
     >
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -118,7 +118,7 @@ export const JourneyGeoMap: React.FC<JourneyVizProps> = ({
       </svg>
 
       {/* 진행 현황 배지 */}
-      <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full bg-black/55 text-white text-[10px] font-black tabular-nums backdrop-blur-sm">
+      <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full bg-black/55 text-white text-[10px] font-bold tabular-nums backdrop-blur-sm">
         {finished ? `완주! ${stations.length}개국` : `${doneCodes.size} / ${stations.length}개국`}
       </div>
 

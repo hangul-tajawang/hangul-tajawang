@@ -20,32 +20,32 @@ export default function TermsOfService() {
   // 영업양도 시행일(2026-09-01) 이후 여부 — 운영자 정의·문의처·시행일자가 바뀐다
   const transferred = new Date() >= TRANSFER_DATE;
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans py-12 px-4">
-      <div className="container mx-auto max-w-3xl bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+    <div className="min-h-screen bg-[#f8f9fa] text-zinc-900 font-sans py-12 px-4">
+      <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden">
         {/* Header */}
-        <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 flex flex-col items-center text-center">
+        <div className="p-8 border-b border-zinc-100 bg-zinc-50/50 flex flex-col items-center text-center">
           <Link prefetch={false} href="/" className="mb-6 self-start flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-blue-600 transition-colors">
             <ChevronLeft size={16} /> 홈으로 돌아가기
           </Link>
           <Scale size={48} className="text-blue-600 mb-4" />
-          <h1 className="text-3xl font-black mb-2">이용약관</h1>
+          <h1 className="text-3xl font-bold mb-2">이용약관</h1>
           <p className="text-zinc-500 text-sm font-medium">시행일자: {transferred ? "2026. 09. 01" : "2026. 07. 12"}</p>
         </div>
 
         {/* Content */}
-        <div className="p-8 md:p-12 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed break-keep">
+        <div className="p-8 md:p-12 space-y-12 text-zinc-700 leading-relaxed break-keep">
           {!transferred && (
-            <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-2xl p-5 text-sm text-blue-900 dark:text-blue-200">
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-sm text-blue-900">
               <strong>[개정 예고]</strong> 2026년 9월 1일자로 서비스 운영 주체가 블루커뮤니케이션즈 주식회사로
               변경(영업 양도)됨에 따라 본 약관의 운영자·문의처가 개정될 예정입니다. 자세한 내용은{" "}
-              <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600 dark:hover:text-blue-300">
+              <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600">
                 운영 주체 변경 안내
               </Link>
               를 확인해 주세요.
             </div>
           )}
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제1조 (목적)
             </h2>
@@ -56,7 +56,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제2조 (서비스의 구성)
             </h2>
@@ -71,7 +71,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제3조 (계정 및 회원 가입)
             </h2>
@@ -83,7 +83,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제4조 (이용자 생성 콘텐츠, UGC)
             </h2>
@@ -97,7 +97,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제5조 (오리지널 콘텐츠 및 원고 투고)
             </h2>
@@ -111,7 +111,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제6조 (서비스의 지적재산권)
             </h2>
@@ -119,7 +119,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제7조 (광고)
             </h2>
@@ -129,7 +129,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제8조 (면책조항)
             </h2>
@@ -141,7 +141,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제9조 (약관의 변경)
             </h2>
@@ -149,7 +149,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제10조 (준거법 및 관할)
             </h2>
@@ -157,13 +157,13 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-zinc-900 dark:text-zinc-50 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               문의처
             </h2>
-            <div className="bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-700">
+            <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
               <p className="text-sm mb-4 font-medium">이용약관, 저작권 신고 및 서비스 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.</p>
-              <div className="flex items-center gap-3 text-zinc-900 dark:text-zinc-100 font-bold">
+              <div className="flex items-center gap-3 text-zinc-900 font-bold">
                 <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center">
                   <Mail size={20} />
                 </div>
@@ -174,7 +174,7 @@ export default function TermsOfService() {
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 text-center flex justify-center gap-6 text-sm font-bold text-zinc-400">
+        <div className="p-8 border-t border-zinc-100 bg-zinc-50/30 text-center flex justify-center gap-6 text-sm font-bold text-zinc-400">
           <Link prefetch={false} href="/privacy" className="hover:text-zinc-600 transition-colors">개인정보처리방침</Link>
           <span>·</span>
           <span>© 2026 {transferred ? "블루커뮤니케이션즈 주식회사" : "한글타자왕"}</span>

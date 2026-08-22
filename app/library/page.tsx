@@ -13,7 +13,7 @@ export default function LibraryPage() {
   return (
     <div className="w-full py-6 md:py-10 text-on-surface">
       <div className="text-center mb-4 md:mb-8 px-4">
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight flex items-center justify-center gap-2"><Library className="text-primary" /> 내 서재</h1>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center justify-center gap-2"><Library className="text-primary" /> 내 서재</h1>
         <p className="mt-3 text-zinc-500 font-medium">키보드로 새긴 문장들이 책이 되어 쌓입니다</p>
       </div>
       <MyLibrary />

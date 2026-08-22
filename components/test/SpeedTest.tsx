@@ -130,7 +130,7 @@ export const SpeedTest: React.FC = () => {
     return target.split("").map((char, i) => {
       const normChar = TypingUtils.normalize(char);
       let cls = "text-zinc-300";
-      if (i === inputValue.length) cls = "text-primary font-black bg-primary/10 rounded-sm";
+      if (i === inputValue.length) cls = "text-primary font-bold bg-primary/10 rounded-sm";
       else if (i < inputValue.length) cls = typedNorm.charAt(i) === normChar ? "text-on-surface font-bold" : "text-red-500 line-through opacity-70";
       return <span key={i} className={cls}>{char}</span>;
     });
@@ -241,27 +241,27 @@ export const SpeedTest: React.FC = () => {
     const meta = TIER_META[tier] || TIER_META.D;
     return (
       <div className="w-full max-w-xl mx-auto py-6 md:py-12 px-4 animate-in zoom-in duration-500">
-        <div className="rounded-[2rem] md:rounded-[3rem] p-8 md:p-14 text-center text-white shadow-2xl relative overflow-hidden"
+        <div className="rounded-2xl md:rounded-2xl p-8 md:p-14 text-center text-white shadow-2xl relative overflow-hidden"
              style={{ background: `linear-gradient(135deg, ${meta.colors[0]}, ${meta.colors[1]})` }}>
-          <p className="text-white/70 font-black text-[10px] md:text-xs uppercase tracking-[0.3em] mb-6">1분 타자 속도 테스트 결과</p>
+          <p className="text-white/70 font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-6">1분 타자 속도 테스트 결과</p>
           <div className="text-6xl mb-4">{meta.emoji}</div>
-          <h2 className="text-6xl md:text-8xl font-black mb-2 tracking-tighter">{tier}급</h2>
+          <h2 className="text-6xl md:text-8xl font-bold mb-2 tracking-tighter">{tier}급</h2>
           <p className="text-xl md:text-2xl font-bold text-white/90 mb-8">{name}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4 mb-8">
-            <div className="bg-white/10 rounded-2xl p-4 md:p-6"><p className="text-3xl md:text-4xl font-black">{result.kpm}타</p><p className="text-[10px] md:text-xs font-bold text-white/60 mt-1">분당 타수</p></div>
-            <div className="bg-white/10 rounded-2xl p-4 md:p-6"><p className="text-3xl md:text-4xl font-black">{result.accuracy}%</p><p className="text-[10px] md:text-xs font-bold text-white/60 mt-1">정확도</p></div>
+            <div className="bg-white/10 rounded-2xl p-4 md:p-6"><p className="text-3xl md:text-4xl font-bold">{result.kpm}타</p><p className="text-[10px] md:text-xs font-bold text-white/60 mt-1">분당 타수</p></div>
+            <div className="bg-white/10 rounded-2xl p-4 md:p-6"><p className="text-3xl md:text-4xl font-bold">{result.accuracy}%</p><p className="text-[10px] md:text-xs font-bold text-white/60 mt-1">정확도</p></div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <button onClick={shareCard} className="flex-1 py-4 bg-white text-zinc-900 font-black rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"><Share2 size={18} /> 결과 자랑하기</button>
-            <button onClick={downloadCard} className="flex-1 py-4 bg-white/15 border border-white/30 font-black rounded-2xl flex items-center justify-center gap-2 hover:bg-white/25 transition-all"><Download size={18} /> 이미지 저장</button>
+            <button onClick={shareCard} className="flex-1 py-4 bg-white text-zinc-900 font-bold rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"><Share2 size={18} /> 결과 자랑하기</button>
+            <button onClick={downloadCard} className="flex-1 py-4 bg-white/15 border border-white/30 font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-white/25 transition-all"><Download size={18} /> 이미지 저장</button>
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3">
-          <button onClick={startTest} className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-lg font-black rounded-2xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"><RotateCcw size={20} /> 다시 측정하기</button>
+          <button onClick={startTest} className="w-full py-5 bg-zinc-900 text-white text-lg font-bold rounded-2xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"><RotateCcw size={20} /> 다시 측정하기</button>
           <div className="grid grid-cols-2 gap-3">
-            <Link prefetch={false} href="/practice" className="py-4 bg-surface-low rounded-2xl font-black text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Trophy size={16} /> 타수 올리는 연습 <ChevronRight size={14} /></Link>
-            <Link prefetch={false} href="/game/typing-race" className="py-4 bg-surface-low rounded-2xl font-black text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Gamepad2 size={16} /> 타자 레이스 도전 <ChevronRight size={14} /></Link>
+            <Link prefetch={false} href="/practice" className="py-4 bg-surface-low rounded-2xl font-bold text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Trophy size={16} /> 타수 올리는 연습 <ChevronRight size={14} /></Link>
+            <Link prefetch={false} href="/game/typing-race" className="py-4 bg-surface-low rounded-2xl font-bold text-sm flex items-center justify-center gap-1.5 hover:text-primary transition-colors"><Gamepad2 size={16} /> 타자 레이스 도전 <ChevronRight size={14} /></Link>
           </div>
         </div>
       </div>
@@ -274,20 +274,20 @@ export const SpeedTest: React.FC = () => {
       <div className="sticky top-20 z-30 flex justify-center gap-3 md:gap-6 mb-4 md:mb-10">
         <div className="flex items-center gap-2 bg-surface-lowest px-4 py-2.5 md:px-6 md:py-3 rounded-2xl shadow-sm">
           <Timer size={18} className={timeLeft <= 10 && gameState === "running" ? "text-red-500 animate-pulse" : "text-primary"} />
-          <span className={`text-xl md:text-2xl font-black tabular-nums ${timeLeft <= 10 && gameState === "running" ? "text-red-500" : "text-on-surface"}`}>{Math.ceil(timeLeft)}s</span>
+          <span className={`text-xl md:text-2xl font-bold tabular-nums ${timeLeft <= 10 && gameState === "running" ? "text-red-500" : "text-on-surface"}`}>{Math.ceil(timeLeft)}s</span>
         </div>
-        <div className="flex items-center gap-2 bg-surface-lowest px-4 py-2.5 md:px-6 md:py-3 rounded-2xl shadow-sm"><Zap size={18} className="text-yellow-500" /><span className="text-xl md:text-2xl font-black text-on-surface tabular-nums">{liveKpm}타</span></div>
+        <div className="flex items-center gap-2 bg-surface-lowest px-4 py-2.5 md:px-6 md:py-3 rounded-2xl shadow-sm"><Zap size={18} className="text-yellow-500" /><span className="text-xl md:text-2xl font-bold text-on-surface tabular-nums">{liveKpm}타</span></div>
       </div>
 
       {/* 문장 카드 */}
-      <div className="relative w-full bg-surface-lowest shadow-[0_30px_60px_rgba(21,28,39,0.08)] p-6 sm:p-10 md:p-16 rounded-[2rem] md:rounded-[3rem] text-center mb-4 md:mb-8 min-h-[120px] md:min-h-[180px] flex items-center justify-center">
+      <div className="relative w-full bg-surface-lowest shadow-[0_30px_60px_rgba(21,28,39,0.08)] p-6 sm:p-10 md:p-16 rounded-2xl md:rounded-2xl text-center mb-4 md:mb-8 min-h-[120px] md:min-h-[180px] flex items-center justify-center">
         {gameState === "ready" ? (
           <div className="flex flex-col items-center gap-6 py-4">
             <p className="text-zinc-500 font-medium leading-relaxed break-keep">60초 동안 나오는 문장을 정확하고 빠르게 입력하세요.<br className="hidden sm:block" /> 타이머는 <strong className="text-on-surface">첫 글자를 치는 순간</strong> 시작됩니다.</p>
-            <button onClick={startTest} className="px-10 py-5 primary-gradient text-white text-lg font-black rounded-full shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">테스트 시작하기</button>
+            <button onClick={startTest} className="px-10 py-5 primary-gradient text-white text-lg font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">테스트 시작하기</button>
           </div>
         ) : (
-          <div className="text-xl sm:text-2xl md:text-4xl leading-relaxed font-plus-jakarta font-black select-none break-keep">{renderHighlightedText()}</div>
+          <div className="text-xl sm:text-2xl md:text-4xl leading-relaxed font-plus-jakarta font-bold select-none break-keep">{renderHighlightedText()}</div>
         )}
       </div>
 
@@ -306,10 +306,10 @@ export const SpeedTest: React.FC = () => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        className={`w-full h-16 md:h-24 px-5 md:px-10 text-xl md:text-3xl bg-surface-lowest rounded-[1.5rem] md:rounded-[2rem] shadow-lg outline-hidden text-center font-bold transition-all ${gameState === "running" ? "ring-4 ring-primary/10 focus:ring-primary/30" : "opacity-50"}`}
+        className={`w-full h-16 md:h-24 px-5 md:px-10 text-xl md:text-3xl bg-surface-lowest rounded-2xl md:rounded-2xl shadow-lg outline-hidden text-center font-bold transition-all ${gameState === "running" ? "ring-4 ring-primary/10 focus:ring-primary/30" : "opacity-50"}`}
         placeholder={gameState === "running" ? "여기에 입력하세요" : "시작 버튼을 눌러주세요"}
       />
-      <p className="mt-4 text-center text-[10px] md:text-xs font-black text-zinc-400 uppercase tracking-widest flex items-center justify-center gap-2"><Target size={13} /> 문장을 끝까지 치면 자동으로 다음 문장이 나옵니다</p>
+      <p className="mt-4 text-center text-[10px] md:text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center justify-center gap-2"><Target size={13} /> 문장을 끝까지 치면 자동으로 다음 문장이 나옵니다</p>
     </div>
   );
 };

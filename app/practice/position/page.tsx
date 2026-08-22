@@ -38,33 +38,33 @@ export default function PositionPracticePage() {
         <PositionPractice initialPhase="keys" />
 
         <article className="mt-20 w-full px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h1 className="text-3xl font-black mb-8 border-b border-surface-high pb-4 flex items-center gap-4">
+            <h1 className="text-3xl font-bold mb-8 border-b border-surface-high pb-4 flex items-center gap-4">
                <Keyboard className="text-primary w-8 h-8"/> 한글 자판 자리 연습: 독수리 타법 완벽 교정 가이드
             </h1>
             
-            <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
+            <div className="prose prose-lg text-zinc-700 max-w-none">
                 <p className="leading-relaxed mb-8">
                     컴퓨터나 노트북을 처음 접하거나, 아직도 두 손가락으로만 타자를 치는 소위 <strong>'독수리 타법'</strong>을 사용하고 계신가요? 
                     타자 속도(타수)를 올리고 오타율을 줄이기 위해서는 <strong>키보드의 자판 위치</strong>를 정확하게 외우고, 각 키를 눌러야 하는 올바른 손가락을 익히는 것이 무엇보다 중요합니다.
                 </p>
 
-                <div className="bg-surface-low p-10 rounded-[2.5rem] leading-loose font-medium border border-surface-high shadow-inner mb-8 text-base">
+                <div className="bg-surface-low p-10 rounded-2xl leading-loose font-medium border border-surface-high shadow-inner mb-8 text-base">
                     <h2 className="text-2xl font-bold mb-6 text-primary">올바른 한글(두벌식) 자판 위치 및 손가락 배치법</h2>
                     <p className="mb-4">
                         한글 두벌식 키보드에서 제일 기본이 되는 <strong>'기본 자리'</strong>는 중간 줄(A~L)입니다.<br/>
                         양손의 검지(집게손가락)를 키보드 자판의 <code>F(ㄹ)</code>와 <code>J(ㅓ)</code> 키 위에 올려보세요. 이 두 키에는 작은 돌기가 튀어나와 있어 화면만 보고도 손가락의 위치를 잡을 수 있습니다.
                     </p>
-                    <ul className="list-disc pl-6 space-y-2 text-zinc-700 dark:text-zinc-300 font-medium">
+                    <ul className="list-disc pl-6 space-y-2 text-zinc-700 font-medium">
                         <li><strong>왼손 기본 자리:</strong> 새끼손가락부터 차례대로 <code>A(ㅁ)</code>, <code>S(ㄴ)</code>, <code>D(ㅇ)</code>, <code>F(ㄹ)</code></li>
                         <li><strong>오른손 기본 자리:</strong> 검지부터 차례대로 <code>J(ㅓ)</code>, <code>K(ㅏ)</code>, <code>L(ㅣ)</code>, <code>;(;)</code></li>
                         <li><strong>엄지손가락:</strong> 스페이스바(Space Bar) 위에 자연스럽게 둡니다.</li>
                     </ul>
                 </div>
 
-                <div className="bg-surface-lowest p-8 rounded-[2.5rem] border border-surface-high">
+                <div className="bg-surface-lowest p-8 rounded-2xl border border-surface-high">
                     <h3 className="text-xl font-bold mb-4 text-on-surface">단계별 학습 전략</h3>
-                    <p className="text-zinc-700 dark:text-zinc-300 mb-4 font-normal">본 '한글타자왕'의 자리 연습 모드는 다음과 같이 구성되어 있습니다.</p>
-                    <ol className="list-decimal pl-6 space-y-4 text-zinc-700 dark:text-zinc-300 font-medium">
+                    <p className="text-zinc-700 mb-4 font-normal">본 '한글타자왕'의 자리 연습 모드는 다음과 같이 구성되어 있습니다.</p>
+                    <ol className="list-decimal pl-6 space-y-4 text-zinc-700 font-medium">
                         <li><strong>기본 자리 (중간 줄):</strong> 가장 빈번하게 사용되며 손가락의 중심이 되는 ㅁ, ㄴ, ㅇ, ㄹ 위치를 연습합니다.</li>
                         <li><strong>윗 자리 (상단 줄):</strong> ㅂ, ㅈ, ㄷ, ㄱ, ㅅ 등 자음이 모여 있는 윗줄로 손가락을 뻗는 연습을 진행합니다.</li>
                         <li><strong>밑 자리 (하단 줄):</strong> ㅋ, ㅌ, ㅊ, ㅍ 등 상대적으로 빈도가 낮지만 정확하게 누르기 까다로운 하단 자음을 숙달합니다.</li>

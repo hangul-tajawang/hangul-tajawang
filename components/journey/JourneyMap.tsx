@@ -161,9 +161,9 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
             return (
               <g key={s.id}>
                 <circle cx={posX(i)} cy={LINE_Y} r={10} fill={done ? color : "#18181b"} stroke={done ? color : isCurrent ? color : "#3f3f46"} strokeWidth={4} />
-                {done && <text x={posX(i)} y={LINE_Y + 4} textAnchor="middle" className="fill-white text-[10px] font-black">✓</text>}
-                {!done && <text x={posX(i)} y={LINE_Y + 3.5} textAnchor="middle" className="fill-zinc-500 text-[9px] font-black">{i + 1}</text>}
-                <text x={posX(i)} y={LINE_Y + 32} textAnchor="middle" className={`text-[12px] font-black ${isCurrent ? "fill-white" : "fill-zinc-400"}`}>
+                {done && <text x={posX(i)} y={LINE_Y + 4} textAnchor="middle" className="fill-white text-[10px] font-bold">✓</text>}
+                {!done && <text x={posX(i)} y={LINE_Y + 3.5} textAnchor="middle" className="fill-zinc-500 text-[9px] font-bold">{i + 1}</text>}
+                <text x={posX(i)} y={LINE_Y + 32} textAnchor="middle" className={`text-[12px] font-bold ${isCurrent ? "fill-white" : "fill-zinc-400"}`}>
                   {name ?? ""}
                 </text>
               </g>
@@ -175,7 +175,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
           </g>
         </g>
         {/* 중앙 고정 하이라이트 (열차 아래 위치 표시) */}
-        <text x={180} y={100} textAnchor="middle" className="fill-zinc-500 text-[9px] font-black">
+        <text x={180} y={100} textAnchor="middle" className="fill-zinc-500 text-[9px] font-bold">
           {finished
             ? "완주!"
             : `${currentIndex + 1}번째 ${course.unitLabel || "항목"} ${phase === "arrived" ? "도착" : "이동 중"}`}
@@ -204,12 +204,12 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
             {multiLine && line.name && (
               <div className="flex items-center gap-2.5 pl-2 pt-1">
                 <span
-                  className="px-3 py-1 rounded-full text-[13px] font-black text-white tracking-widest"
+                  className="px-3 py-1 rounded-full text-[13px] font-bold text-white tracking-widest"
                   style={{ backgroundColor: color, opacity: lineActive || lineDone ? 1 : 0.45 }}
                 >
                   {line.name}
                 </span>
-                <span className="text-[11px] font-black" style={{ color }}>
+                <span className="text-[11px] font-bold" style={{ color }}>
                   {line.stations.length}대
                   {lineDone && " · 정복 완료 ✓"}
                   {lineActive && ` · ${currentIndex - offset + 1}번째 진행 중`}
@@ -235,7 +235,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
                       x={x}
                       y={meta.y - 36}
                       textAnchor={meta.dir === 1 ? "start" : "end"}
-                      className="text-[13px] font-black tracking-[0.2em]"
+                      className="text-[13px] font-bold tracking-[0.2em]"
                       fill={color}
                       opacity={0.55}
                     >
@@ -264,15 +264,15 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
                       className={done ? "" : isCurrent ? "fill-surface-lowest" : "fill-surface-lowest stroke-surface-highest"}
                     />
                     {done ? (
-                      <text x={x} y={y + 4.5} textAnchor="middle" className="fill-white text-[11px] font-black">✓</text>
+                      <text x={x} y={y + 4.5} textAnchor="middle" className="fill-white text-[11px] font-bold">✓</text>
                     ) : (
-                      <text x={x} y={y + 4} textAnchor="middle" className="fill-secondary text-[10px] font-black" opacity={0.7}>{i + 1}</text>
+                      <text x={x} y={y + 4} textAnchor="middle" className="fill-secondary text-[10px] font-bold" opacity={0.7}>{i + 1}</text>
                     )}
                     <text
                       x={x}
                       y={y + 34}
                       textAnchor="middle"
-                      className={`text-[14px] font-black ${
+                      className={`text-[14px] font-bold ${
                         isCurrent ? "fill-on-surface" : name ? "fill-secondary" : "fill-surface-highest"
                       }`}
                     >

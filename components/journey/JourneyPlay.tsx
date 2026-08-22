@@ -284,7 +284,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   // ── 프롬프트 카드 (이동 중: 다음 역 맞히기 / 도착: 지식 문장 필사)
   const promptCard = (compact: boolean) => (
     <div
-      className={`w-full rounded-[1.75rem] transition-colors text-center ${
+      className={`w-full rounded-2xl transition-colors text-center ${
         compact
           ? // 모바일 셸은 항상 어두운 배경 — 라이트 테마에서도 흰 글자가 보이게 카드도 어둡게 고정
             `p-3 ${isWrongNow ? "bg-rose-950/70" : "bg-zinc-900"}`
@@ -310,7 +310,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 🗺️ 지도에 표시된 나라는?
               </p>
               {station.group && (
-                <span className={`px-2.5 py-0.5 rounded-full font-black text-[10px] uppercase tracking-widest ${compact ? "bg-cyan-900/60 text-cyan-200" : "bg-cyan-50 text-cyan-700"}`}>
+                <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-widest ${compact ? "bg-cyan-900/60 text-cyan-200" : "bg-cyan-50 text-cyan-700"}`}>
                   {course.groups?.find((g) => g.id === station.group)?.label || station.group}
                 </span>
               )}
@@ -337,7 +337,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 : len > 8 ? "text-lg" : len > 5 ? "text-2xl" : "text-3xl";
               const trackClass = len > 5 ? "tracking-[0.08em]" : "tracking-[0.2em]";
               return (
-                <span className={`font-black break-keep text-center max-w-full ${sizeClass} ${trackClass} ${compact ? "text-violet-300" : "text-primary"} ${masked ? "opacity-40" : ""}`}>
+                <span className={`font-bold break-keep text-center max-w-full ${sizeClass} ${trackClass} ${compact ? "text-violet-300" : "text-primary"} ${masked ? "opacity-40" : ""}`}>
                   {hintText}
                 </span>
               );
@@ -347,7 +347,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 type="button"
                 onClick={() => { setChosungShown(true); inputRef.current?.focus(); }}
                 onPointerDown={(e) => e.preventDefault()}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black active:scale-95 transition-transform whitespace-nowrap shrink-0"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold active:scale-95 transition-transform whitespace-nowrap shrink-0"
               >
                 <Eye size={13} /> 초성 보기
               </button>
@@ -358,7 +358,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 onClick={revealHint}
                 // 입력창 포커스를 뺏지 않는다 — blur 시 모바일 셸이 일시정지되는 것 방지
                 onPointerDown={(e) => e.preventDefault()}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform whitespace-nowrap shrink-0"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-bold active:scale-95 transition-transform whitespace-nowrap shrink-0"
               >
                 <Lightbulb size={13} /> 정답 보기
               </button>
@@ -375,14 +375,14 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       ) : phase === "traveling" ? (
         <>
           {sequenceQuestion && (
-            <p className={`font-black ${compact ? "text-sm text-zinc-300 mb-1" : "text-base text-on-surface mb-2"}`}>
+            <p className={`font-bold ${compact ? "text-sm text-zinc-300 mb-1" : "text-base text-on-surface mb-2"}`}>
               {sequenceQuestion}
             </p>
           )}
           {/* 주기율표: 원소기호가 곧 문제 — 크게 보여준다 */}
           {course.ui === "periodic" && station.reading && (
             <p
-              className={`font-black ${compact ? "text-3xl mb-1" : "text-5xl mb-2"}`}
+              className={`font-bold ${compact ? "text-3xl mb-1" : "text-5xl mb-2"}`}
               style={{ color: course.lines[0]?.color || "#10b981" }}
             >
               {station.reading}
@@ -398,7 +398,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 onClick={revealHint}
                 // 입력창 포커스를 뺏지 않는다 — blur 시 모바일 셸이 일시정지되는 것 방지
                 onPointerDown={(e) => e.preventDefault()}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-black active:scale-95 transition-transform"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-tertiary/10 text-tertiary text-xs font-bold active:scale-95 transition-transform"
               >
                 <Lightbulb size={13} /> 정답 보기
               </button>
@@ -412,7 +412,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
         </>
       ) : (
         <>
-          <p className={`font-black uppercase tracking-[0.2em] ${compact ? "text-[9px] mb-1 text-violet-300" : "text-[10px] mb-3 text-primary"}`}>
+          <p className={`font-bold uppercase tracking-[0.2em] ${compact ? "text-[9px] mb-1 text-violet-300" : "text-[10px] mb-3 text-primary"}`}>
             <MapPin size={11} className="inline -mt-0.5 mr-1" />
             {station.name}
             {station.year ? ` · ${station.year}` : ""} 도착
@@ -435,12 +435,12 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       ref={inputRef}
       type="text"
       value={inputValue}
-      onChange={handleInputChange}
+      onChange={handleInputChange} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) { e.preventDefault(); setInputValue(""); } }} 
       disabled={gameState !== "playing"}
-      className={`w-full text-center font-black outline-hidden transition-all ${
+      className={`w-full text-center font-bold outline-hidden transition-all ${
         isMobilePlaying
           ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-violet-500"}`
-          : `h-16 px-5 text-2xl text-on-surface bg-surface-lowest rounded-[1.5rem] shadow-[0_20px_40px_rgba(21,28,39,0.08)] placeholder:text-zinc-300 placeholder:text-base ring-2 ${
+          : `h-16 px-5 text-2xl text-on-surface bg-surface-lowest rounded-2xl shadow-[0_20px_40px_rgba(21,28,39,0.08)] placeholder:text-zinc-300 placeholder:text-base ring-2 ${
               gameState === "playing"
                 ? isWrongNow
                   ? "ring-rose-400"
@@ -485,18 +485,18 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
     const mobileHud = (
       <>
         <span className="flex items-center gap-1">
-          <span className="text-[9px] text-zinc-500 font-black uppercase">진행</span>
-          <span className="text-sm font-black text-violet-400 tabular-nums">
+          <span className="text-[9px] text-zinc-500 font-bold uppercase">진행</span>
+          <span className="text-sm font-bold text-violet-400 tabular-nums">
             {Math.min(stationIndex + 1, stations.length)}/{stations.length}
           </span>
         </span>
         <span className="flex items-center gap-1">
-          <span className="text-[9px] text-zinc-500 font-black uppercase">타수</span>
-          <span className="text-sm font-black text-blue-400 tabular-nums">{liveKpm}</span>
+          <span className="text-[9px] text-zinc-500 font-bold uppercase">타수</span>
+          <span className="text-sm font-bold text-blue-400 tabular-nums">{liveKpm}</span>
         </span>
         <span className="flex items-center gap-1">
-          <span className="text-[9px] text-zinc-500 font-black uppercase">정확도</span>
-          <span className="text-sm font-black text-emerald-400 tabular-nums">{accuracy}%</span>
+          <span className="text-[9px] text-zinc-500 font-bold uppercase">정확도</span>
+          <span className="text-sm font-bold text-emerald-400 tabular-nums">{accuracy}%</span>
         </span>
       </>
     );
@@ -522,8 +522,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
 
   const statCell = (label: string, value: React.ReactNode, accent?: string) => (
     <div className="flex flex-col items-center justify-center py-3 rounded-2xl bg-surface-low">
-      <span className="text-[9px] text-secondary/70 uppercase font-black tracking-widest mb-0.5">{label}</span>
-      <span className={`text-xl font-black tabular-nums ${accent || "text-on-surface"}`}>{value}</span>
+      <span className="text-[9px] text-secondary/70 uppercase font-bold tracking-widest mb-0.5">{label}</span>
+      <span className={`text-xl font-bold tabular-nums ${accent || "text-on-surface"}`}>{value}</span>
     </div>
   );
 
@@ -534,11 +534,11 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       {/* 노트북에서 스크롤 없이 한 화면: 좌측 노선도 / 우측 계기판·프롬프트·입력 */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-4 items-start">
         {/* 노선도 카드 */}
-        <div className="relative w-full bg-surface-lowest rounded-[2rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-4 md:p-6 overflow-hidden">
+        <div className="relative w-full bg-surface-lowest rounded-2xl shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-4 md:p-6 overflow-hidden">
           {/* 준비 상태에선 긴 시각화 대신 컴팩트한 시작 카드 — 스크롤 없이 바로 시작 */}
           {gameState === "ready" ? (
             <div className="flex items-center justify-center py-14 px-4">
-              <div className="glass-card !rounded-[2.5rem] p-8 flex flex-col items-center gap-5 max-w-sm w-full">
+              <div className="glass-card !rounded-2xl p-8 flex flex-col items-center gap-5 max-w-sm w-full">
                 <div className="text-5xl">{course.emoji}</div>
                 <div className="text-center">
                   <h3 className="editorial-heading text-2xl mb-1">{course.title}</h3>
@@ -553,13 +553,13 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                   <div className="w-full flex flex-col gap-2">
                     <button
                       onClick={() => startGame(true)}
-                      className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+                      className="w-full py-4 primary-gradient text-white text-lg font-bold rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
                     >
                       <Play size={20} fill="currentColor" /> {resumeSnapshot.stationIndex + 1}번째부터 이어가기
                     </button>
                     <button
                       onClick={() => startGame(false)}
-                      className="w-full py-3 bg-surface-high text-secondary text-sm font-black rounded-2xl transition-all active:scale-95"
+                      className="w-full py-3 bg-surface-high text-secondary text-sm font-bold rounded-2xl transition-all active:scale-95"
                     >
                       처음부터 다시 출발
                     </button>
@@ -567,7 +567,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 ) : (
                   <button
                     onClick={() => startGame(false)}
-                    className="w-full py-4 primary-gradient text-white text-lg font-black rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full py-4 primary-gradient text-white text-lg font-bold rounded-2xl transition-all shadow-xl hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
                   >
                     <Play size={20} fill="currentColor" /> 시작하기
                   </button>
@@ -592,7 +592,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
 
         {/* 사이드 패널: 계기판 + 프롬프트 + 입력 */}
         <div className="flex flex-col gap-3 lg:sticky lg:top-20">
-          <div className="bg-surface-lowest rounded-[1.75rem] shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-3">
+          <div className="bg-surface-lowest rounded-2xl shadow-[0_20px_40px_rgba(21,28,39,0.06)] p-3">
             <div className="grid grid-cols-2 gap-2">
               {statCell(
                 "진행",
@@ -612,7 +612,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
             <button
               type="button"
               onClick={() => setShowAllNames((v) => !v)}
-              className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-black transition-colors ${
+              className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-bold transition-colors ${
                 showAllNames ? "bg-surface-high text-secondary" : "primary-gradient text-white"
               }`}
             >
@@ -625,7 +625,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
                 type="button"
                 onClick={toggleHideChosung}
                 onPointerDown={(e) => e.preventDefault()}
-                className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-black transition-colors ${
+                className={`mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-xs font-bold transition-colors ${
                   hideChosung ? "bg-zinc-900 text-amber-300" : "bg-surface-high text-secondary"
                 }`}
               >

@@ -75,16 +75,16 @@ export default async function ShortCategoryPage({ params }: Props) {
 
         {/* SEO HTML Content */}
         <article className="mt-12 w-full max-w-5xl px-6 lg:px-8 animate-in fade-in duration-1000">
-            <h1 className="text-3xl font-black mb-8 border-b border-surface-high pb-4">{data.category} 기반 짧은 글 타자 연습</h1>
-            <div className="prose dark:prose-invert prose-lg text-zinc-700 dark:text-zinc-300 max-w-none">
+            <h1 className="text-3xl font-bold mb-8 border-b border-surface-high pb-4">{data.category} 기반 짧은 글 타자 연습</h1>
+            <div className="prose prose-lg text-zinc-700 max-w-none">
                 <p className="leading-relaxed mb-8">
                     지금 보고 계신 페이지는 <strong>{data.category}</strong> 테마에 맞춘 짧은 글(문장)들을 집중적으로 연습할 수 있는 타자 연습 모드입니다. 
                     타자 속도(연타수)와 타이핑 정확도를 실시간으로 피드백 받아, 재미와 학습 효율을 동시에 챙겨보세요.
                     아래는 본 프로그램에서 등장하는 주요 <strong>{data.category}</strong> 문장 목록입니다.
                 </p>
-                <div className="bg-surface-low p-10 rounded-[2.5rem] leading-loose font-medium text-lg border border-surface-high shadow-inner">
+                <div className="bg-surface-low p-10 rounded-2xl leading-loose font-medium text-lg border border-surface-high shadow-inner">
                     <h2 className="text-2xl font-bold mb-6 text-primary">제공되는 {data.category} 문장 목록</h2>
-                    <ul className="list-disc pl-6 space-y-2 text-zinc-700 dark:text-zinc-300 font-medium">
+                    <ul className="list-disc pl-6 space-y-2 text-zinc-700 font-medium">
                       {data.sentences.map((st, idx) => (
                         <li key={idx}>{st}</li>
                       ))}
@@ -96,14 +96,14 @@ export default async function ShortCategoryPage({ params }: Props) {
                     {prevData ? (
                         <Link prefetch={false} href={`/practice/short/${prevData.id}`} className="group flex flex-col text-left mr-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">이전 테마</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevData.category}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{prevData.category}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
 
                     {nextData ? (
                         <Link prefetch={false} href={`/practice/short/${nextData.id}`} className="group flex flex-col text-right ml-auto hover:bg-surface-low p-4 rounded-2xl transition-all w-full sm:w-1/2 items-end">
                             <span className="text-xs font-bold text-zinc-500 mb-1 uppercase tracking-wider">다음 테마</span>
-                            <span className="text-xl font-black text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextData.category}</span>
+                            <span className="text-xl font-bold text-zinc-300 group-hover:text-primary transition-colors line-clamp-1">{nextData.category}</span>
                         </Link>
                     ) : <div className="w-full sm:w-1/2" />}
                 </nav>
