@@ -159,11 +159,11 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      <div className="w-full bg-surface/90 backdrop-blur-md border-b border-outline-variant">
+      <div className="w-full bg-surface-high/85 backdrop-blur-md border-b border-outline-variant">
         <div className="container mx-auto max-w-7xl h-16 flex items-center justify-between px-4 lg:px-8">
             <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group shrink-0">
-                <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">한</div>
-                <span className="editorial-heading text-xl whitespace-nowrap">한글타자왕</span>
+                <div className="w-8 h-8 primary-gradient rounded-md flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">한</div>
+                <span className="serif-display text-xl whitespace-nowrap">한글타자왕</span>
             </Link>
 
             {/* 데스크톱 내비(텍스트 전용): 1024px 미만은 햄버거, 1024~1151px은 핵심 7개, 1152px~ 전체 10개 */}
@@ -222,10 +222,10 @@ function NavButton({ label, href, className = "flex", highlight = false }: { lab
     <Link
       href={href}
       prefetch={false}
-      className={`${className} items-center gap-1.5 px-2.5 py-2 text-sm whitespace-nowrap rounded-lg transition-all ${
+      className={`${className} serif-display items-center gap-1.5 px-2.5 py-2 text-sm whitespace-nowrap rounded-lg transition-all ${
         highlight
-          ? "text-on-surface font-bold hover:text-primary hover:bg-primary/5"
-          : "text-zinc-600 font-medium hover:text-primary hover:bg-surface-low"
+          ? "text-on-surface hover:text-primary hover:bg-primary/5"
+          : "text-zinc-600 hover:text-primary hover:bg-surface-low"
       }`}
     >
       {highlight && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />}

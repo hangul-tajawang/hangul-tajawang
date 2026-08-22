@@ -1,30 +1,41 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
-   한글타자왕 디자인 토큰 — "디지털 문방(文房): 종이·잉크·괘선"
-   따뜻한 종이 배경 + 잉크 텍스트 + 브랜드 블루 1개 + 주홍 악센트.
+   한글타자왕 디자인 토큰 — "스카이 팝": 하늘색 놀이터
+   밝은 하늘색 배경 + 흰 카드 + 페리윙클 하드섀도 + 쨍한 파랑.
    라이트 온리(다크모드 없음).
    ───────────────────────────────────────────────────────────── */
-:root {
-  /* Surface Hierarchy — 따뜻한 종이 */
-  --surface: #faf9f6;
-  --surface-container-lowest: #ffffff;
-  --surface-container-low: #f4f2ec;
-  --surface-container-high: #e9e6dd;
-  --surface-container-highest: #dfdbd0;
 
-  /* Brand Colors — 잉크 + 코발트 블루 1개 + 주홍 */
-  --primary: #0a47c2;
-  --primary-container: #0a47c2;
+/* 디스플레이 폰트 — 잘난체(여기어때 무료 배포, 상업 사용 가능). 자체 호스팅. */
+@font-face {
+  font-family: 'Jalnan';
+  src: url('/fonts/Jalnan.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Surface Hierarchy — 거의 흰색에 파랑 잉크 두 방울 */
+  --surface: #fbfdff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f1f7fe;
+  --surface-container-high: #e0eefb;
+  --surface-container-highest: #cfe4f9;
+
+  /* Brand Colors — 쨍한 파랑 + 페리윙클 그림자 + 오렌지 포인트 */
+  --primary: #2447f5;
+  --primary-container: #2447f5;
   --on-primary: #ffffff;
-  --secondary: #5c5a52;
-  --secondary-container: #ece9e0;
-  --on-secondary-container: #2a2926;
-  --tertiary: #c2410c;            /* 주홍(버밀리온) — 도장·강조 악센트 */
-  --on-surface: #1a1a1e;          /* 잉크 */
-  --outline-variant: #e5e1d8;     /* 괘선 */
-  --success: #1b8a5a;
-  --error: #c2410c;
+  --secondary: #4a5b73;
+  --secondary-container: #d6e8fb;
+  --on-secondary-container: #16273c;
+  --tertiary: #f97316;            /* 오렌지 — 강조·마스코트 포인트 */
+  --on-surface: #111318;          /* 잉크 */
+  --outline-variant: #d5e7f8;     /* 헤어라인 */
+  --pop-shadow: #8e9bf7;          /* 카드 하드섀도(페리윙클) */
+  --success: #1ea35d;
+  --error: #e5484d;
 
   --background: var(--surface);
   --foreground: var(--on-surface);
@@ -52,31 +63,31 @@
   --color-error: var(--error);
 
   /* ── 기존 로우 팔레트 재정의 ──────────────────────────────
-     zinc-*가 1,600여 곳에 쓰이므로 스케일 자체를 따뜻한 잉크 그레이로
+     zinc-*가 1,600여 곳에 쓰이므로 스케일 자체를 시원한 블루 그레이로
      오버라이드해 파일 수정 없이 전체 팔레트를 전환한다.
-     blue-*도 브랜드 코발트 램프로 통일(두 파랑 혼용 제거). */
-  --color-zinc-50: #f7f6f2;
-  --color-zinc-100: #efede6;
-  --color-zinc-200: #e3e0d6;
-  --color-zinc-300: #cfcbbf;
-  --color-zinc-400: #a3a099;
-  --color-zinc-500: #7d7a72;
-  --color-zinc-600: #57554f;
-  --color-zinc-700: #3f3d39;
-  --color-zinc-800: #2a2926;
-  --color-zinc-900: #1e1d1b;
-  --color-zinc-950: #141312;
+     blue-*도 브랜드 비비드 블루 램프로 통일. */
+  --color-zinc-50: #f3f8fd;
+  --color-zinc-100: #e7f0fa;
+  --color-zinc-200: #d3e2f1;
+  --color-zinc-300: #b4c9de;
+  --color-zinc-400: #8ba0b6;
+  --color-zinc-500: #64788e;
+  --color-zinc-600: #465a70;
+  --color-zinc-700: #324356;
+  --color-zinc-800: #22303f;
+  --color-zinc-900: #172230;
+  --color-zinc-950: #0e1620;
 
-  --color-blue-50: #eef3fc;
-  --color-blue-100: #dbe6f9;
-  --color-blue-200: #b8cdf2;
-  --color-blue-300: #8badea;
-  --color-blue-400: #4f7ede;
-  --color-blue-500: #1d5cd6;
-  --color-blue-600: #0a47c2;
-  --color-blue-700: #08389c;
-  --color-blue-800: #072e7e;
-  --color-blue-900: #062561;
+  --color-blue-50: #eef2ff;
+  --color-blue-100: #dde4fe;
+  --color-blue-200: #bccafd;
+  --color-blue-300: #93a8fb;
+  --color-blue-400: #5f77f9;
+  --color-blue-500: #3d5af7;
+  --color-blue-600: #2447f5;
+  --color-blue-700: #1b36c9;
+  --color-blue-800: #162b9e;
+  --color-blue-900: #122276;
 
   --font-plus-jakarta: var(--font-plus-jakarta);
   --font-inter: var(--font-inter);
@@ -125,19 +136,21 @@
     font-family: 'Pretendard Variable', Pretendard, var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
   }
 
-  /* 에디토리얼 세리프 — 페이지 타이틀·인용문 전용 (고운바탕, 이미 로드된 폰트) */
+  /* 디스플레이 — 페이지 타이틀·네비·로고 전용 통통 라운드 고딕(잘난체)
+     (클래스명은 이전 리브랜딩의 .serif-display를 유지해 사용처 무수정 전환) */
   .serif-display {
-    font-family: var(--font-gowun-batang), 'Nanum Myeongjo', serif;
-    letter-spacing: -0.01em;
+    font-family: 'Jalnan', 'Pretendard Variable', Pretendard, sans-serif;
+    font-weight: 400 !important; /* 잘난체는 단일 웨이트 — font-bold 유틸의 합성 볼드(뭉개짐) 방지 */
+    letter-spacing: 0;
     word-break: keep-all;
   }
 
-  /* 종이 카드 — glassmorphism 대체: 불투명 종이 + 1px 괘선 + 미세 그림자 */
+  /* 팝 카드 — 흰 카드 + 페리윙클 하드섀도(blur 없는 오프셋) */
   .glass-card {
-    @apply bg-surface-lowest border border-outline-variant rounded-2xl shadow-[0_1px_2px_rgba(26,26,30,0.04)];
+    @apply bg-surface-lowest rounded-[24px] border-0 shadow-[6px_6px_0_var(--pop-shadow)];
   }
   .paper-card {
-    @apply bg-surface-lowest border border-outline-variant rounded-2xl shadow-[0_1px_2px_rgba(26,26,30,0.04)];
+    @apply bg-surface-lowest rounded-[24px] border-0 shadow-[6px_6px_0_var(--pop-shadow)];
   }
 
   /* 과거 그라데이션 → 브랜드 블루 솔리드 (클래스명 유지로 30개 사용처 무수정 전환) */
@@ -150,60 +163,41 @@
     @apply border-t border-outline-variant;
   }
 
-  /* 키캡 — 아이콘 대신 한글 글자를 3D 기계식 키보드 키로 (타자 제품 고유 모티프)
-     .group:hover 시 키가 실제로 "눌리는" 마이크로 인터랙션 */
+  /* 키캡 — 흰 팝 키 + 페리윙클 하드섀도. .group:hover 시 눌리며 백라이트 점등 */
   .keycap {
-    @apply relative inline-flex items-center justify-center rounded-[12px] font-bold text-on-surface select-none;
-    background:
-      radial-gradient(120% 90% at 50% 12%, #ffffff 0%, #f6f4ee 55%, #eceade 100%),
-      #f4f2ec;
-    border: 1px solid #d8d4c8;
+    @apply relative inline-flex items-center justify-center rounded-[14px] font-bold text-on-surface select-none bg-surface-lowest;
     box-shadow:
-      inset 0 2px 1px rgba(255, 255, 255, 1),        /* 윗면 하이라이트 */
-      inset 0 -3px 4px rgba(26, 26, 30, 0.06),       /* 윗면 하단 음영(볼록감) */
-      0 6px 0 #cfcbbf,                                /* 키 옆면 */
-      0 7px 0 #b8b4a8,                                /* 옆면 하단 엣지 */
-      0 9px 8px rgba(26, 26, 30, 0.18);               /* 바닥 그림자 */
+      inset 0 2px 1px rgba(255, 255, 255, 1),
+      0 5px 0 var(--pop-shadow),
+      0 8px 10px rgba(36, 71, 245, 0.14);
     transition: transform 110ms cubic-bezier(0.2, 0, 0.4, 1), box-shadow 110ms cubic-bezier(0.2, 0, 0.4, 1);
   }
   .group:hover .keycap,
   a:hover > .keycap,
   button:hover > .keycap {
-    transform: translateY(5px);
+    transform: translateY(4px);
     box-shadow:
       inset 0 2px 1px rgba(255, 255, 255, 1),
-      inset 0 -2px 3px rgba(26, 26, 30, 0.06),
-      0 1px 0 #cfcbbf,
-      0 2px 0 #b8b4a8,
-      0 3px 9px rgba(10, 71, 194, 0.28),
-      0 0 22px 4px rgba(10, 71, 194, 0.14);
+      0 1px 0 var(--pop-shadow),
+      0 3px 10px rgba(36, 71, 245, 0.35),
+      0 0 24px 5px rgba(36, 71, 245, 0.2);
   }
 
-  /* 키캡 카드 — 카드 자체가 거대한 키캡 (호버 시 통째로 눌림) */
+  /* 키캡 카드 — 카드 자체가 거대한 키(흰 카드 + 하드섀도, 호버 시 눌리며 백라이트) */
   .keycap-card {
-    @apply relative rounded-[20px] select-none;
-    background:
-      radial-gradient(130% 100% at 50% 8%, #ffffff 0%, #faf8f3 60%, #f0eee4 100%),
-      #f4f2ec;
-    border: 1px solid #d8d4c8;
+    @apply relative rounded-[28px] select-none bg-surface-lowest;
     box-shadow:
-      inset 0 2px 1px rgba(255, 255, 255, 1),
-      inset 0 -4px 6px rgba(26, 26, 30, 0.05),
-      0 8px 0 #d5d1c5,
-      0 10px 0 #b8b4a8,
-      0 14px 14px rgba(26, 26, 30, 0.16);
+      0 10px 0 var(--pop-shadow),
+      0 16px 16px rgba(36, 71, 245, 0.12);
     transition: transform 130ms cubic-bezier(0.2, 0, 0.4, 1), box-shadow 130ms cubic-bezier(0.2, 0, 0.4, 1);
   }
   .keycap-card:hover {
-    transform: translateY(7px);
+    transform: translateY(8px);
     /* 눌린 키 밑에서 키보드 백라이트가 새어 나오는 느낌 */
     box-shadow:
-      inset 0 2px 1px rgba(255, 255, 255, 1),
-      inset 0 -3px 5px rgba(26, 26, 30, 0.05),
-      0 1px 0 #d5d1c5,
-      0 3px 0 #b8b4a8,
-      0 6px 18px rgba(10, 71, 194, 0.3),
-      0 0 46px 8px rgba(10, 71, 194, 0.16);
+      0 2px 0 var(--pop-shadow),
+      0 6px 18px rgba(36, 71, 245, 0.32),
+      0 0 46px 10px rgba(36, 71, 245, 0.18);
   }
 }
 

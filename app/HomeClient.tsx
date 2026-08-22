@@ -48,7 +48,7 @@ export default function HomeClient({ initialPopular }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-outline-variant border border-outline-variant rounded-2xl overflow-hidden">
           <PillarCard
             href="/transcription"
-            keycap="필"
+            keycap="✍️"
             eyebrow="생각이 남는 타자"
             title="필사"
             description="좋은 문장을 손끝으로 옮기다 보면 문장이 생각으로 남습니다. 디지털 원고지 위에서 문학을 음미하세요."
@@ -56,7 +56,7 @@ export default function HomeClient({ initialPopular }: Props) {
           />
           <PillarCard
             href="/journey"
-            keycap="지"
+            keycap="🌏"
             eyebrow="배움이 남는 타자"
             title="지식타자"
             description="태정태세문단세부터 세계 수도까지. 눈으로 외우지 말고 손으로 외우면 지식이 배움으로 남습니다."
@@ -64,7 +64,7 @@ export default function HomeClient({ initialPopular }: Props) {
           />
           <PillarCard
             href="/game"
-            keycap="놀"
+            keycap="🎮"
             eyebrow="실력이 남는 타자"
             title="게임"
             description="산성비, 성문방어, 글자 계단. 좋은 게임에 몰입하는 사이 타자 실력이 조용히 쌓입니다."
@@ -289,7 +289,7 @@ function HeroSection() {
     <section className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-16 md:py-24 flex flex-col items-center text-center">
       <div className="flex flex-col items-center w-full">
         {/* 커서 블링크 모티프 — 타자 제품의 정체성 */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-on-surface mb-6 md:mb-8 leading-[1.25] tracking-tight break-keep">
+        <h1 className="serif-display text-4xl md:text-5xl lg:text-6xl text-on-surface mb-6 md:mb-8 leading-[1.3] break-keep">
           한글 타자 연습, <br />
           타자 치는 <span className="text-primary underline decoration-[3px] decoration-primary/30 underline-offset-8">시간</span>을 가치 있게
           <span className="inline-block w-[3px] h-[0.9em] bg-primary align-[-0.12em] ml-1.5 animate-pulse" aria-hidden />
