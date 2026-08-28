@@ -79,8 +79,9 @@ export const PrivacyConsentModal = () => {
                   <p>회원 탈퇴 시까지 또는 서비스 종료 시까지 보유하며, 목적 달성 시 지체 없이 파기합니다.</p>
                 </section>
                 <section>
-                  <h3 className="font-bold text-zinc-900 mb-2">5. 문의처</h3>
-                  <p>withanalog@gmail.com</p>
+                  <h3 className="font-bold text-zinc-900 mb-2">5. 개인정보 보호책임자 및 문의처</h3>
+                  <p>블루커뮤니케이션즈 주식회사 · 개인정보 보호책임자 홍상원</p>
+                  <p>bluecomms.ailab@gmail.com</p>
                 </section>
               </div>
               <div className="mt-8 pt-8 border-t border-zinc-100">

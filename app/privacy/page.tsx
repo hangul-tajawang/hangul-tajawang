@@ -12,14 +12,11 @@ export const metadata: Metadata = {
   },
 };
 
-// 매시간 재생성(ISR) → 2026-09-01 00:00(KST) 이후 재생성 시점에 개정판으로 자동 전환
 export const revalidate = 3600;
 
-const TRANSFER_DATE = new Date('2026-09-01T00:00:00+09:00');
-
 export default function PrivacyPolicy() {
-  // 영업양도 시행일(2026-09-01) 이후 여부 — 운영 주체·문의처·시행일자가 바뀐다
-  const transferred = new Date() >= TRANSFER_DATE;
+  // 영업양도 완료 — 운영 주체·문의처는 블루커뮤니케이션즈 주식회사로 고정
+  const transferred = true;
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-zinc-900 font-sans py-12 px-4">
       <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden">
@@ -35,27 +32,12 @@ export default function PrivacyPolicy() {
           <ShieldCheck size={48} className="text-blue-600 mb-4" />
           <h1 className="text-3xl font-bold mb-2">개인정보 처리방침</h1>
           <p className="text-zinc-500 text-sm font-medium">
-            시행일자: {transferred ? '2026. 09. 01' : '2026. 07. 29'}
+            시행일자: 2026. 08. 29
           </p>
         </div>
 
         {/* Content */}
         <div className="p-8 md:p-12 space-y-12 text-zinc-700 leading-relaxed break-keep">
-          {!transferred && (
-            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-sm text-blue-900">
-              <strong>[개정 예고]</strong> 2026년 9월 1일자로 서비스 운영 주체가
-              블루커뮤니케이션즈 주식회사로 변경(영업 양도)됨에 따라 본 방침의
-              운영 주체·문의처가 개정될 예정입니다. 자세한 내용은{' '}
-              <Link
-                prefetch={false}
-                href="/notice/transfer"
-                className="underline font-bold hover:text-blue-600"
-              >
-                개인정보 이전 안내
-              </Link>
-              를 확인해 주세요.
-            </div>
-          )}
           <section>
             <p>
               {transferred ? (
@@ -103,9 +85,16 @@ export default function PrivacyPolicy() {
                 데이터를 이용자 계정과 연동하여 저장합니다.
               </li>
               <li>
+                <strong>프로필 사진 (선택적, 모바일 앱):</strong> 이용자가 직접
+                프로필 사진을 등록하는 경우에 한하여, 기기의 카메라 또는 사진
+                라이브러리에서 선택한 이미지를 수집·저장합니다. 등록하지 않으면
+                수집하지 않으며, 언제든지 삭제할 수 있습니다.
+              </li>
+              <li>
                 <strong>자동 수집 항목:</strong> 서비스 이용 과정에서 쿠키, 방문
-                일시, 기기·브라우저 정보, 광고 식별자 등이 자동으로 생성·수집될
-                수 있습니다. (제5조 참고)
+                일시, 기기·브라우저 정보(앱의 경우 OS 버전·앱 버전·기기 모델),
+                광고 식별자, 오류(비정상 종료) 로그 등이 자동으로 생성·수집될 수
+                있습니다. (제5조 참고)
               </li>
             </ul>
             <div className="mt-6 bg-zinc-50 p-5 rounded-2xl border border-zinc-100 text-sm">
@@ -217,15 +206,15 @@ export default function PrivacyPolicy() {
                       Microsoft (Clarity)
                     </td>
                     <td className="p-4 border-b border-zinc-100">
-                      세션 리플레이·히트맵 기반 사용성 분석
+                      세션 리플레이·히트맵 기반 사용성 분석 (웹·모바일 앱)
                     </td>
                   </tr>
                   <tr>
                     <td className="p-4 font-medium border-b border-zinc-100 align-top">
-                      Kakao (AdFit)
+                      Kakao · Google (소셜 로그인)
                     </td>
                     <td className="p-4 border-b border-zinc-100">
-                      맞춤형 광고 게재 (웹)
+                      소셜 로그인 인증 처리 (이메일·닉네임·프로필 이미지 확인)
                     </td>
                   </tr>
                   <tr>
@@ -245,10 +234,20 @@ export default function PrivacyPolicy() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium align-top">
-                      Google (AdMob) · Meta (Audience Network)
+                    <td className="p-4 font-medium border-b border-zinc-100 align-top">
+                      Google (AdMob)
                     </td>
-                    <td className="p-4">모바일 앱 내 맞춤형 광고 게재</td>
+                    <td className="p-4 border-b border-zinc-100">
+                      모바일 앱 내 맞춤형 광고 게재
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 font-medium align-top">
+                      Pangle (Bytedance Pte. Ltd.)
+                    </td>
+                    <td className="p-4">
+                      AdMob 미디에이션을 통한 모바일 앱 내 광고 게재
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -275,12 +274,8 @@ export default function PrivacyPolicy() {
                 개선 목적의 이용 행태 분석
               </li>
               <li>
-                <strong>Microsoft Clarity:</strong> 세션 리플레이·히트맵을 통한
-                사용성 분석
-              </li>
-              <li>
-                <strong>Kakao AdFit:</strong> 맞춤형 광고 제공을 위해 쿠키 및
-                광고 식별자를 사용할 수 있습니다.
+                <strong>Microsoft Clarity (웹·모바일 앱):</strong> 세션
+                리플레이·히트맵을 통한 사용성 분석
               </li>
               <li>
                 <strong>Google AdSense:</strong> 웹 맞춤형 광고 제공을 위해
@@ -300,10 +295,10 @@ export default function PrivacyPolicy() {
                 사용 통계 및 오류(비정상 종료) 정보 수집
               </li>
               <li>
-                <strong>
-                  Google AdMob · Meta Audience Network (모바일 앱):
-                </strong>{' '}
-                앱 내 맞춤형 광고 제공을 위해 광고 식별자를 사용할 수 있습니다.
+                <strong>Google AdMob · Pangle (모바일 앱):</strong> 앱 내 맞춤형
+                광고 제공을 위해 광고 식별자(Android 광고 ID, iOS IDFA)를 사용할
+                수 있으며, Pangle은 AdMob 미디에이션 파트너로서 광고를
+                제공합니다.
               </li>
             </ul>
             <p className="mt-4">
@@ -319,7 +314,40 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제6조 (만 14세 미만 아동의 개인정보)
+              제6조 (모바일 앱의 접근권한)
+            </h2>
+            <p className="mb-4">
+              동일한 서비스로 제공되는 모바일 앱(Android·iOS)은 아래와 같은
+              접근권한을 요청하며, 모두 <strong>선택적 접근권한</strong>으로
+              허용하지 않아도 앱의 기본 기능을 이용할 수 있습니다.
+            </p>
+            <ul className="list-disc ml-6 space-y-2">
+              <li>
+                <strong>카메라 (선택):</strong> 프로필 사진을 직접 촬영하여
+                등록하기 위해 사용합니다.
+              </li>
+              <li>
+                <strong>사진·미디어 (선택):</strong> 기기에 저장된 사진을 프로필
+                사진으로 등록하거나 기록 이미지를 저장·공유하기 위해
+                사용합니다.
+              </li>
+              <li>
+                <strong>광고 식별자 / 앱 추적(ATT, 선택):</strong> 맞춤형 광고
+                제공 및 광고 성과 측정을 위해 사용합니다. iOS에서는 앱 추적
+                허용 여부를 이용자가 직접 선택할 수 있습니다.
+              </li>
+            </ul>
+            <p className="mt-4 text-sm text-zinc-500">
+              ※ 접근권한 철회 방법 — Android: 설정 &gt; 애플리케이션 &gt;
+              한글타자왕 &gt; 권한, iOS: 설정 &gt; 한글타자왕에서 언제든지
+              변경할 수 있습니다.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              제7조 (만 14세 미만 아동의 개인정보)
             </h2>
             <p>
               서비스는 만 14세 미만 아동의 개인정보를 수집할 의도가 없습니다. 만
@@ -331,7 +359,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제7조 (이용자의 권리와 행사 방법)
+              제8조 (이용자의 권리와 행사 방법)
             </h2>
             <p className="mb-4">
               이용자는 언제든지 자신의 개인정보에 대해 다음의 권리를 행사할 수
@@ -353,7 +381,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제8조 (개인정보의 파기 절차 및 방법)
+              제9조 (개인정보의 파기 절차 및 방법)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
               <li>
@@ -370,7 +398,36 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제9조 (개인정보 보호책임자 및 문의처)
+              제10조 (개인정보의 안전성 확보조치)
+            </h2>
+            <p className="mb-4">
+              서비스는 이용자의 개인정보를 안전하게 관리하기 위하여 다음과 같은
+              조치를 취하고 있습니다.
+            </p>
+            <ul className="list-disc ml-6 space-y-2">
+              <li>
+                <strong>관리적 조치:</strong> 개인정보 취급 인원을 최소화하고,
+                개인정보를 처리하는 데이터베이스에 대한 접근 권한을 업무상
+                필요한 범위로 제한합니다.
+              </li>
+              <li>
+                <strong>기술적 조치:</strong> 회원 인증·데이터 저장은 접근통제가
+                적용된 클라우드(Supabase)를 통해 처리하며, 이용자 데이터는
+                전송 구간에서 SSL/TLS로 암호화됩니다. 비밀번호 등 인증 정보는
+                서비스가 직접 보관하지 않고 소셜 로그인(카카오·구글) 제공자를
+                통해 처리됩니다.
+              </li>
+              <li>
+                <strong>접근 통제:</strong> 개인정보처리시스템에 대한 접근 권한의
+                부여·변경·말소를 관리하고, 외부로부터의 무단 접근을 통제합니다.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              제11조 (개인정보 보호책임자 및 문의처)
             </h2>
             <p className="mb-4">
               개인정보 처리에 관한 문의, 불만 처리, 피해 구제 등은 아래 개인정보
@@ -378,16 +435,23 @@ export default function PrivacyPolicy() {
             </p>
             <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
               <p className="text-sm mb-4 font-medium">
-                개인정보 보호책임자
-                {transferred && ' (블루커뮤니케이션즈 주식회사)'}
+                개인정보 보호책임자 (정보보호·보안 총괄)
+                {transferred && ' — 블루커뮤니케이션즈 주식회사'}
               </p>
+              <ul className="text-sm space-y-1 mb-4 text-zinc-700">
+                <li>
+                  <strong className="text-zinc-900">성명:</strong> 홍상원
+                </li>
+                <li>
+                  <strong className="text-zinc-900">직책:</strong> 개인정보
+                  보호책임자 겸 정보보안 책임자
+                </li>
+              </ul>
               <div className="flex items-center gap-3 text-zinc-900 font-bold">
                 <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center">
                   <Mail size={20} />
                 </div>
-                {transferred
-                  ? 'bluecomms.ailab@gmail.com'
-                  : 'withanalog@gmail.com'}
+                bluecomms.ailab@gmail.com
               </div>
             </div>
           </section>
@@ -395,7 +459,25 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
-              제10조 (고지의 의무)
+              제12조 (정보주체의 권익침해에 대한 구제방법)
+            </h2>
+            <p className="mb-4">
+              이용자는 개인정보 침해로 인한 구제를 받기 위하여 아래 기관에
+              분쟁 해결이나 상담 등을 신청할 수 있습니다. 서비스의 자체적인
+              처리에 만족하지 못하시는 경우 도움을 받으실 수 있습니다.
+            </p>
+            <ul className="list-disc ml-6 space-y-2 text-sm">
+              <li>개인정보분쟁조정위원회: (국번없이) 1833-6972 / www.kopico.go.kr</li>
+              <li>개인정보침해신고센터: (국번없이) 118 / privacy.kisa.or.kr</li>
+              <li>대검찰청 사이버수사과: (국번없이) 1301 / www.spo.go.kr</li>
+              <li>경찰청 사이버수사국: (국번없이) 182 / ecrm.cyber.go.kr</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              제13조 (고지의 의무)
             </h2>
             <p>
               본 개인정보 처리방침의 내용 추가, 삭제 및 수정이 있을 경우, 변경
@@ -405,7 +487,7 @@ export default function PrivacyPolicy() {
             </p>
             {transferred && (
               <p className="mt-4 text-sm text-zinc-500">
-                부칙: 본 방침은 2026년 9월 1일부터 시행됩니다. 영업 양도에 따라
+                부칙: 본 방침은 2026년 8월 29일부터 시행됩니다. 영업 양도에 따라
                 서비스 운영 주체가 블루커뮤니케이션즈 주식회사로 변경되었으며,
                 자세한 내용은{' '}
                 <Link

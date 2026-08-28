@@ -14,11 +14,10 @@ export const metadata: Metadata = {
 // 매시간 재생성(ISR) → 2026-09-01 00:00(KST) 이후 재생성 시점에 개정판으로 자동 전환
 export const revalidate = 3600;
 
-const TRANSFER_DATE = new Date("2026-09-01T00:00:00+09:00");
 
 export default function TermsOfService() {
-  // 영업양도 시행일(2026-09-01) 이후 여부 — 운영자 정의·문의처·시행일자가 바뀐다
-  const transferred = new Date() >= TRANSFER_DATE;
+  // 영업양도 완료 — 운영자·문의처는 블루커뮤니케이션즈 주식회사로 고정
+  const transferred = true;
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-zinc-900 font-sans py-12 px-4">
       <div className="container mx-auto max-w-3xl bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden">
@@ -29,28 +28,18 @@ export default function TermsOfService() {
           </Link>
           <Scale size={48} className="text-blue-600 mb-4" />
           <h1 className="text-3xl font-bold mb-2">이용약관</h1>
-          <p className="text-zinc-500 text-sm font-medium">시행일자: {transferred ? "2026. 09. 01" : "2026. 07. 12"}</p>
+          <p className="text-zinc-500 text-sm font-medium">시행일자: 2026. 08. 29</p>
         </div>
 
         {/* Content */}
         <div className="p-8 md:p-12 space-y-12 text-zinc-700 leading-relaxed break-keep">
-          {!transferred && (
-            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-sm text-blue-900">
-              <strong>[개정 예고]</strong> 2026년 9월 1일자로 서비스 운영 주체가 블루커뮤니케이션즈 주식회사로
-              변경(영업 양도)됨에 따라 본 약관의 운영자·문의처가 개정될 예정입니다. 자세한 내용은{" "}
-              <Link prefetch={false} href="/notice/transfer" className="underline font-bold hover:text-blue-600">
-                운영 주체 변경 안내
-              </Link>
-              를 확인해 주세요.
-            </div>
-          )}
           <section>
             <h2 className="text-xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
               제1조 (목적)
             </h2>
             <p>
-              본 약관은 '한글타자왕'(이하 "서비스")이 제공하는 타자 연습 및 관련 제반 서비스의 이용과 관련하여, 운영자와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+              본 약관은 '한글타자왕'(이하 "서비스")이 제공하는 타자 연습 및 관련 제반 서비스의 이용과 관련하여, 운영자와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다. 본 약관에서 "서비스"란 웹사이트(hangul-tajawang.com)와 동일한 이름의 모바일 앱(Android·iOS)을 모두 포함하며, 웹과 앱은 하나의 계정으로 기록이 연동됩니다.
               {transferred && <> 본 약관에서 "운영자"란 서비스를 운영하는 블루커뮤니케이션즈 주식회사를 말합니다.</>}
             </p>
           </section>
@@ -65,7 +54,9 @@ export default function TermsOfService() {
               <li><strong>타자 연습:</strong> 자리·낱말·긴글 등 한글 타자 연습 기능</li>
               <li><strong>게임:</strong> 타자 실력을 겨루는 게임 및 점수 기록</li>
               <li><strong>필사·서재:</strong> 글을 따라 쓰는 필사 기능과 개인 서재(필사 기록) 보관</li>
+              <li><strong>지식타자:</strong> 지식·상식 콘텐츠를 타자로 익히는 학습 기능(지식 여정·퀴즈 포함)</li>
               <li><strong>챌린지:</strong> 이용자가 직접 글·댓글·좋아요 등을 등록하는 참여형 콘텐츠</li>
+              <li><strong>모바일 앱:</strong> 위 기능을 동일하게 제공하는 Android·iOS 앱</li>
             </ul>
           </section>
 
@@ -109,7 +100,8 @@ export default function TermsOfService() {
               제6조 (광고)
             </h2>
             <ul className="list-disc ml-6 space-y-2">
-              <li>서비스는 운영을 위하여 Google 애드센스(AdSense) 등을 통한 광고를 게재할 수 있습니다.</li>
+              <li>서비스는 운영을 위하여 웹에서는 Google 애드센스(AdSense), 모바일 앱에서는 Google 애드몹(AdMob) 및 그 미디에이션 파트너(Pangle 등)를 통한 광고를 게재할 수 있습니다.</li>
+              <li>광고 게재 과정에서 쿠키 및 광고 식별자가 이용될 수 있으며, 자세한 내용과 거부 방법은 <strong>개인정보 처리방침</strong>에서 확인할 수 있습니다.</li>
             </ul>
           </section>
 
@@ -148,11 +140,17 @@ export default function TermsOfService() {
             </h2>
             <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
               <p className="text-sm mb-4 font-medium">이용약관, 저작권 신고 및 서비스 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.</p>
+              {transferred && (
+                <ul className="text-sm space-y-1 mb-4 text-zinc-700">
+                  <li><strong className="text-zinc-900">운영자:</strong> 블루커뮤니케이션즈 주식회사</li>
+                  <li><strong className="text-zinc-900">개인정보 보호책임자:</strong> 홍상원</li>
+                </ul>
+              )}
               <div className="flex items-center gap-3 text-zinc-900 font-bold">
                 <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center">
                   <Mail size={20} />
                 </div>
-                {transferred ? "bluecomms.ailab@gmail.com" : "withanalog@gmail.com"}
+                bluecomms.ailab@gmail.com
               </div>
             </div>
           </section>
