@@ -5,7 +5,7 @@ import { Mail, MessageSquareHeart, Copy, Check, ExternalLink, Sparkles } from "l
 
 export const BetaFeedback: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const email = "withanalog@gmail.com";
+  const email = "bluecomms.ailab@gmail.com";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);

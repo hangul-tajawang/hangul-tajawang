@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
       <div className="container mx-auto max-w-7xl px-8 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm">한</div>
-          <span className="font-medium">© 2026 한글타자왕 Web Edition.</span>
+          <span className="font-medium">© 2026 한글타자왕 · 블루커뮤니케이션즈 주식회사</span>
         </div>
         <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-center sm:flex sm:gap-8">
           <Link href="/guide" prefetch={false} className="hover:text-primary transition-colors font-medium">이용 가이드</Link>

@@ -40,10 +40,10 @@ export default function ContactPage() {
                 <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">이메일 문의</h3>
                 <p className="text-sm text-zinc-500 mb-6">가장 빠른 답변을 받으실 수 있는 창구입니다.</p>
                 <a 
-                  href="mailto:withanalog@gmail.com" 
+                  href="mailto:bluecomms.ailab@gmail.com" 
                   className="text-lg font-bold text-zinc-900 border-b-2 border-blue-200 hover:border-blue-600 transition-all"
                 >
-                  withanalog@gmail.com
+                  bluecomms.ailab@gmail.com
                 </a>
               </div>
 

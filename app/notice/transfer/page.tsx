@@ -75,7 +75,7 @@ export default function TransferNoticePage() {
             </p>
             <ul className="list-disc ml-6 space-y-2 mt-3">
               <li>서비스 내 <strong>마이페이지 → 회원 탈퇴</strong></li>
-              <li>이메일 요청: <strong>withanalog@gmail.com</strong></li>
+              <li>이메일 요청: <strong>bluecomms.ailab@gmail.com</strong></li>
             </ul>
           </section>
 
