@@ -61,3 +61,4 @@ member-emails.csv
 
 # 마이그레이션 작업 노트 (로컬 전용)
 CLOUDFLARE_MIGRATION.md
+.storage-backup/

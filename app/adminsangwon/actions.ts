@@ -32,16 +32,28 @@ async function svcRest(method: string, path: string, body?: unknown): Promise<vo
   if (!res.ok) throw new Error(`${method} ${path} → ${res.status}: ${(await res.text()).slice(0, 200)}`);
 }
 
-/** Storage 업로드 → 공개 URL 반환 */
-async function uploadAsset(file: File, path: string): Promise<string> {
+/**
+ * Storage 업로드 → 공개 URL 반환.
+ *
+ * 캐시 정책: 파일명에 타임스탬프를 넣어 URL을 불변으로 만들고(prefix + ts),
+ * 1년 캐시를 건다. 예전에는 고정 경로에 덮어쓰고 `?v=`를 붙여 무효화했는데,
+ * 그러면 URL이 매번 달라져 CDN이 항상 미스가 나고 같은 이미지를 계속
+ * 재다운로드했다 (Supabase 캐시 이그레스의 주요 원인).
+ */
+async function uploadAsset(file: File, prefix: string): Promise<string> {
+  const ext = file.type === "image/webp" ? "webp" : file.type === "image/png" ? "png" : "jpg";
+  const path = `${prefix}-${Date.now()}.${ext}`;
   const res = await fetch(`${URL_}/storage/v1/object/book-assets/${path}`, {
     method: "POST",
-    headers: svcHeaders({ "Content-Type": file.type || "image/jpeg", "x-upsert": "true" }),
+    headers: svcHeaders({
+      "Content-Type": file.type || "image/jpeg",
+      "Cache-Control": "max-age=31536000",
+      "x-upsert": "true",
+    }),
     body: Buffer.from(await file.arrayBuffer()),
   });
   if (!res.ok) throw new Error(`이미지 업로드 실패 (${res.status})`);
-  // 캐시 무효화를 위해 버전 쿼리를 붙인다 (같은 경로 재업로드 대비)
-  return `${URL_}/storage/v1/object/public/book-assets/${path}?v=${Date.now()}`;
+  return `${URL_}/storage/v1/object/public/book-assets/${path}`;
 }
 
 const SLUG = /^[a-z0-9][a-z0-9_-]{1,40}$/;
@@ -77,7 +89,7 @@ export async function saveBook(formData: FormData): Promise<ActionResult> {
 
     let coverImageUrl = existingCoverUrl;
     if (coverFile && coverFile.size > 0) {
-      coverImageUrl = await uploadAsset(coverFile, `covers/${id}.jpg`);
+      coverImageUrl = await uploadAsset(coverFile, `covers/${id}`);
     }
 
     const now = new Date().toISOString();
@@ -148,7 +160,7 @@ export async function saveAuthor(formData: FormData): Promise<ActionResult> {
 
     let imageUrl = existingImageUrl;
     if (imageFile && imageFile.size > 0) {
-      imageUrl = await uploadAsset(imageFile, `authors/${id}.jpg`);
+      imageUrl = await uploadAsset(imageFile, `authors/${id}`);
     }
 
     await svcRest("POST", "authors?on_conflict=id", [{

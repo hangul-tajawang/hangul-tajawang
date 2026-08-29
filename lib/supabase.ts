@@ -1,4 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr'
+import { assertImageFile, resizeToWebp } from './image-resize';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -89,18 +90,29 @@ export class SupabaseService {
     const user = await this.getCurrentUser();
     if (!user) throw new Error('로그인이 필요합니다.');
 
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+    // 원본을 그대로 올리면 3456x2764 / 1.8MB 같은 사진이 버킷에 쌓이고, 그 크기
+    // 그대로 반복 재다운로드되어 Storage 이그레스를 잡아먹는다. 256px 정사각
+    // WebP(약 20KB)로 통일한다.
+    assertImageFile(file);
+    const optimized = await resizeToWebp(file, { maxWidth: 256, square: true });
+
+    // 앱(korean_typing)과 동일한 {uid}/ 경로 규칙을 쓴다. 파일명에 타임스탬프를
+    // 넣어 URL 자체를 불변으로 만들었으므로 ?v= 캐시버스터가 필요 없고,
+    // 1년 캐시를 걸어도 교체 즉시 새 URL로 반영된다.
+    const filePath = `${user.id}/avatar-${Date.now()}.webp`;
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(fileName, file);
+      .upload(filePath, optimized, {
+        cacheControl: '31536000',
+        contentType: 'image/webp',
+      });
 
     if (uploadError) throw uploadError;
 
     const { data: { publicUrl } } = supabase.storage
       .from('avatars')
-      .getPublicUrl(fileName);
+      .getPublicUrl(filePath);
 
     await this.updateProfile({ avatar_url: publicUrl });
     return publicUrl;

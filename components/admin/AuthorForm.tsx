@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { saveAuthor } from "@/app/adminsangwon/actions";
 import { ArrowLeft, UserRound, CheckCircle2, Loader2 } from "lucide-react";
+import { assertImageFile, resizeToWebp } from "@/lib/image-resize";
 
 export interface AuthorFormInitial {
   id: string;
@@ -27,6 +28,21 @@ export function AuthorForm({ initial }: { initial: AuthorFormInitial | null }) {
   const onSubmit = (formData: FormData) => {
     setResult(null);
     startTransition(async () => {
+      // 작가 사진은 앱에서 원형 썸네일로만 쓰인다. 리사이즈 없이 원본을 올리면
+      // 그 크기 그대로 반복 다운로드되므로 256px 정사각 WebP로 통일한다.
+      const imageFile = formData.get("imageFile");
+      if (imageFile instanceof File && imageFile.size > 0) {
+        try {
+          assertImageFile(imageFile);
+        } catch (e) {
+          setResult({ ok: false, message: (e as Error).message });
+          return;
+        }
+        formData.set(
+          "imageFile",
+          await resizeToWebp(imageFile, { maxWidth: 256, square: true })
+        );
+      }
       const r = await saveAuthor(formData);
       setResult(r);
       if (r.ok) router.refresh();

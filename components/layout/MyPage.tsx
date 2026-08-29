@@ -70,9 +70,11 @@ export const MyPage: React.FC<{ onStartChallenge: (content: any) => void }> = ({
       await SupabaseService.uploadAvatar(file);
       await fetchData();
     } catch (error) {
-      alert("이미지 업로드 실패");
+      // 형식·용량 검증 실패는 사용자가 고칠 수 있는 문제이므로 사유를 그대로 보여준다.
+      alert(error instanceof Error ? error.message : "이미지 업로드 실패");
     } finally {
       setUploading(false);
+      e.target.value = ""; // 같은 파일 재선택이 먹도록 초기화
     }
   };
 
