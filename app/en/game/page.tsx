@@ -130,7 +130,7 @@ export default function EnGameHubPage() {
       </div>
 
       <div className="mt-20 p-10 bg-on-surface rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-12 opacity-10">
+        <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
           <Trophy size={180} />
         </div>
         <div className="relative z-10 text-center md:text-left">
@@ -143,7 +143,7 @@ export default function EnGameHubPage() {
         <Link
           prefetch={false}
           href="/en/game/acid-rain"
-          className="px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl hover:scale-105 transition-all flex items-center gap-2 shadow-xl"
+          className="relative z-10 px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl hover:scale-105 transition-all flex items-center gap-2 shadow-xl"
         >
           Start Playing <ChevronRight size={20} />
         </Link>

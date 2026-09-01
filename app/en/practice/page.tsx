@@ -67,7 +67,7 @@ const MODES = [
   },
   {
     href: '/en/transcription',
-    key: '詩',
+    key: '책',
     title: 'Literature Transcription',
     description:
       'The final stage: transcribe full Korean poems and stories on a manuscript-paper screen. Long-form endurance, real vocabulary, lasting records.',
