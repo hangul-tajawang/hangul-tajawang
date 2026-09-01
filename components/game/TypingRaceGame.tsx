@@ -1,5 +1,7 @@
 "use client";
 
+import { useGameT, raceRankLabel } from "@/lib/i18n/game-ui";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Trophy, RotateCcw, Play, Loader2, User, Star, Flame, Flag, ChevronRight, Timer } from "lucide-react";
@@ -36,6 +38,7 @@ const pickWord = (level: number, avoid: string): string => {
 };
 
 export const TypingRaceGame: React.FC = () => {
+  const { isEn, t } = useGameT();
   const [gameState, setGameState] = useState<"ready" | "playing" | "finished">("ready");
   const [playerDist, setPlayerDist] = useState(0);
   const [botDists, setBotDists] = useState<number[]>([0, 0, 0]);
@@ -205,11 +208,11 @@ export const TypingRaceGame: React.FC = () => {
   const accuracy = TypingUtils.calculateAccuracy(wordsTyped, wordsTyped + mistakes);
   const isWrongNow = inputValue.length > 0 && !word.startsWith(inputValue);
 
-  const rankLabel = ["🥇 1등", "🥈 2등", "🥉 3등", "4등"][finalRank - 1] || `${finalRank}등`;
+  const rankLabel = raceRankLabel(isEn, finalRank);
 
   // 레인 렌더링 (플레이어 + 봇 3)
   const lanes = [
-    { name: profile?.nickname || "나", emoji: "🏃", dist: playerDist, color: "text-blue-400", isPlayer: true },
+    { name: profile?.nickname || t("나"), emoji: "🏃", dist: playerDist, color: "text-blue-400", isPlayer: true },
     ...BOTS.map((b, i) => ({ name: b.name, emoji: b.emoji, dist: botDists[i], color: b.color, isPlayer: false })),
   ];
 
@@ -220,25 +223,25 @@ export const TypingRaceGame: React.FC = () => {
         <div className="inline-flex p-6 bg-blue-50 rounded-full mb-8"><Trophy className="w-20 h-20 text-yellow-500" /></div>
         <h2 className="text-5xl font-bold text-zinc-900 mb-2 tracking-tighter">{rankLabel}</h2>
         <p className="text-zinc-500 font-bold mb-10">
-          {finalRank === 1 ? "치타까지 제쳤습니다! 완벽한 질주였어요." : finalRank === 4 ? "거북이에게 졌지만, 다음 판이 있습니다!" : "좋은 기록이에요. 한 등수만 더 올려볼까요?"}
+          {finalRank === 1 ? t("치타까지 제쳤습니다! 완벽한 질주였어요.") : finalRank === 4 ? t("거북이에게 졌지만, 다음 판이 있습니다!") : t("좋은 기록이에요. 한 등수만 더 올려볼까요?")}
         </p>
         <div className="grid grid-cols-3 gap-3 mb-10">
-          <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">타수</p><p className="text-2xl font-bold text-blue-600">{finalKpm}</p></div>
-          <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">정확도</p><p className="text-2xl font-bold text-zinc-900">{accuracy}%</p></div>
+          <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">{t("타수")}</p><p className="text-2xl font-bold text-blue-600">{finalKpm}</p></div>
+          <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">{t("정확도")}</p><p className="text-2xl font-bold text-zinc-900">{accuracy}%</p></div>
           <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100"><p className="text-[10px] font-bold text-zinc-400 uppercase mb-1 tracking-widest">Max Combo</p><p className="text-2xl font-bold text-zinc-900">{maxCombo}</p></div>
         </div>
         <p className="text-sm font-bold text-zinc-400 mb-8">{TypingUtils.getGrade(finalKpm, accuracy)}</p>
         {!user ? (
-          <div className="mb-10 p-8 bg-blue-50 rounded-2xl border border-blue-100"><p className="text-sm font-bold text-blue-600 mb-6 flex items-center justify-center gap-2"><Star size={16} fill="currentColor" /> 랭킹에 이름을 남기고 싶으신가요?</p><button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-5 bg-[#FEE500] text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95"><svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>3초 만에 로그인하고 기록 저장</button></div>
+          <div className="mb-10 p-8 bg-blue-50 rounded-2xl border border-blue-100"><p className="text-sm font-bold text-blue-600 mb-6 flex items-center justify-center gap-2"><Star size={16} fill="currentColor" /> {t("랭킹에 이름을 남기고 싶으신가요?")}</p><button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-5 bg-[#FEE500] text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95"><svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>{t("3초 만에 로그인하고 기록 저장")}</button></div>
         ) : (
-          <div className="mb-10 p-6 bg-green-50 rounded-2xl border border-green-100 flex items-center justify-center gap-3 animate-pulse"><Star size={20} className="text-green-600" fill="currentColor" /><p className="text-sm font-bold text-green-600">방금 세운 기록이 랭킹에 성공적으로 반영되었습니다!</p></div>
+          <div className="mb-10 p-6 bg-green-50 rounded-2xl border border-green-100 flex items-center justify-center gap-3 animate-pulse"><Star size={20} className="text-green-600" fill="currentColor" /><p className="text-sm font-bold text-green-600">{t("방금 세운 기록이 랭킹에 성공적으로 반영되었습니다!")}</p></div>
         )}
         <div className="mb-6 flex justify-center empty:hidden">
           <AdSenseUnit label="content-banner-mobile" width={320} height={100} tight />
         </div>
         <div className="flex flex-col gap-4">
-          <button onClick={startGame} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
-          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ChevronRight size={16} /></Link>
+          <button onClick={startGame} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> {t("다시 도전하기")}</button>
+          <Link prefetch={false} href={isEn ? "/en/game" : "/game"} className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">{t("목록으로 돌아가기")} <ChevronRight size={16} /></Link>
         </div>
       </div>
     </div>
@@ -251,8 +254,8 @@ export const TypingRaceGame: React.FC = () => {
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-20 p-4">
           <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-zinc-200">
             <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600"><Play size={32} fill="currentColor" className="ml-1" /></div>
-            <div className="text-center"><h3 className="text-2xl font-bold text-zinc-900 mb-1">타자 레이스</h3><p className="text-zinc-500 text-xs font-medium">단어를 입력해 달리세요! 거북이(200타), 토끼(350타), 치타(500타)와의 500타 경주입니다.</p></div>
-            <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-xl transition-all shadow-xl">경주 시작</button>
+            <div className="text-center"><h3 className="text-2xl font-bold text-zinc-900 mb-1">{t("타자 레이스")}</h3><p className="text-zinc-500 text-xs font-medium">{t("단어를 입력해 달리세요! 거북이(200타), 토끼(350타), 치타(500타)와의 500타 경주입니다.")}</p></div>
+            <button onClick={startGame} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-xl transition-all shadow-xl">{t("경주 시작")}</button>
           </div>
         </div>
       )}
@@ -268,7 +271,7 @@ export const TypingRaceGame: React.FC = () => {
           return (
             <div key={lane.name + lane.emoji} className={`relative rounded-xl sm:rounded-2xl border ${isMobilePlaying ? "h-7" : "h-9 sm:h-14"} ${lane.isPlayer ? "bg-blue-500/10 border-blue-500/40" : "bg-zinc-900/80 border-zinc-800"}`}>
               <div className={`absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-wider ${lane.color} opacity-70 pointer-events-none`}>
-                {lane.name}{lane.isPlayer ? " (YOU)" : ` · ${BOTS.find(b => b.emoji === lane.emoji)?.cpm}타`}
+                {t(lane.name)}{lane.isPlayer ? " (YOU)" : ` · ${BOTS.find(b => b.emoji === lane.emoji)?.cpm}${isEn ? " CPM" : "타"}`}
               </div>
               {/* 진행 바 */}
               <div className={`absolute left-0 top-0 bottom-0 rounded-2xl ${lane.isPlayer ? "bg-blue-500/20" : "bg-zinc-800/60"} transition-all duration-200`} style={{ width: `${pct}%` }} />
@@ -284,20 +287,20 @@ export const TypingRaceGame: React.FC = () => {
   );
 
   const raceInput = (
-    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) { e.preventDefault(); setInputValue(""); } }} disabled={gameState !== "playing"} className={`w-full text-center font-bold outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-blue-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white border-4 rounded-2xl md:rounded-2xl shadow-xl ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 focus:border-blue-500") : "border-zinc-100 opacity-50"}`}`} placeholder={gameState === "playing" ? "위 단어를 입력하세요!" : "준비가 되면 시작하세요"} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+    <input ref={inputRef} type="text" value={inputValue} onChange={handleInputChange} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) { e.preventDefault(); setInputValue(""); } }} disabled={gameState !== "playing"} className={`w-full text-center font-bold outline-hidden transition-all ${isMobilePlaying ? `h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 placeholder:text-zinc-500 ${isWrongNow ? "border-rose-500" : "border-zinc-700 focus:border-blue-500"}` : `h-14 md:h-20 px-5 md:px-8 text-xl md:text-4xl bg-white border-4 rounded-2xl md:rounded-2xl shadow-xl ${gameState === "playing" ? (isWrongNow ? "border-rose-500" : "border-zinc-900 focus:border-blue-500") : "border-zinc-100 opacity-50"}`}`} placeholder={gameState === "playing" ? t("위 단어를 입력하세요!") : t("준비가 되면 시작하세요")} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
   );
 
   // ── 모바일 풀스크린 몰입 모드 ──
   if (isMobilePlaying && overlay) {
     const exitGame = () => {
-      if (confirm("경주를 그만하고 결과를 볼까요?")) handleFinish(playerDist);
+      if (confirm(t("경주를 그만하고 결과를 볼까요?"))) handleFinish(playerDist);
       else resume();
     };
     const mobileHud = (
       <>
-        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-bold uppercase">타수</span><span className="text-sm font-bold text-blue-400 tabular-nums">{liveKpm}</span></span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-bold uppercase">{t("타수")}</span><span className="text-sm font-bold text-blue-400 tabular-nums">{liveKpm}</span></span>
         <span className="flex items-center gap-1"><Timer size={13} className="text-yellow-400" /><span className="text-sm font-bold text-yellow-400 tabular-nums">{elapsed.toFixed(0)}s</span></span>
-        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-bold uppercase">정확도</span><span className="text-sm font-bold text-emerald-400 tabular-nums">{accuracy}%</span></span>
+        <span className="flex items-center gap-1"><span className="text-[9px] text-zinc-500 font-bold uppercase">{t("정확도")}</span><span className="text-sm font-bold text-emerald-400 tabular-nums">{accuracy}%</span></span>
         {combo > 1 && <span className="text-orange-500 font-bold text-xs italic flex items-center gap-0.5 ml-auto"><Flame size={11} fill="currentColor" />{combo}</span>}
       </>
     );
@@ -308,7 +311,7 @@ export const TypingRaceGame: React.FC = () => {
           {/* 현재 단어 + 다음 단어 미리보기 */}
           <div className="shrink-0 flex flex-col items-center gap-1">
             <div data-race-word className={`px-6 py-2 rounded-xl border-2 text-2xl font-bold tracking-wider transition-colors ${isWrongNow ? "bg-rose-900/30 border-rose-500 text-rose-400" : "bg-zinc-900 border-zinc-700 text-white"}`}>{word}</div>
-            {nextWord && <div className="text-[11px] font-bold text-zinc-500">다음: {nextWord}</div>}
+            {nextWord && <div className="text-[11px] font-bold text-zinc-500">{t("다음: ")}{nextWord}</div>}
           </div>
         </div>
       </MobileGameShell>
@@ -322,14 +325,14 @@ export const TypingRaceGame: React.FC = () => {
       {/* Game Dashboard (데스크톱 ≥lg) */}
       <div className="hidden lg:flex w-full justify-between items-center px-4 md:px-8 py-3 md:py-4 bg-zinc-900 text-white rounded-2xl md:rounded-2xl shadow-xl border border-zinc-800 shrink-0">
         <div className="flex gap-4 md:gap-8 items-center">
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">현재 타수</span><span className="text-lg md:text-2xl font-bold text-blue-400">{liveKpm}</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">{t("현재 타수")}</span><span className="text-lg md:text-2xl font-bold text-blue-400">{liveKpm}</span></div>
           <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">Time</span><span className="text-lg md:text-2xl font-bold text-yellow-400 flex items-center gap-1"><Timer size={18} />{elapsed.toFixed(0)}s</span></div>
-          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">정확도</span><span className="text-lg md:text-2xl font-bold text-emerald-400">{accuracy}%</span></div>
+          <div className="flex flex-col"><span className="text-[9px] text-zinc-500 uppercase font-bold mb-0.5">{t("정확도")}</span><span className="text-lg md:text-2xl font-bold text-emerald-400">{accuracy}%</span></div>
         </div>
         <div className="flex items-center gap-4">
           {combo > 1 && <div className="animate-bounce"><span className="text-orange-500 font-bold text-lg italic flex items-center gap-1"><Flame size={16} fill="currentColor" /> {combo}</span></div>}
           <div className="h-8 w-px bg-zinc-800 hidden sm:block"></div>
-          <div className="text-right hidden sm:block"><div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-tight">Racing Mode</div><div className="font-bold text-zinc-300 text-sm leading-tight">타자 레이스</div></div>
+          <div className="text-right hidden sm:block"><div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-tight">Racing Mode</div><div className="font-bold text-zinc-300 text-sm leading-tight">{t("타자 레이스")}</div></div>
         </div>
       </div>
 
@@ -356,7 +359,7 @@ export const TypingRaceGame: React.FC = () => {
 
         {/* Rankings Sidebar */}
         <div className="flex w-full lg:w-72 bg-white rounded-2xl border border-zinc-200 p-6 shadow-lg flex-col shrink-0">
-          <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-bold">실시간 타수 랭킹</h3></div>
+          <div className="flex items-center gap-2 mb-6"><Trophy className="text-yellow-500" size={20} /><h3 className="text-lg font-bold">{t("실시간 타수 랭킹")}</h3></div>
           <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar max-h-96 lg:max-h-none">
             {rankingLoading ? (<div className="flex flex-col items-center justify-center py-10 gap-2"><Loader2 className="animate-spin text-zinc-300" size={20} /></div>) :
               rankings.length > 0 ? rankings.map((rank, i) => (
@@ -364,11 +367,11 @@ export const TypingRaceGame: React.FC = () => {
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${i === 0 ? "bg-yellow-400 text-white" : i === 1 ? "bg-zinc-300 text-zinc-600" : i === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 text-zinc-400"}`}>{i + 1}</div>
                   <div className="flex-1 flex items-center gap-2 min-w-0">
                     {rank.profiles?.avatar_url ? <Image src={rank.profiles.avatar_url} alt="p" width={24} height={32} className="w-6 h-6 rounded-lg object-cover aspect-square" /> : <div className="w-6 h-6 bg-zinc-50 rounded-lg flex items-center justify-center text-zinc-400"><User size={12} /></div>}
-                    <div className="min-w-0"><p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || "익명"}</p><p className="text-[9px] font-bold text-zinc-400">{rank.level}등 완주</p></div>
+                    <div className="min-w-0"><p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || t("익명")}</p><p className="text-[9px] font-bold text-zinc-400">{rank.level}등 완주</p></div>
                   </div>
                   <div className="text-right shrink-0"><p className="text-sm font-bold text-blue-600">{rank.score.toLocaleString()}타</p></div>
                 </div>
-              )) : <div className="text-center py-10 text-zinc-400 text-xs font-medium">기록 없음</div>}
+              )) : <div className="text-center py-10 text-zinc-400 text-xs font-medium">{t("기록 없음")}</div>}
           </div>
           {!user && (
             <p className="mt-4 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2 animate-pulse">

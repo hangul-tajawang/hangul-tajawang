@@ -1,5 +1,7 @@
 "use client";
 
+import { useGameT, waveLabel, waveClearLabel } from "@/lib/i18n/game-ui";
+
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -98,6 +100,7 @@ function normalizeProfile(value: unknown): ProfileSummary | null {
 const initialEngine = new TypingDefenseEngine();
 
 export const TypingDefenseGame: React.FC = () => {
+  const { isEn, t } = useGameT();
   const engineRef = useRef(initialEngine);
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number | null>(null);
@@ -231,13 +234,13 @@ export const TypingDefenseGame: React.FC = () => {
         // 웨이브 전환 감지
         if (state.wavePhase !== prevPhaseRef.current) {
           if (state.wavePhase === "intermission") {
-            setWaveBanner(`웨이브 ${state.wave} 클리어!`);
+            setWaveBanner(waveClearLabel(isEn, state.wave));
             sound.fanfare();
           }
           prevPhaseRef.current = state.wavePhase;
         }
         if (state.wave > prevWaveRef.current && state.wavePhase === "spawning") {
-          setWaveBanner(`웨이브 ${state.wave}`);
+          setWaveBanner(waveLabel(isEn, state.wave));
           prevWaveRef.current = state.wave;
         }
 
@@ -264,7 +267,7 @@ export const TypingDefenseGame: React.FC = () => {
     setInputValue("");
     setTargetId(null);
     setEffects([]);
-    setWaveBanner("웨이브 1");
+    setWaveBanner(waveLabel(isEn, 1));
     setGameState("playing");
     setSnapshot(engineRef.current.state);
     lastTsRef.current = null;
@@ -317,7 +320,7 @@ export const TypingDefenseGame: React.FC = () => {
             for (let i = 0; i < 3; i++) {
               addEffect({ kind: "dust", x: to.x, y: to.y, dx: (Math.random() - 0.5) * 30, dy: -8 - Math.random() * 14 }, 460);
             }
-            addEffect({ kind: "float", x: to.x, y: to.y, label: targetEnemy.kind === "boss" ? "명중!" : "막힘!", color: targetEnemy.kind === "boss" ? "text-orange-300" : "text-blue-300" }, 700);
+            addEffect({ kind: "float", x: to.x, y: to.y, label: targetEnemy.kind === "boss" ? t("명중!") : t("막힘!"), color: targetEnemy.kind === "boss" ? "text-orange-300" : "text-blue-300" }, 700);
             sound.play("hit", { pitch: 1.05, volume: 0.8 });
           }, ARROW_MS);
         }
@@ -333,7 +336,7 @@ export const TypingDefenseGame: React.FC = () => {
             addEffect({ kind: "float", x: p.x, y: p.y, label: `+${outcome.gainedScore}`, color: "text-yellow-300" }, 820);
           }
         } else if (outcome.skill === "방패") {
-          addEffect({ kind: "gateBanner", label: "방패 +1", color: "text-blue-200 border-blue-300" }, 700);
+          addEffect({ kind: "gateBanner", label: t("방패 +1"), color: "text-blue-200 border-blue-300" }, 700);
           sound.tick();
         } else if (outcome.skill === "수리") {
           addEffect({ kind: "gateBanner", label: "+2 수리", color: "text-green-200 border-green-300" }, 700);
@@ -389,7 +392,7 @@ export const TypingDefenseGame: React.FC = () => {
     const state = engine.state;
     prevWaveRef.current = state.wave;
     prevPhaseRef.current = state.wavePhase;
-    setWaveBanner(state.isBossWave ? `⚔️ 보스 웨이브 ${state.wave}` : `웨이브 ${state.wave}`);
+    setWaveBanner(waveLabel(isEn, state.wave, state.isBossWave));
     if (state.isBossWave) sound.thud();
     setSnapshot(state);
     window.setTimeout(() => inputRef.current?.focus(), 20);
@@ -406,9 +409,9 @@ export const TypingDefenseGame: React.FC = () => {
   // TOP 10 리더보드 + 현재 점수 기준 내 예상 위치 삽입
   type BoardRow = { me?: boolean; nickname: string; score: number; created_at?: string };
   const playBoardRows: BoardRow[] = (() => {
-    const board: BoardRow[] = rankings.slice(0, 10).map((r) => ({ nickname: r.profiles?.nickname || "익명", score: r.score, created_at: r.created_at }));
+    const board: BoardRow[] = rankings.slice(0, 10).map((r) => ({ nickname: r.profiles?.nickname || t("익명"), score: r.score, created_at: r.created_at }));
     if (gameState === "playing" && liveRank !== null && liveRank <= 10) {
-      board.splice(liveRank - 1, 0, { me: true, nickname: profile?.nickname || "나", score: snapshot.score });
+      board.splice(liveRank - 1, 0, { me: true, nickname: profile?.nickname || t("나"), score: snapshot.score });
     }
     return board.slice(0, 10);
   })();
@@ -468,9 +471,9 @@ export const TypingDefenseGame: React.FC = () => {
               <Castle className="w-7 h-7 sm:w-9 sm:h-9" />
             </div>
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mb-1.5 leading-tight">한글 타자 성문방어</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mb-1.5 leading-tight">{t("한글 타자 성문방어")}</h3>
               <p className="text-zinc-500 text-xs sm:text-sm font-medium leading-relaxed">
-                적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 위급하면 <b>번개·방패·수리</b> 스킬을 입력하세요.
+                {isEn ? <>Type the <b className="text-blue-500">word</b> above an enemy to fire an arrow and hold the gate. In a pinch, type a skill word: <b>번개·방패·수리</b>.</> : <>적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 위급하면 <b>번개·방패·수리</b> 스킬을 입력하세요.</>}
               </p>
             </div>
             <button onClick={startGame} className="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg sm:text-xl font-bold rounded-2xl transition-all shadow-xl shadow-blue-200 active:scale-95 shrink-0">
@@ -502,7 +505,7 @@ export const TypingDefenseGame: React.FC = () => {
             <div className={`flex items-center justify-center gap-1.5 font-bold ${meta.color} ${isMobilePlaying ? "text-xs" : "text-base"}`}>
               <Icon size={isMobilePlaying ? 14 : 18} /> {skill}
             </div>
-            {!isMobilePlaying && <div className="mt-1 text-[10px] font-bold text-zinc-400">{meta.desc}</div>}
+            {!isMobilePlaying && <div className="mt-1 text-[10px] font-bold text-zinc-400">{t(meta.desc)}</div>}
           </button>
         );
       })}
@@ -522,7 +525,7 @@ export const TypingDefenseGame: React.FC = () => {
             ? "h-12 px-4 text-lg bg-zinc-800 text-white rounded-xl border-2 border-blue-500 placeholder:text-zinc-500"
             : "h-14 px-5 text-2xl sm:text-3xl bg-white border-4 rounded-2xl shadow-xl border-blue-500 focus:ring-4 ring-blue-100 disabled:opacity-60"
         }`}
-        placeholder={gameState === "playing" ? "적 단어를 입력하세요" : "시작 후 입력 가능"}
+        placeholder={gameState === "playing" ? t("적 단어를 입력하세요") : t("시작 후 입력 가능")}
         autoFocus
         autoComplete="off"
         autoCorrect="off"
@@ -579,7 +582,7 @@ export const TypingDefenseGame: React.FC = () => {
     <aside className="w-full h-full bg-white rounded-2xl border border-zinc-200 p-5 shadow-lg flex flex-col min-h-0">
       <div className="flex items-center gap-2 mb-4 shrink-0">
         <Trophy className="text-yellow-500" size={18} />
-        <h3 className="text-base font-bold">성문방어 랭킹</h3>
+        <h3 className="text-base font-bold">{t("성문방어 랭킹")}</h3>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0">
         {rankingLoading ? (
@@ -589,17 +592,17 @@ export const TypingDefenseGame: React.FC = () => {
             <div key={`${rank.created_at ?? index}-${index}`} className="flex items-center gap-3">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${index === 0 ? "bg-yellow-400 text-white" : index === 1 ? "bg-zinc-300 text-zinc-600" : index === 2 ? "bg-orange-400 text-white" : "bg-zinc-100 text-zinc-400"}`}>{index + 1}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || "익명"}</p>
-                <p className="text-[9px] font-bold text-zinc-400">웨이브 {rank.level} · 콤보 {rank.max_combo}</p>
+                <p className="text-sm font-bold truncate text-zinc-900 leading-tight">{rank.profiles?.nickname || t("익명")}</p>
+                <p className="text-[9px] font-bold text-zinc-400">{isEn ? <>Wave {rank.level} · Combo {rank.max_combo}</> : <>웨이브 {rank.level} · 콤보 {rank.max_combo}</>}</p>
               </div>
               <p className="text-xs font-bold text-blue-600 shrink-0">{rank.score.toLocaleString()}</p>
             </div>
           ))
         ) : (
-          <div className="text-center py-10 text-zinc-400 text-xs font-medium">기록 없음</div>
+          <div className="text-center py-10 text-zinc-400 text-xs font-medium">{t("기록 없음")}</div>
         )}
       </div>
-      {!isLoggedIn && <p className="mt-3 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2 shrink-0">로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.</p>}
+      {!isLoggedIn && <p className="mt-3 text-[9px] text-zinc-400 font-bold text-center leading-relaxed px-2 shrink-0">{t("로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.")}</p>}
       <div className="mt-3 pt-3 border-t border-zinc-100 text-center shrink-0">
         <div className="bg-zinc-50 p-2.5 rounded-xl flex items-center justify-center gap-2">
           <Keyboard size={14} className="text-blue-600" />
@@ -610,7 +613,7 @@ export const TypingDefenseGame: React.FC = () => {
   );
 
   const exitDesktopGame = () => {
-    if (confirm("게임을 그만하고 결과를 볼까요?")) finishGame();
+    if (confirm(t("게임을 그만하고 결과를 볼까요?"))) finishGame();
     else inputRef.current?.focus();
   };
 
@@ -650,7 +653,7 @@ export const TypingDefenseGame: React.FC = () => {
   // ── 모바일 풀스크린 ──
   if (isMobilePlaying && overlay) {
     const exitGame = () => {
-      if (confirm("게임을 그만하고 결과를 볼까요?")) finishGame();
+      if (confirm(t("게임을 그만하고 결과를 볼까요?"))) finishGame();
       else resume();
     };
     const mobileHud = (
@@ -694,19 +697,19 @@ export const TypingDefenseGame: React.FC = () => {
             <Castle className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-2 leading-tight">한글 타자 성문방어</h3>
+            <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-2 leading-tight">{t("한글 타자 성문방어")}</h3>
             <p className="text-zinc-500 text-sm font-medium leading-relaxed">
-              적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 5웨이브마다 <b>보스</b>가 오고, 클리어할 때마다 <b>강화</b>를 고릅니다.
+              {isEn ? <>Type the <b className="text-blue-500">word</b> above an enemy to fire an arrow and hold the gate. A <b>boss</b> arrives every 5 waves, and you pick an <b>upgrade</b> after each clear.</> : <>적의 머리 위 <b className="text-blue-500">단어</b>를 타이핑해 화살을 쏘세요. 웨이브를 막고 성문을 지키면 됩니다. 5웨이브마다 <b>보스</b>가 오고, 클리어할 때마다 <b>강화</b>를 고릅니다.</>}
             </p>
           </div>
           <div className="flex items-center gap-2 w-full">
             <button onClick={startGame} className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold rounded-2xl transition-all shadow-xl shadow-blue-200 active:scale-95">
-              {gameState === "gameover" ? "다시 도전" : "방어 시작"}
+              {gameState === "gameover" ? t("다시 도전") : t("방어 시작")}
             </button>
             {muteButton}
           </div>
-          <p className="text-[11px] font-bold text-zinc-400">전체화면으로 열립니다 · 언제든 나가기 버튼으로 종료</p>
-          <p className="text-[10px] text-zinc-400/80">아트: Tiny Swords by Pixel Frog · 무료 상업적 이용 가능</p>
+          <p className="text-[11px] font-bold text-zinc-400">{t("전체화면으로 열립니다 · 언제든 나가기 버튼으로 종료")}</p>
+          <p className="text-[10px] text-zinc-400/80">{t("아트: Tiny Swords by Pixel Frog · 무료 상업적 이용 가능")}</p>
         </div>
       </div>
 
@@ -736,6 +739,7 @@ function ResultTile({ label, value }: { label: string; value: string }) {
 }
 
 function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefenseState; isLoggedIn: boolean; onRetry: () => void }) {
+  const { isEn, t } = useGameT();
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl animate-in fade-in duration-500" />
@@ -747,8 +751,8 @@ function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefens
         <div className="inline-flex p-6 bg-blue-50 rounded-full mb-6">
           <Castle className="w-16 h-16 text-blue-600" />
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 tracking-tighter">웨이브 {snapshot.wave}에서 성문이 무너졌어요</h2>
-        <p className="text-zinc-500 font-bold mb-8">이번 방어 기록입니다.</p>
+        <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 tracking-tighter">{isEn ? <>The gate fell on wave {snapshot.wave}</> : <>웨이브 {snapshot.wave}에서 성문이 무너졌어요</>}</h2>
+        <p className="text-zinc-500 font-bold mb-8">{t("이번 방어 기록입니다.")}</p>
         <div className="grid grid-cols-2 gap-4 mb-8">
           <ResultTile label="Wave" value={snapshot.wave.toLocaleString()} />
           <ResultTile label="Score" value={snapshot.score.toLocaleString()} />
@@ -757,15 +761,15 @@ function ResultModal({ snapshot, isLoggedIn, onRetry }: { snapshot: TypingDefens
         </div>
         {!isLoggedIn ? (
           <div className="mb-6 p-6 bg-blue-50 rounded-2xl border border-blue-100">
-            <p className="text-sm font-bold text-blue-600 mb-4 flex items-center justify-center gap-2"><Sparkles size={16} fill="currentColor" /> 랭킹에 기록을 남겨보세요.</p>
-            <button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95">카카오로 로그인하고 저장</button>
+            <p className="text-sm font-bold text-blue-600 mb-4 flex items-center justify-center gap-2"><Sparkles size={16} fill="currentColor" /> {t("랭킹에 기록을 남겨보세요.")}</p>
+            <button onClick={() => SupabaseService.signInWithKakao()} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95">{t("카카오로 로그인하고 저장")}</button>
           </div>
         ) : (
-          <div className="mb-6 text-sm font-bold text-green-600">랭킹에 기록이 반영되었습니다.</div>
+          <div className="mb-6 text-sm font-bold text-green-600">{t("랭킹에 기록이 반영되었습니다.")}</div>
         )}
         <div className="flex flex-col gap-4">
-          <button onClick={onRetry} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> 다시 도전하기</button>
-          <Link prefetch={false} href="/game" className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">목록으로 돌아가기 <ArrowRight size={16} /></Link>
+          <button onClick={onRetry} className="w-full py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"><RotateCcw size={24} /> {t("다시 도전하기")}</button>
+          <Link prefetch={false} href={isEn ? "/en/game" : "/game"} className="flex items-center justify-center gap-2 text-zinc-400 font-bold text-sm hover:text-zinc-600 transition-colors">{t("목록으로 돌아가기")} <ArrowRight size={16} /></Link>
         </div>
       </div>
     </div>
@@ -835,13 +839,14 @@ const UPGRADE_ICON: Record<UpgradeId, React.ElementType> = {
 };
 
 function UpgradeModal({ choices, wave, onPick }: { choices: UpgradeOption[]; wave: number; onPick: (id: UpgradeId) => void }) {
+  const { isEn, t } = useGameT();
   return (
     <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-zinc-950/85 backdrop-blur-md animate-in fade-in duration-300" />
       <div className="relative w-full max-w-2xl bg-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-zinc-200 animate-in zoom-in duration-300">
         <div className="text-center mb-6">
-          <p className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-1">웨이브 {wave} 클리어</p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900">강화 하나를 선택하세요</h2>
+          <p className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-1">{isEn ? <>Wave {wave} cleared</> : <>웨이브 {wave} 클리어</>}</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900">{t("강화 하나를 선택하세요")}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {choices.map((choice) => {
@@ -857,8 +862,8 @@ function UpgradeModal({ choices, wave, onPick }: { choices: UpgradeOption[]; wav
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon size={24} />
                 </div>
-                <div className="font-bold text-zinc-900">{choice.title}</div>
-                <div className="text-xs font-medium text-zinc-500 leading-snug">{choice.desc}</div>
+                <div className="font-bold text-zinc-900">{t(choice.title)}</div>
+                <div className="text-xs font-medium text-zinc-500 leading-snug">{t(choice.desc)}</div>
               </button>
             );
           })}
