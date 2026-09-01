@@ -7,6 +7,7 @@ import { SHORT_TEXT_DB } from '@/lib/short-text-data';
 import { QUIZ_DATA } from '@/lib/quiz-data';
 import { blogPosts } from '@/lib/blog-data';
 import { JOURNEY_COURSES } from '@/lib/journey-data';
+import { LOCALIZED_KO_PATHS, koToEnPath } from '@/lib/i18n/routes';
 
 // 사이트맵을 1시간마다 재생성 (매 요청마다 DB 쿼리 방지)
 export const revalidate = 3600;
@@ -44,11 +45,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/contact',
     '/privacy',
     '/terms',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: CONTENT_LAST_UPDATED,
-    changeFrequency: 'monthly' as const, // daily → monthly (정적 페이지는 자주 안 바뀜)
-    priority: route === '' ? 1.0 : 0.8,
+  ].map((route) => {
+    // /en 버전이 있는 페이지는 hreflang 상호참조를 sitemap에도 노출
+    const koPath = route === '' ? '/' : route;
+    const localized = (LOCALIZED_KO_PATHS as readonly string[]).includes(koPath);
+    return {
+      url: `${baseUrl}${route}`,
+      lastModified: CONTENT_LAST_UPDATED,
+      changeFrequency: 'monthly' as const, // daily → monthly (정적 페이지는 자주 안 바뀜)
+      priority: route === '' ? 1.0 : 0.8,
+      ...(localized && {
+        alternates: {
+          languages: { ko: `${baseUrl}${route}`, en: `${baseUrl}${koToEnPath(koPath)}` },
+        },
+      }),
+    };
+  });
+
+  // 영문 페이지 (2026-09 신설 — 코어 페이지만, 한글 콘텐츠 상세는 제외)
+  const EN_LAUNCHED = '2026-09-01';
+  const enPages = LOCALIZED_KO_PATHS.map((koPath) => ({
+    url: `${baseUrl}${koToEnPath(koPath)}`,
+    lastModified: EN_LAUNCHED,
+    changeFrequency: 'monthly' as const,
+    priority: koPath === '/' ? 0.9 : 0.7,
+    alternates: {
+      languages: {
+        ko: koPath === '/' ? baseUrl : `${baseUrl}${koPath}`,
+        en: `${baseUrl}${koToEnPath(koPath)}`,
+      },
+    },
   }));
 
   // 2. 블로그 포스트 (실제 작성 날짜 사용)
@@ -131,6 +157,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticPages,
+    ...enPages,
     ...blogPages,
     ...seriesPages,
     ...authorPages,

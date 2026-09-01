@@ -5,13 +5,32 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, ChevronDown, Zap, Newspaper, Timer, TramFront, Wrench } from "lucide-react";
+import { User as UserIcon, Layout, PenTool, Gamepad2, Users, BookOpenCheck, LogOut, Loader2, Menu, X, ChevronRight, ChevronDown, Zap, Newspaper, Timer, TramFront, Wrench, Globe, BookOpen } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SupabaseService, supabase } from "@/lib/supabase";
 import { NotificationDrawer } from "./NotificationDrawer";
+import { localeFromPathname, switchLocaleHref } from "@/lib/i18n/routes";
+import { getChromeDict, NAV_ITEMS } from "@/lib/i18n/chrome";
+
+/** 언어 선택기 — JS 상태 전환이 아닌 실제 <a> 링크 (크롤러의 /en 발견 경로 겸용) */
+function LanguageSwitch({ pathname, label, className = "" }: { pathname: string; label: string; className?: string }) {
+  return (
+    <a
+      href={switchLocaleHref(pathname)}
+      className={`flex items-center gap-1.5 px-2.5 py-2 text-sm font-bold whitespace-nowrap rounded-lg text-zinc-500 hover:text-primary hover:bg-surface-low transition-all ${className}`}
+    >
+      <Globe size={15} />
+      <span>{label}</span>
+    </a>
+  );
+}
 
 export const Header: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname);
+  const t = getChromeDict(locale);
+  const nav = NAV_ITEMS[locale];
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -116,21 +135,36 @@ export const Header: React.FC = () => {
             <div className="p-6 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center text-white font-bold text-lg">한</div>
-                    <span className="editorial-heading">메뉴</span>
+                    <span className="editorial-heading">{t.menu}</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-zinc-400 hover:text-on-surface transition-colors"><X size={24} /></button>
             </div>
 
             <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-                <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} highlight />
-                <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} highlight />
-                <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} highlight />
-                <p className="pt-4 pb-1 px-2 text-[11px] font-bold uppercase tracking-widest text-zinc-400">도구</p>
-                <MobileNavItem href="/test" icon={<Timer size={20} />} label="1분 타자 테스트" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="원고지 필사" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
-                <MobileNavItem href="/blog" icon={<Newspaper size={20} />} label="블로그" onClick={() => setIsMobileMenuOpen(false)} />
+                {locale === "ko" ? (
+                  <>
+                    <MobileNavItem href="/journey" icon={<TramFront size={20} />} label="지식타자" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <MobileNavItem href="/challenge" icon={<Users size={20} />} label="필사 챌린지" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <MobileNavItem href="/game" icon={<Gamepad2 size={20} />} label="한글 게임" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <p className="pt-4 pb-1 px-2 text-[11px] font-bold uppercase tracking-widest text-zinc-400">도구</p>
+                    <MobileNavItem href="/test" icon={<Timer size={20} />} label="1분 타자 테스트" onClick={() => setIsMobileMenuOpen(false)} />
+                    <MobileNavItem href="/practice" icon={<Layout size={20} />} label="타자 연습장" onClick={() => setIsMobileMenuOpen(false)} />
+                    <MobileNavItem href="/transcription" icon={<PenTool size={20} />} label="원고지 필사" onClick={() => setIsMobileMenuOpen(false)} />
+                    <MobileNavItem href="/quiz" icon={<BookOpenCheck size={20} />} label="맞춤법 퀴즈" onClick={() => setIsMobileMenuOpen(false)} />
+                    <MobileNavItem href="/blog" icon={<Newspaper size={20} />} label="블로그" onClick={() => setIsMobileMenuOpen(false)} />
+                  </>
+                ) : (
+                  <>
+                    <MobileNavItem href="/en/game" icon={<Gamepad2 size={20} />} label="Typing Games" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <MobileNavItem href="/en/test" icon={<Timer size={20} />} label="Typing Test" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <MobileNavItem href="/en/practice" icon={<Layout size={20} />} label="Practice" onClick={() => setIsMobileMenuOpen(false)} highlight />
+                    <p className="pt-4 pb-1 px-2 text-[11px] font-bold uppercase tracking-widest text-zinc-400">{t.toolsSection}</p>
+                    <MobileNavItem href="/en/guide" icon={<BookOpen size={20} />} label="How to Type in Korean" onClick={() => setIsMobileMenuOpen(false)} />
+                  </>
+                )}
+                <div className="pt-4">
+                  <LanguageSwitch pathname={pathname} label={t.languageSwitch} className="w-full justify-center border border-surface-high" />
+                </div>
             </div>
 
             <div className="p-6 bg-surface-low">
@@ -139,18 +173,18 @@ export const Header: React.FC = () => {
                         <Link href="/mypage" prefetch={false} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 p-2">
                             {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={40} height={40} className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold">U</div>}
                             <div>
-                                <p className="editorial-heading text-sm">{profile?.nickname || '필사 작가'}</p>
+                                <p className="editorial-heading text-sm">{profile?.nickname || t.defaultNickname}</p>
                                 <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">My Page</p>
                             </div>
                         </Link>
                         <button onClick={handleLogout} className="flex items-center justify-center gap-2 w-full py-3 bg-surface-lowest border border-outline-variant text-zinc-500 rounded-xl text-xs font-bold">
-                            <LogOut size={14} /> 로그아웃
+                            <LogOut size={14} /> {t.logout}
                         </button>
                     </div>
                 ) : (
                     <button onClick={handleLogin} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg">
                         <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>
-                        3초 만에 시작하기
+                        {t.loginLong}
                     </button>
                 )}
             </div>
@@ -162,17 +196,22 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-50 w-full">
       <div className="w-full bg-surface-high/85 backdrop-blur-md border-b border-outline-variant">
         <div className="container mx-auto max-w-7xl h-16 flex items-center justify-between px-4 lg:px-8">
-            <Link href="/" prefetch={false} className="flex items-center gap-2 cursor-pointer group shrink-0">
+            <Link href={locale === "en" ? "/en" : "/"} prefetch={false} className="flex items-center gap-2 cursor-pointer group shrink-0">
                 <div className="w-8 h-8 primary-gradient rounded-md flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">한</div>
-                <span className="serif-display text-xl whitespace-nowrap">한글타자왕</span>
+                <span className="serif-display text-xl whitespace-nowrap">{locale === "en" ? "Hangul Tajawang" : "한글타자왕"}</span>
             </Link>
 
-            {/* 데스크톱 내비: 코어 3 + 도구 드롭다운 (URL은 전부 기존 그대로) */}
+            {/* 데스크톱 내비: 코어 3 + 도구 드롭다운 (URL은 전부 기존 그대로). en은 /en 버전이 있는 메뉴만 노출 */}
             <nav className="hidden lg:flex items-center gap-1 min-w-0">
-                <NavButton label="지식타자" href="/journey" highlight />
-                <NavButton label="필사 챌린지" href="/challenge" highlight />
-                <NavButton label="한글 게임" href="/game" highlight />
-                <ToolsDropdown />
+                {nav.main.map((item) => (
+                  <NavButton key={item.href} label={item.label} href={item.href} highlight={item.highlight} />
+                ))}
+                {locale === "ko" ? (
+                  <ToolsDropdown />
+                ) : (
+                  nav.tools.map((item) => <NavButton key={item.href} label={item.label} href={item.href} />)
+                )}
+                <LanguageSwitch pathname={pathname} label={t.languageSwitch} />
             </nav>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -188,7 +227,7 @@ export const Header: React.FC = () => {
                                 <>
                                     <Link href="/mypage" prefetch={false} className="flex items-center gap-2 p-1 pr-4 bg-surface-low rounded-full hover:bg-surface-high transition-all">
                                         {profile?.avatar_url ? <Image src={profile.avatar_url} alt="p" width={32} height={32} className="w-8 h-8 rounded-full object-cover" /> : <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-primary font-bold text-xs">U</div>}
-                                        <span className="text-sm font-bold text-zinc-700">마이페이지</span>
+                                        <span className="text-sm font-bold text-zinc-700">{t.mypage}</span>
                                     </Link>
                                     <button onClick={handleLogout} title="로그아웃" aria-label="로그아웃" className="p-2.5 text-zinc-400 hover:text-red-500 hover:bg-surface-low rounded-full transition-all">
                                         <LogOut size={16} />
@@ -196,7 +235,7 @@ export const Header: React.FC = () => {
                                 </>
                             ) : (
                                 <button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-[#FEE500] text-black rounded-full text-sm font-bold hover:opacity-90">
-                                    <Zap size={14} fill="currentColor" /> 시작하기
+                                    <Zap size={14} fill="currentColor" /> {t.login}
                                 </button>
                             )}
                         </div>
@@ -252,7 +291,10 @@ function ToolsDropdown() {
 }
 
 /* 모바일 하단 고정 탭 — 코어 3 + 도구 시트. 허브 화면에서만 노출(플레이 화면 가림 방지). */
-const BOTTOM_TAB_PATHS = new Set(["/", "/challenge", "/game", "/journey", "/test", "/practice", "/transcription", "/quiz", "/blog", "/mypage"]);
+const BOTTOM_TAB_PATHS = new Set([
+  "/", "/challenge", "/game", "/journey", "/test", "/practice", "/transcription", "/quiz", "/blog", "/mypage",
+  "/en", "/en/game", "/en/test", "/en/practice", "/en/guide",
+]);
 
 function BottomTabBar() {
   const pathname = usePathname();
@@ -272,11 +314,19 @@ function BottomTabBar() {
 
   if (!visible) return null;
 
-  const tabs = [
-    { href: "/journey", label: "지식타자", icon: <TramFront size={20} /> },
-    { href: "/challenge", label: "챌린지", icon: <Users size={20} /> },
-    { href: "/game", label: "게임", icon: <Gamepad2 size={20} /> },
-  ];
+  const isEn = localeFromPathname(pathname) === "en";
+  const tabs = isEn
+    ? [
+        { href: "/en/game", label: "Games", icon: <Gamepad2 size={20} /> },
+        { href: "/en/test", label: "Test", icon: <Timer size={20} /> },
+        { href: "/en/practice", label: "Practice", icon: <Layout size={20} /> },
+        { href: "/en/guide", label: "Guide", icon: <BookOpen size={20} /> },
+      ]
+    : [
+        { href: "/journey", label: "지식타자", icon: <TramFront size={20} /> },
+        { href: "/challenge", label: "챌린지", icon: <Users size={20} /> },
+        { href: "/game", label: "게임", icon: <Gamepad2 size={20} /> },
+      ];
 
   return (
     <>
@@ -303,10 +353,12 @@ function BottomTabBar() {
               </Link>
             );
           })}
-          <button onClick={() => setSheetOpen((v) => !v)} className={`flex flex-col items-center justify-center gap-1 text-[11px] font-bold transition-colors ${sheetOpen ? "text-primary" : "text-zinc-500"}`}>
-            <Wrench size={20} />
-            도구
-          </button>
+          {!isEn && (
+            <button onClick={() => setSheetOpen((v) => !v)} className={`flex flex-col items-center justify-center gap-1 text-[11px] font-bold transition-colors ${sheetOpen ? "text-primary" : "text-zinc-500"}`}>
+              <Wrench size={20} />
+              도구
+            </button>
+          )}
         </div>
       </nav>
     </>

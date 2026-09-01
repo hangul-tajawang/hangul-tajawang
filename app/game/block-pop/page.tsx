@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { BlockPopGame } from '@/components/game/BlockPopGame';
 import { GameJsonLd } from '@/components/seo/GameJsonLd';
@@ -22,9 +23,7 @@ export const metadata: Metadata = {
     '무료 타자 게임',
     '한글타자왕 게임',
   ],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/game/block-pop',
-  },
+  alternates: localeAlternates('/game/block-pop', 'ko'),
   openGraph: {
     title: '블록 팝핑 - 한글타자왕',
     description:

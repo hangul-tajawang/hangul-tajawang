@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import type { Metadata } from 'next';
 import HomeClient from './HomeClient';
 import Link from 'next/link';
@@ -11,9 +12,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: '한글타자왕 - 무료 한글타자연습사이트 | 낱말/짧은글/필사/게임',
   description: '한글 타자 연습 사이트 한글타자왕에서 낱말 연습, 짧은 글 연습, 원고지 필사, 산성비 게임을 무료로 즐겨보세요. 독수리 타법 교정과 타자 속도 측정에 가장 효과적인 한글타자연습사이트입니다.',
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com',
-  },
+  alternates: localeAlternates('/', 'ko'),
   openGraph: {
     title: '한글타자왕 - 무료 한글타자연습사이트',
     description: '낱말 연습, 짧은 글 연습, 원고지 필사, 산성비 게임을 무료로 즐겨보세요.',

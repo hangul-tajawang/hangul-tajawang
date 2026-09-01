@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { PositionPractice } from '@/components/word-practice/PositionPractice';
 import { Keyboard } from 'lucide-react';
@@ -6,9 +7,7 @@ export const metadata: Metadata = {
   title: "한글 자판 자리 연습 - 독수리 타법 탈출 기초",
   description: "ㅁㄴㅇㄹ 기본 자리부터 쌍자음까지, 한글 자판 위치를 단계별로 빠르게 익혀보세요. 독수리 타법을 교정하고 타수를 급격히 올리는 가장 쉬운 타자 연습 사이트입니다.",
   keywords: ["한글 자리 연습", "자판 위치 익히기", "타자 기초", "ㅁㄴㅇㄹ 연습", "한글 자판 연습", "독수리 타법 교정", "키보드 자리 외우기", "두벌식 자판"],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/practice/position',
-  },
+  alternates: localeAlternates('/practice/position', 'ko'),
   openGraph: {
     title: "한글 자판 자리 연습 - 한글타자왕",
     description: "독수리 타법 탈출! 단계별 자리 연습으로 한글 자판을 하루 만에 마스터하세요.",

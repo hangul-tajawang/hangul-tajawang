@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from "next";
 import { TypingDefenseGame } from "@/components/game/TypingDefenseGame";
 import { KeyboardAdBanner } from "@/components/layout/KeyboardAdBanner";
@@ -17,9 +18,7 @@ export const metadata: Metadata = {
     "웨이브 디펜스 게임",
     "한글타자왕",
   ],
-  alternates: {
-    canonical: "https://www.hangul-tajawang.com/game/castle-defense",
-  },
+  alternates: localeAlternates('/game/castle-defense', 'ko'),
   openGraph: {
     title: "한글 타자 게임 - 성문방어 | 한글타자왕",
     description: "적의 단어를 타이핑해 화살을 쏘고 웨이브를 막아내는 무료 온라인 한글 타자 디펜스 게임.",

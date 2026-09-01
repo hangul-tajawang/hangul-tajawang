@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -22,9 +23,7 @@ export const metadata: Metadata = {
   title: "한글 게임 모음 - 재미있는 타자 연습 게임",
   description: "산성비 게임부터 향후 추가될 다양한 타자 게임까지! 한글타자왕에서 제공하는 재미있는 한글 게임들을 만나보세요.",
   keywords: ["한글 게임", "타자 게임", "산성비", "단어 맞추기", "온라인 타자 게임", "무료 게임"],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/game',
-  },
+  alternates: localeAlternates('/game', 'ko'),
   openGraph: {
     title: "한글 게임 모음 - 한글타자왕",
     description: "게임처럼 즐기는 타자 연습! 다양한 한글 게임에 도전해 보세요.",

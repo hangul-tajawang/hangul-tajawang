@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { SpeedTest } from '@/components/test/SpeedTest';
 import Link from 'next/link';
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
     '한글 타자 속도',
     '무료 타자 테스트',
   ],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/test',
-  },
+  alternates: localeAlternates('/test', 'ko'),
   openGraph: {
     title: '타자 속도 테스트 - 내 타자 티어는? | 한글타자왕',
     description: '1분 만에 내 타수와 타자 티어(SSS~D급)를 확인하고 결과 카드를 공유해보세요.',

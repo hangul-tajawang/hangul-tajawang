@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { StairsGame } from '@/components/game/StairsGame';
 import { GameJsonLd } from '@/components/seo/GameJsonLd';
@@ -24,9 +25,7 @@ export const metadata: Metadata = {
     '무료 타자 게임',
     '한글타자왕 게임',
   ],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/game/stairs',
-  },
+  alternates: localeAlternates('/game/stairs', 'ko'),
   openGraph: {
     title: '글자 계단 - 타자 계단 게임 | 한글타자왕',
     description:

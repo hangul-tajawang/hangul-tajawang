@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -23,9 +24,7 @@ const PRACTICE_FAQ = [
 export const metadata: Metadata = {
   title: "타자 연습 모드 선택 - 자리/낱말/짧은글",
   description: "기초 자리 연습부터 실전 낱말, 감성 짧은 글 연습까지! 나에게 맞는 연습 모드를 선택해 타자 실력을 키워보세요.",
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/practice',
-  },
+  alternates: localeAlternates('/practice', 'ko'),
   openGraph: {
     title: "연습 모드 선택 - 한글타자왕",
     description: "한글 타자 마스터를 위한 첫 걸음, 모드를 선택하세요.",

@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from "next";
 import Link from "next/link";
 import { Keyboard, Layout, PenTool, Gamepad2, BookOpenCheck, Users, ChevronRight, HelpCircle, Timer, TramFront } from "lucide-react";
@@ -6,9 +7,7 @@ export const metadata: Metadata = {
   title: "기능 안내 - 한글 타자 연습 및 속도 측정 사이트 활용법",
   description: "한글타자왕 활용법을 안내합니다. 지식타자·필사 챌린지·한글 게임 3가지 핵심 기능부터 1분 타자 테스트, 연습장, 원고지 필사, 맞춤법 퀴즈까지 모두 무료입니다.",
   keywords: ["한글타자연습 사용법", "타자 속도 측정 방법", "온라인 타자 연습 가이드", "무료 타자 게임 안내"],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/guide',
-  }
+  alternates: localeAlternates('/guide', 'ko')
 };
 
 // 코어 3 — 한글타자왕의 중심 기능 (지식타자 메인)

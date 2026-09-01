@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { WordGame } from '@/components/game/WordGame';
 import { GameJsonLd } from '@/components/seo/GameJsonLd';
@@ -24,9 +25,7 @@ export const metadata: Metadata = {
     '무료 타자 게임',
     '한글타자왕 게임',
   ],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/game/acid-rain',
-  },
+  alternates: localeAlternates('/game/acid-rain', 'ko'),
   openGraph: {
     title: '한글 산성비 게임 - 한글타자왕',
     description:

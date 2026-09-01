@@ -1,3 +1,4 @@
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { Metadata } from 'next';
 import { TypingRaceGame } from '@/components/game/TypingRaceGame';
 import { GameJsonLd } from '@/components/seo/GameJsonLd';
@@ -22,9 +23,7 @@ export const metadata: Metadata = {
     '무료 타자 게임',
     '한글타자왕 게임',
   ],
-  alternates: {
-    canonical: 'https://www.hangul-tajawang.com/game/typing-race',
-  },
+  alternates: localeAlternates('/game/typing-race', 'ko'),
   openGraph: {
     title: '타자 레이스 - 한글타자왕',
     description:

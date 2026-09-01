@@ -10,12 +10,14 @@ export function GameJsonLd({
   url,
   description,
   genre,
+  inLanguage = "ko",
 }: {
   name: string;
   alternateName?: string;
   url: string;
   description: string;
   genre: string[];
+  inLanguage?: string;
 }) {
   const data = {
     "@context": "https://schema.org",
@@ -24,7 +26,7 @@ export function GameJsonLd({
     ...(alternateName ? { alternateName } : {}),
     url,
     description,
-    inLanguage: "ko",
+    inLanguage,
     genre,
     gamePlatform: ["Web Browser", "PC", "Mobile Web"],
     applicationCategory: "Game",
