@@ -38,7 +38,7 @@ export default function EnBlockPopPage() {
           'Rows of Korean word blocks push up from the bottom of the screen.',
           "Type a block's word and press Enter to pop it.",
           'If any block touches the ceiling, the game ends — keep the stack low.',
-          'Speed rises over time; sign in to post your score to the leaderboard.',
+          'Speed rises over time — see how your score ranks on the leaderboard.',
         ]}
       >
         <BlockPopGame />

@@ -38,7 +38,7 @@ export default function EnAcidRainPage() {
           'Korean words fall from the top of the screen at increasing speed.',
           'Type a falling word exactly and press Enter to destroy it.',
           'Any word that touches the ground costs you a life — survive as long as you can.',
-          'Sign in to post your score to the live leaderboard.',
+          'Chase the high scores on the live leaderboard shared with Korean players.',
         ]}
       >
         <WordGame />
