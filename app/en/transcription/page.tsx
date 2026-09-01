@@ -29,9 +29,9 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Type Korean Literature - Long Text Transcription Practice',
+  title: 'Type Korean Literature - Pilsa Practice',
   description:
-    'Practice long-form Korean typing by transcribing real Korean literature — poems by Yun Dong-ju and Kim So-wol, tales, and novel excerpts — on a manuscript-paper screen. Free pilsa practice.',
+    'Practice long-form Korean typing by transcribing real literature — poems by Yun Dong-ju and Kim So-wol, tales, and novel excerpts. Free pilsa practice.',
   keywords: [
     'korean transcription practice',
     'type korean literature',

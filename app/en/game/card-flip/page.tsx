@@ -28,7 +28,9 @@ export default function EnCardFlipPage() {
         url="https://www.hangul-tajawang.com/en/game/card-flip"
         description="Card-matching memory game played entirely by typing: type a card's Korean word to flip it and find the pairs."
         genre={['Memory', 'Typing Practice', 'Puzzle']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"

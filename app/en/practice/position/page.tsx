@@ -6,7 +6,7 @@ import { localeAlternates } from '@/lib/i18n/alternates';
 export const metadata: Metadata = {
   title: 'Korean Keyboard Practice - Learn Hangul Key Positions',
   description:
-    'Learn the Korean keyboard layout by typing. Free Hangul key position drills teach you where every consonant and vowel lives on the 2-set (Dubeolsik) layout — no keycap stickers needed.',
+    'Learn the Korean keyboard layout by typing: free drills teach where every consonant and vowel lives on the 2-set (Dubeolsik) layout — no keycap stickers needed.',
   keywords: [
     'korean keyboard practice',
     'hangul keyboard layout',

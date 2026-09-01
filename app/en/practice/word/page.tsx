@@ -20,7 +20,7 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Korean Word Typing Practice - Step-by-Step Hangul Drills',
+  title: 'Korean Word Typing Practice - Hangul Drills',
   description:
     'Type real Korean words step by step, organized by keyboard row. Free Hangul word drills that turn key positions into real typing speed — ideal for beginners.',
   keywords: [

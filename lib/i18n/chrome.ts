@@ -29,7 +29,7 @@ const en: typeof ko = {
   login: 'Sign in',
   loginLong: 'Sign in with Kakao',
   logout: 'Sign out',
-  mypage: 'My Page',
+  mypage: 'My Account',
   defaultNickname: 'Typist',
   languageSwitch: '한국어',
   mainNavAria: 'Main menu',

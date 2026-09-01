@@ -28,7 +28,9 @@ export default function EnCastleDefensePage() {
         url="https://www.hangul-tajawang.com/en/game/castle-defense"
         description="Korean typing tower defense: type enemy words to fire arrows and defend the castle gate through escalating waves."
         genre={['Tower Defense', 'Typing Practice', 'Action']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"

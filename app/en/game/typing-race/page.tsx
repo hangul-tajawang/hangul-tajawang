@@ -28,7 +28,9 @@ export default function EnTypingRacePage() {
         url="https://www.hangul-tajawang.com/en/game/typing-race"
         description="Race AI opponents at fixed speeds by typing Korean words — a beginner-friendly way to benchmark your CPM."
         genre={['Racing', 'Typing Practice', 'Casual']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"

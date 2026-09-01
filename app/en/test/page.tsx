@@ -101,7 +101,7 @@ export default function EnSpeedTestPage() {
         <section>
           <h2 className="text-lg font-bold mb-4 pb-2 border-b-2 border-success inline-block">Measure, then improve</h2>
           <p className="text-sm text-zinc-500 leading-relaxed">
-            Below average (300–400 CPM for native speakers)? Build speed with{' '}
+            Below the native-speaker average of 300–400 CPM? Build speed with{' '}
             <Link prefetch={false} href="/en/practice" className="text-primary font-bold underline underline-offset-2">
               step-by-step practice
             </Link>{' '}

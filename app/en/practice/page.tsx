@@ -19,7 +19,7 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Korean Typing Practice for Beginners - Free Hangul Drills',
+  title: 'Korean Typing Practice for Beginners',
   description:
     'Free step-by-step Korean typing practice: learn Hangul key positions, drill real Korean words, and type full sentences. The fastest way for beginners to build Korean typing speed.',
   keywords: [
@@ -92,9 +92,9 @@ export default function EnPracticeHubPage() {
 
       <div className="text-center mb-16">
         <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase mb-3">Practice Modes</p>
-        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-6">Korean Typing Practice</h1>
+        <h1 className="serif-display text-4xl md:text-5xl font-bold mb-6">Korean Typing Practice for Beginners</h1>
         <p className="text-zinc-500 font-medium text-lg leading-relaxed">
-          Three modes, one path: learn the keys, master words, then flow through sentences.
+          Four stages, one path: learn the keys, master words, flow through sentences, then transcribe real literature.
           <br className="hidden md:block" />
           All practice text is authentic Korean — the fastest way to internalize Hangul.
         </p>

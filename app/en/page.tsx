@@ -18,14 +18,14 @@ const FAQ = [
   },
   {
     q: 'How is Korean typing speed measured?',
-    a: 'Korean typing speed is usually measured in CPM — keystrokes per minute counted per jamo (individual letter). The syllable 한 counts as 3 keystrokes: ㅎ + ㅏ + ㄴ. An average Korean office worker types around 300–400 CPM; our speed test converts your score into a fun tier from D up to SSS.',
+    a: 'Korean typing speed is usually measured in CPM (characters per minute), counted per jamo (individual letter) rather than per syllable. The syllable 한 counts as 3 keystrokes: ㅎ + ㅏ + ㄴ. An average Korean office worker types around 300–400 CPM; our speed test converts your score into a fun tier from D up to SSS.',
   },
 ];
 
 export const metadata: Metadata = {
   title: { absolute: 'Korean Typing Practice - Learn to Type Hangul Free' },
   description:
-    'Free Korean typing practice for beginners and learners. Learn the Hangul keyboard layout, drill words and sentences, play Korean typing games, and test your typing speed — no sign-up needed.',
+    'Free Korean typing practice for learners: master the Hangul keyboard, drill words and sentences, play typing games, and test your speed — no sign-up needed.',
   keywords: [
     'korean typing practice',
     'korean typing test',

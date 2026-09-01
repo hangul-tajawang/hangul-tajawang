@@ -28,7 +28,9 @@ export default function EnBlockPopPage() {
         url="https://www.hangul-tajawang.com/en/game/block-pop"
         description="Arcade Korean typing game: word blocks stack up from the bottom — type their words to pop them before they hit the ceiling."
         genre={['Arcade', 'Typing Practice', 'Casual']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"

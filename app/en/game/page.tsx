@@ -155,8 +155,8 @@ export default function EnGameHubPage() {
           <p className="text-zinc-600 leading-loose font-medium">
             Repetitive drills build accuracy, but games build <strong className="text-on-surface">speed under
             pressure</strong> — the skill that makes typing feel effortless. Each game uses real Korean words, so
-            learners get vocabulary exposure with every round. Game screens are shared with our Korean users and appear
-            in Korean, but every game follows one universal rule: <em>type the word you see</em>.
+            learners get vocabulary exposure with every round. The game interface is in English here — only the words you
+            type are Korean — and every game follows one universal rule: <em>type the word you see</em>.
           </p>
         </section>
 

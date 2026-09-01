@@ -11,13 +11,17 @@ export function GameJsonLd({
   description,
   genre,
   inLanguage = "ko",
+  publisherName = "한글타자왕",
+  priceCurrency = "KRW",
 }: {
   name: string;
   alternateName?: string;
   url: string;
   description: string;
   genre: string[];
-  inLanguage?: string;
+  inLanguage?: string | string[];
+  publisherName?: string;
+  priceCurrency?: string;
 }) {
   const data = {
     "@context": "https://schema.org",
@@ -33,8 +37,8 @@ export function GameJsonLd({
     operatingSystem: "Any",
     playMode: "SinglePlayer",
     isAccessibleForFree: true,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" },
-    publisher: { "@type": "Organization", name: "한글타자왕" },
+    offers: { "@type": "Offer", price: "0", priceCurrency },
+    publisher: { "@type": "Organization", name: publisherName },
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }

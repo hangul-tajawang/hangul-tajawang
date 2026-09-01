@@ -23,9 +23,9 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'How to Type in Korean - Hangul Keyboard Guide for Beginners',
+  title: 'How to Type in Korean - Setup & Layout Guide',
   description:
-    'Learn how to type in Korean on any English keyboard: set up the Korean IME on Windows, Mac, or phone, understand the 2-set Hangul layout, and start practicing — all free.',
+    'Learn how to type in Korean on any English keyboard: set up the Korean IME on Windows, Mac or phone, learn the 2-set Hangul layout, and start practicing free.',
   keywords: [
     'how to type in korean',
     'korean typing practice with english keyboard',
@@ -92,7 +92,7 @@ export default function EnGuidePage() {
           <p className="leading-loose mb-4">
             The most common misconception about Korean typing: that you need special hardware. You don&rsquo;t. Korean
             input works through an <strong>IME (Input Method Editor)</strong> — a piece of software built into every
-            operating system that turns ordinary QWERTY keystrokes into Hangul. Press the key printed{' '}
+            operating system that turns ordinary QWERTY keystrokes into Hangul. Press the key labeled{' '}
             <code>D</code> and the IME writes <code>ㅇ</code>; press <code>K</code> and it writes <code>ㅏ</code>; the
             two compose into 아 on their own. Every Korean speaker types this way, on the same physical keyboard you
             have.

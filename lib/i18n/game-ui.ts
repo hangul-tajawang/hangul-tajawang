@@ -25,7 +25,7 @@ const EN: Record<string, string> = {
   '3초 만에 로그인하고 저장': 'Sign in with Kakao to save your score',
   '카카오로 로그인하고 저장': 'Sign in with Kakao to save your score',
   '게임을 그만하고 결과를 볼까요?': 'Quit the game and see your results?',
-  '실시간 랭킹': 'Live Rankings',
+  '실시간 랭킹': 'Live Leaderboard',
   '기록 없음': 'No records yet',
   '익명': 'Anonymous',
   '나': 'You',
@@ -34,7 +34,7 @@ const EN: Record<string, string> = {
   '분당 타수': 'CPM',
   '정확도': 'Accuracy',
   '탭해서 계속': 'Tap to continue',
-  '화면을 누르면 이어서 진행됩니다': 'Touch the screen to resume',
+  '화면을 누르면 이어서 진행됩니다': 'Tap the screen to resume',
   '전체화면으로 열립니다 · 언제든 나가기 버튼으로 종료': 'Opens in fullscreen · exit any time with the close button',
 
   // ── 산성비 (WordGame) ───────────────────────────────────────────────
@@ -55,7 +55,7 @@ const EN: Record<string, string> = {
   '구름 위까지! 대단한 등반이었어요.': 'Above the clouds — what a climb!',
   '절반의 고지를 넘었어요. 한 번 더!': 'Past the halfway mark. One more run!',
   '발끝이 근질근질하죠? 다시 올라볼까요?': 'Feet itching already? Climb again!',
-  '최고 층수 랭킹': 'Highest Floor Rankings',
+  '최고 층수 랭킹': 'Highest Floor Leaderboard',
 
   // ── 타자 레이스 (TypingRaceGame) ────────────────────────────────────
   '타자 레이스': 'Typing Race',
@@ -72,7 +72,7 @@ const EN: Record<string, string> = {
   '치타': 'Cheetah',
   '다음: ': 'Next: ',
   '현재 타수': 'Live CPM',
-  '실시간 타수 랭킹': 'Live CPM Rankings',
+  '실시간 타수 랭킹': 'Live CPM Leaderboard',
 
   // ── 블록 팝핑 (BlockPopGame) ────────────────────────────────────────
   '블록 팝핑': 'Block Pop',
@@ -89,11 +89,11 @@ const EN: Record<string, string> = {
   '단어 입력 후 엔터!': 'Type a word and press Enter!',
   '판정 대기 중...': 'Checking...',
   '짝': 'Pairs',
-  '기억력 랭킹': 'Memory Rankings',
+  '기억력 랭킹': 'Memory Leaderboard',
 
   // ── 성문방어 (TypingDefenseGame) — 스킬 명령어(번개/방패/수리)는 타이핑 대상이라 번역하지 않는다
   '한글 타자 성문방어': 'Castle Defense',
-  '성문방어 랭킹': 'Defense Rankings',
+  '성문방어 랭킹': 'Defense Leaderboard',
   '적 단어를 입력하세요': "Type an enemy's word",
   '시작 후 입력 가능': 'Start the game to type',
   '방어 시작': 'Start Defense',
@@ -105,7 +105,7 @@ const EN: Record<string, string> = {
   '방패 +1': 'Shield +1',
   '이번 방어 기록입니다.': 'Here is your defense record.',
   '강화 하나를 선택하세요': 'Choose one upgrade',
-  '로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.': 'Sign in to post your record to the live rankings.',
+  '로그인하면 내 기록을 실시간 랭킹에 남길 수 있습니다.': 'Sign in to post your record to the live leaderboard.',
   '아트: Tiny Swords by Pixel Frog · 무료 상업적 이용 가능': 'Art: Tiny Swords by Pixel Frog · free for commercial use',
   // 강화 카드(엔진 데이터의 표시 전용 대응 — 엔진은 건드리지 않는다)
   '성문 보강': 'Gate Reinforcement',
@@ -121,7 +121,7 @@ const EN: Record<string, string> = {
   '자동 수리반': 'Auto Repair Crew',
   '웨이브 클리어마다 성문 +2 회복': 'Gate repairs +2 after every wave',
   '로그인을 하시면 나만의 소중한 기록을': 'Sign in to keep your records',
-  '실시간 랭킹에 남길 수 있습니다.': 'on the live rankings.',
+  '실시간 랭킹에 남길 수 있습니다.': 'on the live leaderboard.',
 };
 
 /** /en 라우트 여부 (게임 컴포넌트는 /game/*, /en/game/* 양쪽에서 렌더된다) */

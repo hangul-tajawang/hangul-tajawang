@@ -28,7 +28,9 @@ export default function EnAcidRainPage() {
         url="https://www.hangul-tajawang.com/en/game/acid-rain"
         description="Classic Korean word-rain typing game: type falling Hangul words before they reach the ground."
         genre={['Word Rain', 'Typing Practice', 'Casual']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"

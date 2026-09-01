@@ -28,7 +28,9 @@ export default function EnStairsPage() {
         url="https://www.hangul-tajawang.com/en/game/stairs"
         description="Endless Korean typing game: type each word to climb the staircase one step at a time."
         genre={['Endless Runner', 'Typing Practice', 'Casual']}
-        inLanguage="en"
+        inLanguage={["en", "ko"]}
+        publisherName="Hangul Tajawang"
+        priceCurrency="USD"
       />
       <GamePageShell
         eyebrow="Korean Typing Game"
