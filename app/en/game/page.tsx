@@ -15,7 +15,7 @@ const FAQ = [
   },
   {
     q: 'Are there leaderboards?',
-    a: 'Yes — every game keeps a live ranking board where your score stands against native Korean typists. Chasing a target score is a surprisingly effective practice motivator.',
+    a: 'Yes — sign in (Kakao account, free) and your best score in each game is posted to the live rankings, where you compete with native Korean typists. Chasing a target score is a surprisingly effective practice motivator.',
   },
 ];
 

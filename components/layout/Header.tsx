@@ -183,12 +183,12 @@ export const Header: React.FC = () => {
                             <LogOut size={14} /> {t.logout}
                         </button>
                     </div>
-                ) : locale === "ko" ? (
+                ) : (
                     <button onClick={handleLogin} className="w-full py-4 bg-[#FEE500] text-black font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg">
                         <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.8 1.8 5.3 4.5 6.6l-1.1 4.1c-.1.5.4.8.8.6l4.8-3.2c.3 0 .7.1 1 .1 5.5 0 10-3.5 10-7.8S17.5 3 12 3" /></svg>
                         {t.loginLong}
                     </button>
-                ) : null}
+                )}
             </div>
         </div>
     </div>
@@ -238,11 +238,12 @@ export const Header: React.FC = () => {
                                         <LogOut size={16} />
                                     </button>
                                 </>
-                            ) : locale === "ko" ? (
+                            ) : (
+                                // 영문권 타깃(한국어 학습자)은 카카오톡 보유율이 높아 en에서도 카카오 로그인 노출
                                 <button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-[#FEE500] text-black rounded-full text-sm font-bold hover:opacity-90">
                                     <Zap size={14} fill="currentColor" /> {t.login}
                                 </button>
-                            ) : null /* 영문권에는 카카오 로그인이 무의미 — Google OAuth 도입 전까지 미노출 */}
+                            )}
                         </div>
                         <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 lg:hidden text-zinc-600 hover:bg-surface-low rounded-xl">
                             <Menu size={24} />

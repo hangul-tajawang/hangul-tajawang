@@ -38,7 +38,7 @@ export default function EnCastleDefensePage() {
           'Enemies advance toward your castle, each carrying a Korean word.',
           "Type an enemy's word and press Enter to shoot it down.",
           'Waves get faster and bosses appear — accuracy under pressure is everything.',
-          'Your best wave stands on the leaderboard against Korean players.',
+          'Sign in to post your best wave to the leaderboard.',
         ]}
       >
         <TypingDefenseGame />

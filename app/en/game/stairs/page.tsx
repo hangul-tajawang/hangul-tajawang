@@ -38,7 +38,7 @@ export default function EnStairsPage() {
           'A Korean word appears on the next stair step.',
           'Type it correctly to hop up one step; the pace slowly increases.',
           'Hesitate too long and the stairs crumble — the run ends.',
-          'Your highest climb goes up against Korean players on the leaderboard.',
+          'Sign in to post your highest climb to the leaderboard.',
         ]}
       >
         <StairsGame />
