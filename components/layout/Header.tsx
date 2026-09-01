@@ -162,9 +162,11 @@ export const Header: React.FC = () => {
                     <MobileNavItem href="/en/guide" icon={<BookOpen size={20} />} label="How to Type in Korean" onClick={() => setIsMobileMenuOpen(false)} />
                   </>
                 )}
-                <div className="pt-4">
-                  <LanguageSwitch pathname={pathname} label={t.languageSwitch} className="w-full justify-center border border-surface-high" />
-                </div>
+                {locale === "en" && (
+                  <div className="pt-4">
+                    <LanguageSwitch pathname={pathname} label={t.languageSwitch} className="w-full justify-center border border-surface-high" />
+                  </div>
+                )}
             </div>
 
             <div className="p-6 bg-surface-low">
@@ -207,11 +209,14 @@ export const Header: React.FC = () => {
                   <NavButton key={item.href} label={item.label} href={item.href} highlight={item.highlight} />
                 ))}
                 {locale === "ko" ? (
+                  // 한국어 내비에는 언어 선택기를 노출하지 않는다("영문 타자 연습" 오독 방지) — /en 발견 경로는 푸터 링크가 담당
                   <ToolsDropdown />
                 ) : (
-                  nav.tools.map((item) => <NavButton key={item.href} label={item.label} href={item.href} />)
+                  <>
+                    {nav.tools.map((item) => <NavButton key={item.href} label={item.label} href={item.href} />)}
+                    <LanguageSwitch pathname={pathname} label={t.languageSwitch} />
+                  </>
                 )}
-                <LanguageSwitch pathname={pathname} label={t.languageSwitch} />
             </nav>
 
             <div className="flex items-center gap-2 shrink-0">
