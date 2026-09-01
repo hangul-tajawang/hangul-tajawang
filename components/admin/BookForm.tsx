@@ -30,12 +30,14 @@ export interface BookFormInitial {
 const field = "w-full px-4 py-3 rounded-xl border border-surface-high bg-surface-lowest font-medium text-sm focus:outline-none focus:border-primary/60";
 const label = "block text-xs font-bold text-zinc-500 mb-1.5 mt-5";
 
-// 표지는 폭 800px WebP로 유지한다.
-// 이그레스 문제의 원인은 크기가 아니라 Cache-Control 이었고(no-cache로 저장돼
-// 매번 재다운로드됐다), 지금은 1년 캐시라 유저당 한 번만 받는다.
-// 반대로 표지는 상세 페이지 og:image(카카오톡 공유 썸네일)로도 쓰이므로
-// 400px으로 줄이면 공유 썸네일과 고해상도 화면에서 손해다.
-const MAX_COVER_WIDTH = 800;
+// 표지는 두 벌을 올린다.
+//   본문용 400px — 앱·웹이 실제로 표시하는 크기(앱 상세 110pt x 3배)에 맞춘다.
+//     캐시를 1년으로 바꾼 뒤에도 남은 이그레스의 대부분이 표지였고, 800px→400px로
+//     합계 819KB → 238KB(-71%)가 된다.
+//   og용 800px — 카카오톡 공유 썸네일이 작아지지 않게 따로 둔다. og:image는
+//     스크래퍼만 받아가므로 커도 이그레스에 거의 영향이 없다. (lib/og-image.ts)
+const MAX_COVER_WIDTH = 400;
+const OG_COVER_WIDTH = 800;
 
 export function BookForm({
   authors,
@@ -67,6 +69,10 @@ export function BookForm({
         formData.set(
           "coverFile",
           await resizeToWebp(coverFile, { maxWidth: MAX_COVER_WIDTH })
+        );
+        formData.set(
+          "coverFileOg",
+          await resizeToWebp(coverFile, { maxWidth: OG_COVER_WIDTH })
         );
       }
       const r = await saveBook(formData);

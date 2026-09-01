@@ -7,6 +7,7 @@
 import { updateTag } from "next/cache";
 import { assertAdmin } from "@/lib/admin-auth";
 import { parseManuscript } from "@/lib/manuscript";
+import { toOgPath } from "@/lib/og-image";
 
 const URL_ = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const SVC = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -40,6 +41,25 @@ async function svcRest(method: string, path: string, body?: unknown): Promise<vo
  * 그러면 URL이 매번 달라져 CDN이 항상 미스가 나고 같은 이미지를 계속
  * 재다운로드했다 (Supabase 캐시 이그레스의 주요 원인).
  */
+/** 공개 URL 에서 버킷 내 경로만 뽑는다. */
+function pathOf(publicUrl: string): string {
+  return publicUrl.split("/book-assets/")[1];
+}
+
+/** 경로를 직접 지정해 올린다 (og 변형처럼 이름이 정해진 경우). */
+async function uploadAssetAt(file: File, path: string): Promise<void> {
+  const res = await fetch(`${URL_}/storage/v1/object/book-assets/${path}`, {
+    method: "POST",
+    headers: svcHeaders({
+      "Content-Type": file.type || "image/jpeg",
+      "Cache-Control": "max-age=31536000",
+      "x-upsert": "true",
+    }),
+    body: Buffer.from(await file.arrayBuffer()),
+  });
+  if (!res.ok) throw new Error(`이미지 업로드 실패 (${res.status})`);
+}
+
 async function uploadAsset(file: File, prefix: string): Promise<string> {
   const ext = file.type === "image/webp" ? "webp" : file.type === "image/png" ? "png" : "jpg";
   const path = `${prefix}-${Date.now()}.${ext}`;
@@ -90,6 +110,12 @@ export async function saveBook(formData: FormData): Promise<ActionResult> {
     let coverImageUrl = existingCoverUrl;
     if (coverFile && coverFile.size > 0) {
       coverImageUrl = await uploadAsset(coverFile, `covers/${id}`);
+      // 공유 썸네일용 800px 변형을 같은 이름 + `-og` 로 함께 올린다.
+      // 실패하면 저장 자체를 실패시켜 og:image 가 404 나는 상태를 만들지 않는다.
+      const coverFileOg = formData.get("coverFileOg") as File | null;
+      if (coverFileOg && coverFileOg.size > 0) {
+        await uploadAssetAt(coverFileOg, toOgPath(pathOf(coverImageUrl)));
+      }
     }
 
     const now = new Date().toISOString();

@@ -5,6 +5,7 @@ import type { LongTextData } from '@/lib/long-text-data';
 import { LongPractice } from '@/components/long-practice/LongPractice';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { ogImageUrl } from '@/lib/og-image';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -27,9 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolved = await resolveText(resolvedParams.id);
   if (!resolved) return {};
   const { text, db } = resolved;
-  const coverUrl = db?.book.coverImageUrl
-    ? (db.book.coverImageUrl.startsWith('/') ? `https://www.hangul-tajawang.com${db.book.coverImageUrl}` : db.book.coverImageUrl)
-    : null;
+  // 본문 표지는 400px, 공유 썸네일은 800px(-og) 변형을 쓴다 — lib/og-image.ts 참고
+  const coverUrl = ogImageUrl(db?.book.coverImageUrl);
 
   return {
     title: `${text.title} 한글 타자 연습 | 필사 연습`,

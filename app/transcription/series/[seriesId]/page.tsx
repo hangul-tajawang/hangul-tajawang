@@ -8,6 +8,7 @@ import { BookCoverArt } from '@/components/books/BookCoverArt';
 import { BookSocial } from '@/components/books/BookSocial';
 import { ShareButton } from '@/components/books/ShareButton';
 import { BookOpen, Feather, CalendarDays, CheckCircle2 } from 'lucide-react';
+import { ogImageUrl } from '@/lib/og-image';
 
 type Props = { params: Promise<{ seriesId: string }> };
 
@@ -24,9 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { seriesId } = await params;
   const series = await fetchBookSafe(seriesId);
   if (!series) return {};
-  const ogImage = series.coverImageUrl
-    ? (series.coverImageUrl.startsWith('/') ? `https://www.hangul-tajawang.com${series.coverImageUrl}` : series.coverImageUrl)
-    : 'https://www.hangul-tajawang.com/ogimage.png';
+  // 본문 표지는 400px, 공유 썸네일은 800px(-og) 변형을 쓴다 — lib/og-image.ts 참고
+  const ogImage =
+    ogImageUrl(series.coverImageUrl) ?? 'https://www.hangul-tajawang.com/ogimage.png';
   return {
     title: `${series.title} - 오리지널 연재소설 필사 (전 ${series.totalEpisodes}화)`,
     description: `${series.logline} 한글타자왕에서만 읽고 새길 수 있는 오리지널 소설을 하루 한 화, ${series.totalEpisodes}일 완필 플랜으로 필사해 보세요.`,
