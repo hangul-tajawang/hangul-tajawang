@@ -293,7 +293,7 @@ function ToolsDropdown() {
 /* 모바일 하단 고정 탭 — 코어 3 + 도구 시트. 허브 화면에서만 노출(플레이 화면 가림 방지). */
 const BOTTOM_TAB_PATHS = new Set([
   "/", "/challenge", "/game", "/journey", "/test", "/practice", "/transcription", "/quiz", "/blog", "/mypage",
-  "/en", "/en/game", "/en/test", "/en/practice", "/en/guide",
+  "/en", "/en/game", "/en/test", "/en/practice", "/en/guide", "/en/transcription",
 ]);
 
 function BottomTabBar() {

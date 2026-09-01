@@ -65,6 +65,14 @@ const MODES = [
       'Type short Korean sentences — proverbs, quotes, and encouraging lines — with live CPM and accuracy tracking. Great for rhythm and flow.',
     level: 'Intermediate',
   },
+  {
+    href: '/en/transcription',
+    key: '詩',
+    title: 'Literature Transcription',
+    description:
+      'The final stage: transcribe full Korean poems and stories on a manuscript-paper screen. Long-form endurance, real vocabulary, lasting records.',
+    level: 'Intermediate–Advanced',
+  },
 ];
 
 export default function EnPracticeHubPage() {
@@ -92,7 +100,7 @@ export default function EnPracticeHubPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
         {MODES.map((m) => (
           <Link
             prefetch={false}

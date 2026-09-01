@@ -14,6 +14,7 @@ export const LOCALIZED_KO_PATHS = [
   '/practice/position',
   '/practice/word',
   '/practice/short',
+  '/transcription',
   '/game',
   '/game/acid-rain',
   '/game/stairs',

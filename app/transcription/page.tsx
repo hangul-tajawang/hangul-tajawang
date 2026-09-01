@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { localeAlternates } from '@/lib/i18n/alternates';
 import { LONG_TEXT_DB } from "@/lib/long-text-data";
 import { getDailyPilsa, getKstDateString, getPilsaExcerpt } from "@/lib/daily-pilsa";
 import Link from "next/link";
@@ -21,9 +22,7 @@ export const metadata: Metadata = {
     "감성 필사",
     "무료 필사",
   ],
-  alternates: {
-    canonical: "https://www.hangul-tajawang.com/transcription",
-  },
+  alternates: localeAlternates('/transcription', 'ko'),
   openGraph: {
     title: "온라인 필사 - 한국 문학 타이핑 필사 | 한글타자왕",
     description:

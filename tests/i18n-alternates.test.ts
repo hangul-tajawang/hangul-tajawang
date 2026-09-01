@@ -54,7 +54,7 @@ test("언어 선택기는 대응 페이지로, 대응이 없으면 상대 언어
   assert.equal(switchLocaleHref("/"), "/en");
   assert.equal(switchLocaleHref("/en"), "/");
   // 대응 en 페이지가 없는 한국어 페이지 → en 홈
-  assert.equal(switchLocaleHref("/transcription"), "/en");
+  assert.equal(switchLocaleHref("/challenge"), "/en");
   assert.equal(switchLocaleHref("/blog/some-post"), "/en");
 });
 
