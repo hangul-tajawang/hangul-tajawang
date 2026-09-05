@@ -16,7 +16,6 @@
     "seo:gsc": "node scripts/submit-gsc-sitemap.mjs",
     "test": "tsx --test tests/*.test.ts",
     "test:mobile": "node tests/mobile-e2e.mjs",
-    "stats": "node scripts/pilsa-stats.mjs",
     "map:build": "node scripts/build-world-map.mjs"
   },
   "dependencies": {
