@@ -1,8 +1,13 @@
-import { supabase } from './supabase';
-
-// 필사 리텐션(D1/D7, 완주율) 측정용 최소 계측.
-// 로그인 없이도 재방문을 추적할 수 있도록 localStorage 기반 익명 방문자 ID를 사용한다.
-// usage_events 테이블 생성 SQL과 분석 쿼리는 scripts/usage-events.sql 참고.
+// 필사·지식여정 계측을 GTM dataLayer 로만 보낸다.
+//
+// 예전에는 Supabase usage_events 테이블에도 같이 적었는데 2026-09-05에 걷어냈다.
+//   - 프로덕션에서 이 테이블을 읽는 코드가 없었다 (로컬 CLI 하나뿐, 57일간 조회 28회)
+//   - 그런데 INSERT 14만 건이 Disk IO 1위였다
+//   - 필사 완주 기록은 pilsa_records 에 작품·타수·정확도까지 함께 이미 쌓이고 있어
+//     usage_events 의 pilsa_* 는 더 부실한 중복이었다
+//
+// 지표가 다시 필요해지면 GTM 에서 맞춤 이벤트 트리거 + GA4 태그를 만들면 된다
+// (측정 ID G-5LL9SEW1SL). 아래 dataLayer.push 는 그대로 두었으므로 코드 수정은 필요 없다.
 
 const VISITOR_KEY = 'htw_visitor_id';
 
@@ -32,26 +37,14 @@ export function track(
   event: UsageEventName,
   props: Record<string, string | number | boolean | null> = {}
 ): void {
-  // GTM dataLayer에도 전달 — GTM에서 맞춤 이벤트 트리거를 만들면 GA4에서도 조회 가능
   try {
-    (window as any).dataLayer?.push({ event, ...props });
+    (window as any).dataLayer?.push({
+      event,
+      ...props,
+      visitor_id: getVisitorId(),
+      path: window.location.pathname,
+    });
   } catch {
     /* noop */
   }
-
-  const visitorId = getVisitorId();
-  if (!visitorId) return;
-  supabase
-    .from('usage_events')
-    .insert({
-      visitor_id: visitorId,
-      event,
-      props,
-      path: window.location.pathname,
-    })
-    .then(({ error }) => {
-      if (error && process.env.NODE_ENV === 'development') {
-        console.warn('[analytics] track 실패:', error.message);
-      }
-    });
 }

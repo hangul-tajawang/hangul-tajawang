@@ -253,6 +253,11 @@ export const LongPractice: React.FC<Props> = ({ externalContent, initialTextId, 
   }, [inputValue.length]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // 완주 처리는 한 번만. 이 가드가 없으면 입력 길이가 본문 길이에 도달한 뒤
+    // 키를 누를 때마다 아래 완주 블록이 다시 돌아, 완주 기록(typing_results)이
+    // 0.01초 간격으로 수천 건씩 쌓인다. 줄 단위 모드(handleLineInputChange)에는
+    // 원래부터 같은 가드가 있다.
+    if (report) return;
     const val = e.target.value;
     if (!startTime && val.length > 0) {
       setStartTime(Date.now());
