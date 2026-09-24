@@ -2,7 +2,7 @@
  * 책방 콘텐츠 데이터 레이어 (서버 전용)
  *
  * 진실의 원본은 Supabase books / book_episodes 테이블.
- * `npm run books:publish`(추후 /admin)가 쓰고, 웹은 여기서 ISR(5분)로 읽는다
+ * `npm run books:publish`(추후 /admin)가 쓰고, 웹은 여기서 태그 캐시("books")로 읽는다
  * → 재배포 없이 웹·앱 동시 송출.
  *
  * DB 장애·빌드 환경 미접속 시에는 lib/long-text-data.ts 의 정적 데이터로
@@ -20,8 +20,11 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const SITE = "https://www.hangul-tajawang.com";
 
-/** ISR 주기(초) — publish 후 최대 이 시간 안에 웹 반영 */
-export const BOOKS_REVALIDATE = 300;
+/**
+ * 시간 기반 재검증 없음(무기한 캐시) — publish 시 updateTag("books")가 즉시 갱신한다.
+ * 페이지 revalidate보다 짧은 fetch revalidate가 페이지 주기를 끌어내리므로 여기도 false여야 한다.
+ */
+export const BOOKS_REVALIDATE = false;
 
 // sort_order 컬럼이 아직 없는 DB를 위한 폴백 진열 순서 (기존 편집 순서)
 const FALLBACK_ORDER = new Map(PILSA_SERIES.map((s, i) => [s.id, i]));

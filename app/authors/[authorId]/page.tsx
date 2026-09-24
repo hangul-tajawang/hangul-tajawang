@@ -8,8 +8,9 @@ import { Feather, BookOpen } from 'lucide-react';
 
 type Props = { params: Promise<{ authorId: string }> };
 
-// DB(ISR) — 작가·작품이 늘면 재배포 없이 반영
-export const revalidate = 300;
+// 시간 기반 재생성 없음 — 어드민 발행 시 updateTag("books")로 즉시 갱신.
+// 5분 주기는 DO 큐(NEXT_CACHE_DO_QUEUE) 무료 한도를 넘겨 2026-09-11 제거.
+export const revalidate = false;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

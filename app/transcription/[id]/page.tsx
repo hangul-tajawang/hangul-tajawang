@@ -13,8 +13,9 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-// 책방 화는 DB(ISR)에서 — publish 후 재배포 없이 반영, 새 화 URL도 첫 요청 시 생성
-export const revalidate = 300;
+// 시간 기반 재생성 없음 — 글은 long-text-data.ts(배포 시 갱신), 책방 화는 updateTag("books")로 즉시 갱신.
+// 새 화 URL은 첫 요청 시 생성(dynamicParams). 5분 주기는 DO 큐 무료 한도 초과로 제거.
+export const revalidate = false;
 export const dynamicParams = true;
 
 /** DB(책방) 우선, 없으면 정적(시·수필 등 기존 콘텐츠) */

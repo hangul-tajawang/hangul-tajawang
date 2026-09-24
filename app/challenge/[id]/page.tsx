@@ -4,9 +4,10 @@ import { LongPractice } from "@/components/long-practice/LongPractice";
 import { notFound } from "next/navigation";
 import React from "react";
 
-// 캐싱으로 무분별한 SSR 트래픽 방지. 60초였으나 페이지당 하루 1,440회 캐시 쓰기가 발생해
-// 다른 ISR 페이지와 동일한 300초로 조정 (하루 288회). 유저 창작글이라 5분 지연은 무방.
-export const revalidate = 300;
+// 캐싱으로 무분별한 SSR 트래픽 방지. 유저 창작글이라 갱신 지연은 무방.
+// 60초 → 300초 → 3600초: 5분 주기가 DO 큐(NEXT_CACHE_DO_QUEUE) 무료 한도를 넘겨 2026-09-11 완화.
+// 새 글 URL은 첫 요청 시 생성되므로 바로 뜨고, 수정·완주 수만 최대 1시간 늦게 반영된다.
+export const revalidate = 3600;
 
 interface Props {
   params: Promise<{ id: string }>;

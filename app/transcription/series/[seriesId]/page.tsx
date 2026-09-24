@@ -12,8 +12,9 @@ import { ogImageUrl } from '@/lib/og-image';
 
 type Props = { params: Promise<{ seriesId: string }> };
 
-// DB(ISR) — publish 후 재배포 없이 반영. 새 책 URL도 첫 요청 시 생성(dynamicParams)
-export const revalidate = 300;
+// 시간 기반 재생성 없음 — 어드민 발행 시 updateTag("books")로 즉시 갱신.
+// 새 책 URL은 첫 요청 시 생성(dynamicParams). 5분 주기는 DO 큐 무료 한도 초과로 제거.
+export const revalidate = false;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

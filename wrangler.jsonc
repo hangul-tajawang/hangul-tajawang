@@ -45,6 +45,10 @@
   // ADMIN_ALLOWED_IPS, KAKAO_PLATFORM_APP_KEY)은 `npx wrangler secret put`으로 등록.
   // NEXT_PUBLIC_*은 빌드타임에 인라인되지만 middleware가 런타임 process.env로도 읽으므로 중복 선언.
   "vars": {
+    // DO 큐 샤드 수. 기본 10개가 번갈아 깨어 있어 하루 duration 무료 한도(28h)를 넘김(2026-09-11).
+    // 1개면 하루 최대 24h라 구조적으로 초과 불가. 대신 동시 재검증 한도(기본 5)를 올려 호출자 블로킹 완화.
+    "MAX_REVALIDATE_CONCURRENCY": "1",
+    "NEXT_CACHE_DO_QUEUE_MAX_REVALIDATION": "20",
     "NEXT_PUBLIC_SUPABASE_URL": "https://lxvbibfmvsrdstwwlkdm.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dmJpYmZtdnNyZHN0d3dsa2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjg2MTEsImV4cCI6MjA4Nzg0NDYxMX0.QL-98SP7Q1mShLQbzl-tLQUVZSyZJSIAyYgrIX_tge8"
   }
