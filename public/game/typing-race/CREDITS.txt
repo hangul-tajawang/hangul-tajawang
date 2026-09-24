@@ -1,0 +1,10 @@
+Typing Race (타자 레이스) sprites
+=================================
+
+By Pixel Frog — https://pixelfrog-assets.itch.io
+License: CC0 1.0 Universal (public domain). Credit is not required.
+
+  frog-*.png, mask-run.png, pink-run.png, virtual-run.png
+               Ninja Frog / Mask Dude / Pink Man / Virtual Guy (Pixel Adventure 1)  https://pixelfrog-assets.itch.io/pixel-adventure-1
+  snail-run.png, bunny-run.png, rino-run.png, bird-run.png
+               Snail / Bunny / Rino / BlueBird (Pixel Adventure 2)  https://pixelfrog-assets.itch.io/pixel-adventure-2

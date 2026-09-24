@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 // 허브 진열 순서 — 수도 → 조선 → 국기 → 주기율표 → 삼국
-const COURSE_ORDER = ['world-capitals', 'joseon-kings', 'flag-quiz', 'map-quiz', 'periodic-table', 'three-kingdoms'];
+const COURSE_ORDER = ['world-capitals', 'joseon-kings', 'sajaseongeo', 'flag-quiz', 'map-quiz', 'periodic-table', 'three-kingdoms'];
 const orderIndex = (id: string) => {
   const i = COURSE_ORDER.indexOf(id);
   return i === -1 ? 999 : i;
@@ -63,7 +63,7 @@ export default function JourneyHubPage() {
         <span><span className="block font-bold text-xl">오늘의 지식타자 5문제</span><span className="block text-sm mt-2 opacity-90">짧게 배우고, 헷갈린 문제는 내일 다시 복습해요.</span></span>
         <ArrowRight className="shrink-0" size={24} />
       </Link>
-      <div className="hub-panel grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+      <div className="hub-panel grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
         {orderedCourses.map((course) => {
           const stations = getCourseStations(course);
           return (
@@ -71,10 +71,10 @@ export default function JourneyHubPage() {
               key={course.id}
               prefetch={false}
               href={`/journey/${course.id}`}
-              className="group keycap-card p-8"
+              className="group keycap-card p-6 flex flex-col"
             >
-              <div className="flex items-start justify-between mb-6">
-                <span className="text-5xl" aria-hidden>{course.emoji}</span>
+              <div className="flex items-start justify-between mb-5">
+                <span className="text-4xl" aria-hidden>{course.emoji}</span>
                 <div className="flex flex-col items-end gap-2">
                   <span className="px-3 py-1 rounded-full bg-surface-low text-secondary text-[11px] font-bold">
                     {course.category} · {stations.length}개
@@ -82,10 +82,10 @@ export default function JourneyHubPage() {
                   <JourneyHubProgress courseId={course.id} totalStations={stations.length} />
                 </div>
               </div>
-              <h3 className="serif-display text-2xl font-bold mb-1">{course.title}</h3>
+              <h3 className="serif-display text-xl font-bold mb-1">{course.title}</h3>
               <p className="text-sm font-bold text-primary mb-3">{course.subtitle}</p>
-              <p className="text-sm text-secondary leading-relaxed mb-6">{course.description}</p>
-              <span className="inline-flex items-center gap-2 text-sm font-bold text-on-surface group-hover:gap-3 transition-all">
+              <p className="text-sm text-secondary leading-relaxed mb-6 line-clamp-3">{course.description}</p>
+              <span className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-on-surface group-hover:gap-3 transition-all">
                 코스 시작하기 <ArrowRight size={16} />
               </span>
             </Link>

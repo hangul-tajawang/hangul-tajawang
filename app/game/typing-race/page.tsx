@@ -11,9 +11,9 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '타자 레이스 - 거북이·토끼·치타와 겨루는 한글 타자 경주 게임',
+  title: '타자 레이스 - 짧은 글 한 편으로 달리는 한글 타자 경주 게임',
   description:
-    '단어를 입력할 때마다 캐릭터가 달립니다! 분당 200타 거북이부터 500타 치타까지, AI 봇과 겨루는 500타 한글 타자 경주. 내 실제 타수를 레이스로 확인해보세요.',
+    '짧은 글 한 편을 끝까지 쓰면 결승선! 글자를 칠 때마다 개구리가 달려 나가고, 분당 200타 달팽이부터 750타 파랑새까지 네 상대를 추월하는 한글 타자 경주입니다. 오타가 나면 넘어지니 정확하게 치세요.',
   keywords: [
     '타자 레이스',
     '타자 경주 게임',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '타자 레이스 - 한글타자왕',
     description:
-      '거북이, 토끼, 치타와 500타 경주! 단어를 빠르게 입력해 결승선을 통과하세요.',
+      '짧은 글 한 편을 쓰며 달팽이·토끼·코뿔소·파랑새와 경주! 오타 없이 달려 추월하세요.',
     url: 'https://www.hangul-tajawang.com/game/typing-race',
   },
 };
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function TypingRacePage() {
   return (
     <div className="w-full max-w-6xl mx-auto py-8 px-4">
-      <GameJsonLd name="타자 레이스" url="https://www.hangul-tajawang.com/game/typing-race" description="AI 봇과 경주하며 단어를 입력해 결승선을 통과하는 무료 온라인 타자 게임." genre={["레이싱", "타자 연습", "캐주얼"]} />
+      <GameJsonLd name="타자 레이스" url="https://www.hangul-tajawang.com/game/typing-race" description="200타 달팽이부터 750타 파랑새까지, 문장을 쳐서 달리며 상대를 추월하는 무료 온라인 한글 타자 경주 게임." genre={["레이싱", "타자 연습", "캐주얼"]} />
       <h1 className="sr-only">타자 레이스 한글 타자 경주 게임 - 온라인 랭킹 시스템</h1>
 
       {/* 게임 본체 */}
@@ -51,9 +51,10 @@ export default function TypingRacePage() {
           </div>
           <p className="text-zinc-600 leading-relaxed font-medium">
             <strong className="text-zinc-900">타자 레이스</strong>
-            는 화면에 나오는 단어를 정확히 입력할 때마다 내 캐릭터가 앞으로
-            달려나가는 경주형 타자 게임입니다. 상대는 각기 다른 속도로 달리는
-            세 마리의 AI 봇. 총 500타 거리를 누가 먼저 완주하는지 겨룹니다.
+            는 글을 정확히 칠 때마다 내 개구리가 트랙을 달려 나가는 경주형 타자
+            게임입니다. 각자 정해진 타수로 달리는 달팽이·토끼·코뿔소·파랑새를 쫓아가
+            추월하며 짧은 수필 한 편(약 400타)을 누가 먼저 완주하는지 겨룹니다. 오타가 나면 넘어져서,
+            틀린 글자를 고쳐야 다시 달릴 수 있습니다.
           </p>
           <ul className="space-y-3 text-sm text-zinc-500">
             <li className="flex items-start gap-2">
@@ -86,10 +87,10 @@ export default function TypingRacePage() {
             <Rabbit size={28} />
             <h2 className="text-2xl font-bold">상대 봇 소개</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 text-center">
-              <div className="text-3xl mb-2">🐢</div>
-              <h4 className="font-bold mb-1">거북이</h4>
+              <div className="text-3xl mb-2">🐌</div>
+              <h4 className="font-bold mb-1">달팽이</h4>
               <p className="text-xs text-zinc-500 leading-normal">분당 200타. 타자 입문자의 벽. 아직 자판을 보며 친다면 만만치 않습니다.</p>
             </div>
             <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 text-center">
@@ -98,9 +99,14 @@ export default function TypingRacePage() {
               <p className="text-xs text-zinc-500 leading-normal">분당 350타. 대한민국 평균 직장인 수준. 토끼를 이기면 당신은 평균 이상!</p>
             </div>
             <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 text-center">
-              <div className="text-3xl mb-2">🐆</div>
-              <h4 className="font-bold mb-1">치타</h4>
-              <p className="text-xs text-zinc-500 leading-normal">분당 500타. 숙련 타이피스트의 영역. 치타를 제치고 1등을 노려보세요.</p>
+              <div className="text-3xl mb-2">🦏</div>
+              <h4 className="font-bold mb-1">코뿔소</h4>
+              <p className="text-xs text-zinc-500 leading-normal">분당 500타. 숙련 타이피스트의 영역. 코뿔소를 제치면 상위권입니다.</p>
+            </div>
+            <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 text-center">
+              <div className="text-3xl mb-2">🐦</div>
+              <h4 className="font-bold mb-1">파랑새</h4>
+              <p className="text-xs text-zinc-500 leading-normal">분당 750타. 최상위 고수의 영역. 파랑새까지 제치면 1등입니다.</p>
             </div>
           </div>
         </section>
@@ -129,7 +135,7 @@ export default function TypingRacePage() {
               <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0 font-bold text-green-600">01</div>
               <p className="text-sm text-zinc-500 pt-2">
                 <strong className="text-zinc-800">실전 속도 감각:</strong>{' '}
-                내 타수가 200·350·500타와 실시간으로 비교되어 현재 실력이 직관적으로 보입니다.
+                내 타수가 200·350·500·750타와 실시간으로 비교되어 현재 실력이 직관적으로 보입니다.
               </p>
             </div>
             <div className="flex gap-4">

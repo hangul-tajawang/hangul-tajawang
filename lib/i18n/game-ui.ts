@@ -64,17 +64,28 @@ const EN: Record<string, string> = {
 
   // ── 타자 레이스 (TypingRaceGame) ────────────────────────────────────
   '타자 레이스': 'Typing Race',
-  '단어를 입력해 달리세요! 거북이(200타), 토끼(350타), 치타(500타)와의 500타 경주입니다.':
-    'Type words to run! Race the Turtle (200 CPM), Rabbit (350 CPM), and Cheetah (500 CPM).',
+  '짧은 글 한 편을 끝까지 쓰면 결승선! 달팽이(200타)·토끼(350타)·코뿔소(500타)·파랑새(750타), 그리고 지금 랭킹 1~3위가 자기 기록 타수로 함께 달려요. 오타가 나면 넘어지니 고쳐야 다시 달릴 수 있어요.':
+    'Finish a short essay to cross the line! The Snail (200 CPM), Rabbit (350), Rhino (500), Bluebird (750) — and the current top 3 players at their record speeds — race with you. A typo trips you up until you fix it.',
+  '위 문장을 입력하세요!': 'Type the sentence above!',
+  '마지막 문장이에요!': 'Last sentence — sprint!',
+  '붙여넣기는 안 돼요! 직접 쳐 주세요': 'No pasting — type it yourself!',
+  '사람이 칠 수 없는 속도라 랭킹에는 기록되지 않아요.': 'That speed isn’t humanly possible, so it isn’t posted to the leaderboard.',
+  '중간에 멈춘 경주라 랭킹에는 기록되지 않아요.': 'You left mid-race, so this run isn’t posted to the leaderboard.',
+  '오타! 빨간 글자부터 고쳐야 다시 달릴 수 있어요': 'Typo! Fix the red letter to start running again',
   '경주 시작': 'Start Race',
   '위 단어를 입력하세요!': 'Type the word above!',
   '경주를 그만하고 결과를 볼까요?': 'Quit the race and see your results?',
-  '치타까지 제쳤습니다! 완벽한 질주였어요.': 'You beat even the cheetah — a perfect run!',
-  '거북이에게 졌지만, 다음 판이 있습니다!': 'The turtle got you this time — rematch!',
+  '파랑새까지 제쳤습니다! 완벽한 질주였어요.': 'You beat even the bluebird — a perfect run!',
+  '달팽이에게 졌지만, 다음 판이 있습니다!': 'The snail got you this time — rematch!',
   '좋은 기록이에요. 한 등수만 더 올려볼까요?': 'Nice run. Ready to climb one more place?',
   '거북이': 'Turtle',
   '토끼': 'Rabbit',
   '치타': 'Cheetah',
+  '달팽이': 'Snail',
+  '코뿔소': 'Rhino',
+  '파랑새': 'Bluebird',
+  '추월!': 'overtaken!',
+  '에게 추월당함': ' passed you',
   '다음: ': 'Next: ',
   '현재 타수': 'Live CPM',
   '실시간 타수 랭킹': 'Live CPM Leaderboard',
@@ -155,6 +166,6 @@ export function waveClearLabel(isEn: boolean, wave: number): string {
 }
 
 export function raceRankLabel(isEn: boolean, rank: number): string {
-  if (isEn) return ['🥇 1st', '🥈 2nd', '🥉 3rd', '4th'][rank - 1] || `${rank}th`;
-  return ['🥇 1등', '🥈 2등', '🥉 3등', '4등'][rank - 1] || `${rank}등`;
+  if (isEn) return ['🥇 1st', '🥈 2nd', '🥉 3rd', '4th', '5th'][rank - 1] || `${rank}th`;
+  return ['🥇 1등', '🥈 2등', '🥉 3등', '4등', '5등'][rank - 1] || `${rank}등`;
 }

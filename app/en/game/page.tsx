@@ -12,7 +12,7 @@ const FAQ = [
   },
   {
     q: 'Which Korean typing game should I start with?',
-    a: 'Typing Race is the gentlest start: you race AI bots at fixed speeds so you always know where you stand. Once comfortable, move to Acid Rain or Block Pop for time pressure, then Castle Defense for the full challenge.',
+    a: 'Typing Race is the gentlest start: you race animal runners at fixed speeds so you always know where you stand. Once comfortable, move to Acid Rain or Block Pop for time pressure, then Castle Defense for the full challenge.',
   },
   {
     q: 'Are there leaderboards?',
@@ -89,7 +89,7 @@ const GAMES = [
     href: '/en/game/typing-race',
     icon: <span className="text-5xl" aria-hidden>🏁</span>,
     title: 'Typing Race',
-    description: 'Race a turtle, rabbit, and cheetah to the finish line — type words to speed up.',
+    description: 'Race a snail, rabbit, rhino, and bluebird — type Korean sentences to run.',
     difficulty: 'Easy',
   },
 ];

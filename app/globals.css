@@ -331,3 +331,31 @@
   50% { box-shadow: 0 0 44px rgba(239, 68, 68, 0.6); }
 }
 .cd-danger { animation: cd-danger-pulse 0.9s ease-in-out infinite; }
+
+/* ── 타자 격투(Typing Fight) ───────────────────────────── */
+/* 가로 스트립 스프라이트: --tf-end = -(프레임폭 × (프레임수-1)), steps(n, jump-none)로 첫~끝 프레임을 모두 보여준다 */
+@keyframes tf-sprite { from { background-position-x: 0; } to { background-position-x: var(--tf-end); } }
+.tf-sprite { background-repeat: no-repeat; image-rendering: pixelated; }
+/* 타격 스파크 */
+@keyframes tf-spark {
+  0% { transform: translate(-50%, -50%) scale(0.2) rotate(0deg); opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.5) rotate(25deg); opacity: 0; }
+}
+.tf-spark { animation: tf-spark 0.32s ease-out forwards; }
+/* 콤보 카운터 */
+@keyframes tf-combo {
+  0% { transform: scale(1.6) skewX(-10deg); opacity: 0; }
+  25% { transform: scale(0.95) skewX(-10deg); opacity: 1; }
+  100% { transform: scale(1) skewX(-10deg); opacity: 1; }
+}
+.tf-combo { animation: tf-combo 0.28s ease-out; }
+/* 필살기 화면 번쩍 */
+@keyframes tf-screen-flash { 0% { opacity: 0.85; } 100% { opacity: 0; } }
+.tf-screen-flash { animation: tf-screen-flash 0.45s ease-out forwards; }
+/* 등불 깜빡임 */
+@keyframes tf-flicker { 0%, 100% { opacity: 0.9; } 45% { opacity: 0.65; } 70% { opacity: 1; } }
+.tf-flicker { animation: tf-flicker 2.2s ease-in-out infinite; }
+/* 보스 공격 예고 오라 */
+@keyframes tf-aura { 0%, 100% { opacity: 0.35; transform: translateX(-50%) scale(0.9); } 50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); } }
+.tf-aura { animation: tf-aura 0.5s ease-in-out infinite; }

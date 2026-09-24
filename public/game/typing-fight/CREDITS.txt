@@ -1,0 +1,15 @@
+Typing Fight (타자 격투) sprites
+================================
+
+All character sprites by LuizMelo — https://luizmelo.itch.io
+License: CC0 1.0 Universal (public domain). Credit is not required but appreciated.
+
+  samurai/   Martial Hero     https://luizmelo.itch.io/martial-hero
+  huntress/  Huntress         https://luizmelo.itch.io/huntress
+  ronin/     Martial Hero 3   https://luizmelo.itch.io/martial-hero-3
+  knight/    Fantasy Warrior  https://luizmelo.itch.io/fantasy-warrior
+  kenji/     Martial Hero 2   https://luizmelo.itch.io/martial-hero-2
+  wizard/    Evil Wizard 2    https://luizmelo.itch.io/evil-wizard-2
+
+Each animation strip was cropped from the original sheets to a shared per-character
+bounding box (feet aligned to the bottom edge) so all moves line up in the game.

@@ -26,7 +26,7 @@ const COURSE_SEO: Record<string, { title: string; description: string }> = {
   'world-capitals': {
     title: '세계 수도 외우기 - 나라별 수도 타자 암기 게임',
     description:
-      '세계 수도 외우기, 퀴즈보다 오래 남는 방법. 국기를 보고 수도를 초성 힌트로 떠올려 타자로 입력하면 다음 나라로 — 70여 개국 수도를 무료로 정복하세요.',
+      '세계 수도 외우기, 퀴즈보다 오래 남는 방법. 국기를 보고 수도를 초성 힌트로 떠올려 타자로 입력하면 다음 나라로 — 190여 개국 수도를 무료로 정복하세요.',
   },
   'periodic-table': {
     title: '주기율표 순서 외우기 - 원소기호 타자 암기 게임',
@@ -42,6 +42,11 @@ const COURSE_SEO: Record<string, { title: string; description: string }> = {
     title: '국기 보고 나라 맞히기 - 세계 국기 퀴즈 타자 게임',
     description:
       '세계 국기 200여 개를 보고 나라 이름을 타자로 맞히는 무료 국기 퀴즈. 초성 힌트·하드모드까지, 정복한 국기가 컬렉션으로 쌓입니다.',
+  },
+  sajaseongeo: {
+    title: '사자성어 100 - 뜻까지 외우는 사자성어 모음 타자 게임',
+    description:
+      '자주 쓰는 사자성어 100개를 주제별로 모아 뜻과 한자까지 타자로 외웁니다. 고진감래·새옹지마·청출어람 등 초성 힌트로 떠올리고 뜻 한 줄을 직접 입력하는 무료 암기 게임.',
   },
   'map-quiz': {
     title: '지도 타자 - 세계지도 보고 나라 맞히기 타자 게임',
@@ -112,7 +117,7 @@ export default async function JourneyCoursePage({ params }: Props) {
                 <tr className="bg-surface-low text-left">
                   <th className="px-4 py-3 font-bold text-secondary/70 text-xs w-12">순서</th>
                   <th className="px-4 py-3 font-bold text-secondary/70 text-xs">이름</th>
-                  <th className="px-4 py-3 font-bold text-secondary/70 text-xs hidden sm:table-cell">시기</th>
+                  <th className="px-4 py-3 font-bold text-secondary/70 text-xs hidden sm:table-cell">{course.readingLabel || '시기'}</th>
                   <th className="px-4 py-3 font-bold text-secondary/70 text-xs">핵심 지식</th>
                 </tr>
               </thead>
@@ -124,7 +129,7 @@ export default async function JourneyCoursePage({ params }: Props) {
                       {station.name}
                     </td>
                     <td className="px-4 py-3 text-secondary whitespace-nowrap hidden sm:table-cell">
-                      {station.year || '-'}
+                      {(course.readingLabel ? station.reading : station.year) || '-'}
                     </td>
                     <td className="px-4 py-3 text-secondary">
                       {station.fact}

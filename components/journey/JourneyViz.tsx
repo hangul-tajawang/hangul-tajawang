@@ -7,6 +7,7 @@ import { JourneyWorldMap } from "./JourneyWorldMap";
 import { JourneyPeriodic } from "./JourneyPeriodic";
 import { JourneyGeoMap } from "./JourneyGeoMap";
 import { JourneyFlagStage } from "./JourneyFlagStage";
+import { JourneyIdiomBoard } from "./JourneyIdiomBoard";
 
 /**
  * 코스별 시각화 디스패처.
@@ -52,6 +53,8 @@ export const JourneyViz: React.FC<JourneyVizProps> = (props) => {
       );
     case "periodic":
       return <JourneyPeriodic {...props} />;
+    case "idiom": // 사자성어 — 족자처럼 한자를 크게 걸고 뜻을 보며 따라 쓰기
+      return <JourneyIdiomBoard {...props} />;
     case "map": // 지도 퀴즈 — 실제 세계지도에서 국가 하이라이트
       return <JourneyGeoMap {...props} />;
     default:

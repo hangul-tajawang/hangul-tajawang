@@ -267,9 +267,10 @@ async function main() {
     for (let i = 0; i < 3; i++) {
       const word = await page.evaluate(() => [...document.querySelectorAll('[data-race-word]')].map(d => d.textContent?.trim()).find(t => t && t !== '🏁'));
       if (!word) { raceOk = false; break; }
-      await setInputValue(page, 'input[placeholder="위 단어를 입력하세요!"]', word);
+      // 붙여넣기 차단(한 번에 4글자 이상) 때문에 사람처럼 한 글자씩 넣는다
+      for (let k = 1; k <= word.length; k++) await setInputValue(page, 'input[placeholder="위 문장을 입력하세요!"]', word.slice(0, k));
       await page.waitForTimeout(200);
-      const cleared = await page.evaluate(() => document.querySelector('input[placeholder="위 단어를 입력하세요!"]')?.value === '');
+      const cleared = await page.evaluate(() => document.querySelector('input[placeholder="위 문장을 입력하세요!"]')?.value === '');
       if (!cleared) { raceOk = false; break; }
     }
     ok('단어 3개 연속 인식 → 전진/입력 초기화', raceOk);
@@ -417,10 +418,10 @@ async function main() {
     await kp.goto(BASE + '/game/typing-race', { waitUntil: 'networkidle' });
     await kp.locator('button', { hasText: '경주 시작' }).click();
     await kp.waitForTimeout(300);
-    await kp.evaluate(() => { const el = document.querySelector('input[placeholder="위 단어를 입력하세요!"]'); el?.scrollIntoView({ block: 'center' }); el?.focus(); });
+    await kp.evaluate(() => { const el = document.querySelector('input[placeholder="위 문장을 입력하세요!"]'); el?.scrollIntoView({ block: 'center' }); el?.focus(); });
     await kp.waitForTimeout(400);
     ok('레이스: 목표 단어 보임', await isVisible('[data-race-word]'));
-    ok('레이스: 입력창 보임', await isVisible('input[placeholder="위 단어를 입력하세요!"]'));
+    ok('레이스: 입력창 보임', await isVisible('input[placeholder="위 문장을 입력하세요!"]'));
 
     await kbCtx.close();
 

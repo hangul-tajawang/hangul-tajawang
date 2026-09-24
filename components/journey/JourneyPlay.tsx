@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Play, Eye, EyeOff, Lightbulb, MapPin, Timer } from "lucide-react";
+import { Play, Eye, EyeOff, Lightbulb, MapPin, Timer, ArrowLeft } from "lucide-react";
 import { TypingUtils } from "@/lib/typing-speed";
 import { track } from "@/lib/analytics";
 import { getCourseStations, type JourneyCourse } from "@/lib/journey-data";
@@ -17,6 +17,8 @@ import { useMobileGamePlay } from "@/hooks/useMobileGamePlay";
 import { MobileGameShell } from "@/components/game/MobileGameShell";
 import { JourneyViz } from "./JourneyViz";
 import { JourneyComplete } from "./JourneyComplete";
+import { JourneyIdiomBoard } from "./JourneyIdiomBoard";
+import { AdSenseUnit } from "@/components/layout/AdSenseUnit";
 
 const CHOSEONG = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
 
@@ -76,7 +78,7 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   const wasWrong = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { isMobilePlaying, paused, overlay, resume } = useMobileGamePlay({
+  const { isMobile, isMobilePlaying, paused, overlay, resume } = useMobileGamePlay({
     playing: gameState === "playing",
     inputRef,
   });
@@ -129,6 +131,10 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
   const sequenceQuestion = (() => {
     if (isQuiz) return null;
     if (course.ui === "periodic") return `원자번호 ${stationIndex + 1}번, 이 원소는?`;
+    if (course.stationQuestion) {
+      const groupLabel = course.groups?.find((g) => g.id === station.group)?.label;
+      return groupLabel ? `${groupLabel} · ${course.stationQuestion}` : course.stationQuestion;
+    }
     let offset = 0;
     for (const line of course.lines) {
       if (stationIndex < offset + line.stations.length) {
@@ -379,8 +385,8 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
               {sequenceQuestion}
             </p>
           )}
-          {/* 주기율표: 원소기호가 곧 문제 — 크게 보여준다 */}
-          {course.ui === "periodic" && station.reading && (
+          {/* 주기율표 원소기호·사자성어 한자 등 reading이 곧 단서 — 크게 보여준다 */}
+          {(course.ui === "periodic" || (course.readingLabel && course.ui !== "idiom")) && station.reading && (
             <p
               className={`font-bold ${compact ? "text-3xl mb-1" : "text-5xl mb-2"}`}
               style={{ color: course.lines[0]?.color || "#10b981" }}
@@ -412,10 +418,15 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
         </>
       ) : (
         <>
+          {course.arrivalGuide && (
+            <p className={`font-bold ${compact ? "text-xs mb-1.5 text-amber-300" : "text-sm mb-3 text-amber-700"}`}>{course.arrivalGuide}</p>
+          )}
           <p className={`font-bold uppercase tracking-[0.2em] ${compact ? "text-[9px] mb-1 text-violet-300" : "text-[10px] mb-3 text-primary"}`}>
             <MapPin size={11} className="inline -mt-0.5 mr-1" />
             {station.name}
-            {station.year ? ` · ${station.year}` : ""} 도착
+            {station.year ? ` · ${station.year}` : ""}
+            {course.readingLabel && station.reading ? ` · ${station.reading}` : ""}
+            {course.arrivalGuide ? "" : " 도착"}
           </p>
           <p className={`editorial-heading leading-snug ${compact ? "text-lg text-white" : "text-2xl text-on-secondary-container"}`}>
             {station.fact}
@@ -455,7 +466,9 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
             ? "정답을 입력하세요"
             : phase === "traveling"
               ? `다음 ${unit} 이름을 입력하세요`
-              : "위 문장을 그대로 입력하세요"
+              : course.arrivalGuide
+                ? "위 뜻을 그대로 따라 쓰세요"
+                : "위 문장을 그대로 입력하세요"
       }
       autoComplete="off"
       autoCorrect="off"
@@ -526,6 +539,85 @@ export const JourneyPlay: React.FC<{ course: JourneyCourse }> = ({ course }) => 
       <span className={`text-xl font-bold tabular-nums ${accent || "text-on-surface"}`}>{value}</span>
     </div>
   );
+
+  // ── 데스크톱 전체화면 (사자성어) — 헤더·광고 밖으로 나가 족자와 입력창을 한 화면에 ──
+  if (gameState === "playing" && !isMobile && mounted && course.ui === "idiom") {
+    const exitDesktop = () => {
+      if (confirm("여정을 잠시 멈출까요? 진행 상황은 저장됩니다.")) exitToReady();
+      else inputRef.current?.focus();
+    };
+    const hudStat = (label: string, value: React.ReactNode, accent: string) => (
+      <div className="flex flex-col">
+        <span className="text-[9px] font-bold uppercase tracking-widest text-secondary/70">{label}</span>
+        <span className={`text-xl font-bold tabular-nums ${accent}`}>{value}</span>
+      </div>
+    );
+    return createPortal(
+      <div className="fixed inset-0 z-[9985] bg-surface flex flex-col p-3 gap-3 animate-in fade-in duration-300">
+        <div className="shrink-0 flex items-center gap-6 px-5 py-3 rounded-2xl bg-surface-lowest shadow-[0_10px_30px_rgba(21,28,39,0.06)]">
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={exitDesktop}
+            aria-label="그만하기"
+            className="w-10 h-10 rounded-xl bg-surface-low text-secondary flex items-center justify-center hover:bg-surface-high transition-colors"
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-2xl">{course.emoji}</span>
+            <span className="editorial-heading text-lg truncate">{course.title}</span>
+          </div>
+          <div className="flex items-center gap-7 ml-auto">
+            {hudStat("진행", `${Math.min(stationIndex + 1, stations.length)}/${stations.length}`, "text-primary")}
+            {hudStat("현재 타수", liveKpm, "text-primary-container")}
+            {hudStat("시간", `${Math.floor(elapsed / 60)}:${String(Math.floor(elapsed % 60)).padStart(2, "0")}`, "text-on-surface")}
+            {hudStat("정확도", `${accuracy}%`, "text-on-surface")}
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setShowAllNames((v) => !v)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+                showAllNames ? "bg-surface-high text-secondary" : "primary-gradient text-white"
+              }`}
+            >
+              {showAllNames ? <Eye size={14} /> : <EyeOff size={14} />}
+              {showAllNames ? "정답 보는 중" : "암기 모드"}
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 flex gap-3 min-h-0">
+          <div className="hidden xl:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-surface-lowest/60 p-1">
+            <span className="text-[8px] font-bold uppercase tracking-[0.25em] text-secondary/60 py-1">Sponsor</span>
+            <AdSenseUnit label="sidebar-left" width={160} height={600} />
+          </div>
+          <div className="flex-1 grid grid-cols-[minmax(0,1fr)_minmax(320px,400px)] gap-3 min-h-0 min-w-0">
+            <div className="min-h-0 overflow-y-auto no-scrollbar rounded-2xl bg-surface-lowest p-4 md:p-5">
+              <JourneyIdiomBoard
+                course={course}
+                stations={stations}
+                currentIndex={stationIndex}
+                phase={phase}
+                showAllNames={showAllNames}
+                variant="full"
+                fill
+              />
+            </div>
+            <div className="flex flex-col justify-center gap-3 min-h-0">
+              {promptCard(false)}
+              {journeyInput}
+            </div>
+          </div>
+          <div className="hidden xl:flex flex-col items-center shrink-0 w-[168px] overflow-hidden rounded-2xl bg-surface-lowest/60 p-1">
+            <span className="text-[8px] font-bold uppercase tracking-[0.25em] text-secondary/60 py-1">Sponsor</span>
+            <AdSenseUnit label="sidebar-right" width={160} height={600} />
+          </div>
+        </div>
+        {completeModal}
+      </div>,
+      document.body
+    );
+  }
 
   return (
     <div className="w-full flex flex-col gap-4 py-2 animate-in fade-in duration-700">
